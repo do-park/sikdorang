@@ -1,0 +1,7 @@
+Django==2.2.7
+djangorestframework==3.10.3
+joblib==0.14.0
+numpy==1.17.3
+pytz==2019.3
+scipy==1.5.2
+sqlparse==0.3.0
