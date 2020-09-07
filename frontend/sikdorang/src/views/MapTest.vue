@@ -4,6 +4,8 @@
       <div>
           <button @click="addPositions">보여주나?</button>
           <br>
+          
+          <!-- 길찾기  -->
           <span>To : 
             <input 
             v-model="destination" 
@@ -83,6 +85,7 @@ export default {
                 {
                     title: '성수집근처쨈나',
                     latlng: new kakao.maps.LatLng(36.1115959,128.4303873)
+
                 },
                 {
                     title: '도희동아백화점',
