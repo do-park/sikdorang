@@ -1,21 +1,37 @@
 <template>
   <div>
-      <h1>This is Map</h1>
-      <div>
-          <button @click="addPositions">보여주나?</button>
-          <br>
-          
-          <!-- 길찾기  -->
-          <span>To : 
-            <input 
-            v-model="destination" 
-            @keyup.enter="findPath(destination)"
-            placeholder="어디갈래?">
-            <button @click="findPath(destination)" >길찾기 가보자</button>
-        </span>
-          <p>{{destination}}</p>
-      </div>
-      <div id="map" style="width:100%;height:350px;"></div>
+		<div class="map-top">
+			<div class="search-tap">
+				<button @click="addPositions">보여주나?</button>
+				<br>
+					
+				<!-- 길찾기  -->
+				<span>To : 
+					<input 
+					v-model="destination" 
+					@keyup.enter="findPath(destination)"
+					placeholder="어디갈래?">
+					<button @click="findPath(destination)" >길찾기 가보자</button>
+				</span>
+			</div>
+			
+			<div class="tag-tap">
+				<button>#위대한</button>
+				<button>#가성비</button>
+				<button>#갬성</button>
+				<button>#어쩌구</button>
+				<!-- <button>#저쩌구</button>
+				<button>#스크롤을</button>
+				<button>#시도해보자</button> -->
+			</div>
+		</div>
+		<div class="map-wrap">
+			<div id="map"></div>
+		</div>
+		<div>
+				<div>보여주는곳</div>
+				<div id="show-place"></div>
+		</div>
      
   </div>
 </template>
@@ -43,13 +59,16 @@ export default {
         //맵 생성
         initMap() { 
             var container = document.getElementById('map'); 
-            var options = { center: new kakao.maps.LatLng(36.0970073,128.4254652), level: 3 }; 
+            var options = {
+                center: new kakao.maps.LatLng(36.0970073,128.4254652),
+                level: 3
+            }; 
             var map = new kakao.maps.Map(container, options); 
             //마커추가하려면 객체를 아래와 같이 하나 만든다. 
-            var marker = new kakao.maps.Marker({ position: map.getCenter() }); 
+            var marker = new kakao.maps.Marker({position: map.getCenter()}); 
             marker.setMap(map);
            
-            }, 
+        }, 
         
         //cdn 추가
         addScript() { 
@@ -58,7 +77,7 @@ export default {
             script.onload = () => kakao.maps.load(this.initMap); 
             script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoMapKey}`;
             document.head.appendChild(script); 
-            },
+        },
 
         //여러개 위치 보여주는 함수
         addPositions() {
@@ -110,6 +129,16 @@ export default {
                     image : markerImage // 마커 이미지 
                 });
                 marker.setMap(map);
+
+
+                kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker));
+            }
+
+            function makeOverListener(map, marker) {
+                return function() {
+                    document.getElementById("show-place").innerHTML = marker.mc
+                    console.log(marker) 
+                };
             }
         },
         
@@ -126,5 +155,36 @@ export default {
 </script>
 
 <style>
+
+.map-top {
+	position: absolute;
+	z-index: 10;
+	width: 100%;
+	margin: auto;
+	
+}
+
+.search-tap {
+	background-color: rgba(255, 255, 255, 0.8);
+	width: 400px;
+	margin: auto;
+}
+
+.tag-tap {
+	width: 400px;
+	margin: auto;
+}
+
+.tag-tap > button {
+	margin: 10px;
+	background-color: yellow;
+}
+
+#map {
+	width: 400px;
+	height: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 </style>
