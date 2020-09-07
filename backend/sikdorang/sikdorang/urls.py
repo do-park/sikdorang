@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
+from rest_framework import routers
+from trip.views import TripViewSet
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -28,14 +30,26 @@ schema_view = get_schema_view(
       description="플라잉승희호에는 선장이 필요하다",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
+      license=openapi.License(name="고잉승희호"),
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
 
+router = routers.DefaultRouter()
+router.register('trip', TripViewSet) # prefix = movies , viewset = MovieViewSet
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # 로그인 & 로그아웃
+    path('rest-auth/', include('rest_auth.urls')),
+    # 회원가입
+    path('rest-auth/signup/', include('rest_auth.registration.urls')),
+    # 여행
+    path('trip/', include('trip.urls')),
+    url(r'^',include(router.urls)),
+
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
