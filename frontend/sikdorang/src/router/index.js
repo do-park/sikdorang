@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Map from '../views/Map.vue'
+import MapTest from '../views/MapTest.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -12,8 +12,8 @@ Vue.use(VueRouter)
   },
   {
     path: '/map',
-    name: 'Map',
-    component: Map
+    name: 'MapTest',
+    component: MapTest
   },
 
 ]
