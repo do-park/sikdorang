@@ -1,17 +1,18 @@
 <template>
   <div>
+		<button @click="addPositions">보여주나?</button>
+		<br>
 		<div class="map-top">
 			<div class="search-tap">
-				<button @click="addPositions">보여주나?</button>
-				<br>
 					
 				<!-- 길찾기  -->
-				<span>To : 
-					<input 
+				<span> 
+					<input
+					id="search-box"
 					v-model="destination" 
-					@keyup.enter="findPath(destination)"
+					@keyup.enter="findPath()"
 					placeholder="어디갈래?">
-					<button @click="findPath(destination)" >길찾기 가보자</button>
+					<button id="search-btn" @click="findPath()" >아이콘</button>
 				</span>
 			</div>
 			
@@ -43,6 +44,7 @@ export default {
     data() {
         return {
             destination : '',
+            map: null,
         }
     },
     mounted() {
@@ -64,6 +66,7 @@ export default {
                 level: 3
             }; 
             var map = new kakao.maps.Map(container, options); 
+            this.map = map
             //마커추가하려면 객체를 아래와 같이 하나 만든다. 
             var marker = new kakao.maps.Marker({position: map.getCenter()}); 
             marker.setMap(map);
@@ -72,11 +75,17 @@ export default {
         
         //cdn 추가
         addScript() { 
-            const script = document.createElement('script'); 
+            const script1 = document.createElement('script'); 
             /* global kakao */ 
-            script.onload = () => kakao.maps.load(this.initMap); 
-            script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoMapKey}`;
-            document.head.appendChild(script); 
+            script1.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoMapKey}`;
+            document.head.appendChild(script1);
+
+            const script2 = document.createElement('script'); 
+            script2.type = "text/javascript"
+            script2.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoMapKey}&libraries=services`;
+            document.head.appendChild(script2); 
+
+            script2.onload = () => kakao.maps.load(this.initMap);
         },
 
         //여러개 위치 보여주는 함수
@@ -142,9 +151,23 @@ export default {
             }
         },
         
-        findPath(destination){
-            this.destination = destination
-            console.log(this.destination)
+        findPath(){  
+					var map = this.map
+					// 주소-좌표 변환 객체를 생성합니다
+					var geocoder = new kakao.maps.services.Geocoder();
+
+					// 주소로 좌표를 검색합니다
+					geocoder.addressSearch(this.destination, (result, status) => {
+
+							// 정상적으로 검색이 완료됐으면 
+							if (status === kakao.maps.services.Status.OK) {
+
+									var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+									// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+									map.setCenter(coords);
+							} 
+					});       
 
         }
     }, 
@@ -168,6 +191,18 @@ export default {
 	background-color: rgba(255, 255, 255, 0.8);
 	width: 400px;
 	margin: auto;
+}
+
+#search-box {
+    width: 342px;
+    height: 30px;
+    float: left;
+}
+
+#search-btn {
+    width: 50px;
+    height: 36px;
+    float: right;
 }
 
 .tag-tap {
