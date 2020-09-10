@@ -12,7 +12,7 @@
 
 
 
-![ERD](README_img\ERD.PNG)
+![ERD](README_img/ERD.PNG)
 
 
 
