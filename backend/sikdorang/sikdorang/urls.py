@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf.urls import url
 from rest_framework import routers
 from trip.views import TripViewSet
+from review.views import ReviewViewSet
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -38,6 +39,7 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register('trip', TripViewSet) # prefix = movies , viewset = MovieViewSet
+router.register('review', ReviewViewSet)
 
 
 urlpatterns = [
@@ -48,6 +50,7 @@ urlpatterns = [
     path('rest-auth/signup/', include('rest_auth.registration.urls')),
     # 여행
     path('trip/', include('trip.urls')),
+    path('review/', include('review.urls')),
     url(r'^',include(router.urls)),
 
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
