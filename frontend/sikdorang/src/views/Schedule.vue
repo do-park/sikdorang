@@ -19,7 +19,12 @@
 
     <div style="height:50px;"></div>
 
-    <v-btn @click="createPlan(clonedItems)">완료</v-btn>
+    <v-btn @click="createPlan(clonedItems)">CREATE</v-btn>
+    <v-btn @click="updatePlan()">UPDATE</v-btn>
+    <span v-for="(item, i) in saved" :key="item">
+      <v-btn @click="readPlan(item, i)">READ -{{item}}</v-btn>
+      <v-btn @click="deletePlan(item, i)">DELETE - {{item}}</v-btn>
+    </span>
   </div>
 </template>
 
@@ -34,8 +39,9 @@ export default {
   },
   data() {
     return {
+      // for test
+      saved: [],
       clonedItems: [],
-
       availableItems: [
         {
           name: "식당",
@@ -54,11 +60,9 @@ export default {
           id: "A",
         },
       ],
-
       clonedItemOptions: {
         group: "items",
       },
-
       availableItemOptions: {
         group: {
           name: "items",
@@ -70,24 +74,22 @@ export default {
     };
   },
   methods: {
+    // function about drag and drop
     handleClone(item) {
-      // Create a fresh copy of item
       let cloneMe = JSON.parse(JSON.stringify(item));
       this.$delete(cloneMe, "uid");
       return cloneMe;
     },
-
     deleteItem(index) {
       this.clonedItems.splice(index, 1);
     },
-
     uuid(e) {
       if (e.uid) return e.uid;
       const key = Math.random().toString(10).slice(2);
       this.$set(e, "uid", key);
       return e.uid;
     },
-
+    // function about plans
     createPlan(items) {
       let R = 0;
       let C = 0;
@@ -95,7 +97,7 @@ export default {
       let A = 0;
       let plan = "";
       for (let i = 0; i < items.length; i++) {
-        if (items[i].name === "R") {
+        if (items[i].id === "R") {
           plan = plan + "R" + R + "-";
           R += 1;
         } else if (items[i].id === "C") {
@@ -109,7 +111,49 @@ export default {
           A += 1;
         }
       }
-      console.log(plan.slice(0, -1));
+      // for test: console로 찍는 대신 백엔드로 넘길 수 있게 수정
+      this.saved.push(plan.slice(0, -1));
+      this.clonedItems = [];
+      console.log(this.saved);
+    },
+    readPlan(item) {
+      // for test: this.saved에서 꺼내오는 대신 백엔드에서 받아올 수 있게 수정
+      let plan = item.split("-");
+      this.clonedItems = [];
+      console.log(plan);
+      for (let i = 0; i < plan.length; i++) {
+        if (plan[i][0] == "R") {
+          this.clonedItems.push({
+            name: "식당",
+            id: "R",
+          });
+        } else if (plan[i][0] == "C") {
+          this.clonedItems.push({
+            name: "카페",
+            id: "C",
+          });
+        } else if (plan[i][0] == "S") {
+          this.clonedItems.push({
+            name: "관광지",
+            id: "S",
+          });
+        } else if (plan[i][0] == "A") {
+          this.clonedItems.push({
+            name: "숙박",
+            id: "A",
+          });
+        }
+      }
+    },
+    updatePlan() {
+      console.log("update plan");
+    },
+    deletePlan(item, i) {
+      // for test: this.saved에서 삭제하는 대신 DB에서 삭제해야 함
+      // 사실상 지금 이 코드는 쓸모가 없다...ㅋㅋ
+      console.log(item);
+      console.log(i);
+      if (i > -1) this.saved.splice(i, 1);
     },
   },
 };
