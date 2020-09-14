@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MapTest from '../views/MapTest.vue'
+import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -15,7 +17,11 @@ Vue.use(VueRouter)
     name: 'MapTest',
     component: MapTest
   },
-
+  {
+    path: '/idealtagcup',
+    name: 'IdealTagCup',
+    component: IdealTagCupView,
+  }
 ]
 
 const router = new VueRouter({
