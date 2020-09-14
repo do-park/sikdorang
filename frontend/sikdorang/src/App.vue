@@ -34,20 +34,28 @@
     </v-app-bar>
 
     <v-main>
-      <MapTest />
+      <router-link to="/">Home</router-link> |
+      <router-link to="/maptest">MapTest</router-link> |
+      <router-link to="/map">Map</router-link> |
+      <router-view/>
     </v-main>
   </v-app>
+  
 </template>
 
 <script>
-import MapTest from "./views/MapTest";
+// import MapTest from "./views/MapTest";
+// import Home from "./views/Home";
+// import Map from "./views/Map";
 
 export default {
   name: "App",
 
-  components: {
-    MapTest,
-  },
+  // components: {
+  //   Home,
+  //   MapTest,
+  //   Map,
+  // },
 
   data: () => ({
     //

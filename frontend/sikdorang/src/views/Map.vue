@@ -1,8 +1,8 @@
 <template>
   <div>
-      <h1>음식점 골라골라</h1>
-      <MapField/>
       <MapTheme/>
+      <MapField/>
+      
   </div>
 </template>
 
