@@ -13,6 +13,7 @@
     "load-script-once": "^2.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.4.3",
+    "vuedraggable": "^2.24.1",
     "vuetify": "^2.2.11",
     "vuex": "^3.5.1"
   },
