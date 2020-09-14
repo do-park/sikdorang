@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MapTest from '../views/MapTest.vue'
 import MapMain from '../views/MapMain.vue'
-import SelectLocation from '../views/SelectLocation.vue'
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -19,14 +19,10 @@ Vue.use(VueRouter)
   },
   {
     path: '/map',
-    name: 'Map',
+    name: 'MapMain',
     component: MapMain
   },
-  {
-    path: '/selectlocation',
-    name: 'SelectLocation',
-    component: SelectLocation
-  },
+
 
 ]
 

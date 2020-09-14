@@ -1,6 +1,6 @@
 <template>
   <div>
-		<button @click="getMyLocation">내 위치 보여주나?</button>
+	<button @click="getMyLocation">내 위치 보여주나?</button>
     <button @click="showPositions(positions)">보여주나?</button>
 		<br>
     <button @click="showPaths()">일정 보기 </button>
