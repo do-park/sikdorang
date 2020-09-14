@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MapTest from '../views/MapTest.vue'
-import Map from '../views/Map.vue'
+import MapMain from '../views/MapMain.vue'
+import SelectLocation from '../views/SelectLocation.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -19,7 +20,12 @@ Vue.use(VueRouter)
   {
     path: '/map',
     name: 'Map',
-    component: Map
+    component: MapMain
+  },
+  {
+    path: '/selectlocation',
+    name: 'SelectLocation',
+    component: SelectLocation
   },
 
 ]

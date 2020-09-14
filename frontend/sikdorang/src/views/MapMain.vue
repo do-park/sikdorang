@@ -1,7 +1,12 @@
 <template>
   <div>
-      <MapTheme/>
-      <MapField/>
+      <div>
+          <MapTheme/>
+      </div>
+      <div>
+          <MapField/>
+      </div>
+      
       
   </div>
 </template>
@@ -10,7 +15,7 @@
 import MapField from '../components/Map/MapField'
 import MapTheme from '../components/Map/MapTheme'
 export default {
-    name:'Map',
+    name:'MapMain',
     components : {
         MapField,
         MapTheme,

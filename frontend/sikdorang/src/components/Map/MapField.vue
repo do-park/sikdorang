@@ -1,6 +1,7 @@
 <template>
   <div>
-		<button @click="getMyLocation">내 위치 보여주나?</button>
+      {{destination}}
+	
     <button @click="showPositions(positions)">보여주나?</button>
 		<br>
     <button @click="showPaths()">일정 보기 </button>
@@ -36,12 +37,10 @@ export default {
 	name : "MapField",
 	data() {
 		return {
-			destination : "",
+			destination : '',
 			map: null,
-			latitude :36.109328,
-			longitude :128.4128223,
-			myLatitude : null,
-			myLongitude : null,
+			startLat :36.109328,
+			startLong :128.4128223,
 			plans : [],
 			positions : []
 		}
@@ -52,9 +51,45 @@ export default {
 		}
 		else {
 			this.addScript();
-		}
+        }
+           
 	},
 	methods : {
+        startCoord() {
+            var map = this.map
+
+            if (this.$cookies.get("searchMethod")==="myLocation"){
+            this.startLat = this.$cookies.get("startLatitude")
+            this.startLong = this.$cookies.get("startLongitude")
+
+            var LatLng = new kakao.maps.LatLng(this.startLat, this.startLong)
+            map.setCenter(LatLng);
+			var marker = new kakao.maps.Marker({ position: map.getCenter() });
+			marker.setMap(map);
+
+            }
+            else {
+                this.destination = this.$cookies.get('destination')
+
+                // 주소-좌표 변환 객체를 생성합니다
+                var geocoder = new kakao.maps.services.Geocoder();
+
+                // 주소로 좌표를 검색합니다
+                geocoder.addressSearch(this.destination, (result, status) => {
+
+                    // 정상적으로 검색이 완료됐으면 
+                    if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                        map.setCenter(coords);
+                        var marker = new kakao.maps.Marker({ position: map.getCenter() });
+                        marker.setMap(map);
+                    } 
+                })
+            }
+        },
+
 		fillPositions() {
 			this.positions = [
 				{   
@@ -90,7 +125,7 @@ export default {
 		initMap() { 
 			var container = document.getElementById('map'); 
 			var options = {
-				center: new kakao.maps.LatLng(36.0970073,128.4254652),
+				center: new kakao.maps.LatLng(this.startLat,this.startLong),
 				level: 3
 			}; 
 			var map = new kakao.maps.Map(container, options); 
@@ -98,7 +133,8 @@ export default {
 			var marker = new kakao.maps.Marker({position: map.getCenter()}); 
 			marker.setMap(map);
 
-			this.fillPositions();	
+            this.fillPositions();
+            this.startCoord();	
 		},
 			
 		showNewMap(LatLng) { 
@@ -272,47 +308,7 @@ export default {
 			map.setBounds(bounds);			
 		},
 
-			
-		findPath(){  
-			var map = this.map
-
-			// 주소-좌표 변환 객체를 생성합니다
-			var geocoder = new kakao.maps.services.Geocoder();
-
-			// 주소로 좌표를 검색합니다
-			geocoder.addressSearch(this.destination, (result, status) => {
-
-				// 정상적으로 검색이 완료됐으면 
-				if (status === kakao.maps.services.Status.OK) {
-					var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-					// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-					map.setCenter(coords);
-				} 
-			});       
-
-		},
-
-		getMyLocation() {	
-			if('geolocation' in navigator) {
-
-				//위치 요청
-				navigator.geolocation.getCurrentPosition(function(pos) {
-					this.myLatitude = pos.coords.latitude;
-					this.myLongitude = pos.coords.longitude;
-					alert("현재 위치는 : " + this.myLatitude + ", "+ this.myLongitude);
-					var myLocation = new kakao.maps.LatLng(this.myLatitude,this.myLongitude)
-					var map = this.map
-					map.setCenter(myLocation)
-				}.bind(this));
-
-			} else {
-
-				//위치정보 사용 불가능 
-				console.log("위치 정보 사용이 불가능합니다.")
-			}
-		},
-
+		
 		makePlan(position) {
 			var flag = true
 			this.plans.forEach(plan => {

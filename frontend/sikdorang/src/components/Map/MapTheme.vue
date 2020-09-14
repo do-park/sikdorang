@@ -29,6 +29,11 @@
 <script>
 export default {
     name : 'MapTheme',
+    data() {
+        return{
+            destination : "",
+        }
+    },
 }
 </script>
 
