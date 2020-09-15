@@ -34,7 +34,7 @@ export default {
 				require("@/assets/food_cup/jokbal.jpg"),
 				require("@/assets/food_cup/zzim_tang.jpg"),
 			],
-			tags: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+			tags: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
 			leftIndex: 0,
 			rightIndex: 1,
 			round: 1,
@@ -46,39 +46,42 @@ export default {
 	methods: {
 		onClick(direction) {
 			this.clickCount += 2
+			// 선택한 이미지를 userChoice에 추가합니다.
 			if (direction === 'left') {
 				this.userChoice.push(this.tags[this.leftIndex])
 			} else {
 				this.userChoice.push(this.tags[this.rightIndex])
 			}
+			// clickCount가 배열보다 같거나 크다면 다음 라운드로 진행합니다.
 			if (this.clickCount >= (this.tags.length-1)) {
 				this.nextRound()
 			} else {
 				this.leftIndex = this.leftIndex+2
 				this.rightIndex = this.rightIndex+2
+				// rightIndex가 배열의 마지막 인덱스보다 큰 값이라면 부전승 시킵니다.
 				if (this.rightIndex > (this.tags.length-1)) {
 					this.userChoice.push(this.tags[this.leftIndex])
 					this.nextRound()
 				}
 			}
-			if (this.tags.length == 2) {
+			if (this.tags.length == 4) {
 				this.tagsSave()
 			}
 		},
 		nextRound() {
+			// tags를 userChocie로 갱신하고 나머지 정보를 초기화합니다.
 			this.tags = this.userChoice
 			this.userChoice = []
 			this.round += 1
 			this.clickCount = -1
-			console.log('round:', this.round)
-			console.log('tags:', this.tags)
+			// tags의 길이가 1이라면 종료된 것이므로 게임을 종료합니다.
 			if (this.tags.length === 1) {
-				console.log('종료 로직을 실행합니다.')
 				this.isDone = true
 			}
 			this.leftIndex = 0
 			this.rightIndex = 1
 		},
+		// 4강(3강이 되는 경우는 3강)이 되면 정보를 저장합니다.
 		tagsSave() {
 			console.log('유저 정보와 태그를 서버에 보내 저장합니다.')
 			this.$axios.post()
