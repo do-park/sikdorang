@@ -29,13 +29,13 @@ const mypage = {
     },
     actions: {
         actionUserInfo: ({ commit }, payload) => {
-            commit('mutationUserInfo', payload)
+            commit("mutationUserInfo", payload)
         },
         actionTripList: ({ commit }, payload) => {
-            commit('mutationTripList', payload)
+            commit("mutationTripList", payload)
         },
         actionClickedIndex: ({ commit }, payload) => {
-            commit('mutationClickedIndex', payload)
+            commit("mutationClickedIndex", payload)
         }
     }
 }

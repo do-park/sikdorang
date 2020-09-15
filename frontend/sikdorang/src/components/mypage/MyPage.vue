@@ -7,8 +7,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import TripList from './TripList.vue'
 import UserProfile from './UserProfile.vue'
+
+const mypage = 'mypage'
 
 export default {
 	name: "MyPage",
@@ -19,12 +22,12 @@ export default {
     mounted() {
 		// 유저 정보를 가져옵니다.
 		// this.$axios.get()
-		this.userInfo = {
+		const userInfo = {
 			userName: "조규성",
 			userBirth: "1995",
-			userPhone: "01076338540",
+			userPhone: "01076338540"
 		},
-		this.tripItems = [
+		tripItems = [
 			[
 				{   
 					id : 1,
@@ -64,12 +67,14 @@ export default {
 				}
 			]
 		]
+		this.actionUserInfo(userInfo)
+		this.actionTripList(tripItems)
 	},
-	data() {
-		return {
-			userInfo: null,
-			tripItems: null,
-		}
+	methods: {
+		...mapActions(mypage, [
+			'actionUserInfo',
+			'actionTripList',
+		]),
 	}
 }
 </script>

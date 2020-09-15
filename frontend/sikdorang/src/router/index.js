@@ -5,6 +5,7 @@ import MapTest from '../views/MapTest.vue'
 import Signup from '../views/Signup.vue'
 import MapMain from '../views/MapMain.vue'
 import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
+import MyPageView from '../views/mypage/MyPageView.vue'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ Vue.use(VueRouter)
     name: 'IdealTagCup',
     component: IdealTagCupView,
   },
+  {
+    path: '/mypage',
+    name: 'MyPageView',
+    component: MyPageView,
+  }
 ]
 
 const router = new VueRouter({
