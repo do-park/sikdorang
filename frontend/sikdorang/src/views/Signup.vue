@@ -6,6 +6,12 @@
         label="이메일"
         :rules="emailRules"
         hide-details="auto"></v-text-field>
+      <!-- <v-text-field
+        v-model="signupData.phone"
+        label="휴대폰 번호"
+        :rules="phoneRules"
+        type="number"
+        hide-details="auto"></v-text-field> -->
       <v-text-field
         v-model="signupData.nickname"
         label="닉네임"
@@ -13,7 +19,7 @@
         hide-details="auto"></v-text-field>
       <div class="year">
         <v-slider
-          v-model="year"
+          v-model="signupData.year"
           label="출생년도"
           :min=1900
           :max="nowYear"
@@ -36,7 +42,7 @@
         :type="show1 ? 'text' : 'password'"
         counter
         @click:append="show1 = !show1"></v-text-field>
-      <v-btn class="signup-btn" color="primary">가입하기</v-btn>
+      <v-btn class="signup-btn" color="primary" @click="clickSignup">가입하기</v-btn>
     </div>
   </div>
 </template>
@@ -49,15 +55,19 @@ export default {
     return {
       signupData: {
         email: "",
+        // phone: "",
         nickname: "",
-        year: "",
+        year: 1990,
         password: "",
         rePassword: "",
 
       },
       emailRules: [
-        value => (value && value.length >= 5) || '올바른 이메일을 입력하세요.',
+        value => (value && value.includes('@') && value.includes('.')) || '올바른 이메일을 입력하세요.',
       ],
+      // phoneRules: [
+      //   value => (value && value.length === 11) || '올바른 휴대폰 번호를 입력하세요.',
+      // ],
       nicknameRules: [
         value => (value && value.length >= 1) || '1자 이상 입력하세요.',
       ],
@@ -68,8 +78,35 @@ export default {
         value => (value && value.length >= 8) || '8자 이상 입력하세요.',
       ],
       rePasswordRules: [
-        value => (value === this.signupData.password) || '비밀번호가 일치하지 않습니다.'
-      ]
+        value => (value === this.signupData.password) || '비밀번호가 일치하지 않습니다.',
+      ],
+    }
+  },
+  methods: {
+    clickSignup() {
+      var pass = false
+      if (this.signupData.email.includes('@') && this.signupData.email.includes('.')) {
+        // if (this.signupData.phone.length === 11) {
+          if (this.signupData.nickname.length >= 1) {
+            if (this.signupData.password.length >= 8) {
+              if (this.signupData.password === this.signupData.rePassword) {
+                pass = true
+              }
+            }
+          }
+        // } 
+      }
+
+      if (pass) {
+        this.$axios.post(`/api/signup`, this.signupData)
+        .then (response => {
+          console.log(response)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+      
     }
   },
 }
