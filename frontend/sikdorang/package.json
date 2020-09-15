@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "load-script-once": "^2.0.1",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.7.4",
     "vue-router": "^3.4.3",
     "vuetify": "^2.2.11",
     "vuex": "^3.5.1"
