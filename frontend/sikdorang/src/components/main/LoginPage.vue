@@ -32,7 +32,13 @@ export default {
   },
   methods : {
     clickLogin() {
-      console.log(this.loginData)
+      this.$axios.post(`/api/login`, this.loginData)
+      .then (response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
 
   },
