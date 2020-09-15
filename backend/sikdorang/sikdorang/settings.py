@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 
     # DRF
     'rest_framework',
@@ -58,6 +59,9 @@ INSTALLED_APPS = [
 
     # 여행
     'trip',
+
+    # 데이터베이스 추가
+    'api',
 ]
 
 MIDDLEWARE = [
