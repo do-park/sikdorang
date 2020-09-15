@@ -263,7 +263,114 @@ export default {
 			map.setBounds(bounds);	
 		},
 
+	showPositions2222(locs) {
+			var map = this.map;
+			var positions = locs.slice(0,3);	
+			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+			var bounds = new kakao.maps.LatLngBounds();   
+				this.recommendMarkers = [];
+			//커스텀 마커 정보
+			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
+				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
+				OFFSET_X = 12, // 기본, 클릭 마커의 기준 X좌표
+				OFFSET_Y = MARKER_HEIGHT, // 기본, 클릭 마커의 기준 Y좌표
+				OVER_MARKER_WIDTH = 40, // 오버 마커의 너비
+				OVER_MARKER_HEIGHT = 42, // 오버 마커의 높이
+				OVER_OFFSET_X = 13, // 오버 마커의 기준 X좌표
+				OVER_OFFSET_Y = OVER_MARKER_HEIGHT, // 오버 마커의 기준 Y좌표
+				SPRITE_GAP = 10; // 스프라이트 이미지에서 마커간 간격
+		
 
+			var markerSize = new kakao.maps.Size(MARKER_WIDTH, MARKER_HEIGHT), // 기본, 클릭 마커의 크기
+				markerOffset = new kakao.maps.Point(OFFSET_X, OFFSET_Y), // 기본, 클릭 마커의 기준좌표
+				overMarkerSize = new kakao.maps.Size(OVER_MARKER_WIDTH, OVER_MARKER_HEIGHT), // 오버 마커의 크기
+				overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y); // 오버 마커의 기준 좌표
+			
+			// 클릭한 마커를 담을 변수
+			var selectedMarker = null;	
+
+			for (var i = 0; i < positions.length; i ++) {
+				var gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
+					originY = (MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 기본, 클릭 마커로 사용할 Y좌표 값
+					overOriginY = (OVER_MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 오버 마커로 사용할 Y좌표 값
+					normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
+					clickOrigin = new kakao.maps.Point(gapX, originY), // 스프라이트 이미지에서 마우스오버 마커로 사용할 영역의 좌상단 좌표
+					overOrigin = new kakao.maps.Point(gapX * 2, overOriginY); // 스프라이트 이미지에서 클릭 마커로 사용할 영역의 좌상단 좌표
+
+				
+				// 기본 마커이미지, 오버 마커이미지, 클릭 마커이미지를 생성합니다
+				var normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
+					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
+					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
+					
+				// // 마커 이미지의 이미지 크기 입니다
+				// var imageSize = new kakao.maps.Size(24, 35); 
+				
+				// // 마커 이미지를 생성합니다    
+				// var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+				
+				// 마커를 생성합니다
+				var marker = new kakao.maps.Marker({
+					map: map,
+					position: positions[i].latlng,
+					title : positions[i].title, 
+					image : normalImage
+				});
+				// 마커에 표시할 인포윈도우를 생성합니다 
+				var infowindow = new kakao.maps.InfoWindow({
+					content: positions[i].title // 인포윈도우에 표시할 내용
+				});
+
+				// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
+				// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+				(function(marker, infowindow) {
+					// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
+					kakao.maps.event.addListener(marker, 'mouseover', function() {
+						infowindow.open(map, marker);
+						if (!selectedMarker || selectedMarker !== marker) {
+						marker.setImage(overImage);
+					}
+					});
+
+					// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
+					kakao.maps.event.addListener(marker, 'mouseout', function() {
+						infowindow.close();
+						//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
+						// 마커의 이미지를 기본 이미지로 변경합니다
+						if (!selectedMarker || selectedMarker !== marker) {
+							marker.setImage(normalImage);
+						}
+					});
+
+					kakao.maps.event.addListener(marker, 'click', function(){
+						console.log(`${marker}을 클릭했습니다.`)
+						//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
+						// 마커의 이미지를 클릭 이미지로 변경합니다
+						if (!selectedMarker || selectedMarker !== marker) {
+
+							// 클릭된 마커 객체가 null이 아니면
+							// 클릭된 마커의 이미지를 기본 이미지로 변경하고
+							!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+
+							// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+							marker.setImage(clickImage);
+						}
+
+						// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+						selectedMarker = marker;
+						console.log()
+						console.log("selectMarker",selectedMarker.title);
+						})
+				})(marker, infowindow);
+
+				bounds.extend(positions[i].latlng);
+				marker.setMap(map);
+			}
+
+			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+			map.setBounds(bounds);	
+		},
 
 
 
