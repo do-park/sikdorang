@@ -24,7 +24,7 @@ class Command(BaseCommand):
         Sub PJT 1에서 만든 Dataframe을 이용하여 DB를 초기화합니다.
         """
         print("[*] 카테고리 넣는중")
-        category_name = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "족발/보쌈", "찜/탕", "도시락", "패스트푸드", "술집"]
+        category_name = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
         for i in range(14):
             category = models.Category.objects.create(
                 id = i,
