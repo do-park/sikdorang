@@ -19,17 +19,20 @@
 
     <div style="height:50px;"></div>
 
-    <v-btn @click="createtrip(clonedItems)">CREATE</v-btn>
+    <v-btn @click="createTrip()">CREATE</v-btn>
+    <br />
     <span v-for="(item, i) in saved" :key="item">
-      <v-btn @click="readtrip(item, i)">READ {{i}}</v-btn>
-      <v-btn @click="updatetrip(item, i)">UPDATE {{i}}</v-btn>
-      <v-btn @click="deletetrip(item, i)">DELETE {{i}}</v-btn>
+      <v-btn @click="readTrip(item)">READ {{i}}</v-btn>
+      <v-btn @click="updateTrip(item)">UPDATE {{i}}</v-btn>
+      <v-btn @click="deleteTrip(item)">DELETE {{i}}</v-btn>
+      <br />
     </span>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import Swal from "sweetalert2";
 
 export default {
   name: "Schedule",
@@ -74,11 +77,11 @@ export default {
       },
     };
   },
-  // todo: 현재 로그인한 유저의 정보를 받아와야 함, 일단 1 넣어주는걸로 test
   created() {
+    // todo: userId에 현재 로그인한 유저의 id 넣어주기
     this.userId = 1;
+    this.getTripdata();
   },
-
   methods: {
     // function about drag and drop
     handleClone(item) {
@@ -96,73 +99,174 @@ export default {
       return e.uid;
     },
     // function about trips
-    createtrip(items) {
-      let R = 0;
-      let C = 0;
-      let S = 0;
-      let A = 0;
-      let trip = "";
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].id === "R") {
-          trip = trip + "R" + R + "-";
-          R += 1;
-        } else if (items[i].id === "C") {
-          trip = trip + "C" + C + "-";
-          C += 1;
-        } else if (items[i].id === "S") {
-          trip = trip + "S" + S + "-";
-          S += 1;
-        } else {
-          trip = trip + "A" + A + "-";
-          A += 1;
-        }
-      }
-      // for test: console로 찍는 대신 백엔드로 넘길 수 있게 수정
-      this.saved.push(trip.slice(0, -1));
-      this.clonedItems = [];
-      console.log(this.saved);
+    getTripdata() {
+      // getTripdata 유저 정보 받는 쪽으로 수정
+      this.$axios
+        .get(`/trip/`)
+        .then((response) => {
+          const data = response.data;
+          for (let i = 0; i < data.length; i++) {
+            this.saved.push({
+              id: data[i].id,
+              name: data[i].name,
+              plan: data[i].plan,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-    readtrip(item) {
-      // for test: this.saved에서 꺼내오는 대신 백엔드에서 받아올 수 있게 수정
-      let trip = item.split("-");
+    createPlan() {
+      if (this.clonedItems.length === 0) {
+        Swal.fire({
+          icon: "error",
+          title: "일정을 등록하세요.",
+        });
+        return false;
+      }
+      let plan = "";
+      for (let i = 0; i < this.clonedItems.length; i++) {
+        plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
+      }
+      return plan;
+    },
+    createTrip() {
+      let plan = this.createPlan();
+      if (!plan) {
+        return;
+      }
+      const inputValue = String(new Date()).slice(4, 24);
+      Swal.fire({
+        icon: "info",
+        title: "일정의 이름을 입력하세요.",
+        input: "text",
+        inputValue: inputValue,
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (value === "") {
+            return "일정의 이름을 입력하세요!";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
+          this.$axios
+            .post(`/trip/`, {
+              user: this.userId,
+              name: result.value,
+              plan: plan.slice(0, -1),
+            })
+            .then((response) => {
+              if (parseInt(response.status / 100) == 2) {
+                Swal.fire({
+                  icon: "success",
+                  title: "일정을 등록했습니다.",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+    },
+    readTrip(item) {
+      let trip = item.plan.split("-");
       this.clonedItems = [];
-      console.log(trip);
       for (let i = 0; i < trip.length; i++) {
         if (trip[i][0] == "R") {
           this.clonedItems.push({
             name: "식당",
             id: "R",
+            uid: trip[i].slice(1),
           });
         } else if (trip[i][0] == "C") {
           this.clonedItems.push({
             name: "카페",
             id: "C",
+            uid: trip[i].slice(1),
           });
         } else if (trip[i][0] == "S") {
           this.clonedItems.push({
             name: "관광지",
             id: "S",
+            uid: trip[i].slice(1),
           });
         } else if (trip[i][0] == "A") {
           this.clonedItems.push({
             name: "숙박",
             id: "A",
+            uid: trip[i].slice(1),
           });
         }
       }
     },
-    updatetrip(item, i) {
-      // for test: this.saved에서 수정하는 대신 DB에서 수정해야 함
-      // 사실상 지금 이 코드는 쓸모가 없다...ㅋㅋ
-      console.log(item);
-      console.log(i);
+    updateTrip(item) {
+      let plan = this.createPlan();
+      if (!plan) {
+        return;
+      }
+      const inputValue = item.name;
+      Swal.fire({
+        icon: "info",
+        title: "일정의 이름을 입력하세요.",
+        input: "text",
+        inputValue: inputValue,
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (value === "") {
+            return "일정의 이름을 입력하세요!";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
+          this.$axios
+            .put(`/trip/${item.id}/`, {
+              user: this.userId,
+              name: result.value,
+              plan: plan.slice(0, -1),
+            })
+            .then((response) => {
+              if (parseInt(response.status / 100) == 2) {
+                Swal.fire({
+                  icon: "success",
+                  title: "일정을 수정했습니다.",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
     },
-    deletetrip(item, i) {
-      // for test: this.saved에서 삭제하는 대신 DB에서 삭제해야 함
-      // 사실상 지금 이 코드는 쓸모가 없다...ㅋㅋ
-      console.log(item);
-      console.log(i);
-      if (i > -1) this.saved.splice(i, 1);
+    deleteTrip(item) {
+      Swal.fire({
+        title: "일정을 삭제합니다.",
+        text:
+          "확인 버튼을 누르면 모든 데이터가 영구적으로 삭제되어 복구할 수 없게 됩니다.",
+        icon: "warning",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.value) {
+          this.$axios
+            .delete(`/trip/${item.id}/`)
+            .then((response) => {
+              if (parseInt(response.status / 100) == 2) {
+                Swal.fire({
+                  title: "일정이 삭제되었습니다.",
+                  icon: "success",
+                  showConfirmButton: true,
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
     },
   },
 };
