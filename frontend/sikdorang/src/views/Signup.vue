@@ -28,7 +28,7 @@
       <v-text-field
         v-model="signupData.password"
         label="비밀번호"
-        :rules="[passwordRules.required, passwordRules.min]"
+        :rules="passwordRules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show1 ? 'text' : 'password'"
         hint="8자 이상"
@@ -42,7 +42,10 @@
         :type="show1 ? 'text' : 'password'"
         counter
         @click:append="show1 = !show1"></v-text-field>
-      <v-btn class="signup-btn" color="primary" @click="clickSignup">가입하기</v-btn>
+      <v-btn 
+        class="signup-btn" 
+        color="primary" 
+        @click="clickSignup">가입하기</v-btn>
     </div>
   </div>
 </template>
@@ -73,7 +76,6 @@ export default {
       ],
       nowYear: new Date().getFullYear(),
       show1: false,
-      password: 'Password',
       passwordRules: [
         value => (value && value.length >= 8) || '8자 이상 입력하세요.',
       ],
@@ -112,7 +114,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .signup-box {
     width: 500px;
     margin: 5rem auto;
