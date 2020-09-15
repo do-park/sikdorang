@@ -1,10 +1,15 @@
 <template>
-  
+    <MyPage/>
 </template>
 
 <script>
-export default {
+import MyPage from '@/components/mypage/MyPage.vue'
 
+export default {
+    name: "MyPageView",
+    components: {
+        MyPage,
+    }
 }
 </script>
 
