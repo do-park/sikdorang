@@ -28,7 +28,7 @@ export default {
     },
     methods : {
       clickMyChoice() {
-        console.log('내가 고르기 누름')
+        this.$router.push(`/map`)
       },
       clickRecommend() {
         console.log('추천 코스 누름')
@@ -39,11 +39,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .myChoice, .recommend {
   margin-top: 3rem
-
-
 }
 
 .main-wrap {
