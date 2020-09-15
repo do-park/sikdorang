@@ -100,7 +100,7 @@ export default {
       }
 
       if (pass) {
-        this.$axios.post(`/api/signup`, this.signupData)
+        this.$axios.post(`/rest-auth/signup/`, this.signupData)
         .then (response => {
           console.log(response)
         })

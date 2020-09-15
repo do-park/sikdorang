@@ -32,7 +32,7 @@ export default {
   },
   methods : {
     clickLogin() {
-      this.$axios.post(`/api/login`, this.loginData)
+      this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
         console.log(response)
       })
