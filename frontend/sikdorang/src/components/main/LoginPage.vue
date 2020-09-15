@@ -23,6 +23,7 @@ export default {
   name:'LoginPage',
   data() {
     return {
+      isLogin: this.$store.state.isLogin,
       loginData: {
         email: "",
         password: ""
@@ -34,12 +35,14 @@ export default {
     clickLogin() {
       this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
-        console.log(response)
+        window.$cookies.set('auth-token',response.key)
+        this.$router.push({ name: 'Home' })
       })
       .catch(err => {
         console.log(err)
+        alert('회원 정보가 일치하지 않습니다.')
       })
-    }
+    },
 
   },
 

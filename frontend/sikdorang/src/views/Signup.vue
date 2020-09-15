@@ -13,9 +13,9 @@
         type="number"
         hide-details="auto"></v-text-field> -->
       <v-text-field
-        v-model="signupData.nickname"
+        v-model="signupData.username"
         label="닉네임"
-        :rules="nicknameRules"
+        :rules="usernameRules"
         hide-details="auto"></v-text-field>
       <div class="year">
         <v-slider
@@ -26,18 +26,18 @@
           thumb-label="always"></v-slider>
       </div>
       <v-text-field
-        v-model="signupData.password"
+        v-model="signupData.password1"
         label="비밀번호"
-        :rules="passwordRules"
+        :rules="password1Rules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show1 ? 'text' : 'password'"
         hint="8자 이상"
         counter
         @click:append="show1 = !show1"></v-text-field>
       <v-text-field
-        v-model="signupData.rePassword"
+        v-model="signupData.password2"
         label="비밀번호 확인"
-        :rules="rePasswordRules"
+        :rules="password2Rules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show1 ? 'text' : 'password'"
         counter
@@ -59,10 +59,10 @@ export default {
       signupData: {
         email: "",
         // phone: "",
-        nickname: "",
+        username: "",
         year: 1990,
-        password: "",
-        rePassword: "",
+        password1: "",
+        password2: "",
 
       },
       emailRules: [
@@ -71,16 +71,16 @@ export default {
       // phoneRules: [
       //   value => (value && value.length === 11) || '올바른 휴대폰 번호를 입력하세요.',
       // ],
-      nicknameRules: [
+      usernameRules: [
         value => (value && value.length >= 1) || '1자 이상 입력하세요.',
       ],
       nowYear: new Date().getFullYear(),
       show1: false,
-      passwordRules: [
+      password1Rules: [
         value => (value && value.length >= 8) || '8자 이상 입력하세요.',
       ],
-      rePasswordRules: [
-        value => (value === this.signupData.password) || '비밀번호가 일치하지 않습니다.',
+      password2Rules: [
+        value => (value === this.signupData.password1) || '비밀번호가 일치하지 않습니다.',
       ],
     }
   },
@@ -89,9 +89,9 @@ export default {
       var pass = false
       if (this.signupData.email.includes('@') && this.signupData.email.includes('.')) {
         // if (this.signupData.phone.length === 11) {
-          if (this.signupData.nickname.length >= 1) {
-            if (this.signupData.password.length >= 8) {
-              if (this.signupData.password === this.signupData.rePassword) {
+          if (this.signupData.username.length >= 1) {
+            if (this.signupData.password1.length >= 8) {
+              if (this.signupData.password1 === this.signupData.password2) {
                 pass = true
               }
             }
@@ -100,6 +100,7 @@ export default {
       }
 
       if (pass) {
+        console.log(this.signupData)
         this.$axios.post(`/rest-auth/signup/`, this.signupData)
         .then (response => {
           console.log(response)
