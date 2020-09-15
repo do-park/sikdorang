@@ -10,6 +10,7 @@
       <div v-if="!flag">
           <MapTheme/>
           <MapField/>
+          <MapCards :kakao="kakao"/>
       </div>    
        
   </div>
@@ -19,12 +20,14 @@
 import SelectStart from '../components/Map/SelectStart'
 import MapField from '../components/Map/MapField'
 import MapTheme from '../components/Map/MapTheme'
+import MapCards from '../components/Map/MapCards'
 export default {
     name:'MapMain',
     components : {
         SelectStart,
         MapField,
         MapTheme,
+        MapCards
     },
     mounted() {
         this.flag = true

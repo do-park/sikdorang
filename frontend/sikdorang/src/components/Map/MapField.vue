@@ -8,25 +8,7 @@
 		<div class="map-wrap">
 			<div id="map"></div>
 		</div>
-		<div>
-			<div>보여주는곳</div>
-			<div id="show-place"></div>
-		</div>
 
-		<h3>일정 추가해보세요</h3>
-		<span 
-		v-for="temp in temps" 
-		:key="temp.id"
-		>
-			<button @click="makePlan(temp)">{{temp.title}}</button>
-		</span>
-		<!-- <h3>일정<button @click="resetPlans()">RESET</button></h3> -->
-		<span 
-		v-for="plan in plans" 
-		:key="plan.id"
-		>
-			<!-- <button @click="showNewMap(plan.latlng)">{{plan.title}}</button> -->
-		</span>   
   </div>
 </template>
 
@@ -290,7 +272,7 @@ export default {
 			var selectedMarker = null;	
 
 			for (var i = 0; i < positions.length; i ++) {
-				var gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
+				const gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
 					originY = (MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 기본, 클릭 마커로 사용할 Y좌표 값
 					overOriginY = (OVER_MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 오버 마커로 사용할 Y좌표 값
 					normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
@@ -299,7 +281,7 @@ export default {
 
 				
 				// 기본 마커이미지, 오버 마커이미지, 클릭 마커이미지를 생성합니다
-				var normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
+				const normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 					
@@ -310,7 +292,7 @@ export default {
 				// var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
 				
 				// 마커를 생성합니다
-				var marker = new kakao.maps.Marker({
+				const marker = new kakao.maps.Marker({
 					map: map,
 					position: positions[i].latlng,
 					title : positions[i].title, 
@@ -347,7 +329,7 @@ export default {
 						//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
 						// 마커의 이미지를 클릭 이미지로 변경합니다
 						if (!selectedMarker || selectedMarker !== marker) {
-
+							
 							// 클릭된 마커 객체가 null이 아니면
 							// 클릭된 마커의 이미지를 기본 이미지로 변경하고
 							!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
@@ -358,7 +340,7 @@ export default {
 
 						// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
 						selectedMarker = marker;
-						console.log()
+						
 						console.log("selectMarker",selectedMarker.title);
 						})
 				})(marker, infowindow);
