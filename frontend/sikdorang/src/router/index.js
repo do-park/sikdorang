@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MapTest from '../views/MapTest.vue'
 import Signup from '../views/Signup.vue'
+import MapMain from '../views/MapMain.vue'
 
 Vue.use(VueRouter)
 
@@ -13,7 +14,7 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/map',
+    path: '/maptest',
     name: 'MapTest',
     component: MapTest
   },
@@ -22,6 +23,12 @@ Vue.use(VueRouter)
     name: 'Signup',
     component: Signup
   },
+  {
+    path: '/map',
+    name: 'MapMain',
+    component: MapMain
+  },
+
 
 ]
 
