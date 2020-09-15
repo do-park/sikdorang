@@ -13,7 +13,11 @@ const mypage = {
             return state.tripList
         },
         getClickedTrip: state => {
-            return state.tripList[state.clickedIndex]
+            if (state.tripList !== null) {
+                return state.tripList[state.clickedIndex]
+            } else {
+                return { id: 0, title: "시작점", lan: 36.0970073, lng: 128.4254652 }
+            }
         },
     },
     mutations: {

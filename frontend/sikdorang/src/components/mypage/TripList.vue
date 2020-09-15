@@ -2,7 +2,7 @@
     <div>
         <h1>일정목록</h1>
         <div v-for="(tripList, index) in getTripList" :key="index">
-            <TripListItem :tripList="tripList"/>
+            <TripListItem :tripList="tripList" :index="index"/>
         </div>
     </div>
 </template>

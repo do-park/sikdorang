@@ -2,6 +2,7 @@
 	<div>
 		<h1>마이페이지</h1>
 		<UserProfile/>
+		<MyPageMap/>
 		<TripList/>
 	</div>
 </template>
@@ -10,6 +11,7 @@
 import { mapActions } from 'vuex'
 import TripList from './TripList.vue'
 import UserProfile from './UserProfile.vue'
+import MyPageMap from './MyPageMap.vue'
 
 const mypage = 'mypage'
 
@@ -18,6 +20,7 @@ export default {
 	components: {
 		TripList,
 		UserProfile,
+		MyPageMap,
 	},
     mounted() {
 		// 유저 정보를 가져옵니다.
@@ -65,6 +68,14 @@ export default {
 					lat: 36.119735,
 					lng: 118.3463003,
 				}
+			],
+			[
+				{
+					id: 7,
+					title: '두번째 인덱스',
+					lat: 36.119737,
+					lng: 118.3463005,
+				}
 			]
 		]
 		this.actionUserInfo(userInfo)
@@ -75,7 +86,7 @@ export default {
 			'actionUserInfo',
 			'actionTripList',
 		]),
-	}
+	},
 }
 </script>
 
