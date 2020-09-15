@@ -1,10 +1,14 @@
 <template>
 	<div>
 		<div>
-			<img :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')">
+			<img :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
 		</div>
 		<div>
-			<img :src="imgs[tags[rightIndex]]" alt="right Image" @click="onClick('right')">
+			<img :src="imgs[tags[rightIndex]]" alt="right Image" @click="onClick('right')" v-if="!isDone">
+		</div>
+		<div v-if="isDone" @click="done">
+			<h2>1위</h2>
+			<img :src="imgs[tags[0]]">
 		</div>
 	</div>
 </template>
@@ -34,6 +38,7 @@ export default {
 			round: 1,
 			clickCount: -1,
 			userChoice: [],
+			isDone: false,
 		}
 	},
 	methods: {
@@ -50,6 +55,7 @@ export default {
 				this.leftIndex = this.leftIndex+2
 				this.rightIndex = this.rightIndex+2
 				if (this.rightIndex > (this.tags.length-1)) {
+					this.userChoice.push(this.tags[this.leftIndex])
 					this.nextRound()
 				}
 			}
@@ -64,13 +70,19 @@ export default {
 			this.userChoice = []
 			this.round += 1
 			this.clickCount = -1
+			console.log('round:', this.round)
+			console.log('tags:', this.tags)
 			if (this.tags.length === 1) {
 				console.log('종료 로직을 실행합니다.')
+				this.isDone = true
 			}
 		},
 		tagsSave() {
 			console.log('유저 정보와 태그를 서버에 보내 저장합니다.')
 			this.$axios.post()
+		},
+		done() {
+			this.$router.push('/')
 		}
 	}
 }
