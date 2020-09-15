@@ -71,7 +71,7 @@ export default {
 			this.startCoord();
 			this.fillPositions();
 			this.initCurLocation();
-			this.showPositions(this.temps)
+			this.showPositions2222(this.temps)
 		},
 
 		initCurLocation() {
@@ -266,7 +266,7 @@ export default {
 	showPositions2222(locs) {
 			var map = this.map;
 			var positions = locs.slice(0,3);	
-			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+			// var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			var bounds = new kakao.maps.LatLngBounds();   
 				this.recommendMarkers = [];
 			//커스텀 마커 정보
@@ -618,25 +618,25 @@ export default {
 			
 		// },
 
-		// // MakrerImage 객체를 생성하여 반환하는 함수입니다
-		// createMarkerImage(markerSize, offset, spriteOrigin) {
-		// 	var SPRITE_MARKER_URL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites2.png' // 스프라이트 마커 이미지 URL
-		// 	var SPRITE_WIDTH = 126, // 스프라이트 이미지 너비
-		// 		SPRITE_HEIGHT = 146 // 스프라이트 이미지 높이
-		// 	var	spriteImageSize = new kakao.maps.Size(SPRITE_WIDTH, SPRITE_HEIGHT); // 스프라이트 이미지의 크기
+		// MakrerImage 객체를 생성하여 반환하는 함수입니다
+		createMarkerImage(markerSize, offset, spriteOrigin) {
+			var SPRITE_MARKER_URL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites2.png' // 스프라이트 마커 이미지 URL
+			var SPRITE_WIDTH = 126, // 스프라이트 이미지 너비
+				SPRITE_HEIGHT = 146 // 스프라이트 이미지 높이
+			var	spriteImageSize = new kakao.maps.Size(SPRITE_WIDTH, SPRITE_HEIGHT); // 스프라이트 이미지의 크기
 			
-		// 	var markerImage = new kakao.maps.MarkerImage(
-		// 		SPRITE_MARKER_URL, // 스프라이트 마커 이미지 URL
-		// 		markerSize, // 마커의 크기
-		// 		{
-		// 			offset: offset, // 마커 이미지에서의 기준 좌표
-		// 			spriteOrigin: spriteOrigin, // 스트라이프 이미지 중 사용할 영역의 좌상단 좌표
-		// 			spriteSize: spriteImageSize // 스프라이트 이미지의 크기
-		// 		}
-		// 	);
+			var markerImage = new kakao.maps.MarkerImage(
+				SPRITE_MARKER_URL, // 스프라이트 마커 이미지 URL
+				markerSize, // 마커의 크기
+				{
+					offset: offset, // 마커 이미지에서의 기준 좌표
+					spriteOrigin: spriteOrigin, // 스트라이프 이미지 중 사용할 영역의 좌상단 좌표
+					spriteSize: spriteImageSize // 스프라이트 이미지의 크기
+				}
+			);
 			
-		// 	return markerImage;
-		// },
+			return markerImage;
+		},
 		
 		getTimeHTML(distance) {
 
