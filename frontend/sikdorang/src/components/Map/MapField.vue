@@ -31,7 +31,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 export default {
 	name : "MapField",
@@ -129,24 +129,24 @@ export default {
             }
 		},
 		
-		// getList() {
+		getList() {
 			//axios로 현재 좌표를 보내면 추천 음식점 6개 받아온다.
-			// axios.get('/getRests', Headers)
-			// .then(res => {
+			axios.get('/getRests', Headers)
+			.then(res => {
 
-			// })
-			// .catch(res=>{
+			})
+			.catch(res=>{
 
-			// })
-			// //선택 음식점 주변의 관광지/카페 정보를 얻는다.
-			// axios.get('/getRests', Headers)
-			// .then(res => {
+			})
+			//선택 음식점 주변의 관광지/카페 정보를 얻는다.
+			axios.get('/getRests', Headers)
+			.then(res => {
 
-			// })
-			// .catch(res=>{
+			})
+			.catch(res=>{
 				
-			// })
-		// },
+			})
+		},
 
 		fillPositions() {
 			this.temps = [
