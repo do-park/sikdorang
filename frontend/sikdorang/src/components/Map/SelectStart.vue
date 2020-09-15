@@ -39,6 +39,7 @@
                             v-model="destination" 
                             @keyup.enter="findPath(destination)"
                             label="어디 갈래?"
+                            placeholder="XX동 or XX동 775-5"
                             
                         ></v-text-field>
                         <v-btn
