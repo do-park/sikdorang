@@ -1,7 +1,12 @@
 <template>
   <div>
       <div class="d-flex justify-content-center">
-          <div class="box" v-for="rec in threeRec" :key="rec.id">
+          <div 
+          class="box" 
+          v-for="rec in threeRec" 
+          :key="rec.id"
+          @click="selectRest()"
+          >
             {{rec.title}}
             {{rec.latitude}}
             {{rec.longitude}}
