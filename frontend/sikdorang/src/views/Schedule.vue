@@ -1,0 +1,276 @@
+<template>
+  <div>
+    <h1>오늘의 일정</h1>
+    <p>일정을 삭제하려면 클릭하세요.</p>
+    <draggable v-model="clonedItems" :options="clonedItemOptions" style="border: 1px solid blue;">
+      <v-btn
+        v-for="(item, index) in clonedItems"
+        :key="uuid(item)"
+        @click="deleteItem(index)"
+        class="clickable"
+      >{{item.name}}</v-btn>
+    </draggable>
+
+    <div style="height:50px;"></div>
+
+    <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
+      <v-btn v-for="item in availableItems" :key="uuid(item)">{{item.name}}</v-btn>
+    </draggable>
+
+    <div style="height:50px;"></div>
+
+    <v-btn @click="createTrip()">CREATE</v-btn>
+    <br />
+    <span v-for="(item, i) in saved" :key="item">
+      <v-btn @click="readTrip(item)">READ {{i}}</v-btn>
+      <v-btn @click="updateTrip(item)">UPDATE {{i}}</v-btn>
+      <v-btn @click="deleteTrip(item)">DELETE {{i}}</v-btn>
+      <br />
+    </span>
+  </div>
+</template>
+
+<script>
+import draggable from "vuedraggable";
+import Swal from "sweetalert2";
+
+export default {
+  name: "Schedule",
+  order: 2,
+  components: {
+    draggable,
+  },
+  data() {
+    return {
+      userId: null,
+      // for test
+      saved: [],
+      clonedItems: [],
+      availableItems: [
+        {
+          name: "식당",
+          id: "R",
+        },
+        {
+          name: "카페",
+          id: "C",
+        },
+        {
+          name: "관광지",
+          id: "S",
+        },
+        {
+          name: "숙박",
+          id: "A",
+        },
+      ],
+      clonedItemOptions: {
+        group: "items",
+      },
+      availableItemOptions: {
+        group: {
+          name: "items",
+          pull: "clone",
+          put: false,
+        },
+        sort: false,
+      },
+    };
+  },
+  created() {
+    // todo: userId에 현재 로그인한 유저의 id 넣어주기
+    this.userId = 1;
+    this.getTripdata();
+  },
+  methods: {
+    // function about drag and drop
+    handleClone(item) {
+      let cloneMe = JSON.parse(JSON.stringify(item));
+      this.$delete(cloneMe, "uid");
+      return cloneMe;
+    },
+    deleteItem(index) {
+      this.clonedItems.splice(index, 1);
+    },
+    uuid(e) {
+      if (e.uid) return e.uid;
+      const key = Math.random().toString(10).slice(2);
+      this.$set(e, "uid", key);
+      return e.uid;
+    },
+    // function about trips
+    getTripdata() {
+      // getTripdata 유저 정보 받는 쪽으로 수정
+      this.$axios
+        .get(`/trip/list/${this.userId}`)
+        .then((response) => {
+          const data = response.data;
+          for (let i = 0; i < data.length; i++) {
+            this.saved.push({
+              id: data[i].id,
+              name: data[i].name,
+              plan: data[i].plan,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    createPlan() {
+      if (this.clonedItems.length === 0) {
+        Swal.fire({
+          icon: "error",
+          title: "일정을 등록하세요.",
+        });
+        return false;
+      }
+      let plan = "";
+      for (let i = 0; i < this.clonedItems.length; i++) {
+        plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
+      }
+      return plan;
+    },
+    createTrip() {
+      let plan = this.createPlan();
+      if (!plan) {
+        return;
+      }
+      const inputValue = String(new Date()).slice(4, 24);
+      Swal.fire({
+        icon: "info",
+        title: "일정의 이름을 입력하세요.",
+        input: "text",
+        inputValue: inputValue,
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (value === "") {
+            return "일정의 이름을 입력하세요!";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
+          this.$axios
+            .post(`/trip/`, {
+              user: this.userId,
+              name: result.value,
+              plan: plan.slice(0, -1),
+            })
+            .then((response) => {
+              if (parseInt(response.status / 100) == 2) {
+                Swal.fire({
+                  icon: "success",
+                  title: "일정을 등록했습니다.",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+    },
+    readTrip(item) {
+      let trip = item.plan.split("-");
+      this.clonedItems = [];
+      for (let i = 0; i < trip.length; i++) {
+        if (trip[i][0] == "R") {
+          this.clonedItems.push({
+            name: "식당",
+            id: "R",
+            uid: trip[i].slice(1),
+          });
+        } else if (trip[i][0] == "C") {
+          this.clonedItems.push({
+            name: "카페",
+            id: "C",
+            uid: trip[i].slice(1),
+          });
+        } else if (trip[i][0] == "S") {
+          this.clonedItems.push({
+            name: "관광지",
+            id: "S",
+            uid: trip[i].slice(1),
+          });
+        } else if (trip[i][0] == "A") {
+          this.clonedItems.push({
+            name: "숙박",
+            id: "A",
+            uid: trip[i].slice(1),
+          });
+        }
+      }
+    },
+    updateTrip(item) {
+      let plan = this.createPlan();
+      if (!plan) {
+        return;
+      }
+      const inputValue = item.name;
+      Swal.fire({
+        icon: "info",
+        title: "일정의 이름을 입력하세요.",
+        input: "text",
+        inputValue: inputValue,
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (value === "") {
+            return "일정의 이름을 입력하세요!";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
+          this.$axios
+            .put(`/trip/${item.id}/`, {
+              user: this.userId,
+              name: result.value,
+              plan: plan.slice(0, -1),
+            })
+            .then((response) => {
+              if (parseInt(response.status / 100) == 2) {
+                Swal.fire({
+                  icon: "success",
+                  title: "일정을 수정했습니다.",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+    },
+    deleteTrip(item) {
+      Swal.fire({
+        title: "일정을 삭제합니다.",
+        text:
+          "확인 버튼을 누르면 모든 데이터가 영구적으로 삭제되어 복구할 수 없게 됩니다.",
+        icon: "warning",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.value) {
+          this.$axios
+            .delete(`/trip/${item.id}/`)
+            .then((response) => {
+              if (parseInt(response.status / 100) == 2) {
+                Swal.fire({
+                  title: "일정이 삭제되었습니다.",
+                  icon: "success",
+                  showConfirmButton: true,
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+    },
+  },
+};
+</script>
+
+<style>
+</style>
