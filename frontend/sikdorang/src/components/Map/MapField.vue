@@ -8,25 +8,7 @@
 		<div class="map-wrap">
 			<div id="map"></div>
 		</div>
-		<div>
-			<div>보여주는곳</div>
-			<div id="show-place"></div>
-		</div>
 
-		<h3>일정 추가해보세요</h3>
-		<span 
-		v-for="temp in temps" 
-		:key="temp.id"
-		>
-			<button @click="makePlan(temp)">{{temp.title}}</button>
-		</span>
-		<!-- <h3>일정<button @click="resetPlans()">RESET</button></h3> -->
-		<span 
-		v-for="plan in plans" 
-		:key="plan.id"
-		>
-			<!-- <button @click="showNewMap(plan.latlng)">{{plan.title}}</button> -->
-		</span>   
   </div>
 </template>
 
@@ -43,6 +25,8 @@ export default {
 			startLong :128.4128223,
 			curLat: null,
 			curLong: null,
+			curMarkers : [],
+			recommendMarkers : [],
 			plans : [],
 			temps : [],
 		}
@@ -65,12 +49,11 @@ export default {
 			}; 
 			var map = new kakao.maps.Map(container, options); 
             this.map = map;
-			var marker = new kakao.maps.Marker({position: map.getCenter()}); 
-			marker.setMap(map);
 			
 			this.startCoord();
 			this.fillPositions();
 			this.initCurLocation();
+			this.showCandidates(this.temps)
 		},
 
 		initCurLocation() {
@@ -92,7 +75,21 @@ export default {
 
 			script2.onload = () => kakao.maps.load(this.initMap);
 		},
-		
+	
+		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
+		showMarkers(markers) {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(this.map);
+			}    
+		},
+
+		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
+		hideMarkers(markers) {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(null);
+			} 
+		},
+
         startCoord() {
 			var map = this.map
 			
@@ -103,7 +100,12 @@ export default {
             var LatLng = new kakao.maps.LatLng(this.startLat, this.startLong)
             map.setCenter(LatLng);
 			var marker = new kakao.maps.Marker({ position: map.getCenter() });
-			marker.setMap(map);
+			this.curMarkers = [];
+			
+			// 마커를 추가
+			this.curMarkers.push(marker);
+			console.log("myloc",this.curMarkers)
+			this.showMarkers(this.curMarkers);
 
             }
             else {
@@ -123,29 +125,34 @@ export default {
 						map.setCenter(coords);
 						console.log(`${this.destination} 좌표 : ${coords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
-                        marker.setMap(map);
+                        this.curMarkers = [];
+					
+						// 마커를 추가
+						this.curMarkers.push(marker);
+						console.log("choose region",this.curMarkers)
+						this.showMarkers(this.curMarkers);
                     } 
                 })
             }
 		},
-		
+		// 지금 내 위치에서 근처의 음식점 리스트 받아오는 함수
 		// getList() {
-			//axios로 현재 좌표를 보내면 추천 음식점 6개 받아온다.
-			// axios.get('/getRests', Headers)
-			// .then(res => {
+		// 	//axios로 현재 좌표를 보내면 추천 음식점 6개 받아온다.
+		// 	axios.get('/getRests', Headers)
+		// 	.then(res => {
 
-			// })
-			// .catch(res=>{
+		// 	})
+		// 	.catch(res=>{
 
-			// })
-			// //선택 음식점 주변의 관광지/카페 정보를 얻는다.
-			// axios.get('/getRests', Headers)
-			// .then(res => {
+		// 	})
+		// 	//선택 음식점 주변의 관광지/카페 정보를 얻는다.
+		// 	axios.get('/getRests', Headers)
+		// 	.then(res => {
 
-			// })
-			// .catch(res=>{
+		// 	})
+		// 	.catch(res=>{
 				
-			// })
+		// 	})
 		// },
 
 		fillPositions() {
@@ -178,12 +185,178 @@ export default {
 				},
 				{   
 					id : 6,
-					title: '마지막',
-					latlng: new kakao.maps.LatLng(36.119735,118.3463003)
+					title: '인동스타벅스',
+					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
 				}
 			]
 		},
+	
+	
+	showPositions(locs) {
+			var map = this.map;
+			var positions = locs.slice(0,3);	
+			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+			var bounds = new kakao.maps.LatLngBounds();   
+					
+			for (var i = 0; i < positions.length; i ++) {
+					
+				// 마커 이미지의 이미지 크기 입니다
+				var imageSize = new kakao.maps.Size(24, 35); 
+				
+				// 마커 이미지를 생성합니다    
+				var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+				
+				// 마커를 생성합니다
+				var marker = new kakao.maps.Marker({
+					map: map,
+					position: positions[i].latlng,
+					title : positions[i].title, 
+					image : markerImage
+				});
+				// 마커에 표시할 인포윈도우를 생성합니다 
+				var infowindow = new kakao.maps.InfoWindow({
+					content: positions[i].title // 인포윈도우에 표시할 내용
+				});
+
+				// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
+				// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+				(function(marker, infowindow) {
+					// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
+					kakao.maps.event.addListener(marker, 'mouseover', function() {
+						infowindow.open(map, marker);
+					});
+
+					// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
+					kakao.maps.event.addListener(marker, 'mouseout', function() {
+						infowindow.close();
+					});
+
+					kakao.maps.event.addListener(marker, 'click', function(){
+						console.log(`${marker}을 클릭했습니다.`)
+					})
+				})(marker, infowindow);
+
+				bounds.extend(positions[i].latlng);
+				marker.setMap(map);
+			}
+
+			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+			map.setBounds(bounds);	
+		},
+
+	showCandidates(locs) {
+			var map = this.map;
+			var positions = locs.slice(0,3);	
+			// var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+			var bounds = new kakao.maps.LatLngBounds();   
+				this.recommendMarkers = [];
+			//커스텀 마커 정보
+			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
+				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
+				OFFSET_X = 12, // 기본, 클릭 마커의 기준 X좌표
+				OFFSET_Y = MARKER_HEIGHT, // 기본, 클릭 마커의 기준 Y좌표
+				OVER_MARKER_WIDTH = 40, // 오버 마커의 너비
+				OVER_MARKER_HEIGHT = 42, // 오버 마커의 높이
+				OVER_OFFSET_X = 13, // 오버 마커의 기준 X좌표
+				OVER_OFFSET_Y = OVER_MARKER_HEIGHT, // 오버 마커의 기준 Y좌표
+				SPRITE_GAP = 10; // 스프라이트 이미지에서 마커간 간격
+		
+
+			var markerSize = new kakao.maps.Size(MARKER_WIDTH, MARKER_HEIGHT), // 기본, 클릭 마커의 크기
+				markerOffset = new kakao.maps.Point(OFFSET_X, OFFSET_Y), // 기본, 클릭 마커의 기준좌표
+				overMarkerSize = new kakao.maps.Size(OVER_MARKER_WIDTH, OVER_MARKER_HEIGHT), // 오버 마커의 크기
+				overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y); // 오버 마커의 기준 좌표
 			
+			// 클릭한 마커를 담을 변수
+			var selectedMarker = null;	
+
+			for (var i = 0; i < positions.length; i ++) {
+				const gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
+					originY = (MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 기본, 클릭 마커로 사용할 Y좌표 값
+					overOriginY = (OVER_MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 오버 마커로 사용할 Y좌표 값
+					normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
+					clickOrigin = new kakao.maps.Point(gapX, originY), // 스프라이트 이미지에서 마우스오버 마커로 사용할 영역의 좌상단 좌표
+					overOrigin = new kakao.maps.Point(gapX * 2, overOriginY); // 스프라이트 이미지에서 클릭 마커로 사용할 영역의 좌상단 좌표
+
+				
+				// 기본 마커이미지, 오버 마커이미지, 클릭 마커이미지를 생성합니다
+				const normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
+					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
+					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
+					
+				// // 마커 이미지의 이미지 크기 입니다
+				// var imageSize = new kakao.maps.Size(24, 35); 
+				
+				// // 마커 이미지를 생성합니다    
+				// var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+				
+				// 마커를 생성합니다
+				const marker = new kakao.maps.Marker({
+					map: map,
+					position: positions[i].latlng,
+					title : positions[i].title, 
+					image : normalImage
+				});
+				// 마커에 표시할 인포윈도우를 생성합니다 
+				var infowindow = new kakao.maps.InfoWindow({
+					content: positions[i].title // 인포윈도우에 표시할 내용
+				});
+
+				// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
+				// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+				(function(marker, infowindow) {
+					// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
+					kakao.maps.event.addListener(marker, 'mouseover', function() {
+						infowindow.open(map, marker);
+						if (!selectedMarker || selectedMarker !== marker) {
+						marker.setImage(overImage);
+					}
+					});
+
+					// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
+					kakao.maps.event.addListener(marker, 'mouseout', function() {
+						infowindow.close();
+						//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
+						// 마커의 이미지를 기본 이미지로 변경합니다
+						if (!selectedMarker || selectedMarker !== marker) {
+							marker.setImage(normalImage);
+						}
+					});
+
+					kakao.maps.event.addListener(marker, 'click', function(){
+						console.log(`${marker}을 클릭했습니다.`)
+						//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
+						// 마커의 이미지를 클릭 이미지로 변경합니다
+						if (!selectedMarker || selectedMarker !== marker) {
+							
+							// 클릭된 마커 객체가 null이 아니면
+							// 클릭된 마커의 이미지를 기본 이미지로 변경하고
+							!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+
+							// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+							marker.setImage(clickImage);
+						}
+
+						// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+						selectedMarker = marker;
+						
+						console.log("selectMarker",selectedMarker.title);
+						})
+				})(marker, infowindow);
+
+				bounds.extend(positions[i].latlng);
+				marker.setMap(map);
+			}
+
+			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+			map.setBounds(bounds);	
+		},
+
+
+
+
 	// 	showNewMap(LatLng) { 
 	// 		var map = this.map;
 	// 		map.setCenter(LatLng);
@@ -191,37 +364,27 @@ export default {
 	// 		marker.setMap(map);
 	// 	},
 			
-	// 	showPositions(locs) {
-	// 		var map = this.map;
-	// 		var positions = locs;	
-	// 		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-	// 		var bounds = new kakao.maps.LatLngBounds();   
-					
-	// 		for (var i = 0; i < positions.length; i ++) {
-					
-	// 			// 마커 이미지의 이미지 크기 입니다
-	// 			var imageSize = new kakao.maps.Size(24, 35); 
-				
-	// 			// 마커 이미지를 생성합니다    
-	// 			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-				
-	// 			// 마커를 생성합니다
-	// 			var marker = new kakao.maps.Marker({
-	// 				map: map,
-	// 				position: positions[i].latlng,
-	// 				title : positions[i].title, 
-	// 				image : markerImage
-	// 			});
-
-	// 			bounds.extend(positions[i].latlng);
-	// 			marker.setMap(map);
-	// 		}
-
-	// 		// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
-	// 		// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-	// 		map.setBounds(bounds);	
-	// 	},
-
+	
+		// MakrerImage 객체를 생성하여 반환하는 함수입니다
+		createMarkerImage(markerSize, offset, spriteOrigin) {
+			var SPRITE_MARKER_URL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites2.png' // 스프라이트 마커 이미지 URL
+			var SPRITE_WIDTH = 126, // 스프라이트 이미지 너비
+				SPRITE_HEIGHT = 146 // 스프라이트 이미지 높이
+			var	spriteImageSize = new kakao.maps.Size(SPRITE_WIDTH, SPRITE_HEIGHT); // 스프라이트 이미지의 크기
+			
+			var markerImage = new kakao.maps.MarkerImage(
+				SPRITE_MARKER_URL, // 스프라이트 마커 이미지 URL
+				markerSize, // 마커의 크기
+				{
+					offset: offset, // 마커 이미지에서의 기준 좌표
+					spriteOrigin: spriteOrigin, // 스트라이프 이미지 중 사용할 영역의 좌상단 좌표
+					spriteSize: spriteImageSize // 스프라이트 이미지의 크기
+				}
+			);
+			
+			return markerImage;
+		},
+		
 		getTimeHTML(distance) {
 
 			// 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
