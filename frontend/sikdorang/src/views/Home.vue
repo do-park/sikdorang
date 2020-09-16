@@ -1,10 +1,20 @@
 <template>
   <div class="home">
-    <v-btn  v-if="!nowMain" class="arrow-btn" color="primary" @click="changeToMainPage">지금은 로그인페이지</v-btn>
-    <transition name="component-fade" mode="out-in">
+    <v-btn 
+      v-if="!nowMain" 
+      class="arrow-btn" 
+      color="primary" 
+      @click="changeToMainPage">지금은 로그인페이지</v-btn>
+    <transition 
+      name="component-fade" 
+      mode="out-in">
       <component v-bind:is="view"></component>
     </transition>
-    <v-btn  v-if="nowMain" class="arrow-btn" color="primary" @click="changeToLoginPage">지금은 메인페이지</v-btn>
+    <v-btn 
+      v-if="nowMain" 
+      class="arrow-btn" 
+      color="primary" 
+      @click="changeToLoginPage">지금은 메인페이지</v-btn>
   </div>
 </template>
 
