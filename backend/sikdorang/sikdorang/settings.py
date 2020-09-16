@@ -63,6 +63,9 @@ INSTALLED_APPS = [
     # 여행
     'trip',
 
+    # 추천
+    'recommend',
+
     # 데이터베이스 추가
     'api',
 
