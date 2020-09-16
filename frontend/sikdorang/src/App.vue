@@ -1,32 +1,21 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-       <router-link to="/">Map</router-link> |
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-main>
+      <router-link to="/">Home</router-link>|
+      <router-link to="/maptest">MapTest</router-link>|
+      <router-link to="/map">Map 시작하기</router-link>|
+      <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>
+      <router-link to="/signup">Signup</router-link>|
+      <router-link to="/schedule">schedule</router-link>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  name: "App",
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  data: () => ({}),
+};
+</script>
