@@ -27,8 +27,10 @@ export default {
 			curLong: null,
 			curMarkers : [],
 			recommendMarkers : [],
+			selectedMarker : null,
 			plans : [],
 			temps : [],
+			flip : false,
 		}
 	},
 	mounted() {
@@ -38,8 +40,14 @@ export default {
 		else {
 			this.addScript();
         }
-
+		
 	},
+	watch : {
+		selectedMarker(){
+			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
+		}
+	},
+	
 	methods : {
 		initMap() { 
 			var container = document.getElementById('map'); 
@@ -49,7 +57,8 @@ export default {
 			}; 
 			var map = new kakao.maps.Map(container, options); 
             this.map = map;
-			
+			this.$emit('getKakao',window.kakao)
+
 			this.startCoord();
 			this.fillPositions();
 			this.initCurLocation();
@@ -91,6 +100,7 @@ export default {
 		},
 
         startCoord() {
+			this.$cookies.set('flip',false)
 			var map = this.map
 			
             if (this.$cookies.get("searchMethod")==="myLocation"){
@@ -192,7 +202,7 @@ export default {
 		},
 	
 	
-	showPositions(locs) {
+		showPositions(locs) {
 			var map = this.map;
 			var positions = locs.slice(0,3);	
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
@@ -244,13 +254,12 @@ export default {
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);	
 		},
-
 	showCandidates(locs) {
 			var map = this.map;
 			var positions = locs.slice(0,3);	
 			// var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			var bounds = new kakao.maps.LatLngBounds();   
-				this.recommendMarkers = [];
+			this.recommendMarkers = [];
 			//커스텀 마커 정보
 			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
 				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
@@ -269,7 +278,7 @@ export default {
 				overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y); // 오버 마커의 기준 좌표
 			
 			// 클릭한 마커를 담을 변수
-			var selectedMarker = null;	
+			var selectedMarker = this.selectedMarker;	
 
 			for (var i = 0; i < positions.length; i ++) {
 				const gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
@@ -285,12 +294,6 @@ export default {
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 					
-				// // 마커 이미지의 이미지 크기 입니다
-				// var imageSize = new kakao.maps.Size(24, 35); 
-				
-				// // 마커 이미지를 생성합니다    
-				// var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-				
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
 					map: map,
@@ -298,119 +301,70 @@ export default {
 					title : positions[i].title, 
 					image : normalImage
 				});
+
+				marker.normalImage = normalImage;
+				marker.idx = i;
+
 				// 마커에 표시할 인포윈도우를 생성합니다 
 				var infowindow = new kakao.maps.InfoWindow({
 					content: positions[i].title // 인포윈도우에 표시할 내용
 				});
 
-				// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
-				// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-				(function(marker, infowindow) {
-					// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
-					kakao.maps.event.addListener(marker, 'mouseover', function() {
-						infowindow.open(map, marker);
-						if (!selectedMarker || selectedMarker !== marker) {
-						marker.setImage(overImage);
-					}
-					});
 
-					// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
-					kakao.maps.event.addListener(marker, 'mouseout', function() {
-						infowindow.close();
-						//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
-						// 마커의 이미지를 기본 이미지로 변경합니다
-						if (!selectedMarker || selectedMarker !== marker) {
-							marker.setImage(normalImage);
-						}
-					});
-
-					kakao.maps.event.addListener(marker, 'click', function(){
-						console.log(`${marker}을 클릭했습니다.`)
-						//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
-						// 마커의 이미지를 클릭 이미지로 변경합니다
-						if (!selectedMarker || selectedMarker !== marker) {
-							
-							// 클릭된 마커 객체가 null이 아니면
-							// 클릭된 마커의 이미지를 기본 이미지로 변경하고
-							!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
-
-							// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-							marker.setImage(clickImage);
-
-						}
-
-						// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
-						selectedMarker = marker;
-						
-						console.log("selectMarker",selectedMarker.title);
-
-
-
-						// 커스텀 오버레이에 표시할 내용입니다     
-						// HTML 문자열 또는 Dom Element 입니다 
-						var content = '<div class="overlaybox">' +
-							'    <div class="boxtitle">금주 영화순위</div>' +
-							'    <div class="first">' +
-							'        <div class="triangle text">1</div>' +
-							'        <div class="movietitle text">드래곤 길들이기2</div>' +
-							'    </div>' +
-							'    <ul>' +
-							'        <li class="up">' +
-							'            <span class="number">2</span>' +
-							'            <span class="title">명량</span>' +
-							'            <span class="arrow up"></span>' +
-							'            <span class="count">2</span>' +
-							'        </li>' +
-							'        <li>' +
-							'            <span class="number">3</span>' +
-							'            <span class="title">해적(바다로 간 산적)</span>' +
-							'            <span class="arrow up"></span>' +
-							'            <span class="count">6</span>' +
-							'        </li>' +
-							'        <li>' +
-							'            <span class="number">4</span>' +
-							'            <span class="title">해무</span>' +
-							'            <span class="arrow up"></span>' +
-							'            <span class="count">3</span>' +
-							'        </li>' +
-							'        <li>' +
-							'            <span class="number">5</span>' +
-							'            <span class="title">안녕, 헤이즐</span>' +
-							'            <span class="arrow down"></span>' +
-							'            <span class="count">1</span>' +
-							'        </li>' +
-							'    </ul>' +
-							'</div>';
-
-						// 커스텀 오버레이가 표시될 위치입니다 
-						var position = new kakao.maps.LatLng(37.49887, 127.026581);  
-
-						// 커스텀 오버레이를 생성합니다
-						var customOverlay = new kakao.maps.CustomOverlay({
-							position: position,
-							content: content,
-							xAnchor: 0.3,
-							yAnchor: 0.91
-						});
-
-						// 커스텀 오버레이를 지도에 표시합니다
-						customOverlay.setMap(map);
-
-
-
-						})
-				})(marker, infowindow);
+				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
+				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,normalImage));
+				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
+			
 
 				bounds.extend(positions[i].latlng);
 				marker.setMap(map);
+			}
+			function makeOverListener(map, marker, infowindow, overImage) {
+					return function() {
+						infowindow.open(map, marker);
+						if (!selectedMarker || selectedMarker !== marker) {
+							marker.setImage(overImage);
+						}
+					};
+				}
+			function makeOutListener(map, marker,infowindow,normalImage) {
+				return function() {
+					infowindow.close();
+					//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
+					// 마커의 이미지를 기본 이미지로 변경합니다
+					if (!selectedMarker || selectedMarker !== marker) {
+						marker.setImage(normalImage);
+					}
+				};
+			}
+			function makeClickListener(map, marker, infowindow, clickImage) {
+				return function() {
+					//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
+					// 마커의 이미지를 클릭 이미지로 변경합니다
+					if (!selectedMarker || selectedMarker !== marker) {
+						
+						// 클릭된 마커 객체가 null이 아니면
+						// 클릭된 마커의 이미지를 기본 이미지로 변경하고
+						!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+
+						// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+						marker.setImage(clickImage);
+					}
+
+					// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+					selectedMarker = marker;
+					this.selectedMarker = selectedMarker;
+					console.log('this', window)
+					window.$cookies.set('selectedMarker', selectedMarker.idx)
+					
+					console.log("selectMarker",this.selectedMarker.mc, this.selectedMarker.idx);
+				};
 			}
 
 			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);	
 		},
-
-
 
 
 	// 	showNewMap(LatLng) { 

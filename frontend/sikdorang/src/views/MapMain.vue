@@ -9,8 +9,8 @@
       </div>
       <div v-if="!flag">
           <MapTheme/>
-          <MapField/>
-          <MapCards :kakao="kakao"/>
+          <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
+          <MapCards :kakao="kakao" :selected="selected"/>
       </div>    
        
   </div>
@@ -37,12 +37,20 @@ export default {
             map : null,
             flag : true,
             destination : '',
+            kakao : null,
+            selected : null,
         }
     },
     methods : {
         flagValue(value) {
             this.flag = value
         },
+        getKakao(kakao) {
+            this.kakao = kakao
+        },
+        selectedMarker(idx) {
+            this.selected = idx
+        }
     },
 
 }

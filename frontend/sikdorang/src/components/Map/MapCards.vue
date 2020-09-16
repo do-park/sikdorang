@@ -1,5 +1,6 @@
 <template>
   <div>
+      <div>{{flip}}</div>
       <div class="d-flex justify-content-center">
           <div 
           class="box" 
@@ -13,6 +14,8 @@
             <p>음식점 카테고리</p>
             <p>태그들</p>
           </div>
+          <button @click="checkFilp">다른거 볼래요</button>
+
       </div>
   </div>
 </template>
@@ -27,8 +30,12 @@ export default {
             filp : false,
         }
     },
+    props : {
+        selected : Number,
+    },
     mounted() {
         this.fillPositions()
+        console.log("MapCard mounted",this.flip)
     },
     methods : {
         fillPositions() {
@@ -76,13 +83,22 @@ export default {
             console.log(this.threeRec)
         },
         checkFilp() {
-            this.flip = !this.filp
-            if (this.filp) {
-                this.threeRec = this.recommendations.slice(0,3)
+            if (this.flip === null ) {
+                this.flip = this.$cookies.get('flip')
             }
-            else {
+            console.log("before",this.flip,!!this.flip)
+            if (this.filp === true ) {
+                console.log("true->false")
+                this.flip = false
                 this.threeRec = this.recommendations.slice(3,6)
             }
+            else {
+                console.log("false->true")
+                this.flip = true
+                this.threeRec = this.recommendations.slice(0,3)
+            }
+            console.log("after",this.flip)
+            this.$cookies.set('flip',this.flip)
         },
     },
 }
