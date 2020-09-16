@@ -2,7 +2,10 @@
   <v-app>
     <v-main>
       <router-link to="/">Home</router-link>|
-      <router-link to="/map">map</router-link>|
+      <router-link to="/maptest">MapTest</router-link>|
+      <router-link to="/map">Map 시작하기</router-link>|
+      <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>
+      <router-link to="/signup">Signup</router-link>|
       <router-link to="/schedule">schedule</router-link>
       <router-view />
     </v-main>
@@ -10,19 +13,9 @@
 </template>
 
 <script>
-// import MapTest from "./views/MapTest";
-// import Schedule from "./views/Schedule";
-
 export default {
   name: "App",
 
-  components: {
-    // MapTest,
-    // Schedule,
-  },
-
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
 };
 </script>
