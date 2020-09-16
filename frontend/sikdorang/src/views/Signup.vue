@@ -90,12 +90,14 @@ export default {
 
       if (pass) {
         console.log(this.signupData)
-        this.$axios.post(`/rest-auth/signup/`, this.signupData)
+        this.$axios.post(`/rest-auth/registration/`, this.signupData)
         .then (response => {
-          console.log(response)
+          window.$cookies.set('auth-token',response.data.key)
+          this.$router.push({ name: 'Home' })
         })
         .catch(err => {
           console.log(err)
+          alert("너무 일상적인 비밀번호입니다. 변경해주세요.")
         })
       }
       
