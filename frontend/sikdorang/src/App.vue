@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <v-main>
+  <div id="app">
       <router-link to="/">Home</router-link>|
       <router-link to="/maptest">MapTest</router-link>|
       <router-link to="/map">Map 시작하기</router-link>|
@@ -8,8 +7,7 @@
       <router-link to="/signup">Signup</router-link>|
       <router-link to="/schedule">schedule</router-link>
       <router-view />
-    </v-main>
-  </v-app>
+  </div>
 </template>
 
 <script>

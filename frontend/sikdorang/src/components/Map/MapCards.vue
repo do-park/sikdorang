@@ -2,6 +2,10 @@
   <div>
       <div>flip : {{ getFlip }}</div>
       <div v-if="getClicked">{{threeRec[getClicked].title}}디테일 보여주기</div>
+      <div class="d-flex flex-column align-items-center">
+      <div>
+          <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
+      </div>
       <div class="d-flex justify-content-center">
           <div 
           class="box" 
@@ -13,8 +17,9 @@
             {{rec.latitude}}
             {{rec.longitude}}
           </div>
-          <button @click="checkFilp">다른거 볼래요</button>
-
+          <br>
+          
+        </div>
       </div>
   </div>
 </template>
@@ -107,7 +112,7 @@ export default {
             ]
         },
         checkFilp() {
-            console.log("before",this.getFlip,!this.getFlip)
+            console.log("before",this.getFlip)
             if (this.getFlip) {
                 this.threeRec = this.recommendations.slice(3,6)
                

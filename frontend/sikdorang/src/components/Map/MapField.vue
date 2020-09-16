@@ -57,7 +57,9 @@ export default {
 	watch : {
 		getFlip(){
 			console.log("watch getFlip",this.getFlip)
-			if (window.kakao && window.kakao.map) {this.showCandidates(this.temps)}
+			if (window.kakao && window.kakao.map) {
+				this.showCandidates(this.temps)
+				}
 			
 		},
 		selectedMarker(){
@@ -78,48 +80,8 @@ export default {
 			'actionMouseOver',
 			'actionClicked'
 		]),
-		addResOverlay(marker,map) {
-			// 커스텀 오버레이에 표시할 컨텐츠 입니다
-			// 커스텀 오버레이는 아래와 같이 사용자가 자유롭게 컨텐츠를 구성하고 이벤트를 제어할 수 있기 때문에
-			// 별도의 이벤트 메소드를 제공하지 않습니다 
-
-			var content = '<div class="wrap">' + 
-            '    <div class="info">' + 
-            '        <div class="title">' + 
-            `            ${this.threeRec[this.getClicked].title}` + 
-            '            <div class="close" onclick="closeOverlay()" title="닫기">X</div>' + 
-            '        </div>' + 
-            '        <div class="body">' + 
-            '            <div class="img">' +
-            '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
-            '           </div>' + 
-            '            <div class="desc">' + 
-            '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' + 
-            '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
-            '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
-            '            </div>' + 
-            '        </div>' + 
-            '    </div>' +    
-            '</div>';
-			// 마커 위에 커스텀오버레이를 표시합니다
-			// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-			var overlay = new kakao.maps.CustomOverlay({
-				content: content,
-				map: map,
-				position: marker.getPosition(),      
-			});
-			this.clickedOverlay = overlay;
-			// 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-			kakao.maps.event.addListener(marker, 'click', function() {
-				overlay.setMap(map);
-			});
-		},
-			// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
-		closeOverlay() {
-			console.log("닫기를 눌렀습니다.")
-			this.clickedOverlay.setMap(null);     
-			
-		},
+		
+		
 		moveAndModal() {
 			// 이동할 위도 경도 위치를 생성합니다 
             var moveLatLon = this.threeRec[this.getClicked].latlng;
@@ -336,9 +298,11 @@ export default {
 		// },
 
 		showCandidates(locs) {
+			console.log("showCandidates 실행되었습니다.")
 			const self = this
 			var map = this.map;
 			if (this.getFlip) {
+				console.log("true네요")
 				this.threeRec = locs.slice(0,3);
 			}
 			else {
@@ -452,7 +416,7 @@ export default {
 					
 					console.log("selectMarker",this.selectedMarker.mc, this.selectedMarker.idx);
 					self.actionClicked(selectedMarker.idx)
-					self.addResOverlay(marker,map);
+					
 				};
 			}
 
@@ -651,25 +615,19 @@ export default {
 	margin-right: auto;
 }
 
-
-.overlaybox {position:relative;width:360px;height:350px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;}
-.overlaybox div, ul {overflow:hidden;margin:0;padding:0;}
-.overlaybox li {list-style: none;}
-.overlaybox .boxtitle {color:#fff;font-size:16px;font-weight:bold;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;margin-bottom:8px;}
-.overlaybox .first {position:relative;width:247px;height:136px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumb.png') no-repeat;margin-bottom:8px;}
-.first .text {color:#fff;font-weight:bold;}
-.first .triangle {position:absolute;width:48px;height:48px;top:0;left:0;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/triangle.png') no-repeat; padding:6px;font-size:18px;}
-.first .movietitle {position:absolute;width:100%;bottom:0;background:rgba(0,0,0,0.4);padding:7px 15px;font-size:14px;}
-.overlaybox ul {width:247px;}
-.overlaybox li {position:relative;margin-bottom:2px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1;}
-.overlaybox li span {display:inline-block;}
-.overlaybox li .number {font-size:16px;font-weight:bold;}
-.overlaybox li .title {font-size:13px;}
-.overlaybox ul .arrow {position:absolute;margin-top:8px;right:25px;width:5px;height:3px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/updown.png') no-repeat;} 
-.overlaybox li .up {background-position:0 -40px;}
-.overlaybox li .down {background-position:0 -60px;}
-.overlaybox li .count {position:absolute;margin-top:5px;right:15px;font-size:10px;}
-.overlaybox li:hover {color:#fff;background:#d24545;}
-.overlaybox li:hover .up {background-position:0 0px;}
-.overlaybox li:hover .down {background-position:0 -20px;}   
+.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+.wrap * {padding: 0;margin: 0;}
+.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+.wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+.info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+.info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+/* .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;} */
+.info .close:hover {cursor: pointer;}
+.info .body {position: relative;overflow: hidden;}
+.info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+.info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+.info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+.info .link {color: #5085BB;}
 </style>
