@@ -45,9 +45,11 @@ router.register('review', ReviewViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 로그인 & 로그아웃
-    path('rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/', include('rest_auth.urls')),
+    # 소셜 로그인
+    url(r'^accounts/', include('allauth.urls')),
     # 회원가입
-    path('rest-auth/signup/', include('rest_auth.registration.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
     # 여행
     path('trip/', include('trip.urls')),
     path('review/', include('review.urls')),
