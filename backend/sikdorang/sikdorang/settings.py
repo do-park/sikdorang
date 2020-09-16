@@ -44,14 +44,17 @@ INSTALLED_APPS = [
 
     # DRF - token auth
     'rest_framework.authtoken',
-    'drf_yasg',
 
     # rest_auth
     'django.contrib.sites',
     'rest_auth',
+    'rest_auth.registration',
+
+    # 소셜 로그인
     'allauth',
     'allauth.account',
-    'rest_auth.registration',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
 
     # 계정
     'accounts',
@@ -62,6 +65,8 @@ INSTALLED_APPS = [
 
     # 데이터베이스 추가
     'api',
+
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +163,9 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+ACCOUNT_EMAIL_REQUIRED = False
