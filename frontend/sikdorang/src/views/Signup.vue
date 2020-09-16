@@ -1,11 +1,6 @@
 <template>
   <div class="signup">
     <div class="signup-box">
-      <v-text-field
-        v-model="signupData.email"
-        label="이메일"
-        :rules="emailRules"
-        hide-details="auto"></v-text-field>
       <!-- <v-text-field
         v-model="signupData.phone"
         label="휴대폰 번호"
@@ -14,7 +9,7 @@
         hide-details="auto"></v-text-field> -->
       <v-text-field
         v-model="signupData.username"
-        label="닉네임"
+        label="아이디"
         :rules="usernameRules"
         hide-details="auto"></v-text-field>
       <div class="year">
@@ -57,7 +52,6 @@ export default {
   data() {
     return {
       signupData: {
-        email: "",
         // phone: "",
         username: "",
         year: 1990,
@@ -65,14 +59,11 @@ export default {
         password2: "",
 
       },
-      emailRules: [
-        value => (value && value.includes('@') && value.includes('.')) || '올바른 이메일을 입력하세요.',
-      ],
       // phoneRules: [
       //   value => (value && value.length === 11) || '올바른 휴대폰 번호를 입력하세요.',
       // ],
       usernameRules: [
-        value => (value && value.length >= 1) || '1자 이상 입력하세요.',
+        value => (value && value.length >= 5) || '5자 이상 입력하세요.',
       ],
       nowYear: new Date().getFullYear(),
       show1: false,
@@ -87,17 +78,15 @@ export default {
   methods: {
     clickSignup() {
       var pass = false
-      if (this.signupData.email.includes('@') && this.signupData.email.includes('.')) {
-        // if (this.signupData.phone.length === 11) {
-          if (this.signupData.username.length >= 1) {
-            if (this.signupData.password1.length >= 8) {
-              if (this.signupData.password1 === this.signupData.password2) {
-                pass = true
-              }
+      // if (this.signupData.phone.length === 11) {
+        if (this.signupData.username.length >= 5) {
+          if (this.signupData.password1.length >= 8) {
+            if (this.signupData.password1 === this.signupData.password2) {
+              pass = true
             }
           }
-        // } 
-      }
+        }
+      // } 
 
       if (pass) {
         console.log(this.signupData)

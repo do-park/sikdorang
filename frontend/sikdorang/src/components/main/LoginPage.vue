@@ -2,8 +2,8 @@
   <div class="login-box">
     <div>로그인 페이지</div>
     <v-text-field
-      v-model="loginData.email"
-      label="이메일"
+      v-model="loginData.username"
+      label="아이디"
       hide-details="auto"></v-text-field>
     <v-text-field
       v-model="loginData.password"
@@ -25,7 +25,7 @@ export default {
     return {
       isLogin: this.$store.state.isLogin,
       loginData: {
-        email: "",
+        username: "",
         password: ""
       },
       show1: false,
