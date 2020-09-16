@@ -57,7 +57,8 @@ export default {
 	watch : {
 		getFlip(){
 			console.log("watch getFlip",this.getFlip)
-			this.showCandidates(this.temps)
+			if (window.kakao && window.kakao.map) {this.showCandidates(this.temps)}
+			
 		},
 		selectedMarker(){
 			console.log(this.selectedMarker.mc)
@@ -82,11 +83,11 @@ export default {
 			// 커스텀 오버레이는 아래와 같이 사용자가 자유롭게 컨텐츠를 구성하고 이벤트를 제어할 수 있기 때문에
 			// 별도의 이벤트 메소드를 제공하지 않습니다 
 
-			var content = '<div class="wrap" @click="closeOverlay()>' + 
+			var content = '<div class="wrap">' + 
             '    <div class="info">' + 
             '        <div class="title">' + 
             `            ${this.threeRec[this.getClicked].title}` + 
-            '            <div class="close" @click="closeOverlay()" title="닫기">X</div>' + 
+            '            <div class="close" onclick="closeOverlay()" title="닫기">X</div>' + 
             '        </div>' + 
             '        <div class="body">' + 
             '            <div class="img">' +
