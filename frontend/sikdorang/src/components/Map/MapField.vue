@@ -57,9 +57,9 @@ export default {
 	watch : {
 		getFlip(){
 			console.log("watch getFlip",this.getFlip)
-			if (window.kakao && window.kakao.map) {
+			if (window.kakao) {
 				this.showCandidates(this.temps)
-				}
+			}
 			
 		},
 		selectedMarker(){
@@ -142,7 +142,6 @@ export default {
 		},
 
         startCoord() {
-			this.$cookies.set('flip',false)
 			var map = this.map
 			
             if (this.$cookies.get("searchMethod")==="myLocation"){
@@ -298,20 +297,16 @@ export default {
 		// },
 
 		showCandidates(locs) {
-			console.log("showCandidates 실행되었습니다.")
 			const self = this
 			var map = this.map;
 			if (this.getFlip) {
-				console.log("true네요")
 				this.threeRec = locs.slice(0,3);
 			}
 			else {
 				this.threeRec = locs.slice(3,6);
 			}
-			var positions = this.threeRec
-			// var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-			
-			var bounds = new kakao.maps.LatLngBounds();   
+			var positions = this.threeRec;
+			var bounds = new kakao.maps.LatLngBounds();  
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
 			//커스텀 마커 정보
@@ -370,7 +365,6 @@ export default {
 			
 				bounds.extend(positions[i].latlng);
 				this.recommendMarkers.push(marker)
-				this.showMarkers(this.recommendMarkers);
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {
 				return function() {
@@ -382,7 +376,7 @@ export default {
 				};
 			}
 			function makeOutListener(map, marker,infowindow,normalImage) {
-				// this.actionMouseOver(null)
+				
 				return function() {
 					infowindow.close();
 					//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
@@ -394,7 +388,7 @@ export default {
 				};
 			}
 			function makeClickListener(map, marker, infowindow, clickImage) {
-				// this.actionClicked(selectedMarker.idx)
+				
 				return function() {
 					//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
 					// 마커의 이미지를 클릭 이미지로 변경합니다
@@ -423,7 +417,7 @@ export default {
 			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);
-
+			this.showMarkers(this.recommendMarkers);
 		},
 
 

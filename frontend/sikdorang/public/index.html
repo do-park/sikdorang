@@ -11,18 +11,15 @@
     
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
- 
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
   </head>
   <body style="margin: 0px;">
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <script>
-    function closeOverlay() {
-      console.log("닫기를 눌렀습니다.", $cookies.get("clickedOverlay"))
-			overlay = $cookies.get("clickedOverlay")
-			overlay.setMap(null);     	
-		}
+
     </script>
     <div id="app"></div>
     <!-- built files will be auto injected -->

@@ -1,7 +1,10 @@
 <template>
   <div>
       <div>flip : {{ getFlip }}</div>
-      <div v-if="getClicked">{{threeRec[getClicked].title}}디테일 보여주기</div>
+
+    
+      
+     
       <div class="d-flex flex-column align-items-center">
       <div>
           <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
@@ -44,7 +47,7 @@ export default {
         ...mapGetters(mapEvent, [
             'getFlip',
             'getMouseOver',
-            'getClicked'
+           
             
         ])
     },
@@ -53,15 +56,11 @@ export default {
             console.log(this.getMouseOver,"자세히 볼까요?")
 
         },
-        getClicked() {
-            console.log(this.getClicked,"디테일 모달입니다.")
-            
-        },
     },
     mounted() {
         this.fillPositions()
         this.checkFilp()
-        this.selected = this.$cookies.get('selectedMarker')
+
         
     },
     methods : {
@@ -112,7 +111,7 @@ export default {
             ]
         },
         checkFilp() {
-            console.log("before",this.getFlip)
+            console.log("MapCards getFlip",this.getFlip)
             if (this.getFlip) {
                 this.threeRec = this.recommendations.slice(3,6)
                
@@ -124,7 +123,6 @@ export default {
                 
             }
             this.actionFlip(!this.getFlip)
-            console.log("after",this.getFlip)
         },
     }
 }
