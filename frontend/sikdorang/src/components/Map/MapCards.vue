@@ -50,7 +50,7 @@ export default {
         },
         getClicked() {
             console.log(this.getClicked,"디테일 모달입니다.")
-            this.moveToClicked()
+            
         },
     },
     mounted() {
