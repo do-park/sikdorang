@@ -102,7 +102,7 @@ export default {
     getTripdata() {
       // getTripdata 유저 정보 받는 쪽으로 수정
       this.$axios
-        .get(`/trip/`)
+        .get(`/trip/list/${this.userId}`)
         .then((response) => {
           const data = response.data;
           for (let i = 0; i < data.length; i++) {
