@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+import mapEvent from './modules/mapEvent.js'
+
 export default new Vuex.Store({
   state: {
     positions : []
@@ -12,5 +14,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
+    mapEvent,
   }
 })

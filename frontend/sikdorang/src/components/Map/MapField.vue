@@ -1,18 +1,20 @@
 <template>
   <div>
-      {{destination}}
-    <!-- <button @click="showPositions(positions)">보여주나?</button> -->
-		<br>
-    <!-- <button @click="showPaths()">일정 보기 </button> -->
+	<p>{{destination}}</p>
+	<p>{{getFlip}}</p>
+	<br>		
+	<div class="map-wrap">
+		<div id="map"></div>
+	</div>
+	<div>
 		
-		<div class="map-wrap">
-			<div id="map"></div>
-		</div>
-
+	</div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex"
+const mapEvent = "mapEvent"
 // import axios from 'axios'
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 export default {
@@ -30,7 +32,9 @@ export default {
 			selectedMarker : null,
 			plans : [],
 			temps : [],
+			threeRec : [],
 			flip : false,
+			clickedOverlay : null,
 		}
 	},
 	mounted() {
@@ -42,13 +46,88 @@ export default {
         }
 		
 	},
+	computed : {
+		...mapGetters(mapEvent, [
+			'getFlip',
+			'getMouseOver',
+			'getClicked'
+		])
+
+	},
 	watch : {
+		getFlip(){
+			console.log("watch getFlip",this.getFlip)
+			this.showCandidates(this.temps)
+		},
 		selectedMarker(){
+			console.log(this.selectedMarker.mc)
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
-		}
+		},
+		getMouseOver(){
+			console.log(this.getMouseOver)
+		},
+		getClicked(){	
+            //지도 확대하고 모달창 띄운다.          
+			this.moveAndModal();    
+		},
 	},
 	
 	methods : {
+		...mapActions(mapEvent,[
+			'actionMouseOver',
+			'actionClicked'
+		]),
+		addResOverlay(marker,map) {
+			// 커스텀 오버레이에 표시할 컨텐츠 입니다
+			// 커스텀 오버레이는 아래와 같이 사용자가 자유롭게 컨텐츠를 구성하고 이벤트를 제어할 수 있기 때문에
+			// 별도의 이벤트 메소드를 제공하지 않습니다 
+
+			var content = '<div class="wrap">' + 
+            '    <div class="info">' + 
+            '        <div class="title">' + 
+            `            ${this.threeRec[this.getClicked].title}` + 
+            '            <div class="close" @click="closeOverlay()" title="닫기">X</div>' + 
+            '        </div>' + 
+            '        <div class="body">' + 
+            '            <div class="img">' +
+            '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+            '           </div>' + 
+            '            <div class="desc">' + 
+            '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' + 
+            '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
+            '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
+            '            </div>' + 
+            '        </div>' + 
+            '    </div>' +    
+            '</div>';
+			// 마커 위에 커스텀오버레이를 표시합니다
+			// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+			var overlay = new kakao.maps.CustomOverlay({
+				content: content,
+				map: map,
+				position: marker.getPosition(),      
+			});
+			this.clickedOverlay = overlay;
+			// 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
+			kakao.maps.event.addListener(marker, 'click', function() {
+				overlay.setMap(map);
+			});
+		},
+			// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
+		closeOverlay() {
+				this.clickedOverlay.setMap(null);     
+			
+		},
+		moveAndModal() {
+			// 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = this.threeRec[this.getClicked].latlng;
+
+            // 지도 중심을 부드럽게 이동시킵니다
+            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+			this.map.panTo(moveLatLon);  
+			
+
+		},
 		initMap() { 
 			var container = document.getElementById('map'); 
 			var options = {
@@ -69,7 +148,6 @@ export default {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
 		},
-
 		//cdn 추가
 		addScript() { 
 			const script1 = document.createElement('script'); 
@@ -201,64 +279,74 @@ export default {
 			]
 		},
 	
-	
-		showPositions(locs) {
+		// showPositions(locs) {
+		// 	var positions = locs
+			
+		// 	var map = this.map;	
+		// 	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+		// 	var bounds = new kakao.maps.LatLngBounds();   
+					
+		// 	for (var i = 0; i < positions.length; i ++) {
+					
+		// 		// 마커 이미지의 이미지 크기 입니다
+		// 		var imageSize = new kakao.maps.Size(24, 35); 
+				
+		// 		// 마커 이미지를 생성합니다    
+		// 		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+				
+		// 		// 마커를 생성합니다
+		// 		var marker = new kakao.maps.Marker({
+		// 			map: map,
+		// 			position: positions[i].latlng,
+		// 			title : positions[i].title, 
+		// 			image : markerImage
+		// 		});
+		// 		// 마커에 표시할 인포윈도우를 생성합니다 
+		// 		var infowindow = new kakao.maps.InfoWindow({
+		// 			content: positions[i].title // 인포윈도우에 표시할 내용
+		// 		});
+
+		// 		// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
+		// 		// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+		// 		(function(marker, infowindow) {
+		// 			// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
+		// 			kakao.maps.event.addListener(marker, 'mouseover', function() {
+		// 				infowindow.open(map, marker);
+		// 			});
+
+		// 			// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
+		// 			kakao.maps.event.addListener(marker, 'mouseout', function() {
+		// 				infowindow.close();
+		// 			});
+
+		// 			kakao.maps.event.addListener(marker, 'click', function(){
+		// 				console.log(`${marker}을 클릭했습니다.`)
+		// 			})
+		// 		})(marker, infowindow);
+
+		// 		bounds.extend(positions[i].latlng);
+		// 		marker.setMap(map);
+		// 	}
+
+		// 	// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+		// 	// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+		// 	map.setBounds(bounds);	
+		// },
+
+		showCandidates(locs) {
+			const self = this
 			var map = this.map;
-			var positions = locs.slice(0,3);	
-			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-			var bounds = new kakao.maps.LatLngBounds();   
-					
-			for (var i = 0; i < positions.length; i ++) {
-					
-				// 마커 이미지의 이미지 크기 입니다
-				var imageSize = new kakao.maps.Size(24, 35); 
-				
-				// 마커 이미지를 생성합니다    
-				var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-				
-				// 마커를 생성합니다
-				var marker = new kakao.maps.Marker({
-					map: map,
-					position: positions[i].latlng,
-					title : positions[i].title, 
-					image : markerImage
-				});
-				// 마커에 표시할 인포윈도우를 생성합니다 
-				var infowindow = new kakao.maps.InfoWindow({
-					content: positions[i].title // 인포윈도우에 표시할 내용
-				});
-
-				// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
-				// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-				(function(marker, infowindow) {
-					// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
-					kakao.maps.event.addListener(marker, 'mouseover', function() {
-						infowindow.open(map, marker);
-					});
-
-					// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
-					kakao.maps.event.addListener(marker, 'mouseout', function() {
-						infowindow.close();
-					});
-
-					kakao.maps.event.addListener(marker, 'click', function(){
-						console.log(`${marker}을 클릭했습니다.`)
-					})
-				})(marker, infowindow);
-
-				bounds.extend(positions[i].latlng);
-				marker.setMap(map);
+			if (this.getFlip) {
+				this.threeRec = locs.slice(0,3);
 			}
-
-			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
-			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-			map.setBounds(bounds);	
-		},
-	showCandidates(locs) {
-			var map = this.map;
-			var positions = locs.slice(0,3);	
+			else {
+				this.threeRec = locs.slice(3,6);
+			}
+			var positions = this.threeRec
 			// var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+			
 			var bounds = new kakao.maps.LatLngBounds();   
+			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
 			//커스텀 마커 정보
 			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
@@ -310,24 +398,25 @@ export default {
 					content: positions[i].title // 인포윈도우에 표시할 내용
 				});
 
-
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
 				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,normalImage));
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
 			
-
 				bounds.extend(positions[i].latlng);
-				marker.setMap(map);
+				this.recommendMarkers.push(marker)
+				this.showMarkers(this.recommendMarkers);
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {
-					return function() {
-						infowindow.open(map, marker);
-						if (!selectedMarker || selectedMarker !== marker) {
-							marker.setImage(overImage);
-						}
-					};
-				}
+				return function() {
+					infowindow.open(map, marker);
+					if (!selectedMarker || selectedMarker !== marker) {
+						marker.setImage(overImage);
+					}
+					self.actionMouseOver(marker.idx)
+				};
+			}
 			function makeOutListener(map, marker,infowindow,normalImage) {
+				// this.actionMouseOver(null)
 				return function() {
 					infowindow.close();
 					//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
@@ -335,9 +424,11 @@ export default {
 					if (!selectedMarker || selectedMarker !== marker) {
 						marker.setImage(normalImage);
 					}
+					self.actionMouseOver(null);
 				};
 			}
 			function makeClickListener(map, marker, infowindow, clickImage) {
+				// this.actionClicked(selectedMarker.idx)
 				return function() {
 					//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
 					// 마커의 이미지를 클릭 이미지로 변경합니다
@@ -354,16 +445,19 @@ export default {
 					// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
 					selectedMarker = marker;
 					this.selectedMarker = selectedMarker;
-					console.log('this', window)
+
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
 					
 					console.log("selectMarker",this.selectedMarker.mc, this.selectedMarker.idx);
+					self.actionClicked(selectedMarker.idx)
+					self.addResOverlay(marker,map);
 				};
 			}
 
 			// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-			map.setBounds(bounds);	
+			map.setBounds(bounds);
+
 		},
 
 
@@ -538,7 +632,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .map-top {
 	position: absolute;
@@ -555,4 +649,25 @@ export default {
 	margin-right: auto;
 }
 
+
+.overlaybox {position:relative;width:360px;height:350px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;}
+.overlaybox div, ul {overflow:hidden;margin:0;padding:0;}
+.overlaybox li {list-style: none;}
+.overlaybox .boxtitle {color:#fff;font-size:16px;font-weight:bold;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;margin-bottom:8px;}
+.overlaybox .first {position:relative;width:247px;height:136px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumb.png') no-repeat;margin-bottom:8px;}
+.first .text {color:#fff;font-weight:bold;}
+.first .triangle {position:absolute;width:48px;height:48px;top:0;left:0;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/triangle.png') no-repeat; padding:6px;font-size:18px;}
+.first .movietitle {position:absolute;width:100%;bottom:0;background:rgba(0,0,0,0.4);padding:7px 15px;font-size:14px;}
+.overlaybox ul {width:247px;}
+.overlaybox li {position:relative;margin-bottom:2px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1;}
+.overlaybox li span {display:inline-block;}
+.overlaybox li .number {font-size:16px;font-weight:bold;}
+.overlaybox li .title {font-size:13px;}
+.overlaybox ul .arrow {position:absolute;margin-top:8px;right:25px;width:5px;height:3px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/updown.png') no-repeat;} 
+.overlaybox li .up {background-position:0 -40px;}
+.overlaybox li .down {background-position:0 -60px;}
+.overlaybox li .count {position:absolute;margin-top:5px;right:15px;font-size:10px;}
+.overlaybox li:hover {color:#fff;background:#d24545;}
+.overlaybox li:hover .up {background-position:0 0px;}
+.overlaybox li:hover .down {background-position:0 -20px;}   
 </style>
