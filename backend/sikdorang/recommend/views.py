@@ -7,6 +7,14 @@ import scipy.sparse as sps
 from sklearn.metrics.pairwise import cosine_similarity
 import os
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+from api.models import Store
 
 
 DATA_DIR = "../../data"
@@ -176,3 +184,9 @@ def user_based(dataframe, for_user):
     result1 = User_item_score1(for_user)
     result2 = User_item_score2(for_user)
     return result1
+
+
+@api_view(['GET'])
+def get_tag_recommendation(request, user_pk):
+    User = get_user_model()
+    user = get_
