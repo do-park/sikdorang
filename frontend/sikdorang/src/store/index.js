@@ -7,6 +7,8 @@ Vue.use(VueCookies)
 
 import mapEvent from './modules/mapEvent.js'
 
+import mypage from './modules/mypage.js'
+
 export default new Vuex.Store({
   state: {
     positions : [],
@@ -22,6 +24,7 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
+    mypage: mypage,
     mapEvent,
   }
 })
