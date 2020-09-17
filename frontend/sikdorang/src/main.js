@@ -6,8 +6,8 @@ import VueCookies from 'vue-cookies'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 // import vuetify from "./plugins/vuetify";
 import axios from "axios";
-// import $ from "jquery";
-
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
 Vue.prototype.$axios = axios;
 axios.defaults.baseURL = "http://localhost:8080";
 
@@ -15,7 +15,6 @@ Vue.config.productionTip = false;
 Vue.use(VueCookies)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
-// Vue.use($)
 
 new Vue({
   router,
