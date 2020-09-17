@@ -1,12 +1,6 @@
 <template>
   <div class="signup">
     <div class="signup-box">
-      <!-- <v-text-field
-        v-model="signupData.phone"
-        label="휴대폰 번호"
-        :rules="phoneRules"
-        type="number"
-        hide-details="auto"></v-text-field> -->
       <v-text-field
         v-model="signupData.username"
         label="아이디"
@@ -52,16 +46,12 @@ export default {
   data() {
     return {
       signupData: {
-        // phone: "",
         username: "",
         year: 1990,
         password1: "",
         password2: "",
 
       },
-      // phoneRules: [
-      //   value => (value && value.length === 11) || '올바른 휴대폰 번호를 입력하세요.',
-      // ],
       usernameRules: [
         value => (value && value.length >= 5) || '5자 이상 입력하세요.',
       ],
@@ -78,15 +68,13 @@ export default {
   methods: {
     clickSignup() {
       var pass = false
-      // if (this.signupData.phone.length === 11) {
-        if (this.signupData.username.length >= 5) {
-          if (this.signupData.password1.length >= 8) {
-            if (this.signupData.password1 === this.signupData.password2) {
-              pass = true
-            }
+      if (this.signupData.username.length >= 5) {
+        if (this.signupData.password1.length >= 8) {
+          if (this.signupData.password1 === this.signupData.password2) {
+            pass = true
           }
         }
-      // } 
+      }
 
       if (pass) {
         console.log(this.signupData)
