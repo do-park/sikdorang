@@ -1,20 +1,14 @@
 <template>
   <div class="home">
-    <v-btn 
-      v-if="!nowMain" 
-      class="arrow-btn" 
-      color="primary" 
-      @click="changeToMainPage">btn</v-btn>
     <transition 
       name="component-fade" 
       mode="out-in">
-      <component v-bind:is="view" v-on:clickLogin="changeToMainPage"></component>
+      <component v-bind:is="view"
+        v-on:toMainPage="changeToMainPage"
+        v-on:toLoginPageOrMyPage="changeToLoginPageOrMyPage"
+        ></component>
     </transition>
-    <v-btn 
-      v-if="nowMain" 
-      class="arrow-btn" 
-      color="primary" 
-      @click="changeToLoginPageOrMyPage">btn</v-btn>
+    
   </div>
 </template>
 
