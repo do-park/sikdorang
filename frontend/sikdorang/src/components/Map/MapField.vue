@@ -411,6 +411,7 @@ export default {
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
 					
 					console.log("selectMarker",this.selectedMarker.mc, this.selectedMarker.idx);
+					console.log("선택했다",selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
 					
 				};

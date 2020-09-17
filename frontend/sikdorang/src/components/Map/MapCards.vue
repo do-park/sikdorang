@@ -32,40 +32,31 @@
       </div>
       <div class="d-flex justify-content-center">
           <div 
-          :class="{ 'active': isActive0 }"
-          class="box" 
-          @click="selectRest(getThreeRes[0])"
-          data-toggle="modal" 
-          data-target="#exampleModal"
+            :class="{ 'active': isActive0 }"
+            class="box" 
+            @click="selectRest(getThreeRes[0])"
+            data-toggle="modal" 
+            data-target="#exampleModal"
           >
             A.{{getThreeRes[0].title}}
-            <hr>
-            {{getThreeRes[0].latitude}}
-            {{getThreeRes[0].longitude}}
           </div>
           <div 
-          :class="{ 'active': isActive1 }"
-          class="box" 
-          @click="selectRest(getThreeRes[1])"
-          data-toggle="modal" 
-          data-target="#exampleModal"
+            :class="{ 'active': isActive1 }"
+            class="box" 
+            @click="selectRest(getThreeRes[1])"
+            data-toggle="modal" 
+            data-target="#exampleModal"
           >
             B.{{getThreeRes[1].title}}
-            <hr>
-            {{getThreeRes[1].latitude}}
-            {{getThreeRes[1].longitude}}
           </div>
           <div 
-          :class="{ 'active': isActive2 }"
-          class="box" 
-          @click="selectRest(getThreeRes[2])"
-          data-toggle="modal" 
-          data-target="#exampleModal"
+            :class="{ 'active': isActive2 }"
+            class="box" 
+            @click="selectRest(getThreeRes[2])"
+            data-toggle="modal" 
+            data-target="#exampleModal"
           >
             C.{{getThreeRes[2].title}}
-            <hr>
-            {{getThreeRes[2].latitude}}
-            {{getThreeRes[2].longitude}}
           </div>
         
           <br> 
@@ -98,9 +89,7 @@ export default {
             'getFlip',
             'getMouseOver',
             'getClicked',
-            'getThreeRes'
-           
-            
+            'getThreeRes'    
         ])
     },
     watch : {
@@ -210,6 +199,7 @@ export default {
     margin: 2px;
     text-align: center;
     background-color : lightgray;
+    height : 50px;
     width : 130px;
 }
 .box:hover{

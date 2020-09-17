@@ -22,7 +22,7 @@ import SelectStart from '../components/Map/SelectStart'
 import MapField from '../components/Map/MapField'
 import MapTheme from '../components/Map/MapTheme'
 import MapCards from '../components/Map/MapCards'
-import MarkerModal from '../components/Map/MapCards'
+import MarkerModal from '../components/Map/MarkerModal'
 
 export default {
     name:'MapMain',
@@ -43,6 +43,7 @@ export default {
             destination : '',
             kakao : null,
             selected : null,
+            showModal : false,
         }
     },
     methods : {

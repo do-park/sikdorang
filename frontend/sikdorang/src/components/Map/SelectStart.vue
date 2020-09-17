@@ -4,7 +4,7 @@
         <button type="button" class="btn btn-secondary" @click="getMyLocation">내 위치</button>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
-        다른 지역
+            다른 지역
         </button>
 
         <!-- Modal -->
