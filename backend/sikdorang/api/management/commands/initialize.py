@@ -57,7 +57,14 @@ class Command(BaseCommand):
             for store in stores.itertuples()
         ]
         models.Store.objects.bulk_create(stores_bulk)
-
+        a = models.Store.objects.all()
+        with open("categorydata.json") as json_file:
+            json_data = json.load(json_file)
+        b = 0
+        for i in a:
+            i.category_id = json_data[b]
+            b += 1
+        models.Store.objects.bulk_update(a, ['category'])
         print("[+] Done")
 
     def handle(self, *args, **kwargs):
