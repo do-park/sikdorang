@@ -53,6 +53,8 @@ urlpatterns = [
     # 여행
     path('trip/', include('trip.urls')),
     path('review/', include('review.urls')),
+    # 추천
+    path('recommend/', include('recommend.urls')),
     url(r'^',include(router.urls)),
 
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),

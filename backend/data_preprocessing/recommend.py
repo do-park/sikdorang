@@ -1,43 +1,17 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+# https://medium.com/sfu-cspmp/recommendation-systems-user-based-collaborative-filtering-using-n-nearest-neighbors-bf7361dc24e0
+
+from parse import load_dataframes
 import numpy as np
 import pandas as pd
 import shutil
 import scipy.sparse as sps
 from sklearn.metrics.pairwise import cosine_similarity
-import os
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.db.models import Q
-from django.contrib.auth import get_user_model
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 
 
-from api.models import Store
+def UB_DF(dataframe, for_user):
+    print(for_user)
 
-
-DATA_DIR = "../../data"
-DUMP_FILE = os.path.join(DATA_DIR, "dump.pkl")
-
-# Create your views here.
-def recommend(request, user_pk):
-    dataframe = load_dataframes()
-    result = user_based(dataframe,user_pk)
-    result_list = []
-    result = result[['store_name', 'address', 'category']]
-    for row in result.iterrows():
-        result_list.append(row)
-    return HttpResponse(result_list)
-
-
-def load_dataframes():
-    return pd.read_pickle(DUMP_FILE)
-
-
-# @login_required
-def user_based(dataframe, for_user):
-        # 리뷰를 유저로 묶어서 그 개수를 카운트, 100개 이상 리뷰 작성한 유저를 activate_user로 지정
+    # 리뷰를 유저로 묶어서 그 개수를 카운트, 100개 이상 리뷰 작성한 유저를 activate_user로 지정
 
     user_review_counts = dataframe['reviews']['user'].value_counts().rename_axis('user').reset_index(name='counts')
     activate_user = user_review_counts[user_review_counts['counts'] >= 100]
@@ -181,11 +155,32 @@ def user_based(dataframe, for_user):
         Store_Name = top_5_recommendation.merge(dataframe['stores'], how='inner', left_on='store', right_on='id')
         return Store_Name
 
+    print(for_user)
+
     result1 = User_item_score1(for_user)
+    print(result1[['store_name', 'address', 'category']])
+
     result2 = User_item_score2(for_user)
-    return result1
+    print(result2[['store_name', 'address', 'category']])
+    return
 
 
-@api_view(['GET'])
-def get_tag_recommendation(request, user_pk):
-    User = get_user_model()
+
+def main():
+    data = load_dataframes()
+
+    term_w = shutil.get_terminal_size()[0] - 1
+    separater = "-" * term_w
+
+    print("[음식점을 추천해봅시다]")
+    print("input user number")
+    # 75794
+    for_user = int(input())
+    print(f"{separater}\n")
+    UB_DF(data, for_user)
+    print(f"{separater}\n")
+    print('end')
+
+
+if __name__ == "__main__":
+    main()

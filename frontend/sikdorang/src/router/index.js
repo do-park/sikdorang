@@ -7,6 +7,7 @@ import MapMain from '../views/MapMain.vue'
 import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
 import MyPageView from '../views/mypage/MyPageView.vue'
 import Schedule from "../views/Schedule.vue"
+import Recommend from "../views/Recommend.vue"
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
     path: "/schedule",
     name: "Schedule",
     component: Schedule,
+  },
+  {
+    path: "/recommend",
+    name: "Recommend",
+    component: Recommend,
   },
 ]
 
