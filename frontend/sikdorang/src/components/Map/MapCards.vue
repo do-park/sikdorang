@@ -8,7 +8,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <div v-if="selectedRest">{{selectedRest.title}}</div>
+                    <div v-if="getSelectedRest">{{getSelectedRest.title}}</div>
                     <div v-else>어떤 식당을 찾으시나요?</div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -78,7 +78,6 @@ export default {
         return {
             
             recommendations : [],
-            selectedRest : null,
             isActive0 : false,
             isActive1 : false,
             isActive2 : false,
@@ -92,13 +91,17 @@ export default {
             'getFlip',
             'getMouseOver',
             'getClicked',
-            'getThreeRes'    
+            'getThreeRes',
+            'getSelectedRest'   
         ])
     },
     watch : {
         getMouseOver() {
             this.changeOverBox(this.getMouseOver)
         },
+        getClicked() {
+            this.actionSelectedRest(this.getThreeRes[this.getClicked])
+        }
         
     },
     mounted() {
@@ -110,10 +113,12 @@ export default {
     methods : {
         ...mapActions(mapEvent, [
             'actionFlip',
+            'actionSelectedRest'
+
 
         ]),
         selectRest(rest) {
-            this.selectedRest = rest
+            this.actionSelectedRest(rest)
         },
         changeOverBox(overidx){ 
            

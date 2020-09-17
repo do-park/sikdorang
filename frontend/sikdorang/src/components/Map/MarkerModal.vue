@@ -2,7 +2,7 @@
 
   <div>
       <!-- Modal -->
-        <div class="modal fade" ref="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- <div class="modal fade" ref="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -25,7 +25,7 @@
             </div>
             </div>
         </div>
-        </div>
+        </div> -->
   </div>
 </template>
 
@@ -39,21 +39,12 @@ export default {
     computed : {
         ...mapGetters(mapEvent, [
             'getClicked',
-            'getThreeRes',
         ])
     },
     watch : {
         getClicked() {
             this.showLoginModal()
         },
-        getThreeRes() {
-            console.log(this.getThreeRes)
-        },
-    },
-    data() {
-        return {
-            curRest : null,
-        }
     },
     methods : {
         showLoginModal() {
