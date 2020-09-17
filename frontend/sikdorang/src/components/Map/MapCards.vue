@@ -2,7 +2,6 @@
   <div>
       <div>flip : {{ getFlip }}</div>
 
-
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -17,7 +16,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                ...
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
@@ -35,38 +34,38 @@
           <div 
           :class="{ 'active': isActive0 }"
           class="box" 
-          @click="selectRest(threeRes[0])"
+          @click="selectRest(getThreeRes[0])"
           data-toggle="modal" 
           data-target="#exampleModal"
           >
-            A.{{threeRes[0].title}}
+            A.{{getThreeRes[0].title}}
             <hr>
-            {{threeRes[0].latitude}}
-            {{threeRes[0].longitude}}
+            {{getThreeRes[0].latitude}}
+            {{getThreeRes[0].longitude}}
           </div>
           <div 
           :class="{ 'active': isActive1 }"
           class="box" 
-          @click="selectRest(threeRes[1])"
+          @click="selectRest(getThreeRes[1])"
           data-toggle="modal" 
           data-target="#exampleModal"
           >
-            B.{{threeRes[1].title}}
+            B.{{getThreeRes[1].title}}
             <hr>
-            {{threeRes[1].latitude}}
-            {{threeRes[1].longitude}}
+            {{getThreeRes[1].latitude}}
+            {{getThreeRes[1].longitude}}
           </div>
           <div 
           :class="{ 'active': isActive2 }"
           class="box" 
-          @click="selectRest(threeRes[2])"
+          @click="selectRest(getThreeRes[2])"
           data-toggle="modal" 
           data-target="#exampleModal"
           >
-            C.{{threeRes[2].title}}
+            C.{{getThreeRes[2].title}}
             <hr>
-            {{threeRes[2].latitude}}
-            {{threeRes[2].longitude}}
+            {{getThreeRes[2].latitude}}
+            {{getThreeRes[2].longitude}}
           </div>
         
           <br> 
@@ -83,7 +82,7 @@ export default {
     name : 'MapCards',
     data() {
         return {
-            threeRes : [],
+            
             recommendations : [],
             selectedRest : null,
             isActive0 : false,
@@ -98,7 +97,8 @@ export default {
         ...mapGetters(mapEvent, [
             'getFlip',
             'getMouseOver',
-            'getClicked'
+            'getClicked',
+            'getThreeRes'
            
             
         ])
@@ -193,12 +193,12 @@ export default {
         },
         checkFilp() {
             console.log("MapCards getFlip",this.getFlip)
-            if (this.getFlip) {
-                this.threeRes = this.recommendations.slice(3,6) 
-            }
-            else {
-                this.threeRes = this.recommendations.slice(0,3)
-            }
+            // if (this.getFlip) {
+            //     this.threeRes = this.recommendations.slice(3,6) 
+            // }
+            // else {
+            //     this.threeRes = this.recommendations.slice(0,3)
+            // }
             this.actionFlip(!this.getFlip)
         },
     }

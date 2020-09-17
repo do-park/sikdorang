@@ -32,7 +32,6 @@ export default {
 			selectedMarker : null,
 			plans : [],
 			temps : [],
-			threeRec : [],
 			flip : false,
 			clickedOverlay : null,
 		}
@@ -50,7 +49,8 @@ export default {
 		...mapGetters(mapEvent, [
 			'getFlip',
 			'getMouseOver',
-			'getClicked'
+			'getClicked',
+			'getThreeRes',
 		])
 
 	},
@@ -78,13 +78,14 @@ export default {
 	methods : {
 		...mapActions(mapEvent,[
 			'actionMouseOver',
-			'actionClicked'
+			'actionClicked',
+			'actionThreeRes',
 		]),
 		
 		
 		moveAndModal() {
 			// 이동할 위도 경도 위치를 생성합니다 
-            var moveLatLon = this.threeRec[this.getClicked].latlng;
+            var moveLatLon = this.getThreeRes[this.getClicked].latlng;
 
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
@@ -300,12 +301,13 @@ export default {
 			const self = this
 			var map = this.map;
 			if (this.getFlip) {
-				this.threeRec = locs.slice(0,3);
+				this.actionThreeRes(locs.slice(0,3))
+				
 			}
 			else {
-				this.threeRec = locs.slice(3,6);
+				this.actionThreeRes(locs.slice(3,6))
 			}
-			var positions = this.threeRec;
+			var positions = this.getThreeRes;
 			var bounds = new kakao.maps.LatLngBounds();  
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
