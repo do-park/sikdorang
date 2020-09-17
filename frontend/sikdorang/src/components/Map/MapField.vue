@@ -148,6 +148,7 @@ export default {
             var LatLng = new kakao.maps.LatLng(this.startLat, this.startLong)
             map.setCenter(LatLng);
 			var marker = new kakao.maps.Marker({ position: map.getCenter() });
+			this.hideMarkers(this.curMarkers)
 			this.curMarkers = [];
 			
 			// 마커를 추가
