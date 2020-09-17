@@ -19,14 +19,14 @@
             </div>
             <div class="modal-body">
                 여행을 시작할 지역을 검색해보세요!
+                <br>
                     <input
                         v-model="destination" 
                         @keyup.enter="findPath(destination)"
                         label="어디 갈래?"
-                        placeholder="XX동 or XX동 775-5"
-                        
+                        placeholder="예시) XX동 or XX동 775-5"
                     />
-                    <button @click="findPath(destination)">
+                    <button class="btn btn-secondary" @click="findPath(destination)">
                         검색
                     </button>
                     <br>
@@ -40,74 +40,7 @@
         </div>
         </div>
 
-
-
-
-            <!-- <v-dialog
-            v-model="dialog"
-            width="500"
-            >
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                color="red lighten-2"
-                dark
-                v-bind="attrs"
-                v-on="on"
-                >
-                다른 지역
-                </v-btn>
-            </template>
-
-            <v-card>
-                <v-card-title class="headline grey lighten-2">
-                지역 검색하기
-                </v-card-title>
-                <div>
-                    <v-card-text>
-                    여행을 시작할 지역을 검색해보세요!
-                   
-                    <template>
-                    <v-form>
-                        <span>
-                        <v-text-field
-                            v-model="destination" 
-                            @keyup.enter="findPath(destination)"
-                            label="어디 갈래?"
-                            placeholder="XX동 or XX동 775-5"
-                            
-                        ></v-text-field>
-                        <v-btn
-                            color="primary"
-                            text
-                            @click="findPath(destination)"
-                        >
-                            검색
-                        </v-btn>
-                        {{message}}
-                        </span>
-                    </v-form>
-                   
-                    </template>
-           
-                    </v-card-text>
-                </div>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="primary"
-                    text
-                    @click="check"
-                >
-                    확인
-                </v-btn>
-                </v-card-actions>
-            </v-card>
-            </v-dialog> -->
-        </div>
-        <!-- <div id="map"></div> -->
+    </div>
   </div>
 </template>
 

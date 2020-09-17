@@ -2,26 +2,71 @@
   <div>
       <div>flip : {{ getFlip }}</div>
 
-    
-      
-     
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <div v-if="selectedRest">{{selectedRest.title}}</div>
+                    <div v-else>어떤 식당을 찾으시나요?</div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary">일정 저장하기</button>
+            </div>
+            </div>
+        </div>
+        </div>
+            
       <div class="d-flex flex-column align-items-center">
       <div>
           <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
       </div>
       <div class="d-flex justify-content-center">
           <div 
+          :class="{ 'active': isActive0 }"
           class="box" 
-          v-for="rec in threeRec" 
-          :key="rec.id"
-          @click="selectRest()"
+          @click="selectRest(threeRes[0])"
+          data-toggle="modal" 
+          data-target="#exampleModal"
           >
-            {{rec.title}}
-            {{rec.latitude}}
-            {{rec.longitude}}
+            {{threeRes[0].title}}
+            {{threeRes[0].latitude}}
+            {{threeRes[0].longitude}}
           </div>
-          <br>
-          
+          <div 
+          :class="{ 'active': isActive1 }"
+          class="box" 
+          @click="selectRest(threeRes[1])"
+          data-toggle="modal" 
+          data-target="#exampleModal"
+          >
+            {{threeRes[1].title}}
+            {{threeRes[1].latitude}}
+            {{threeRes[1].longitude}}
+          </div>
+          <div 
+          :class="{ 'active': isActive2 }"
+          class="box" 
+          @click="selectRest(threeRes[2])"
+          data-toggle="modal" 
+          data-target="#exampleModal"
+          >
+            {{threeRes[2].title}}
+            {{threeRes[2].latitude}}
+            {{threeRes[2].longitude}}
+          </div>
+        
+          <br> 
         </div>
       </div>
   </div>
@@ -35,9 +80,12 @@ export default {
     name : 'MapCards',
     data() {
         return {
-            threeRec : [],
+            threeRes : [],
             recommendations : [],
-            selected : null,
+            selectedRest : null,
+            isActive0 : false,
+            isActive1 : false,
+            isActive2 : false,
         }
     },
     props : {
@@ -47,12 +95,14 @@ export default {
         ...mapGetters(mapEvent, [
             'getFlip',
             'getMouseOver',
+            'getClicked'
            
             
         ])
     },
     watch : {
         getMouseOver() {
+            this.changeOverBox(this.getMouseOver)
             console.log(this.getMouseOver,"자세히 볼까요?")
 
         },
@@ -68,7 +118,35 @@ export default {
             'actionFlip',
 
         ]),
+        selectRest(rest) {
+            this.selectedRest = rest
+        },
+        changeOverBox(overidx){ 
+           
+            this.isActive0 = false
+            this.isActive1 = false
+            this.isActive2 = false
+           
 
+           if (overidx === 0) {
+               this.isActive0 = true
+           }
+           else if (overidx === 1) {
+               this.isActive1 = true
+           }
+           else if (overidx === 2) {
+               this.isActive2 = true
+           }
+           else{
+             
+            this.isActive0 = false
+            this.isActive1 = false
+            this.isActive2 = false
+           
+           }
+
+            
+        },
         fillPositions() {
 			this.recommendations = [
 				{   
@@ -113,14 +191,10 @@ export default {
         checkFilp() {
             console.log("MapCards getFlip",this.getFlip)
             if (this.getFlip) {
-                this.threeRec = this.recommendations.slice(3,6)
-               
-                
+                this.threeRes = this.recommendations.slice(3,6) 
             }
             else {
-                this.threeRec = this.recommendations.slice(0,3)
-                
-                
+                this.threeRes = this.recommendations.slice(0,3)
             }
             this.actionFlip(!this.getFlip)
         },
@@ -136,6 +210,10 @@ export default {
     width : 130px;
 }
 .box:hover{
+    cursor: pointer;
+    background-color: lightblue;
+}
+.active{
     cursor: pointer;
     background-color: lightblue;
 }
