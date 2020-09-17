@@ -39,6 +39,7 @@
             data-target="#exampleModal"
           >
             A.{{getThreeRes[0].title}}
+            <p>@ 맛집 정보 @</p>
           </div>
           <div 
             :class="{ 'active': isActive1 }"
@@ -48,6 +49,7 @@
             data-target="#exampleModal"
           >
             B.{{getThreeRes[1].title}}
+            <p>@ 맛집 정보 @</p>
           </div>
           <div 
             :class="{ 'active': isActive2 }"
@@ -57,6 +59,7 @@
             data-target="#exampleModal"
           >
             C.{{getThreeRes[2].title}}
+            <p>@ 맛집 정보 @</p>
           </div>
         
           <br> 
@@ -95,9 +98,8 @@ export default {
     watch : {
         getMouseOver() {
             this.changeOverBox(this.getMouseOver)
-            console.log(this.getMouseOver,"자세히 볼까요?")
-
         },
+        
     },
     mounted() {
         this.fillPositions()
@@ -199,7 +201,6 @@ export default {
     margin: 2px;
     text-align: center;
     background-color : lightgray;
-    height : 50px;
     width : 130px;
 }
 .box:hover{

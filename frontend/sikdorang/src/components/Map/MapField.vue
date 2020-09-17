@@ -63,11 +63,7 @@ export default {
 			
 		},
 		selectedMarker(){
-			console.log(this.selectedMarker.mc)
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
-		},
-		getMouseOver(){
-			console.log(this.getMouseOver)
 		},
 		getClicked(){	
             //지도 확대하고 모달창 띄운다.          
@@ -156,7 +152,6 @@ export default {
 			
 			// 마커를 추가
 			this.curMarkers.push(marker);
-			console.log("myloc",this.curMarkers)
 			this.showMarkers(this.curMarkers);
 
             }
@@ -378,7 +373,6 @@ export default {
 				};
 			}
 			function makeOutListener(map, marker,infowindow,normalImage) {
-				
 				return function() {
 					infowindow.close();
 					//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
@@ -409,8 +403,6 @@ export default {
 					this.selectedMarker = selectedMarker;
 
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
-					
-					console.log("selectMarker",this.selectedMarker.mc, this.selectedMarker.idx);
 					console.log("선택했다",selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
 					
