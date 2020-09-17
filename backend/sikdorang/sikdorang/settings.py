@@ -62,7 +62,6 @@ INSTALLED_APPS = [
 
     # 여행
     'trip',
-    'recommend',
 
     # 추천
     'recommend',

@@ -189,4 +189,3 @@ def user_based(dataframe, for_user):
 @api_view(['GET'])
 def get_tag_recommendation(request, user_pk):
     User = get_user_model()
-    user = get_

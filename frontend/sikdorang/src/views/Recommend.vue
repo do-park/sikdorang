@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     getRecommend() {
-      console.log(this.userId, typeof this.userId);
       this.$axios
         .get(`/recommend/${this.userId}`)
         .then((response) => {
