@@ -5,41 +5,53 @@ import MapTest from '../views/MapTest.vue'
 import Signup from '../views/Signup.vue'
 import MapMain from '../views/MapMain.vue'
 import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
+import MyPageView from '../views/mypage/MyPageView.vue'
+import Schedule from "../views/Schedule.vue"
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path: '/maptest',
-    name: 'MapTest',
-    component: MapTest
+    path: "/maptest",
+    name: "MapTest",
+    component: MapTest,
   },
   {
-    path: '/signup',
-    name: 'Signup',
-    component: Signup
+    path: "/signup",
+    name: "Signup",
+    component: Signup,
   },
   {
-    path: '/map',
-    name: 'MapMain',
-    component: MapMain
+    path: "/map",
+    name: "MapMain",
+    component: MapMain,
   },
   {
-    path: '/idealtagcup',
-    name: 'IdealTagCup',
+    path: "/idealtagcup",
+    name: "IdealTagCup",
     component: IdealTagCupView,
+  },
+  {
+    path: '/mypage',
+    name: 'MyPageView',
+    component: MyPageView,
+  },
+  {
+    path: "/schedule",
+    name: "Schedule",
+    component: Schedule,
   },
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 
 export default router
