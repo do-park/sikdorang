@@ -39,7 +39,8 @@
           data-toggle="modal" 
           data-target="#exampleModal"
           >
-            {{threeRes[0].title}}
+            A.{{threeRes[0].title}}
+            <hr>
             {{threeRes[0].latitude}}
             {{threeRes[0].longitude}}
           </div>
@@ -50,7 +51,8 @@
           data-toggle="modal" 
           data-target="#exampleModal"
           >
-            {{threeRes[1].title}}
+            B.{{threeRes[1].title}}
+            <hr>
             {{threeRes[1].latitude}}
             {{threeRes[1].longitude}}
           </div>
@@ -61,7 +63,8 @@
           data-toggle="modal" 
           data-target="#exampleModal"
           >
-            {{threeRes[2].title}}
+            C.{{threeRes[2].title}}
+            <hr>
             {{threeRes[2].latitude}}
             {{threeRes[2].longitude}}
           </div>
