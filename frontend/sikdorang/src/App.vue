@@ -5,7 +5,6 @@
       <router-link to="/maptest">MapTest</router-link>|
       <router-link to="/map">Map 시작하기</router-link>|
       <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>|
-      <span v-if="!this.$store.state.isLogin"><router-link to="/signup">Signup</router-link>|</span>
       <router-link to="/schedule">schedule</router-link>|
       <router-view />
     </v-main>
