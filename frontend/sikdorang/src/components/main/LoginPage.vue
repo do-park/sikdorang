@@ -35,9 +35,9 @@ export default {
     clickLogin() {
       this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
-        window.$cookies.set('auth-token',response.key)
-        // this.$router.push({ name: 'Home' })
-        // 메인으로 컴포넌트 이동하게 해야함 (emit)
+        window.$cookies.set('auth-token',response.data.key)
+        this.$store.state.isLogin = true
+        this.$emit('clickLogin');
       })
       .catch(err => {
         console.log(err)

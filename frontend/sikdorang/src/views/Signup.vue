@@ -81,6 +81,7 @@ export default {
         this.$axios.post(`/rest-auth/registration/`, this.signupData)
         .then (response => {
           window.$cookies.set('auth-token',response.data.key)
+          this.$store.state.isLogin = true
           this.$router.push({ name: 'Home' })
         })
         .catch(err => {

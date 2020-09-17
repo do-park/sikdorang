@@ -16,10 +16,7 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    storeLogin(state, payload) {
-      window.$cookies.set('auth-token', payload.token)
-      state.isLogin = true
-    },
+
   },
   actions: {
   },
