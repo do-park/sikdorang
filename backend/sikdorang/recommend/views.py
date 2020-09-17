@@ -8,6 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 from django.http import HttpResponse
 
+
 DATA_DIR = "../../data"
 DUMP_FILE = os.path.join(DATA_DIR, "dump.pkl")
 
@@ -16,6 +17,7 @@ def recommend(request, user_pk):
     dataframe = load_dataframes()
     result = user_based(dataframe,user_pk)
     result_list = []
+    result = result[['store_name', 'address', 'category']]
     for row in result.iterrows():
         result_list.append(row)
     return HttpResponse(result_list)
