@@ -4,17 +4,17 @@
       v-if="!nowMain" 
       class="arrow-btn" 
       color="primary" 
-      @click="changeToMainPage">지금은 로그인페이지</v-btn>
+      @click="changeToMainPage">btn</v-btn>
     <transition 
       name="component-fade" 
       mode="out-in">
-      <component v-bind:is="view"></component>
+      <component v-bind:is="view" v-on:clickLogin="changeToMainPage"></component>
     </transition>
     <v-btn 
       v-if="nowMain" 
       class="arrow-btn" 
       color="primary" 
-      @click="changeToLoginPage">지금은 메인페이지</v-btn>
+      @click="changeToLoginPageOrMyPage">btn</v-btn>
   </div>
 </template>
 
@@ -36,12 +36,23 @@ export default {
     }
   },
   methods: {
-    changeToLoginPage() {
-      this.view = LoginPage
-      this.nowMain = false
+    changeToLoginPageOrMyPage() {
+
+      // islogin확인
+      if (this.$store.state.isLogin) {
+
+        // 마이페이지로 이동
+        this.$router.push({ name: 'MyPageView' })
+      } else {
+        this.view = LoginPage
+        this.nowMain = false
+      }
+
+      
     },
 
     changeToMainPage() {
+      console.log('isLogin',this.$store.state.isLogin)
       this.view = MainPage
       this.nowMain = true
     }
