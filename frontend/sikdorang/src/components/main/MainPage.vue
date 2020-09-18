@@ -15,6 +15,10 @@
         @click="clickRecommend"
       >식도랑 추천 코스</v-btn>
     </div>
+    <v-btn 
+      class="arrow-btn" 
+      color="primary" 
+      @click="clickToLoginPageOrMyPage">btn</v-btn>
   </div>
 </template>
 
@@ -32,7 +36,10 @@ export default {
       },
       clickRecommend() {
         console.log('추천 코스 누름')
-      }
+      },
+      clickToLoginPageOrMyPage() {
+        this.$emit('toLoginPageOrMyPage');
+      },
 
     },
 

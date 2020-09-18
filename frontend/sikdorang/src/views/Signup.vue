@@ -5,10 +5,19 @@
         v-model="signupData.username"
         label="아이디"
         :rules="usernameRules"
-        hide-details="auto"></v-text-field>
-      <div class="year">
+        hide-details="auto"
+        @keyup="turnUsernameOkToFalse"></v-text-field>
+      <v-btn 
+        color="primary" 
+        @click="checkUsername">중복확인</v-btn>
+      <div v-if="clickedCheckUsername">
+        <div v-if="!usernameOk">이미 있는 아이디입니다.</div>
+        <div v-else>사용 할 수 있는 아이디입니다.</div>
+      </div>
+      
+      <div class="age">
         <v-slider
-          v-model="signupData.year"
+          v-model="signupData.age"
           label="출생년도"
           :min=1900
           :max="nowYear"
@@ -47,11 +56,14 @@ export default {
     return {
       signupData: {
         username: "",
-        year: 1990,
+        age: 1990,
         password1: "",
         password2: "",
 
       },
+      usernameOk: false,
+      clickedCheckUsername: false,
+      token: '',
       usernameRules: [
         value => (value && value.length >= 5) || '5자 이상 입력하세요.',
       ],
@@ -66,9 +78,28 @@ export default {
     }
   },
   methods: {
+    turnUsernameOkToFalse() {
+      this.usernameOk = false
+      this.clickedCheckUsername = false
+    },
+    checkUsername() {
+      if (this.signupData.username.length >= 5) {
+        this.clickedCheckUsername = true
+        this.$axios.get(`/trip/chk/${this.signupData.username}`)
+        .then (response => {
+          console.log(response.data)
+          if (response.data === '사용 할 수 있는 아이디입니다.') {
+            this.usernameOk = true
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+    },
     clickSignup() {
       var pass = false
-      if (this.signupData.username.length >= 5) {
+      if (this.usernameOk) {
         if (this.signupData.password1.length >= 8) {
           if (this.signupData.password1 === this.signupData.password2) {
             pass = true
@@ -78,18 +109,37 @@ export default {
 
       if (pass) {
         console.log(this.signupData)
+
         this.$axios.post(`/rest-auth/registration/`, this.signupData)
         .then (response => {
-          window.$cookies.set('auth-token',response.data.key)
+          window.$cookies.set('auth-token',response.data.token)
           this.$store.state.isLogin = true
-          this.$router.push({ name: 'Home' })
+          this.pushUserAge()
         })
         .catch(err => {
           console.log(err)
           alert("너무 일상적인 비밀번호입니다. 변경해주세요.")
         })
+
       }
       
+    },
+    pushUserAge() {
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get('auth-token')}`
+        }
+      }
+      console.log(window.$cookies.get('auth-token'))
+
+      this.$axios.put(`/rest-auth/user/`, this.signupData, requestHeaders)
+      .then (response => {
+        console.log(response)
+        this.$router.push({ name: 'Home' })
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
 }
@@ -100,7 +150,7 @@ export default {
     width: 500px;
     margin: 5rem auto;
   }
-  .year {
+  .age {
     margin-top: 3rem;
   }
   .signup-btn {

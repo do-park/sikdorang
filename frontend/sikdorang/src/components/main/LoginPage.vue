@@ -1,5 +1,9 @@
 <template>
   <div class="login-box">
+    <v-btn 
+      class="arrow-btn" 
+      color="primary" 
+      @click="clickToMainPage">btn</v-btn>
     <div>로그인 페이지</div>
     <div>
       <v-text-field
@@ -41,14 +45,18 @@ export default {
     clickLogin() {
       this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
-        window.$cookies.set('auth-token',response.data.key)
+        console.log(response)
+        window.$cookies.set('auth-token',response.data.token)
         this.$store.state.isLogin = true
-        this.$emit('clickLogin');
+        this.$emit('toMainPage');
       })
       .catch(err => {
         console.log(err)
         alert('아이디 또는 비밀번호를 다시 확인해주세요.')
       })
+    },
+    clickToMainPage() {
+      this.$emit('toMainPage');
     },
 
   },
