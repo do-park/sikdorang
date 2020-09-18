@@ -26,11 +26,23 @@ export default {
       window.$cookies.remove('auth-token')
       this.$store.state.isLogin = false
 
-      //get으로 로그아웃 보내기 (헤더에 토큰)
+      const requestHeaders = {
+        headers: {
+          Authorization: this.$cookies.get('auth-token')
+        }
+      }
 
-      // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
-			this.$router.push({ name: 'Home' })
-			window.location.reload()
+      //get으로 로그아웃 보내기 (헤더에 토큰)
+      this.$axios.get(`/rest-auth/logout/`, requestHeaders)
+      .then (response => {
+        console.log(response)
+        // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
+        this.$router.push({ name: 'Home' })
+        window.location.reload()
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
     }
   },
