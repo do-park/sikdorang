@@ -26,14 +26,16 @@ export default {
       window.$cookies.remove('auth-token')
       this.$store.state.isLogin = false
 
+      console.log(this.$cookies.get('auth-token'))
+
       const requestHeaders = {
         headers: {
-          Authorization: this.$cookies.get('auth-token')
+          Authorization: `JWT ${this.$cookies.get('auth-token')}`
         }
       }
 
       //get으로 로그아웃 보내기 (헤더에 토큰)
-      this.$axios.get(`/rest-auth/logout/`, requestHeaders)
+      this.$axios.post(`/rest-auth/logout/`, requestHeaders)
       .then (response => {
         console.log(response)
         // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.

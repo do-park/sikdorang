@@ -45,7 +45,8 @@ export default {
     clickLogin() {
       this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
-        window.$cookies.set('auth-token',response.data.key)
+        console.log(response)
+        window.$cookies.set('auth-token',response.data.token)
         this.$store.state.isLogin = true
         this.$emit('toMainPage');
       })
