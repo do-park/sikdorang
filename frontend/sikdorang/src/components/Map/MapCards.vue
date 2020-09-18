@@ -107,6 +107,7 @@ export default {
     mounted() {
         this.fillPositions()
         this.checkFilp()
+        this.actionSelectedRest = this.getThreeRes[0]
 
         
     },

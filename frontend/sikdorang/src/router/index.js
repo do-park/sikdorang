@@ -6,7 +6,7 @@ import Signup from "../views/Signup.vue"
 import MapMain from "../views/MapMain.vue"
 import IdealTagCupView from "../views/idealtagcup/IdealTagCupView.vue"
 import Schedule from "../views/Schedule.vue"
-
+  
 Vue.use(VueRouter)
 
 const routes = [

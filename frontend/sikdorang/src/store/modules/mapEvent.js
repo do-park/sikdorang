@@ -5,7 +5,7 @@ const mapEvent = {
         mouseOver : null,
         clicked : null,
         threeRes : null,
-        selectedRest : null,
+        selectedRest :null,
     },
     getters : {
         getFlip : state => {
