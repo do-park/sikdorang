@@ -9,7 +9,7 @@ import json
 class Command(BaseCommand):
     help = "initialize database"
     DATA_DIR = Path(settings.BASE_DIR).parent.parent / "data"
-    DATA_FILE = str(DATA_DIR / "dump.pkl")
+    DATA_FILE = str(DATA_DIR / "store_dump.pkl")
 
     def _load_dataframes(self):
         try:
@@ -43,21 +43,20 @@ class Command(BaseCommand):
 
         print("[*] Initializing stores...")
         models.Store.objects.all().delete()
-        stores = dataframes["stores"]
+        stores = dataframes
         stores_bulk = [
             models.Store(
                 id=store.id,
                 store_name=store.store_name,
-                branch=store.branch,
                 tel=store.tel,
                 address=store.address,
                 latitude=store.latitude,
                 longitude=store.longitude,
+                category_id=store.category
             )
             for store in stores.itertuples()
         ]
         models.Store.objects.bulk_create(stores_bulk)
-
         print("[+] Done")
 
     def handle(self, *args, **kwargs):
