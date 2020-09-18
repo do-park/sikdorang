@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Tags(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -20,5 +21,5 @@ class Store(models.Model):
     address = models.CharField(max_length=200, null=True)
     latitude = models.FloatField(max_length=10, null=True)
     longitude = models.FloatField(max_length=10, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tags, related_name = 'store_tags') 
-    category = models.ManyToManyField(Category, related_name = 'store_category')
