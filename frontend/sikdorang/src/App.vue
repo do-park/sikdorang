@@ -21,6 +21,13 @@ export default {
       
     }
   },
-  
+  methods: {
+    tryLogout() {
+      window.$cookies.remove('auth-token')
+      this.$store.state.isLogin = false
+      
+
+    }
+  },
 };
 </script>
