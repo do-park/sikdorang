@@ -21,7 +21,7 @@ def trip_list(request, user_pk):
 @api_view(['GET'])
 def checkID(request, name):
     User = get_user_model()
-    user = User.objects.filter(username='name')
+    user = User.objects.filter(username=name)
     if user:
         return HttpResponse('이미 있는 아이디입니다.')
     else:

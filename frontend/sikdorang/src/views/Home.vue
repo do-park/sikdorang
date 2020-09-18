@@ -29,7 +29,16 @@ export default {
       nowMain: true
     }
   },
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   methods: {
+    handleScroll() {
+      console.log('스크롤!!')
+    },
     changeToLoginPageOrMyPage() {
 
       // islogin확인
