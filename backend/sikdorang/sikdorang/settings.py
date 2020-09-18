@@ -158,14 +158,17 @@ AUTH_USER_MODEL = 'accounts.User'
 # rest-auth
 SITE_ID = 1
 
-REST_FRAMEWORK ={
- 'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
 }
@@ -182,10 +185,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
 ACCOUNT_EMAIL_REQUIRED = False
 
-# JWT_AUTH = {
-#    'JWT_SECRET_KEY' : SECRET_KEY,
-#    'JWT_ALGORITHM' : 'HS256',
-#    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
-#    'JWT_ALLOW_REFRESH' : False,
-#    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
-# }
+JWT_AUTH = {
+   'JWT_SECRET_KEY' : SECRET_KEY,
+   'JWT_ALGORITHM' : 'HS256',
+   'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
+   'JWT_ALLOW_REFRESH' : False,
+   'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
+}
