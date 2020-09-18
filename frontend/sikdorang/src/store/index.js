@@ -7,6 +7,8 @@ Vue.use(VueCookies)
 
 import mapEvent from './modules/mapEvent.js'
 
+import mypage from './modules/mypage.js'
+
 export default new Vuex.Store({
   state: {
     positions : [],
@@ -14,14 +16,12 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    storeLogin(state, payload) {
-      window.$cookies.set('auth-token', payload.token)
-      state.isLogin = true
-    },
+
   },
   actions: {
   },
   modules: {
+    mypage: mypage,
     mapEvent,
   }
 })

@@ -1,11 +1,13 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import Home from "../views/Home.vue"
-import MapTest from "../views/MapTest.vue"
-import Signup from "../views/Signup.vue"
-import MapMain from "../views/MapMain.vue"
-import IdealTagCupView from "../views/idealtagcup/IdealTagCupView.vue"
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
+import MapTest from '../views/MapTest.vue'
+import Signup from '../views/Signup.vue'
+import MapMain from '../views/MapMain.vue'
+import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
+import MyPageView from '../views/mypage/MyPageView.vue'
 import Schedule from "../views/Schedule.vue"
+import Recommend from "../views/Recommend.vue"
 
 Vue.use(VueRouter)
 
@@ -36,9 +38,19 @@ const routes = [
     component: IdealTagCupView,
   },
   {
+    path: '/mypage',
+    name: 'MyPageView',
+    component: MyPageView,
+  },
+  {
     path: "/schedule",
     name: "Schedule",
     component: Schedule,
+  },
+  {
+    path: "/recommend",
+    name: "Recommend",
+    component: Recommend,
   },
 ]
 
