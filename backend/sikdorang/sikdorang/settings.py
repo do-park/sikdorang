@@ -158,17 +158,21 @@ AUTH_USER_MODEL = 'accounts.User'
 # rest-auth
 SITE_ID = 1
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
+REST_FRAMEWORK ={
+ 'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
     ),
 }
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
 }
+
+REST_USE_JWT = True
+
+ACCOUNT_LOGOUT_ON_GET = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -178,17 +182,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
 ACCOUNT_EMAIL_REQUIRED = False
 
-JWT_AUTH = {
-# If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
-'JWT_VERIFY': True,
-# You can turn off expiration time verification by setting JWT_VERIFY_EXPIRATION to False.
-# If set to False, JWTs will last forever meaning a leaked token could be used by an attacker indefinitely.
-'JWT_VERIFY_EXPIRATION': True,
-# This is an instance of Python's datetime.timedelta. This will be added to datetime.utcnow() to set the expiration time.
-# Default is datetime.timedelta(seconds=300)(5 minutes).
-'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-'JWT_ALLOW_REFRESH': True,
-'JWT_AUTH_HEADER_PREFIX': 'JWT',
-}
-
-REST_USE_JWT = True
+# JWT_AUTH = {
+#    'JWT_SECRET_KEY' : SECRET_KEY,
+#    'JWT_ALGORITHM' : 'HS256',
+#    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
+#    'JWT_ALLOW_REFRESH' : False,
+#    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
+# }
