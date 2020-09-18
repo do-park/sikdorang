@@ -101,14 +101,16 @@ export default {
         },
         getClicked() {
             this.actionSelectedRest(this.getThreeRes[this.getClicked])
+        },
+        getThreeRes() {
+            console.log(this.getThreeRes)
+            this.actionSelectedRest = this.getThreeRes[0];
         }
         
     },
     mounted() {
         this.fillPositions()
         this.checkFilp()
-        this.actionSelectedRest = this.getThreeRes[0]
-
         
     },
     methods : {

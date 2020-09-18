@@ -1,7 +1,6 @@
 <template>
   <div>
-	<p>{{destination}}</p>
-	<p>{{getFlip}}</p>
+	{{getThreeRes}}
 	<br>		
 	<div class="map-wrap">
 		<div id="map"></div>
@@ -31,7 +30,7 @@ export default {
 			recommendMarkers : [],
 			selectedMarker : null,
 			plans : [],
-			temps : [],
+			recommends : [],
 			flip : false,
 			clickedOverlay : null,
 		}
@@ -58,7 +57,7 @@ export default {
 		getFlip(){
 			console.log("watch getFlip",this.getFlip)
 			if (window.kakao) {
-				this.showCandidates(this.temps)
+				this.showCandidates(this.recommends)
 			}
 			
 		},
@@ -102,7 +101,7 @@ export default {
 			this.startCoord();
 			this.fillPositions();
 			this.initCurLocation();
-			this.showCandidates(this.temps)
+			this.showCandidates(this.recommends)
 		},
 
 		initCurLocation() {
@@ -127,6 +126,7 @@ export default {
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 		showMarkers(markers) {
 			for (var i = 0; i < markers.length; i++) {
+				console.log(i,markers[i])
 				markers[i].setMap(this.map);
 			}    
 		},
@@ -173,9 +173,11 @@ export default {
 						map.setCenter(coords);
 						console.log(`${this.destination} 좌표 : ${coords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
-                        this.curMarkers = [];
+                        
 					
 						// 마커를 추가
+						this.hideMarkers(this.curMarkers)
+						this.curMarkers = [];
 						this.curMarkers.push(marker);
 						console.log("choose region",this.curMarkers)
 						this.showMarkers(this.curMarkers);
@@ -204,7 +206,7 @@ export default {
 		// },
 
 		fillPositions() {
-			this.temps = [
+			this.recommends = [
 				{   
 					id : 1,
 					title: '승희 위치', 
