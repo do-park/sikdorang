@@ -95,9 +95,10 @@ export default {
 
         ]),
         selectRest(idx) {
-                if (idx < 3 && idx >= 0) {
-                    this.actionClicked(idx)
-                this.actionSelectedRest(this.getThreeRes[idx])
+            var self = this
+            if (idx < 3 && idx >= 0) {
+                self.actionClicked(idx)
+                self.actionSelectedRest(self.getThreeRes[idx])
                 var Rest = this.getSelectedRest
                 swal({
                 title: Rest.title,
@@ -119,7 +120,7 @@ export default {
                     })
                 } 
             }); 
-            }
+        }
         },
         changeOverBox(overidx){ 
            

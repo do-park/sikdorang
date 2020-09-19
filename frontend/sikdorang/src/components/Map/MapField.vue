@@ -66,7 +66,8 @@ export default {
 		},
 		getClicked(){	
             //지도 확대하고 모달창 띄운다.          
-			this.moveAndModal();    
+			this.moveSmoothly();  
+			this.showCandidates(this.recommends)  
 		},
 	},
 	
@@ -79,7 +80,7 @@ export default {
 		]),
 		
 		
-		moveAndModal() {
+		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
             var moveLatLon = this.getThreeRes[this.getClicked].latlng;
 
@@ -263,10 +264,39 @@ export default {
                     }
                 })
             } 
-        });
+		});
+		},
+		//카드 누르면 마커 이미지 변경
+		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
+			if (this.getClicked !== marker.idx) {
+				console.log("달라요",this.getClicked, marker.idx)
+				marker.setImage(normalImage);
+			}
+			else {
+				console.log("같아요",this.getClicked, marker.idx)
+				this.selectedMarker = marker;
+				marker.setImage(clickImage);
+			}
+			// if (this.selectedMarker && this.selectedMarker.idx !== this.getClicked){
+			// 	console.log("누른게 달라요")
+			// 	if (this.getClicked === marker.idx) {
+			// 		!!this.selectedMarker && this.selectedMarker.setImage(this.selectedMarker.normalImage);
+
+			// 	// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+			// 		marker.setImage(clickImage);
+			// 		this.selectedMarker = marker;
+			// 	}
+			// }
+			// else if (!this.selectedMarker){
+			// 	if (this.getClicked === marker.idx) {
+			// 		this.selectedMarker = marker
+			// 		marker.setImage(clickImage);
+					
+			// 	}
+			// }	
+		},
 
         
-        },
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
@@ -318,6 +348,8 @@ export default {
 				const normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
+
+				
 					
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
@@ -342,6 +374,8 @@ export default {
 				bounds.extend(positions[i].latlng);
 				// console.log(typeof(bounds),bounds.length,"bounds",bounds)
 				this.recommendMarkers.push(marker)
+
+				self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {
 				return function() {
@@ -369,13 +403,14 @@ export default {
 					//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
 					// 마커의 이미지를 클릭 이미지로 변경합니다
 					if (!selectedMarker || selectedMarker !== marker) {
-						
-						// 클릭된 마커 객체가 null이 아니면
-						// 클릭된 마커의 이미지를 기본 이미지로 변경하고
-						!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+							// 클릭된 마커 객체가 null이 아니면
+							// 클릭된 마커의 이미지를 기본 이미지로 변경하고
+							!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
 
-						// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-						marker.setImage(clickImage);
+							// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+							marker.setImage(clickImage);
+						// }
+						
 					}
 
 					// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
@@ -394,16 +429,7 @@ export default {
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);
 			this.showMarkers(this.recommendMarkers);
-		},
-
-
-	// 	showNewMap(LatLng) { 
-	// 		var map = this.map;
-	// 		map.setCenter(LatLng);
-	// 		var marker = new kakao.maps.Marker({ position: map.getCenter() });
-	// 		marker.setMap(map);
-	// 	},
-			
+		},	
 	
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
 		createMarkerImage(markerSize, offset, spriteOrigin) {
@@ -543,9 +569,6 @@ export default {
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);			
 		},
-
-		
-	
 	}, 
 }
 </script>
