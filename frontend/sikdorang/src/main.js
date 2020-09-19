@@ -9,7 +9,7 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "http://j3d202.p.ssafy.io:8080/";
 
 Vue.config.productionTip = false;
 Vue.use(VueCookies)

@@ -41,6 +41,7 @@ export default {
 			clickCount: -1,
 			userChoice: [],
 			isDone: false,
+			isSaved: false,
 		}
 	},
 	methods: {
@@ -64,8 +65,9 @@ export default {
 					this.nextRound()
 				}
 			}
-			if (this.tags.length == 4) {
+			if (this.tags.length == 4 && !this.isSaved) {
 				this.tagsSave()
+				this.isSaved = true
 			}
 		},
 		nextRound() {
@@ -83,8 +85,17 @@ export default {
 		},
 		// 4강(3강이 되는 경우는 3강)이 되면 정보를 저장합니다.
 		tagsSave() {
-			console.log('유저 정보와 태그를 서버에 보내 저장합니다.')
-			this.$axios.post()
+			console.log('Tags saving', this.tags)
+			const requestHeaders = {
+				headers: {
+					Authorization: `JWT ${this.$cookies.get('auth-token')}`
+				}
+			}
+			this.$axios.post('idealtag', {tags: this.tags}, requestHeaders)
+			.then(res => {
+				console.log(res)
+			})
+			.catch(err => console.erro(err))
 		},
 		done() {
 			this.$emit('done')

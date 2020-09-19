@@ -14,9 +14,10 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex"
+
 const mapEvent = "mapEvent"
-// import axios from 'axios'
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
+
 export default {
 	name : "MapField",
 	data() {
@@ -43,7 +44,6 @@ export default {
 		else {
 			this.addScript();
         }
-		
 	},
 	computed : {
 		...mapGetters(mapEvent, [
@@ -60,7 +60,6 @@ export default {
 			if (window.kakao) {
 				this.showCandidates(this.temps)
 			}
-			
 		},
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
@@ -70,24 +69,43 @@ export default {
 			this.moveAndModal();    
 		},
 	},
-	
 	methods : {
 		...mapActions(mapEvent,[
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
 		]),
-		
-		
+		divideRecommendation(cf) {
+			if (cf === "식당" | cf === "카페"){
+				this.getSCRecommendation()
+			} else {
+				this.getSHRecommendation()
+			}
+		},
+		getSCRecommendation() {
+			console.log('음식점 / 카페를 추천 받습니다.')
+
+			// 	const requestHeaders = {
+			// 		headers: {
+			// 			Authorization: `JWT ${this.$cookies.get('auth-token')}`
+			// 		}
+			// 	}
+			// 	this.$axios.post('recommendation/tag-based/', requestHeaders)
+			// 	.then(res => {
+			// 		console.log(res)
+			// 	})
+			// 	.catch(err => console.error(err))
+		},
+		getSHRecommendation() {
+			console.log('관광지 / 숙박 정보를 받습니다.')
+			// const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+		},
 		moveAndModal() {
 			// 이동할 위도 경도 위치를 생성합니다 
             var moveLatLon = this.getThreeRes[this.getClicked].latlng;
-
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
 			this.map.panTo(moveLatLon);  
-			
-
 		},
 		initMap() { 
 			var container = document.getElementById('map'); 
