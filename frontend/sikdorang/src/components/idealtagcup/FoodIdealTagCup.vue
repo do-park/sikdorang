@@ -91,11 +91,12 @@ export default {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('idealtag', {tags: this.tags}, requestHeaders)
+			console.log(requestHeaders)
+			this.$axios.post('trip/idealtag', {tags: this.tags}, requestHeaders)
 			.then(res => {
 				console.log(res)
 			})
-			.catch(err => console.erro(err))
+			.catch(err => console.error(err))
 		},
 		done() {
 			this.$emit('done')

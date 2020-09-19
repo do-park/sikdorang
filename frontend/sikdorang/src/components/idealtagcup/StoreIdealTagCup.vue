@@ -83,7 +83,7 @@ export default {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('idealcategory', {tags: this.tags}, requestHeaders)
+			this.$axios.post('trip/idealcategory', {tags: this.tags}, requestHeaders)
 			.then(res => {
 				console.log(res)
 			})

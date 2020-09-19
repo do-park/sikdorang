@@ -30,10 +30,14 @@ def checkID(request, name):
 
 @api_view(['POST'])
 def idealtag(request):
-    user = request.user
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', user)
     tags = request.data['tags']
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', tags)
+    
     for i in tags:
-        tag = TagModel.objects.create(name=i, user=user)
+        tag = TagModel.objects.create(name=i, user=user, count=1)
     return HttpResponse('잘됨')
     
 
