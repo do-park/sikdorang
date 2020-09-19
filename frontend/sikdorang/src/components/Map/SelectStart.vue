@@ -59,8 +59,8 @@ export default {
                 //위치 요청
 				navigator.geolocation.getCurrentPosition(function(pos) {
 					this.Latitude = pos.coords.latitude;
-					this.Longitude = pos.coords.longitude;
-                    alert("현재 위치는 : " + this.Latitude + ", "+ this.Longitude);
+                    this.Longitude = pos.coords.longitude;
+                    swal("내 위치", this.Latitude + ", "+ this.Longitude, "success");
                     
                     //시작 위도,경도 쿠키에 올리기
                     console.log(this.Latitude,this.Longitude)
