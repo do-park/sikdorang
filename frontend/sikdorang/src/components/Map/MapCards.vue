@@ -1,7 +1,6 @@
 <template>
   <div>
-      <div>flip : {{ getFlip }}</div>
-
+      <!-- <div>flip : {{ getFlip }}</div> -->
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -101,16 +100,14 @@ export default {
         },
         getClicked() {
             this.actionSelectedRest(this.getThreeRes[this.getClicked])
-        },
-        getThreeRes() {
-            console.log(this.getThreeRes)
-            this.actionSelectedRest = this.getThreeRes[0];
         }
         
     },
     mounted() {
         this.fillPositions()
         this.checkFilp()
+        this.actionSelectedRest = this.getThreeRes[0]
+
         
     },
     methods : {
@@ -191,7 +188,6 @@ export default {
             ]
         },
         checkFilp() {
-            console.log("MapCards getFlip",this.getFlip)
             this.actionFlip(!this.getFlip)
         },
     }

@@ -1,7 +1,5 @@
 <template>
-  <div>
-	{{getThreeRes}}
-	<br>		
+  <div>	
 	<div class="map-wrap">
 		<div id="map"></div>
 	</div>
@@ -252,7 +250,11 @@ export default {
 				this.actionThreeRes(locs.slice(3,6))
 			}
 			var positions = this.getThreeRes;
-			var bounds = new kakao.maps.LatLngBounds();  
+			var bounds = new kakao.maps.LatLngBounds();
+			//현재 위치도 지도 범위에 포함  
+			// bounds.extend(this.curMarkers.latlng);
+			// console.log(bounds.length,"bounds",bounds)
+
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
 			//커스텀 마커 정보
@@ -310,6 +312,7 @@ export default {
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
 			
 				bounds.extend(positions[i].latlng);
+				// console.log(typeof(bounds),bounds.length,"bounds",bounds)
 				this.recommendMarkers.push(marker)
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {
@@ -534,5 +537,6 @@ export default {
 	margin-left: auto;
 	margin-right: auto;
 }
+
 
 </style>
