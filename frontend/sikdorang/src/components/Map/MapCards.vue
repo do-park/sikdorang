@@ -1,30 +1,5 @@
 <template>
-  <div>
-      <!-- <div>flip : {{ getFlip }}</div> -->
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    <div v-if="getSelectedRest">{{getSelectedRest.title}}</div>
-                    <div v-else>어떤 식당을 찾으시나요?</div>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary">일정 저장하기</button>
-            </div>
-            </div>
-        </div>
-        </div>
-            
+  <div>         
       <div class="d-flex flex-column align-items-center">
       <div>
           <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
@@ -33,7 +8,7 @@
           <div 
             :class="{ 'active': isActive0 }"
             class="box" 
-            @click="selectRest(getThreeRes[0])"
+            @click="selectRest(0)"
             data-toggle="modal" 
             data-target="#exampleModal"
           >
@@ -43,7 +18,7 @@
           <div 
             :class="{ 'active': isActive1 }"
             class="box" 
-            @click="selectRest(getThreeRes[1])"
+            @click="selectRest(1)"
             data-toggle="modal" 
             data-target="#exampleModal"
           >
@@ -53,7 +28,7 @@
           <div 
             :class="{ 'active': isActive2 }"
             class="box" 
-            @click="selectRest(getThreeRes[2])"
+            @click="selectRest(2)"
             data-toggle="modal" 
             data-target="#exampleModal"
           >
@@ -68,6 +43,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 const mapEvent = "mapEvent"
 
@@ -113,12 +89,37 @@ export default {
     methods : {
         ...mapActions(mapEvent, [
             'actionFlip',
-            'actionSelectedRest'
+            'actionSelectedRest',
+            'actionClicked',
 
 
         ]),
-        selectRest(rest) {
-            this.actionSelectedRest(rest)
+        selectRest(idx) {
+            this.actionClicked(idx)
+            this.actionSelectedRest(this.getThreeRes[idx])
+            var Rest = this.getSelectedRest
+            swal({
+            title: Rest.title,
+            text: "이런이런 맛집입니다아",
+            buttons: ["취소","추가"],
+            })
+            .then((res) => {
+            if (res) {
+                swal(`${Rest.title}을 일정에 추가할까요?`,{
+                    buttons: ["아니오","네"],
+                })
+                .then((res)=>{
+                    if (res) {
+                        swal(`${Rest.title}을 일정에 추가할까요?`,{
+                        icon : "success"
+                        })
+                        
+                    }
+                })
+            } 
+        });
+
+        
         },
         changeOverBox(overidx){ 
            
