@@ -23,6 +23,7 @@ export default {
 			map: null,
 			startLat :36.109328,
 			startLong :128.4128223,
+			startCoords : null,
 			curLat: null,
 			curLong: null,
 			curMarkers : [],
@@ -105,7 +106,7 @@ export default {
             this.map = map;
 			this.$emit('getKakao',window.kakao)
 
-			this.startCoord();
+			this.setStartCoords();
 			this.fillPositions();
 			this.initCurLocation();
 			this.showCandidates(this.recommends)
@@ -145,15 +146,15 @@ export default {
 			} 
 		},
 
-        startCoord() {
+        setStartCoords() {
 			var map = this.map
 			
             if (this.$cookies.get("searchMethod")==="myLocation"){
             this.startLat = this.$cookies.get("startLatitude")
             this.startLong = this.$cookies.get("startLongitude")
 
-            var LatLng = new kakao.maps.LatLng(this.startLat, this.startLong)
-            map.setCenter(LatLng);
+            this.startCoords = new kakao.maps.LatLng(this.startLat, this.startLong)
+            map.setCenter(this.startCoords);
 			var marker = new kakao.maps.Marker({ position: map.getCenter() });
 			this.hideMarkers(this.curMarkers)
 			this.curMarkers = [];
@@ -174,11 +175,11 @@ export default {
 
                     // 정상적으로 검색이 완료됐으면 
                     if (status === kakao.maps.services.Status.OK) {
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        this.startCoords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
                         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-						map.setCenter(coords);
-						console.log(`${this.destination} 좌표 : ${coords} `)
+						map.setCenter(this.startCoords);
+						console.log(`${this.destination} 좌표 : ${this.startCoords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
                         
 					
@@ -271,7 +272,7 @@ export default {
             } 
 		});
 		},
-		
+
 		//카드 누르면 마커 이미지 변경
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
 
@@ -300,7 +301,7 @@ export default {
 			var positions = this.getThreeRes;
 			var bounds = new kakao.maps.LatLngBounds();
 			//현재 위치도 지도 범위에 포함  
-			// bounds.extend(this.curMarkers.latlng);
+			bounds.extend(self.startCoords);
 			// console.log(bounds.length,"bounds",bounds)
 
 			this.hideMarkers(this.recommendMarkers)
