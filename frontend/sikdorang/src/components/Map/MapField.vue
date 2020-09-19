@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 const mapEvent = "mapEvent"
 // import axios from 'axios'
@@ -48,6 +49,7 @@ export default {
 			'getMouseOver',
 			'getClicked',
 			'getThreeRes',
+			'getSelectedRest'
 		])
 
 	},
@@ -73,6 +75,7 @@ export default {
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
+			'actionSelectedRest'
 		]),
 		
 		
@@ -238,7 +241,32 @@ export default {
 				}
 			]
 		},
-	
+		selectRest(idx) {
+            this.actionSelectedRest(this.getThreeRes[idx])
+            var Rest = this.getSelectedRest
+            swal({
+            title: Rest.title,
+            text: "이런이런 맛집입니다아",
+            buttons: ["취소","추가"],
+            })
+            .then((res) => {
+            if (res) {
+                swal(`${Rest.title}을 일정에 추가할까요?`,{
+                    buttons: ["아니오","네"],
+                })
+                .then((res)=>{
+                    if (res) {
+                        swal(`${Rest.title}을 일정에 추가할까요?`,{
+                        icon : "success"
+                        })
+                        
+                    }
+                })
+            } 
+        });
+
+        
+        },
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
@@ -357,6 +385,7 @@ export default {
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
 					console.log("선택했다",selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
+					self.selectRest(selectedMarker.idx)
 					
 				};
 			}
