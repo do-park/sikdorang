@@ -271,8 +271,8 @@ export default {
             } 
 		});
 		},
+		
 		//카드 누르면 마커 이미지 변경
-
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
 
 			if (this.getClicked !== marker.idx) {

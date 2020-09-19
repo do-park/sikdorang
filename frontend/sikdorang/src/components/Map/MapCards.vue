@@ -191,6 +191,7 @@ export default {
         },
         checkFilp() {
             this.actionFlip(!this.getFlip)
+            this.actionClicked(null)
         },
     }
 }
