@@ -4,6 +4,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert';
 import { mapActions, mapGetters } from "vuex"
 // import jQuery from 'jquery';
 // let $ = jQuery;
@@ -13,6 +14,7 @@ export default {
     computed : {
         ...mapGetters(mapEvent, [
             'getClicked',
+            'getThreeRes',
             'getSelectedRest'
         ])
     },
