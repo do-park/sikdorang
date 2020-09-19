@@ -1,11 +1,6 @@
 <template>
   <div class="signup">
     <div class="signup-box">
-      <v-text-field
-        v-model="signupData.email"
-        label="이메일"
-        :rules="emailRules"
-        hide-details="auto"></v-text-field>
       <!-- <v-text-field
         v-model="signupData.phone"
         label="휴대폰 번호"
@@ -13,9 +8,9 @@
         type="number"
         hide-details="auto"></v-text-field> -->
       <v-text-field
-        v-model="signupData.nickname"
-        label="닉네임"
-        :rules="nicknameRules"
+        v-model="signupData.username"
+        label="아이디"
+        :rules="usernameRules"
         hide-details="auto"></v-text-field>
       <div class="year">
         <v-slider
@@ -26,23 +21,26 @@
           thumb-label="always"></v-slider>
       </div>
       <v-text-field
-        v-model="signupData.password"
+        v-model="signupData.password1"
         label="비밀번호"
-        :rules="[passwordRules.required, passwordRules.min]"
+        :rules="password1Rules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show1 ? 'text' : 'password'"
         hint="8자 이상"
         counter
         @click:append="show1 = !show1"></v-text-field>
       <v-text-field
-        v-model="signupData.rePassword"
+        v-model="signupData.password2"
         label="비밀번호 확인"
-        :rules="rePasswordRules"
+        :rules="password2Rules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show1 ? 'text' : 'password'"
         counter
         @click:append="show1 = !show1"></v-text-field>
-      <v-btn class="signup-btn" color="primary" @click="clickSignup">가입하기</v-btn>
+      <v-btn 
+        class="signup-btn" 
+        color="primary" 
+        @click="clickSignup">가입하기</v-btn>
     </div>
   </div>
 </template>
@@ -54,56 +52,52 @@ export default {
   data() {
     return {
       signupData: {
-        email: "",
         // phone: "",
-        nickname: "",
+        username: "",
         year: 1990,
-        password: "",
-        rePassword: "",
+        password1: "",
+        password2: "",
 
       },
-      emailRules: [
-        value => (value && value.includes('@') && value.includes('.')) || '올바른 이메일을 입력하세요.',
-      ],
       // phoneRules: [
       //   value => (value && value.length === 11) || '올바른 휴대폰 번호를 입력하세요.',
       // ],
-      nicknameRules: [
-        value => (value && value.length >= 1) || '1자 이상 입력하세요.',
+      usernameRules: [
+        value => (value && value.length >= 5) || '5자 이상 입력하세요.',
       ],
       nowYear: new Date().getFullYear(),
       show1: false,
-      password: 'Password',
-      passwordRules: [
+      password1Rules: [
         value => (value && value.length >= 8) || '8자 이상 입력하세요.',
       ],
-      rePasswordRules: [
-        value => (value === this.signupData.password) || '비밀번호가 일치하지 않습니다.',
+      password2Rules: [
+        value => (value === this.signupData.password1) || '비밀번호가 일치하지 않습니다.',
       ],
     }
   },
   methods: {
     clickSignup() {
       var pass = false
-      if (this.signupData.email.includes('@') && this.signupData.email.includes('.')) {
-        // if (this.signupData.phone.length === 11) {
-          if (this.signupData.nickname.length >= 1) {
-            if (this.signupData.password.length >= 8) {
-              if (this.signupData.password === this.signupData.rePassword) {
-                pass = true
-              }
+      // if (this.signupData.phone.length === 11) {
+        if (this.signupData.username.length >= 5) {
+          if (this.signupData.password1.length >= 8) {
+            if (this.signupData.password1 === this.signupData.password2) {
+              pass = true
             }
           }
-        // } 
-      }
+        }
+      // } 
 
       if (pass) {
-        this.$axios.post(`/api/signup`, this.signupData)
+        console.log(this.signupData)
+        this.$axios.post(`/rest-auth/registration/`, this.signupData)
         .then (response => {
-          console.log(response)
+          window.$cookies.set('auth-token',response.data.key)
+          this.$router.push({ name: 'Home' })
         })
         .catch(err => {
           console.log(err)
+          alert("너무 일상적인 비밀번호입니다. 변경해주세요.")
         })
       }
       
@@ -112,7 +106,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .signup-box {
     width: 500px;
     margin: 5rem auto;

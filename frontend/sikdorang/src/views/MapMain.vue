@@ -9,8 +9,9 @@
       </div>
       <div v-if="!flag">
           <MapTheme/>
-          <MapField/>
-          <MapCards :kakao="kakao"/>
+          <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
+          <MapCards :kakao="kakao" :selected="selected"/>
+          <MarkerModal/>
       </div>    
        
   </div>
@@ -21,13 +22,16 @@ import SelectStart from '../components/Map/SelectStart'
 import MapField from '../components/Map/MapField'
 import MapTheme from '../components/Map/MapTheme'
 import MapCards from '../components/Map/MapCards'
+import MarkerModal from '../components/Map/MarkerModal'
+
 export default {
     name:'MapMain',
     components : {
         SelectStart,
         MapField,
         MapTheme,
-        MapCards
+        MapCards,
+        MarkerModal
     },
     mounted() {
         this.flag = true
@@ -37,12 +41,21 @@ export default {
             map : null,
             flag : true,
             destination : '',
+            kakao : null,
+            selected : null,
+            showModal : false,
         }
     },
     methods : {
         flagValue(value) {
             this.flag = value
         },
+        getKakao(kakao) {
+            this.kakao = kakao
+        },
+        selectedMarker(idx) {
+            this.selected = idx
+        }
     },
 
 }

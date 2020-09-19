@@ -9,11 +9,15 @@
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "bootstrap-vue": "^2.17.0",
     "core-js": "^3.6.5",
+    "jquery": "^3.5.1",
     "load-script-once": "^2.0.1",
+    "sweetalert2": "^10.0.2",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
     "vue-router": "^3.4.3",
+    "vuedraggable": "^2.24.1",
     "vuetify": "^2.2.11",
     "vuex": "^3.5.1"
   },
