@@ -241,60 +241,6 @@ export default {
 			]
 		},
 	
-		// showPositions(locs) {
-		// 	var positions = locs
-			
-		// 	var map = this.map;	
-		// 	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-		// 	var bounds = new kakao.maps.LatLngBounds();   
-					
-		// 	for (var i = 0; i < positions.length; i ++) {
-					
-		// 		// 마커 이미지의 이미지 크기 입니다
-		// 		var imageSize = new kakao.maps.Size(24, 35); 
-				
-		// 		// 마커 이미지를 생성합니다    
-		// 		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-				
-		// 		// 마커를 생성합니다
-		// 		var marker = new kakao.maps.Marker({
-		// 			map: map,
-		// 			position: positions[i].latlng,
-		// 			title : positions[i].title, 
-		// 			image : markerImage
-		// 		});
-		// 		// 마커에 표시할 인포윈도우를 생성합니다 
-		// 		var infowindow = new kakao.maps.InfoWindow({
-		// 			content: positions[i].title // 인포윈도우에 표시할 내용
-		// 		});
-
-		// 		// 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
-		// 		// 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-		// 		(function(marker, infowindow) {
-		// 			// 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
-		// 			kakao.maps.event.addListener(marker, 'mouseover', function() {
-		// 				infowindow.open(map, marker);
-		// 			});
-
-		// 			// 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
-		// 			kakao.maps.event.addListener(marker, 'mouseout', function() {
-		// 				infowindow.close();
-		// 			});
-
-		// 			kakao.maps.event.addListener(marker, 'click', function(){
-		// 				console.log(`${marker}을 클릭했습니다.`)
-		// 			})
-		// 		})(marker, infowindow);
-
-		// 		bounds.extend(positions[i].latlng);
-		// 		marker.setMap(map);
-		// 	}
-
-		// 	// LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
-		// 	// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-		// 	map.setBounds(bounds);	
-		// },
-
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
@@ -567,25 +513,7 @@ export default {
 		},
 
 		
-	// 	makePlan(position) {
-	// 		var flag = true
-	// 		this.plans.forEach(plan => {
-	// 			if (position.id === plan.id){
-	// 				flag = false
-	// 				alert(`이미 ${position.title}은 일정에 있습니다.`)
-	// 			}
-	// 		});	
-	// 		if (flag){
-	// 			this.plans.push(position)
-	// 		}
-					
-	// 		this.showPositions(this.plans)
-	// 	},
-
-	// 	resetPlans() {
-	// 		this.plans = []
-	// 		this.initMap()
-	// 	},
+	
 	}, 
 }
 </script>
@@ -607,19 +535,4 @@ export default {
 	margin-right: auto;
 }
 
-.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
-.wrap * {padding: 0;margin: 0;}
-.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
-.wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-.info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-.info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
-/* .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;} */
-.info .close:hover {cursor: pointer;}
-.info .body {position: relative;overflow: hidden;}
-.info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
-.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
-.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
-.info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
-.info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-.info .link {color: #5085BB;}
 </style>

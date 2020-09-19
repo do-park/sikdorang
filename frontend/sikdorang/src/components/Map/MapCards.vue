@@ -192,12 +192,6 @@ export default {
         },
         checkFilp() {
             console.log("MapCards getFlip",this.getFlip)
-            // if (this.getFlip) {
-            //     this.threeRes = this.recommendations.slice(3,6) 
-            // }
-            // else {
-            //     this.threeRes = this.recommendations.slice(0,3)
-            // }
             this.actionFlip(!this.getFlip)
         },
     }
