@@ -65,8 +65,7 @@ export default {
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
 		getClicked(){	
-            //지도 확대하고 모달창 띄운다.          
-			this.moveSmoothly();  
+                    
 			this.showCandidates(this.recommends)  
 		},
 	},
@@ -82,8 +81,14 @@ export default {
 		
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
-            var moveLatLon = this.getThreeRes[this.getClicked].latlng;
+			var moveLatLon = this.getThreeRes[this.getClicked].latlng;
 
+			// 나중에 음식점 리스트 받아오면 바뀔 코드
+			// var lat = this.getThreeRes[this.getClicked].latitude;
+			// var long = this.getThreeRes[this.getClicked].longitude;
+            // var moveLatLon = new kakao.maps.LatLng(lat,long)
+
+			console.log(moveLatLon,"으로 부드럽게 이동합니다.")
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
 			this.map.panTo(moveLatLon);  
@@ -267,7 +272,9 @@ export default {
 		});
 		},
 		//카드 누르면 마커 이미지 변경
+
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
+
 			if (this.getClicked !== marker.idx) {
 				console.log("달라요",this.getClicked, marker.idx)
 				marker.setImage(normalImage);
@@ -277,25 +284,8 @@ export default {
 				this.selectedMarker = marker;
 				marker.setImage(clickImage);
 			}
-			// if (this.selectedMarker && this.selectedMarker.idx !== this.getClicked){
-			// 	console.log("누른게 달라요")
-			// 	if (this.getClicked === marker.idx) {
-			// 		!!this.selectedMarker && this.selectedMarker.setImage(this.selectedMarker.normalImage);
-
-			// 	// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-			// 		marker.setImage(clickImage);
-			// 		this.selectedMarker = marker;
-			// 	}
-			// }
-			// else if (!this.selectedMarker){
-			// 	if (this.getClicked === marker.idx) {
-			// 		this.selectedMarker = marker
-			// 		marker.setImage(clickImage);
-					
-			// 	}
-			// }	
+			return this.selectedMarker	
 		},
-
         
 		showCandidates(locs) {
 			const self = this
@@ -375,7 +365,7 @@ export default {
 				// console.log(typeof(bounds),bounds.length,"bounds",bounds)
 				this.recommendMarkers.push(marker)
 
-				self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
+				selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {
 				return function() {
@@ -416,7 +406,7 @@ export default {
 					// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
 					selectedMarker = marker;
 					this.selectedMarker = selectedMarker;
-
+					infowindow.close();
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
 					console.log("선택했다",selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
@@ -429,6 +419,7 @@ export default {
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);
 			this.showMarkers(this.recommendMarkers);
+			self.moveSmoothly();
 		},	
 	
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
