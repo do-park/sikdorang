@@ -1,56 +1,58 @@
 <template>
-
   <div>
-      <!-- Modal -->
-        <!-- <div class="modal fade" ref="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    
-                    <div v-if="getClicked">dddd{{getThreeRes[getClicked].title}}</div>
-                    <div v-else>?????????어떤 식당을 찾으시나요?
-                    </div>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>{{getThreeRes}}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" >닫기</button>
-                <button type="button" class="btn btn-primary">일정 저장하기</button>
-            </div>
-            </div>
-        </div>
-        </div> -->
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
-import jQuery from 'jquery';
-let $ = jQuery;
+import { mapActions, mapGetters } from "vuex"
+// import jQuery from 'jquery';
+// let $ = jQuery;
 const mapEvent = "mapEvent"
 export default {
     name : 'MarkerModal',
     computed : {
         ...mapGetters(mapEvent, [
             'getClicked',
+            'getSelectedRest'
         ])
     },
     watch : {
         getClicked() {
-            this.showLoginModal()
+            this.selectRest(this.getClicked)
         },
     },
     methods : {
-        showLoginModal() {
-            // 로그인 모달 창을 보여줍니다.
-			$('#exampleModal').modal('show')
-		},
+        ...mapActions(mapEvent,[
+            'actionClicked',
+            'actionSelectedRest',
+        ]),
+        selectRest(idx) {
+            this.actionClicked(idx)
+            this.actionSelectedRest(this.getThreeRes[idx])
+            var Rest = this.getSelectedRest
+            swal({
+            title: Rest.title,
+            text: "이런이런 맛집입니다아",
+            buttons: ["취소","추가"],
+            })
+            .then((res) => {
+            if (res) {
+                swal(`${Rest.title}을 일정에 추가할까요?`,{
+                    buttons: ["아니오","네"],
+                })
+                .then((res)=>{
+                    if (res) {
+                        swal(`${Rest.title}을 일정에 추가할까요?`,{
+                        icon : "success"
+                        })
+                        
+                    }
+                })
+            } 
+        });
+
+        
+        },
 
     }
 
