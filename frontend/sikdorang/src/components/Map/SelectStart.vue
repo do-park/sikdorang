@@ -60,15 +60,16 @@ export default {
 				navigator.geolocation.getCurrentPosition(function(pos) {
 					this.Latitude = pos.coords.latitude;
                     this.Longitude = pos.coords.longitude;
-                    swal("내 위치", this.Latitude + ", "+ this.Longitude, "success");
-                    
-                    //시작 위도,경도 쿠키에 올리기
-                    console.log(this.Latitude,this.Longitude)
-                    this.$cookies.set('startLatitude',this.Latitude)
-                    this.$cookies.set('startLongitude',this.Longitude)
-                    this.$cookies.set("searchMethod", "myLocation")
-                    this.$emit("flag",false)
-                    
+                    swal("내 위치", this.Latitude + ", "+ this.Longitude, "success")
+                    .then((res)=>{
+                        if (res) {
+                            //시작 위도,경도 쿠키에 올리기
+                            this.$cookies.set('startLatitude',this.Latitude)
+                            this.$cookies.set('startLongitude',this.Longitude)
+                            this.$cookies.set("searchMethod", "myLocation")
+                            this.$emit("flag",false)
+                        }
+                    })
                 }.bind(this));
                 
 			} else {
