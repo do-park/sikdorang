@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
     "load-script-once": "^2.0.1",
+    "sweetalert": "^2.1.2",
     "sweetalert2": "^10.0.2",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",

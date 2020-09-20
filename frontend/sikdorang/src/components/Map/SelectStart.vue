@@ -2,49 +2,14 @@
   <div>
     <div class="text-center">
         <button type="button" class="btn btn-secondary" @click="getMyLocation">내 위치</button>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
-            다른 지역
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">지역 검색하기</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                여행을 시작할 지역을 검색해보세요!
-                <br>
-                    <input
-                        v-model="destination" 
-                        @keyup.enter="findPath(destination)"
-                        label="어디 갈래?"
-                        placeholder="예시) XX동 or XX동 775-5"
-                    />
-                    <button class="btn btn-secondary" @click="findPath(destination)">
-                        검색
-                    </button>
-                    <br>
-                    {{message}}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" @click="check">확인</button>
-            </div>
-            </div>
-        </div>
-        </div>
+        <button class="btn btn-secondary" @click="search">다른 지역</button>
 
     </div>
   </div>
 </template>
 
 <script>
+import swal from 'sweetalert';
 export default {
     name : 'SelectStart',
     data() {
@@ -58,30 +23,53 @@ export default {
     },
  
     methods : {
-        check() {
-            this.dialog = false
-            this.message = ''
-            this.$cookies.set("searchMethod", "Regions")
-            this.destination = ''
-            this.$emit("flag",false)
-           
+        search() {
+            swal({
+            title: "어느 지역을 검색하시겠습니까?",
+            content: "input",
+            buttons: true,
+            })
+            .then((value) => {
+            if (value) {
+                swal(`${value}에서 시작해볼까요?`,{
+                    buttons: true,
+                })
+                .then((res)=>{
+                    if (res) {
+                        console.log(res,"ok눌렀다")
+                        this.$cookies.set("searchMethod", "Regions")
+                        this.destination = ''
+                        this.$emit("flag",false)
+                    }
+                })
+                
+            } else {
+                swal("검색어를 입력해주세요.", {
+                icon: "warning",
+                dangerMode: true,
+                } ) 
+            }
+            });
+
         },
+      
         getMyLocation() {	
 			if('geolocation' in navigator) {
                 
                 //위치 요청
 				navigator.geolocation.getCurrentPosition(function(pos) {
 					this.Latitude = pos.coords.latitude;
-					this.Longitude = pos.coords.longitude;
-                    alert("현재 위치는 : " + this.Latitude + ", "+ this.Longitude);
-                    
-                    //시작 위도,경도 쿠키에 올리기
-                    console.log(this.Latitude,this.Longitude)
-                    this.$cookies.set('startLatitude',this.Latitude)
-                    this.$cookies.set('startLongitude',this.Longitude)
-                    this.$cookies.set("searchMethod", "myLocation")
-                    this.$emit("flag",false)
-                    
+                    this.Longitude = pos.coords.longitude;
+                    swal("내 위치", this.Latitude + ", "+ this.Longitude, "success")
+                    .then((res)=>{
+                        if (res) {
+                            //시작 위도,경도 쿠키에 올리기
+                            this.$cookies.set('startLatitude',this.Latitude)
+                            this.$cookies.set('startLongitude',this.Longitude)
+                            this.$cookies.set("searchMethod", "myLocation")
+                            this.$emit("flag",false)
+                        }
+                    })
                 }.bind(this));
                 
 			} else {
