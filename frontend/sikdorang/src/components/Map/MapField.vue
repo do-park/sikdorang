@@ -82,7 +82,8 @@ export default {
 		
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
-			var moveLatLon = this.getThreeRes[this.getClicked].latlng;
+			if (this.getClicked) {
+				var moveLatLon = this.getThreeRes[this.getClicked].latlng;
 
 			// 나중에 음식점 리스트 받아오면 바뀔 코드
 			// var lat = this.getThreeRes[this.getClicked].latitude;
@@ -92,8 +93,8 @@ export default {
 			console.log(moveLatLon,"으로 부드럽게 이동합니다.")
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-			this.map.panTo(moveLatLon);  
-			
+			this.map.panTo(moveLatLon);
+			}
 
 		},
 		initMap() { 

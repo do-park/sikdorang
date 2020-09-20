@@ -82,7 +82,10 @@ export default {
     mounted() {
         this.fillPositions()
         this.checkFilp()
-        this.actionSelectedRest = this.getThreeRes[0]
+        if (this.getThreeRes) {
+            this.actionSelectedRest = this.getThreeRes[0]
+        }
+        
 
         
     },
@@ -95,15 +98,15 @@ export default {
 
         ]),
         selectRest(idx) {
-            var self = this
+         
             if (idx < 3 && idx >= 0) {
-                self.actionClicked(idx)
-                self.actionSelectedRest(self.getThreeRes[idx])
+                this.actionClicked(idx)
+                this.actionSelectedRest(this.getThreeRes[idx])
                 var Rest = this.getSelectedRest
                 swal({
                 title: Rest.title,
                 text: "이런이런 맛집입니다아",
-                buttons: ["취소","추가"],
+                buttons: ["닫기","추가"],
                 })
                 .then((res) => {
                 if (res) {
