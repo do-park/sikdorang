@@ -51,7 +51,7 @@ export default {
     name : 'MapCards',
     data() {
         return {
-            
+            plans : [],
             recommendations : [],
             isActive0 : false,
             isActive1 : false,
@@ -115,10 +115,11 @@ export default {
                     })
                     .then((res)=>{
                         if (res) {
-                            swal(`${Rest.title}을 일정에 추가할까요?`,{
+                            swal(`${Rest.title}을 일정에 추가했습니다`,{
                             icon : "success"
                             })
-                            
+                            this.plans.push(this.getSelectedRest)
+                            console.log("일정",this.plans)
                         }
                     })
                 } 
@@ -149,7 +150,6 @@ export default {
            
            }
 
-            
         },
         fillPositions() {
 			this.recommendations = [
