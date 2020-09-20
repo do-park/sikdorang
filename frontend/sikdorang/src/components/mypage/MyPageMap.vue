@@ -213,7 +213,6 @@ export default {
             val.forEach(el => {
                 el.latlng = new kakao.maps.LatLng(el.lat, el.lng)
             })
-            console.log(val)
 			this.plans = val
 			this.showPaths()
         }
