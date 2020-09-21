@@ -2,19 +2,36 @@
   <div>
       
       <div v-for="theme in themes" :key="theme.id" class="d-flex">
-          <img class="img-circle" :src="require(`../../../public/photos/${posefiles[idx].file_reference}`)">
-          <div>{{theme.store_name}}</div>
+          <!-- <img class="img-circle" :src="require(`../../../public/icons/${theme.id}`)"> -->
+          <div class="box">{{theme.theme_name}}</div>
       </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex"
+const theme = "theme"
+
 export default {
     name : 'ThemePage',
+    data() {
+        return{
+            themes : this.getThemes
+        }
+    },
+    computed : {
+        ...mapGetters(theme, [
+            'getThemes'
+        ])
+    }
 }
 </script>
 
 <style scoped>
+.box{
+    background-color: blanchedalmond;
+    height : 100px;
+}
 .img-circle {
   display: inline-block;
   width: 100px;
