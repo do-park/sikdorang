@@ -1,5 +1,5 @@
 <template>
-  <!-- 여행 가이드로 활동할 자격을 신청하는 공간 -->
+  <!-- 여행 가이드로 활동할 자격을 신청하는 페이지 -->
   <div>
       <PhoneNumberAuthentication/>
   </div>
