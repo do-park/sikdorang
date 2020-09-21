@@ -11,6 +11,7 @@ import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
+import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 
 Vue.use(VueRouter)
 
@@ -68,8 +69,14 @@ const routes = [
   {
     path: "/trip/detail/:item_pk",
     name: "TripProductDetailView",
-    component: TripProductDetailView
+    component: TripProductDetailView,
   },
+  {
+    path: "/trip/list",
+    name: "TripProductsView",
+    component: TripProductsView,
+  }
+
 ]
 
 const router = new VueRouter({

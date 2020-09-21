@@ -10,7 +10,9 @@ import TripProductList from "@/components/guide/TripProductList.vue"
 
 export default {
     name: "TripProductsView",
-
+    components: {
+        TripProductList,
+    }
 }
 </script>
 

@@ -1,10 +1,10 @@
 <template>
-	<div>
-		<h1>마이페이지</h1>
+    <div>
+        <h1>관리자 마이페이지</h1>
 		<UserProfile/>
 		<MyPageMap/>
 		<TripList/>
-	</div>
+    </div>
 </template>
 
 <script>
@@ -13,8 +13,8 @@ import UserProfile from './UserProfile.vue'
 import MyPageMap from './MyPageMap.vue'
 
 export default {
-	name: "MyPage",
-	components: {
+    name: "AdminMyPage",
+    components: {
 		TripList,
 		UserProfile,
 		MyPageMap,
