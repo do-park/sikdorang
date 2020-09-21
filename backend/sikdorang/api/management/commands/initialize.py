@@ -3,6 +3,7 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from sikdorang import settings
 from api import models
+from achievement import models
 import json
 
 
@@ -23,42 +24,48 @@ class Command(BaseCommand):
         """
         Sub PJT 1에서 만든 Dataframe을 이용하여 DB를 초기화합니다.
         """
-        print("[*] 카테고리 넣는중")
-        category_name = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
-        for i in range(14):
-            category = models.Category.objects.create(
-                id = i,
-                name = category_name[i]
-            )
-        # print("[*] 태그 넣는중")
-        # tags_name = ["가성비", "청결", "친절", "분위기", "인테리어", "아침", "점심", "저녁", "친구", "연인", "가족", "주차장"]
-        # for j in range(12):
-        #     tag = models.TagModel.objects.create(
-        #         id = j,
-        #         name = tags_name[j]
+        # print("[*] 카테고리 넣는중")
+        # category_name = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
+        # for i in range(14):
+        #     category = models.Category.objects.create(
+        #         id = i,
+        #         name = category_name[i]
         #     )
-
-        print("[*] Loading data...")
-        dataframes = self._load_dataframes()
-
-        print("[*] Initializing stores...")
-        models.Store.objects.all().delete()
-        stores = dataframes
-        stores_bulk = [
-            models.Store(
-                id=store.id,
-                store_name=store.store_name,
-                tel=store.tel,
-                address=store.address,
-                latitude=store.latitude,
-                longitude=store.longitude,
-                category_id=store.new_category,
-                tags=store.tags, 
+        print("[*] 업적 넣는중")
+        file_path = str(Command.DATA_DIR / "achievement.json")
+        with open(file_path, "rt", encoding="UTF-8") as json_file:
+            json_data = json.load(json_file)
+        for i in json_data:
+            models.AchiveStore.objects.create(
+                id = i['id'],
+                store_name = i['store_name'],
+                tel = i['tel'],
+                address = i['address'],
+                image = settings.BASE_DIR+"/media/achieveimg/" + i['image'],
+                description = i['description'],
             )
-            for store in stores.itertuples()
-        ]
-        models.Store.objects.bulk_create(stores_bulk)
-        print("[+] Done")
+
+        # print("[*] Loading data...")
+        # dataframes = self._load_dataframes()
+
+        # print("[*] Initializing stores...")
+        # models.Store.objects.all().delete()
+        # stores = dataframes
+        # stores_bulk = [
+        #     models.Store(
+        #         id=store.id,
+        #         store_name=store.store_name,
+        #         tel=store.tel,
+        #         address=store.address,
+        #         latitude=store.latitude,
+        #         longitude=store.longitude,
+        #         category_id=store.new_category,
+        #         tags=store.tags, 
+        #     )
+        #     for store in stores.itertuples()
+        # ]
+        # models.Store.objects.bulk_create(stores_bulk)
+        # print("[+] Done")
 
     def handle(self, *args, **kwargs):
         self._initialize()
