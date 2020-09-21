@@ -38,6 +38,7 @@ export default {
                     if (res) {
                         console.log(res,"ok눌렀다")
                         this.$cookies.set("searchMethod", "Regions")
+                        this.$cookies.set("destination", value)
                         this.destination = ''
                         this.$emit("flag",false)
                     }

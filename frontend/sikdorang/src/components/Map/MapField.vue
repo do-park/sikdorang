@@ -109,6 +109,7 @@ export default {
 
 			this.setStartCoords();
 			this.fillPositions();
+			console.log("!!!!!!!!!!!!!!!!!",this.recommends)
 			this.initCurLocation();
 			this.showCandidates(this.recommends)
 		},
@@ -182,15 +183,16 @@ export default {
 						map.setCenter(this.startCoords);
 						console.log(`${this.destination} 좌표 : ${this.startCoords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
-                        
 					
 						// 마커를 추가
 						this.hideMarkers(this.curMarkers)
 						this.curMarkers = [];
 						this.curMarkers.push(marker);
-						console.log("choose region",this.curMarkers)
 						this.showMarkers(this.curMarkers);
-                    } 
+					} 
+					else{
+						console.log("검색 결과 오류입니다.")
+					}
                 })
             }
 		},
@@ -248,6 +250,13 @@ export default {
 					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
 				}
 			]
+			if (this.getFlip) {
+				this.actionThreeRes(this.recommends.slice(0,3))
+
+			}
+			else {
+				this.actionThreeRes(this.recommends.slice(3,6))
+			}
 		},
 		selectRest(idx) {
             this.actionSelectedRest(this.getThreeRes[idx])
@@ -292,9 +301,10 @@ export default {
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
+			
 			if (this.getFlip) {
 				this.actionThreeRes(locs.slice(0,3))
-				
+
 			}
 			else {
 				this.actionThreeRes(locs.slice(3,6))
