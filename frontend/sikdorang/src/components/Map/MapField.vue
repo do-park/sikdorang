@@ -50,13 +50,13 @@ export default {
 			'getMouseOver',
 			'getClicked',
 			'getThreeRes',
-			'getSelectedRest'
+			'getSelectedRest',
+			'getPlanList'
 		])
 
 	},
 	watch : {
 		getFlip(){
-			console.log("watch getFlip",this.getFlip)
 			if (window.kakao) {
 				this.showCandidates(this.recommends)
 			}
@@ -74,7 +74,8 @@ export default {
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
-			'actionSelectedRest'
+			'actionSelectedRest',
+			'actionPlanList',
 		]),
 		divideRecommendation(cf) {
 			if (cf === "식당" | cf === "카페"){
@@ -104,14 +105,14 @@ export default {
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
-			var moveLatLon = this.getThreeRes[this.getClicked].latlng;
+			if (this.getClicked) {
+				var moveLatLon = this.getThreeRes[this.getClicked].latlng;
 
 			// 나중에 음식점 리스트 받아오면 바뀔 코드
 			// var lat = this.getThreeRes[this.getClicked].latitude;
 			// var long = this.getThreeRes[this.getClicked].longitude;
             // var moveLatLon = new kakao.maps.LatLng(lat,long)
 
-			console.log(moveLatLon,"으로 부드럽게 이동합니다.")
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
 			this.map.panTo(moveLatLon);  
@@ -201,38 +202,20 @@ export default {
 						map.setCenter(this.startCoords);
 						console.log(`${this.destination} 좌표 : ${this.startCoords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
-                        
 					
 						// 마커를 추가
 						this.hideMarkers(this.curMarkers)
 						this.curMarkers = [];
 						this.curMarkers.push(marker);
-						console.log("choose region",this.curMarkers)
 						this.showMarkers(this.curMarkers);
-                    } 
+					} 
+					else{
+						console.log("검색 결과 오류입니다.")
+					}
                 })
             }
 		},
-		// 지금 내 위치에서 근처의 음식점 리스트 받아오는 함수
-		// getList() {
-		// 	//axios로 현재 좌표를 보내면 추천 음식점 6개 받아온다.
-		// 	axios.get('/getRests', Headers)
-		// 	.then(res => {
-
-		// 	})
-		// 	.catch(res=>{
-
-		// 	})
-		// 	//선택 음식점 주변의 관광지/카페 정보를 얻는다.
-		// 	axios.get('/getRests', Headers)
-		// 	.then(res => {
-
-		// 	})
-		// 	.catch(res=>{
-				
-		// 	})
-		// },
-
+		
 		fillPositions() {
 			this.recommends = [
 				{   
@@ -267,6 +250,13 @@ export default {
 					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
 				}
 			]
+			if (this.getFlip) {
+				this.actionThreeRes(this.recommends.slice(0,3))
+
+			}
+			else {
+				this.actionThreeRes(this.recommends.slice(3,6))
+			}
 		},
 		selectRest(idx) {
             this.actionSelectedRest(this.getThreeRes[idx])
@@ -298,11 +288,9 @@ export default {
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
 
 			if (this.getClicked !== marker.idx) {
-				console.log("달라요",this.getClicked, marker.idx)
 				marker.setImage(normalImage);
 			}
 			else {
-				console.log("같아요",this.getClicked, marker.idx)
 				this.selectedMarker = marker;
 				marker.setImage(clickImage);
 			}
@@ -312,9 +300,10 @@ export default {
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
+			
 			if (this.getFlip) {
 				this.actionThreeRes(locs.slice(0,3))
-				
+
 			}
 			else {
 				this.actionThreeRes(locs.slice(3,6))
@@ -430,7 +419,6 @@ export default {
 					this.selectedMarker = selectedMarker;
 					infowindow.close();
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
-					console.log("선택했다",selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
 					self.selectRest(selectedMarker.idx)
 					
