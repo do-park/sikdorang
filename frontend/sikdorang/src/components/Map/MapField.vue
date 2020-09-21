@@ -94,6 +94,7 @@ export default {
 			this.$axios.post('recommendation/tag-based/', requestHeaders)
 			.then(res => {
 				console.log(res)
+				this.recommends = res.data
 			})
 			.catch(err => console.error(err))
 		},
@@ -283,7 +284,8 @@ export default {
                 .then((res)=>{
                     if (res) {
                         swal(`${Rest.title}을 일정에 추가할까요?`,{
-                        icon : "success"
+						icon : "success"
+						// store에 올리는 로직.
                         })
                         
                     }
