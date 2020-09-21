@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import MapTest from '../views/MapTest.vue'
 import Signup from '../views/Signup.vue'
 import MapMain from '../views/MapMain.vue'
 import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
@@ -17,11 +16,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-  },
-  {
-    path: "/maptest",
-    name: "MapTest",
-    component: MapTest,
   },
   {
     path: "/signup",
