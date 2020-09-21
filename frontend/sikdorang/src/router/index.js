@@ -10,6 +10,7 @@ import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import Payment from "../views/pay/Payment.vue"
+import Result from "../views/pay/Result.vue"
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,11 @@ const routes = [
     path: "/payment",
     name: "Payment",
     component: Payment,
+  },
+  {
+    path: "/result",
+    name: "Result",
+    component: Result,
   },
 ]
 
