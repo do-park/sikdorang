@@ -1,83 +1,15 @@
 <template>
-  <div id="box">
-        <div class="text-center">
-            <v-btn
-            color="red lighten-2"
-            dark
-            @click="getMyLocation"
-            >
-            내 위치
-            </v-btn>
+  <div>
+    <div class="text-center">
+        <button type="button" class="btn btn-secondary" @click="getMyLocation">내 위치</button>
+        <button class="btn btn-secondary" @click="search">다른 지역</button>
 
-            <v-dialog
-            v-model="dialog"
-            width="500"
-            >
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                color="red lighten-2"
-                dark
-                v-bind="attrs"
-                v-on="on"
-                >
-                다른 지역
-                </v-btn>
-            </template>
-
-            <v-card>
-                <v-card-title class="headline grey lighten-2">
-                지역 검색하기
-                </v-card-title>
-                <div>
-                    <v-card-text>
-                    여행을 시작할 지역을 검색해보세요!
-                   
-                    <template>
-                    <v-form>
-                        <span>
-                        <v-text-field
-                            v-model="destination" 
-                            @keyup.enter="findPath(destination)"
-                            label="어디 갈래?"
-                            placeholder="XX동 or XX동 775-5"
-                            
-                        ></v-text-field>
-                        <v-btn
-                            color="primary"
-                            text
-                            @click="findPath(destination)"
-                        >
-                            검색
-                        </v-btn>
-                        {{message}}
-                        </span>
-                    </v-form>
-                   
-                    </template>
-           
-                    </v-card-text>
-                </div>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="primary"
-                    text
-                    @click="check"
-                >
-                    확인
-                </v-btn>
-                </v-card-actions>
-            </v-card>
-            </v-dialog>
-        </div>
-        <!-- <div id="map"></div> -->
+    </div>
   </div>
 </template>
 
 <script>
+import swal from 'sweetalert';
 export default {
     name : 'SelectStart',
     data() {
@@ -91,30 +23,53 @@ export default {
     },
  
     methods : {
-        check() {
-            this.dialog = false
-            this.message = ''
-            this.$cookies.set("searchMethod", "Regions")
-            this.destination = ''
-            this.$emit("flag",false)
-           
+        search() {
+            swal({
+            title: "어느 지역을 검색하시겠습니까?",
+            content: "input",
+            buttons: true,
+            })
+            .then((value) => {
+            if (value) {
+                swal(`${value}에서 시작해볼까요?`,{
+                    buttons: true,
+                })
+                .then((res)=>{
+                    if (res) {
+                        console.log(res,"ok눌렀다")
+                        this.$cookies.set("searchMethod", "Regions")
+                        this.destination = ''
+                        this.$emit("flag",false)
+                    }
+                })
+                
+            } else {
+                swal("검색어를 입력해주세요.", {
+                icon: "warning",
+                dangerMode: true,
+                } ) 
+            }
+            });
+
         },
+      
         getMyLocation() {	
 			if('geolocation' in navigator) {
                 
                 //위치 요청
 				navigator.geolocation.getCurrentPosition(function(pos) {
 					this.Latitude = pos.coords.latitude;
-					this.Longitude = pos.coords.longitude;
-                    alert("현재 위치는 : " + this.Latitude + ", "+ this.Longitude);
-                    
-                    //시작 위도,경도 쿠키에 올리기
-                    console.log(this.Latitude,this.Longitude)
-                    this.$cookies.set('startLatitude',this.Latitude)
-                    this.$cookies.set('startLongitude',this.Longitude)
-                    this.$cookies.set("searchMethod", "myLocation")
-                    this.$emit("flag",false)
-                    
+                    this.Longitude = pos.coords.longitude;
+                    swal("내 위치", this.Latitude + ", "+ this.Longitude, "success")
+                    .then((res)=>{
+                        if (res) {
+                            //시작 위도,경도 쿠키에 올리기
+                            this.$cookies.set('startLatitude',this.Latitude)
+                            this.$cookies.set('startLongitude',this.Longitude)
+                            this.$cookies.set("searchMethod", "myLocation")
+                            this.$emit("flag",false)
+                        }
+                    })
                 }.bind(this));
                 
 			} else {
@@ -136,8 +91,5 @@ export default {
 </script>
 
 <style>
-#box{
-    background : lightgray;
-    margin : 2rem;
-}
+
 </style>

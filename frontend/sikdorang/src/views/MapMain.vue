@@ -11,6 +11,7 @@
           <MapTheme/>
           <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
           <MapCards :kakao="kakao" :selected="selected"/>
+      
       </div>    
        
   </div>
@@ -21,13 +22,16 @@ import SelectStart from '../components/Map/SelectStart'
 import MapField from '../components/Map/MapField'
 import MapTheme from '../components/Map/MapTheme'
 import MapCards from '../components/Map/MapCards'
+
+
 export default {
     name:'MapMain',
     components : {
         SelectStart,
         MapField,
         MapTheme,
-        MapCards
+        MapCards,
+    
     },
     mounted() {
         this.flag = true
@@ -39,6 +43,7 @@ export default {
             destination : '',
             kakao : null,
             selected : null,
+            showModal : false,
         }
     },
     methods : {

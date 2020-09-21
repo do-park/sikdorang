@@ -1,8 +1,12 @@
 const mypage = {
     namespaced: true,
     state: {
-        userInfo: null,
-        tripList: null,
+        userInfo: {
+            userName: null,
+            userBirth: null,
+            userPhone: null,
+        },
+        tripList: [],
         clickedIndex: null,
     },
     getters: {

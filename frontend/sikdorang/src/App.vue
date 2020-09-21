@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <v-main>
+  <div id="app">
       <router-link to="/">Home</router-link>|
       <router-link to="/maptest">MapTest</router-link>|
       <router-link to="/map">Map 시작하기</router-link>|
@@ -9,8 +8,7 @@
       <router-link to="/recommend">recommend</router-link>|
       <span v-if="$store.state.isLogin"><a @click="tryLogout">로그아웃</a></span>
       <router-view />
-    </v-main>
-  </v-app>
+  </div>
 </template>
 
 <script>
