@@ -15,8 +15,8 @@
 
 <script>
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
-
 import { Viewer } from '@toast-ui/vue-editor'
+import { mapActions } from 'vuex'
 
 export default {
     name: "TripProductDetail",
@@ -34,6 +34,14 @@ export default {
         return {
             detail: null,
         }
+    },
+    methods: {
+        ...mapActions('order', [
+            "actionOrderTrip",
+        ]),
+        onClick() {
+            this.actionOrderTrip(this.detail)
+        },
     }
 }
 </script>
