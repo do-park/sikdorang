@@ -1,25 +1,24 @@
 <template>
   <div class="login-box">
-    <v-btn 
-      class="arrow-btn" 
-      color="primary" 
-      @click="clickToMainPage">btn</v-btn>
+    <button 
+      class="btn btn-primary" 
+      @click="clickToMainPage">btn</button>
     <div>로그인 페이지</div>
     <div>
-      <v-text-field
+      <input
+        type="text"
+        class="form-control"
         v-model="loginData.username"
-        label="아이디"
-        hide-details="auto"></v-text-field>
-      <v-text-field
+        placeholder="아이디"
+        hide-details="auto">
+      <input
+        type="password"
+        class="form-control"
         v-model="loginData.password"
-        label="비밀번호"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show1 ? 'text' : 'password'"
-        @click:append="show1 = !show1"></v-text-field>
-      <v-btn 
-        class="login-btn" 
-        color="primary" 
-        @click="clickLogin">로그인</v-btn>
+        placeholder="비밀번호">
+      <button 
+        class="btn btn-primary login-btn" 
+        @click="clickLogin">로그인</button>
     </div>
     <div>
       <router-link to="/signup">Signup</router-link>
@@ -38,7 +37,6 @@ export default {
         username: "",
         password: ""
       },
-      show1: false,
     }
   },
   methods : {
