@@ -1,25 +1,49 @@
 <template>
-  <div>
-      <div>flip : {{ getFlip }}</div>
-      <div v-if="getClicked">{{threeRec[getClicked].title}}디테일 보여주기</div>
+  <div>         
+      <div class="d-flex flex-column align-items-center">
+      <div>
+          <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
+      </div>
       <div class="d-flex justify-content-center">
           <div 
-          class="box" 
-          v-for="rec in threeRec" 
-          :key="rec.id"
-          @click="selectRest()"
+            :class="{ 'active': isActive0 }"
+            class="box" 
+            @click="selectRest(0)"
+            data-toggle="modal" 
+            data-target="#exampleModal"
           >
-            {{rec.title}}
-            {{rec.latitude}}
-            {{rec.longitude}}
+            A.{{getThreeRes[0].title}}
+            <p>@ 맛집 정보 @</p>
           </div>
-          <button @click="checkFilp">다른거 볼래요</button>
-
+          <div 
+            :class="{ 'active': isActive1 }"
+            class="box" 
+            @click="selectRest(1)"
+            data-toggle="modal" 
+            data-target="#exampleModal"
+          >
+            B.{{getThreeRes[1].title}}
+            <p>@ 맛집 정보 @</p>
+          </div>
+          <div 
+            :class="{ 'active': isActive2 }"
+            class="box" 
+            @click="selectRest(2)"
+            data-toggle="modal" 
+            data-target="#exampleModal"
+          >
+            C.{{getThreeRes[2].title}}
+            <p>@ 맛집 정보 @</p>
+          </div>
+        
+          <br> 
+        </div>
       </div>
   </div>
 </template>
 
 <script>
+import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 const mapEvent = "mapEvent"
 
@@ -27,9 +51,11 @@ export default {
     name : 'MapCards',
     data() {
         return {
-            threeRec : [],
+            plans : this.getPlanList,
             recommendations : [],
-            selected : null,
+            isActive0 : false,
+            isActive1 : false,
+            isActive2 : false,
         }
     },
     props : {
@@ -39,32 +65,96 @@ export default {
         ...mapGetters(mapEvent, [
             'getFlip',
             'getMouseOver',
-            'getClicked'
-            
+            'getClicked',
+            'getThreeRes',
+            'getSelectedRest',
+            'getPlanList'   
         ])
     },
     watch : {
         getMouseOver() {
-            console.log(this.getMouseOver,"자세히 볼까요?")
-
+            this.changeOverBox(this.getMouseOver)
         },
         getClicked() {
-            console.log(this.getClicked,"디테일 모달입니다.")
-            
-        },
+            this.actionSelectedRest(this.getThreeRes[this.getClicked])
+            this.selectRest(this.getClicked)
+        }
+        
     },
     mounted() {
         this.fillPositions()
         this.checkFilp()
-        this.selected = this.$cookies.get('selectedMarker')
+        if (this.getThreeRes) {
+            this.actionSelectedRest = this.getThreeRes[0]
+        }
+        
+
         
     },
     methods : {
         ...mapActions(mapEvent, [
             'actionFlip',
+            'actionSelectedRest',
+            'actionClicked',
+            'actionPlanList',
+
 
         ]),
+        selectRest(idx) {
+            var plans = this.getPlanList
+            if (idx < 3 && idx >= 0) {
+                this.actionClicked(idx)
+                this.actionSelectedRest(this.getThreeRes[idx])
+                var Rest = this.getSelectedRest
+                swal({
+                title: Rest.title,
+                text: "이런이런 맛집입니다아",
+                buttons: ["닫기","추가"],
+                })
+                .then((res) => {
+                if (res) {
+                    swal(`${Rest.title}을 일정에 추가할까요?`,{
+                        buttons: ["아니오","네"],
+                    })
+                    .then((res)=>{
+                        if (res) {
+                            swal(`${Rest.title}을 일정에 추가했습니다`,{
+                            icon : "success"
+                            })
+                            plans.push(this.getSelectedRest)
+                            this.actionPlanList(plans)
+                            console.log("일정",this.getPlanList)
+                        }
+                    })
+                } 
+            }); 
+        }
+        },
+        changeOverBox(overidx){ 
+           
+            this.isActive0 = false
+            this.isActive1 = false
+            this.isActive2 = false
+           
 
+           if (overidx === 0) {
+               this.isActive0 = true
+           }
+           else if (overidx === 1) {
+               this.isActive1 = true
+           }
+           else if (overidx === 2) {
+               this.isActive2 = true
+           }
+           else{
+             
+            this.isActive0 = false
+            this.isActive1 = false
+            this.isActive2 = false
+           
+           }
+
+        },
         fillPositions() {
 			this.recommendations = [
 				{   
@@ -107,19 +197,8 @@ export default {
             ]
         },
         checkFilp() {
-            console.log("before",this.getFlip,!this.getFlip)
-            if (this.getFlip) {
-                this.threeRec = this.recommendations.slice(3,6)
-               
-                
-            }
-            else {
-                this.threeRec = this.recommendations.slice(0,3)
-                
-                
-            }
             this.actionFlip(!this.getFlip)
-            console.log("after",this.getFlip)
+            this.actionClicked(null)
         },
     }
 }
@@ -133,6 +212,10 @@ export default {
     width : 130px;
 }
 .box:hover{
+    cursor: pointer;
+    background-color: lightblue;
+}
+.active{
     cursor: pointer;
     background-color: lightblue;
 }

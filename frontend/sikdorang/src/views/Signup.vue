@@ -1,49 +1,55 @@
 <template>
   <div class="signup">
     <div class="signup-box">
-      <v-text-field
+      <input
+        type="text"
+        class="form-control"
         v-model="signupData.username"
-        label="아이디"
+        placeholder="아이디"
         :rules="usernameRules"
         hide-details="auto"
-        @keyup="turnUsernameOkToFalse"></v-text-field>
-      <v-btn 
-        color="primary" 
-        @click="checkUsername">중복확인</v-btn>
+        @keyup="turnUsernameOkToFalse">
+      <button 
+        class="btn btn-primary"
+        @click="checkUsername">중복확인</button>
       <div v-if="clickedCheckUsername">
         <div v-if="!usernameOk">이미 있는 아이디입니다.</div>
         <div v-else>사용 할 수 있는 아이디입니다.</div>
       </div>
       
       <div class="age">
-        <v-slider
-          v-model="signupData.age"
-          label="출생년도"
+        <label for="birthYear">출생년도</label>
+        <input
+          type="range"
+          class="form-control-range"
+          id="birthYear"
           :min=1900
           :max="nowYear"
-          thumb-label="always"></v-slider>
+          v-model="signupData.age">
+        {{signupData.age}}
       </div>
-      <v-text-field
+      <input
+        type="password"
+        class="form-control"
         v-model="signupData.password1"
-        label="비밀번호"
+        placeholder="비밀번호"
         :rules="password1Rules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show1 ? 'text' : 'password'"
         hint="8자 이상"
         counter
-        @click:append="show1 = !show1"></v-text-field>
-      <v-text-field
+        @click:append="show1 = !show1">
+      <input
+        type="password"
+        class="form-control"
         v-model="signupData.password2"
-        label="비밀번호 확인"
+        placeholder="비밀번호 확인"
         :rules="password2Rules"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show1 ? 'text' : 'password'"
         counter
-        @click:append="show1 = !show1"></v-text-field>
-      <v-btn 
-        class="signup-btn" 
-        color="primary" 
-        @click="clickSignup">가입하기</v-btn>
+        @click:append="show1 = !show1">
+      <button
+        class="btn btn-primary signup-btn"
+        @click="clickSignup">가입하기</button>
     </div>
   </div>
 </template>

@@ -2,23 +2,20 @@
   <div class="main-wrap">
     <div>여행을 시작할까요?</div>
     <div class="myChoice">
-      <v-btn
-        color="red lighten-2"
-        dark
+      <button
+        class="btn btn-danger"
         @click="clickMyChoice"
-      >내가 고르기</v-btn>
+      >내가 고르기</button>
     </div>
     <div class="recommend">
-      <v-btn
-        color="red lighten-2"
-        dark
+      <button
+        class="btn btn-danger"
         @click="clickRecommend"
-      >식도랑 추천 코스</v-btn>
+      >식도랑 추천 코스</button>
     </div>
-    <v-btn 
-      class="arrow-btn" 
-      color="primary" 
-      @click="clickToLoginPageOrMyPage">btn</v-btn>
+    <button 
+      class="btn btn-primary" 
+      @click="clickToLoginPageOrMyPage">btn</button>
   </div>
 </template>
 

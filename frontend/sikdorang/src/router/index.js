@@ -8,6 +8,7 @@ import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
 import MyPageView from '../views/mypage/MyPageView.vue'
 import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
+import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 
 Vue.use(VueRouter)
 
@@ -52,6 +53,11 @@ const routes = [
     name: "Recommend",
     component: Recommend,
   },
+  {
+    path: "/application",
+    name: "ApplicationGuideView",
+    component: ApplicationGuideView,
+  }
 ]
 
 const router = new VueRouter({

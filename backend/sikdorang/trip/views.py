@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import Trip
+from api.models import *
 
 from rest_framework import viewsets
 
@@ -26,6 +27,27 @@ def checkID(request, name):
         return HttpResponse('이미 있는 아이디입니다.')
     else:
         return HttpResponse('사용 할 수 있는 아이디입니다.')
+
+@api_view(['POST'])
+def idealtag(request):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tags = request.data['tags']
+    for i in tags:
+        tag = TagModel.objects.create(name=i, user=user, count=1)
+    return HttpResponse('잘됨')
+
+@api_view(['POST'])
+def idealcategory(request):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tags = request.data['tags']
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', tags)
+    
+    for i in tags:
+        tag = CategoryUser.objects.create(name=i, user=user, count=1)
+    return HttpResponse('잘됨')
+    
 
 # @api_view(['POST'])
 # @permission_classes([IsAuthenticated])

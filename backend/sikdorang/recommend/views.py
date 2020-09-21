@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 import numpy as np
 import pandas as pd
 import shutil
@@ -15,7 +13,6 @@ from rest_framework.response import Response
 
 
 from api.models import Store
-
 
 DATA_DIR = "../../data"
 DUMP_FILE = os.path.join(DATA_DIR, "dump.pkl")
@@ -186,6 +183,42 @@ def user_based(dataframe, for_user):
     return result1
 
 
-@api_view(['GET'])
-def get_tag_recommendation(request, user_pk):
-    User = get_user_model()
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_tag_recommendation(request):
+    user_pk = request.META['auth-token']
+    user = request.user
+    data = request.data
+    lat = data.lat
+    lng = data.lng
+    stores = Store.objects.filter(
+        Q(latitude__lte=lat+0.04) & Q(latitude__gte=lat-0.04) & Q(longitude__lte=lng+0.04) & Q(longitude__gte=lng-0.04)
+    )
+    recommendation = {}
+    # 임시 데이터
+    user_tags = [{tag: 0, count: 2}, {tag: 1, count: 5}, {tag: 6, count: 1}]
+    user_categories = [{category: 2, count: 1}, {category: 7, count: 6}, {category: 8, count: 4}]
+    store_tags = [
+        {store_id: 45, tag: 0}, {store_id: 45, tag: 2}, {store_id: 45, tag: 5},
+        {store_id: 525, tag: 2}, {store_id: 525, tag: 6}, {store_id: 525, tag: 7},
+        {store_id: 1244, tag: 1}, {store_id: 975, tag: 0}, {store_id: 975, tag: 1},
+        {store_id: 4, tag: 6}
+    ]
+    store_categories = [
+        {store_id: 45, category: 2}, {store_id: 525, category: 8}, {store_id: 1244, category: 2},
+        {store_id: 975, category: 2}, {store_id: 4, category: 7},
+    ]
+    for user_tag in user_tags:
+        for store_tag in sotre_tags:
+            if user_tag.tag == store_tag.tag:
+                if store_tag.store_id not in recommendation:
+                    recommendation[store_tag.store_id] = 0
+                recommendation[store_tag.store_id] += user_tag.count
+    for user_category in user_categories:
+        for store_category in store_categories:
+            if user_category.category == store_category.category:
+                if store_tag.store_id not in recommendation:
+                    recommendation[store_category.store_id] = 0
+                recommendation[store_category.store_id] += user_category.count
+    recommendation = sorted(recommendation.items(), key=(lambda x: x[1]), reverse=True)
+    print(recommendation)

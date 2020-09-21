@@ -4,6 +4,9 @@ const mapEvent = {
         flip : false,
         mouseOver : null,
         clicked : null,
+        threeRes : null,
+        selectedRest : null,
+        planList : [],
     },
     getters : {
         getFlip : state => {
@@ -14,6 +17,15 @@ const mapEvent = {
         },
         getClicked : state => {
             return state.clicked
+        },
+        getThreeRes : state => {
+            return state.threeRes
+        },
+        getSelectedRest : state => {
+            return state.selectedRest
+        },
+        getPlanList : state => {
+            return state.planList
         },
     },
     mutations : {
@@ -26,6 +38,15 @@ const mapEvent = {
         mutationClicked: (state,payload) => {
             state.clicked = payload
         },
+        mutationThreeRes: (state,payload) => {
+            state.threeRes = payload
+        },
+        mutationSelectedRest: (state,payload) => {
+            state.selectedRest = payload
+        },
+        mutationPlanList: (state,payload) => {
+            state.planList = payload
+        },
     },
     actions : {
         actionFlip: ({commit}, payload) => {
@@ -36,6 +57,15 @@ const mapEvent = {
         },
         actionClicked: ({commit}, payload) => {
             commit("mutationClicked", payload)
+        },
+        actionThreeRes: ({commit}, payload) => {
+            commit("mutationThreeRes", payload)
+        },
+        actionSelectedRest: ({commit}, payload) => {
+            commit("mutationSelectedRest", payload)
+        },
+        actionPlanList: ({commit}, payload) => {
+            commit("mutationPlanList", payload)
         },
     }
 }
