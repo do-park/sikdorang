@@ -1,0 +1,95 @@
+<template>
+	<div>
+		<h1>마이페이지</h1>
+		<UserProfile/>
+		<MyPageMap/>
+		<TripList/>
+	</div>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+import TripList from './TripList.vue'
+import UserProfile from './UserProfile.vue'
+import MyPageMap from './MyPageMap.vue'
+
+const mypage = 'mypage'
+
+export default {
+	name: "MyPage",
+	components: {
+		TripList,
+		UserProfile,
+		MyPageMap,
+	},
+    mounted() {
+		// 유저 정보를 가져옵니다.
+		// this.$axios.get()
+		const userInfo = {
+			userName: "조규성",
+			userBirth: "1995",
+			userPhone: "01076338540"
+		},
+		tripItems = [
+			[
+				{   
+					id : 1,
+					title: '승희', 
+					lat: 36.1406514,
+					lng: 128.3271104,
+				},
+				{   
+					id : 2,
+					title: '인영', 
+					lat: 36.1035992,
+					lng: 128.4162945
+				},
+				{   
+					id : 3,
+					title: '규성', 
+					lat: 36.0954328,
+					lng: 128.3963511
+				},
+				{   
+					id : 4,
+					title: '성수',
+					lat: 36.1115959,
+					lng: 128.4303873
+				},
+				{   
+					id : 5,
+					title: '도희',
+					lat: 36.119735,
+					lng: 128.3463003,
+				},
+				{   
+					id : 6,
+					title: '마지막',
+					lat: 36.1073795,
+					lng: 128.4174558,
+				}
+			],
+			[
+				{
+					id: 7,
+					title: '두번째 인덱스',
+					lat: 36.1073795,
+					lng: 128.4174558,
+				}
+			]
+		]
+		this.actionUserInfo(userInfo)
+		this.actionTripList(tripItems)
+	},
+	methods: {
+		...mapActions(mypage, [
+			'actionUserInfo',
+			'actionTripList',
+		]),
+	},
+}
+</script>
+
+<style>
+
+</style>

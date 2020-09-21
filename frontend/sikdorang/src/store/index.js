@@ -6,6 +6,8 @@ Vue.use(Vuex)
 Vue.use(VueCookies)
 
 import mapEvent from './modules/mapEvent.js'
+import mypage from './modules/mypage.js'
+import schedule from './modules/schedule.js'
 
 export default new Vuex.Store({
   state: {
@@ -14,14 +16,13 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    storeLogin(state, payload) {
-      window.$cookies.set('auth-token', payload.token)
-      state.isLogin = true
-    },
+
   },
   actions: {
   },
   modules: {
+    mypage: mypage,
     mapEvent,
+    schedule,
   }
 })

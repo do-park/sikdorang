@@ -12,9 +12,10 @@
 <script>
 import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
+
 const mapEvent = "mapEvent"
-// import axios from 'axios'
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
+
 export default {
 	name : "MapField",
 	data() {
@@ -42,7 +43,6 @@ export default {
 		else {
 			this.addScript();
         }
-		
 	},
 	computed : {
 		...mapGetters(mapEvent, [
@@ -60,7 +60,6 @@ export default {
 			if (window.kakao) {
 				this.showCandidates(this.recommends)
 			}
-			
 		},
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
@@ -70,7 +69,6 @@ export default {
 			this.showCandidates(this.recommends)  
 		},
 	},
-	
 	methods : {
 		...mapActions(mapEvent,[
 			'actionMouseOver',
@@ -79,8 +77,32 @@ export default {
 			'actionSelectedRest',
 			'actionPlanList',
 		]),
-		
-		
+		divideRecommendation(cf) {
+			if (cf === "식당" | cf === "카페"){
+				this.getSCRecommendation()
+			} else {
+				this.getSHRecommendation()
+			}
+		},
+		getSCRecommendation() {
+			console.log('음식점 / 카페를 추천 받습니다.')
+
+			const requestHeaders = {
+				headers: {
+					Authorization: `JWT ${this.$cookies.get('auth-token')}`
+				}
+			}
+			this.$axios.post('recommendation/tag-based/', requestHeaders)
+			.then(res => {
+				console.log(res)
+				this.recommends = res.data
+			})
+			.catch(err => console.error(err))
+		},
+		getSHRecommendation() {
+			console.log('관광지 / 숙박 정보를 받습니다.')
+			// const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
 			if (this.getClicked) {
@@ -93,9 +115,7 @@ export default {
 
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-			this.map.panTo(moveLatLon);
-			}
-
+			this.map.panTo(moveLatLon);  
 		},
 		initMap() { 
 			var container = document.getElementById('map'); 
@@ -254,7 +274,8 @@ export default {
                 .then((res)=>{
                     if (res) {
                         swal(`${Rest.title}을 일정에 추가할까요?`,{
-                        icon : "success"
+						icon : "success"
+						// store에 올리는 로직.
                         })
                         
                     }

@@ -78,8 +78,16 @@ export default {
 			}
 		},
 		tagsSave() {
-			console.log('유저 정보와 태그를 서버에 보내 저장합니다.')
-			this.$axios.post()
+			const requestHeaders = {
+				headers: {
+					Authorization: `JWT ${this.$cookies.get('auth-token')}`
+				}
+			}
+			this.$axios.post('trip/idealcategory', {tags: this.tags}, requestHeaders)
+			.then(res => {
+				console.log(res)
+			})
+			.catch(err => console.erro(err))
 		},
 		done() {
 			this.$router.push('/')
