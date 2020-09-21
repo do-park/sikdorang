@@ -50,13 +50,13 @@ export default {
 			'getMouseOver',
 			'getClicked',
 			'getThreeRes',
-			'getSelectedRest'
+			'getSelectedRest',
+			'getPlanList'
 		])
 
 	},
 	watch : {
 		getFlip(){
-			console.log("watch getFlip",this.getFlip)
 			if (window.kakao) {
 				this.showCandidates(this.recommends)
 			}
@@ -76,7 +76,8 @@ export default {
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
-			'actionSelectedRest'
+			'actionSelectedRest',
+			'actionPlanList',
 		]),
 		
 		
@@ -90,7 +91,6 @@ export default {
 			// var long = this.getThreeRes[this.getClicked].longitude;
             // var moveLatLon = new kakao.maps.LatLng(lat,long)
 
-			console.log(moveLatLon,"으로 부드럽게 이동합니다.")
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
 			this.map.panTo(moveLatLon);
@@ -109,7 +109,6 @@ export default {
 
 			this.setStartCoords();
 			this.fillPositions();
-			console.log("!!!!!!!!!!!!!!!!!",this.recommends)
 			this.initCurLocation();
 			this.showCandidates(this.recommends)
 		},
@@ -196,26 +195,7 @@ export default {
                 })
             }
 		},
-		// 지금 내 위치에서 근처의 음식점 리스트 받아오는 함수
-		// getList() {
-		// 	//axios로 현재 좌표를 보내면 추천 음식점 6개 받아온다.
-		// 	axios.get('/getRests', Headers)
-		// 	.then(res => {
-
-		// 	})
-		// 	.catch(res=>{
-
-		// 	})
-		// 	//선택 음식점 주변의 관광지/카페 정보를 얻는다.
-		// 	axios.get('/getRests', Headers)
-		// 	.then(res => {
-
-		// 	})
-		// 	.catch(res=>{
-				
-		// 	})
-		// },
-
+		
 		fillPositions() {
 			this.recommends = [
 				{   
@@ -287,11 +267,9 @@ export default {
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
 
 			if (this.getClicked !== marker.idx) {
-				console.log("달라요",this.getClicked, marker.idx)
 				marker.setImage(normalImage);
 			}
 			else {
-				console.log("같아요",this.getClicked, marker.idx)
 				this.selectedMarker = marker;
 				marker.setImage(clickImage);
 			}
@@ -420,7 +398,6 @@ export default {
 					this.selectedMarker = selectedMarker;
 					infowindow.close();
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
-					console.log("선택했다",selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
 					self.selectRest(selectedMarker.idx)
 					

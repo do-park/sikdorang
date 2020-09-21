@@ -2,7 +2,7 @@
   <div>
     <div class="text-center">
         <button type="button" class="btn btn-secondary" @click="getMyLocation">내 위치</button>
-        <button class="btn btn-secondary" @click="search">다른 지역</button>
+        <!-- <button class="btn btn-secondary" @click="search">다른 지역</button> -->
 
     </div>
   </div>
@@ -23,36 +23,36 @@ export default {
     },
  
     methods : {
-        search() {
-            swal({
-            title: "어느 지역을 검색하시겠습니까?",
-            content: "input",
-            buttons: true,
-            })
-            .then((value) => {
-            if (value) {
-                swal(`${value}에서 시작해볼까요?`,{
-                    buttons: true,
-                })
-                .then((res)=>{
-                    if (res) {
-                        console.log(res,"ok눌렀다")
-                        this.$cookies.set("searchMethod", "Regions")
-                        this.$cookies.set("destination", value)
-                        this.destination = ''
-                        this.$emit("flag",false)
-                    }
-                })
+        // search() {
+        //     swal({
+        //     title: "어느 지역을 검색하시겠습니까?",
+        //     content: "input",
+        //     buttons: true,
+        //     })
+        //     .then((value) => {
+        //     if (value) {
+        //         swal(`${value}에서 시작해볼까요?`,{
+        //             buttons: true,
+        //         })
+        //         .then((res)=>{
+        //             if (res) {
+        //                 console.log(res,"ok눌렀다")
+        //                 this.$cookies.set("searchMethod", "Regions")
+        //                 this.$cookies.set("destination", value)
+        //                 this.destination = ''
+        //                 this.$emit("flag",false)
+        //             }
+        //         })
                 
-            } else {
-                swal("검색어를 입력해주세요.", {
-                icon: "warning",
-                dangerMode: true,
-                } ) 
-            }
-            });
+        //     } else {
+        //         swal("검색어를 입력해주세요.", {
+        //         icon: "warning",
+        //         dangerMode: true,
+        //         } ) 
+        //     }
+        //     });
 
-        },
+        // },
       
         getMyLocation() {	
 			if('geolocation' in navigator) {

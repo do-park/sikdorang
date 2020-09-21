@@ -51,7 +51,7 @@ export default {
     name : 'MapCards',
     data() {
         return {
-            plans : [],
+            plans : this.getPlanList,
             recommendations : [],
             isActive0 : false,
             isActive1 : false,
@@ -67,7 +67,8 @@ export default {
             'getMouseOver',
             'getClicked',
             'getThreeRes',
-            'getSelectedRest'   
+            'getSelectedRest',
+            'getPlanList'   
         ])
     },
     watch : {
@@ -76,6 +77,7 @@ export default {
         },
         getClicked() {
             this.actionSelectedRest(this.getThreeRes[this.getClicked])
+            this.selectRest(this.getClicked)
         }
         
     },
@@ -94,11 +96,12 @@ export default {
             'actionFlip',
             'actionSelectedRest',
             'actionClicked',
+            'actionPlanList',
 
 
         ]),
         selectRest(idx) {
-         
+            var plans = this.getPlanList
             if (idx < 3 && idx >= 0) {
                 this.actionClicked(idx)
                 this.actionSelectedRest(this.getThreeRes[idx])
@@ -118,8 +121,9 @@ export default {
                             swal(`${Rest.title}을 일정에 추가했습니다`,{
                             icon : "success"
                             })
-                            this.plans.push(this.getSelectedRest)
-                            console.log("일정",this.plans)
+                            plans.push(this.getSelectedRest)
+                            this.actionPlanList(plans)
+                            console.log("일정",this.getPlanList)
                         }
                     })
                 } 
