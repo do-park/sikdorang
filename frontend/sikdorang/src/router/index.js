@@ -9,7 +9,7 @@ import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import ThemeDetail from "../views/theme/ThemeDetail.vue"
-import Test from "../views/Test.vue"
+
 
 Vue.use(VueRouter)
 
@@ -59,11 +59,7 @@ const routes = [
     name: "ThemeDetail",
     component:ThemeDetail,
   },
-  {
-    path: "/test",
-    name: "Test",
-    component:Test,
-  }
+  
 ]
 
 const router = new VueRouter({
