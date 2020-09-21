@@ -1,11 +1,11 @@
 <template>
   <div id="app">
       <router-link to="/">Home</router-link>|
-      <router-link to="/maptest">MapTest</router-link>|
       <router-link to="/map">Map 시작하기</router-link>|
       <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>|
       <router-link to="/schedule">schedule</router-link>|
       <router-link to="/recommend">recommend</router-link>|
+      <router-link to="/test">test</router-link>|
       <span v-if="$store.state.isLogin"><a @click="tryLogout">로그아웃</a></span>
       <router-view />
   </div>

@@ -1,4 +1,4 @@
-const theme = {
+const themes = {
     namespaced : true,
     state : {
         themes : 
@@ -14,7 +14,7 @@ const theme = {
             {"id":9, "theme_name":"전국 터미널 맛집"},
             {"id":10, "theme_name":"기차역 맛집"},
             {"id":11, "theme_name":"고속도로 휴게소 맛집"},
-            ]
+            ],
     },
     getters : {
         getThemes : state => {
@@ -36,7 +36,7 @@ const theme = {
     }
 }
 
-export default theme
+export default themes
 
 
 
