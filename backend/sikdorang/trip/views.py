@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import Trip
 from api.models import *
@@ -42,7 +41,6 @@ def idealcategory(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     tags = request.data['tags']
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', tags)
     
     for i in tags:
         tag = CategoryUser.objects.create(name=i, user=user, count=1)

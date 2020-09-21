@@ -55,6 +55,7 @@ urlpatterns = [
     # 여행
     path('trip/', include('trip.urls')),
     path('review/', include('review.urls')),
+    path('achievement/', include('achievement.urls')),
     # 추천
     path('recommend/', include('recommend.urls')),
     url(r'^',include(router.urls)),
