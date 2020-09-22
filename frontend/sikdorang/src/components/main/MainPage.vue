@@ -16,16 +16,21 @@
     <button 
       class="btn btn-primary" 
       @click="clickToLoginPageOrMyPage">btn</button>
+      <ThemePage/>
   </div>
 </template>
 
 <script>
+import ThemePage from '@/components/main/ThemePage.vue'
 export default {
     name:'MainPage',
     data() {
         return {
 
         }
+    },
+    components : {
+      ThemePage,
     },
     methods : {
       clickMyChoice() {
