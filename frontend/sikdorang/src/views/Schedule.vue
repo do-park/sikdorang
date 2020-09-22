@@ -50,18 +50,22 @@ export default {
         {
           name: "식당",
           id: "R",
+          userChoice: null,
         },
         {
           name: "카페",
           id: "C",
+          userChoice: null,
         },
         {
           name: "관광지",
           id: "S",
+          userChoice: null,
         },
         {
           name: "숙박",
           id: "A",
+          userChoice: null,
         },
       ],
       clonedItemOptions: {

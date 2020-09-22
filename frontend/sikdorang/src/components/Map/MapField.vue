@@ -53,7 +53,6 @@ export default {
 			'getSelectedRest',
 			'getPlanList'
 		])
-
 	},
 	watch : {
 		getFlip(){
@@ -79,12 +78,12 @@ export default {
 		]),
 		divideRecommendation(cf) {
 			if (cf === "식당" | cf === "카페"){
-				this.getSCRecommendation()
+				this.getSCRecommendation(cf)
 			} else {
-				this.getSHRecommendation()
+				this.getSHRecommendation(cf)
 			}
 		},
-		getSCRecommendation() {
+		getSCRecommendation(cf) {
 			console.log('음식점 / 카페를 추천 받습니다.')
 
 			const requestHeaders = {
@@ -92,14 +91,14 @@ export default {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('recommendation/tag-based/', requestHeaders)
+			this.$axios.post('recommendation/tag-based/', {category: cf}, requestHeaders)
 			.then(res => {
 				console.log(res)
-				this.recommends = res.data
+				// this.recommends = res.data
 			})
 			.catch(err => console.error(err))
 		},
-		getSHRecommendation() {
+		getSHRecommendation(cf) {
 			console.log('관광지 / 숙박 정보를 받습니다.')
 			// const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
 		},
