@@ -9,7 +9,7 @@
           :key="restuarant.id"
           class="box col-sm-4 m-0"
         >
-          <span v-if="userVisited[index] == 'True'" class="effect">
+          <span v-if="userVisited[index] === 1" class="effect">
             <div
               class="img-card"
               :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
@@ -28,9 +28,7 @@
 </template>
 
 <script>
-// import swal from "sweetalert";
 import Swal from "sweetalert2";
-var BASE_URL = "http://j3d202.p.ssafy.io:8080";
 export default {
   name: "ThemeDetail",
   data() {
@@ -42,7 +40,7 @@ export default {
         { id: 222, store_name: "빵집2" },
         { id: 333, store_name: "빵집3" },
       ],
-      IMG_URL: `${BASE_URL}`,
+      IMG_URL: "http://j3d202.p.ssafy.io:8080",
       userId: null,
       userVisited: [],
     };
@@ -70,11 +68,20 @@ export default {
         });
     },
     getMyVisited(userId) {
+      //나중에 axios로 받아오면 이거 지워주세요.
+      this.userVisited = [1,1,1,0,0,0,0,0,0]
+
       // todo: axios로 Back에서 user의 achievedata 받아오기
       console.log(userId);
-      const data =
-        "False,True,True,False,False,True,False,True,True,False,False";
-      this.userVisited = data.split(",");
+      
+      // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
+      // .then(res => {
+      //     var userVisited = res.data
+      //     this.userVisited = userVisited
+      // })
+      // .catch(err => {
+      //     console.log(err)
+      // }) 
     },
     goDetail(rest, index) {
       //   swal(rest.store_name, rest.description);
