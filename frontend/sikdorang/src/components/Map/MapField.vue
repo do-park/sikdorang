@@ -85,7 +85,6 @@ export default {
 		},
 		getSCRecommendation(cf) {
 			console.log('음식점 / 카페를 추천 받습니다.')
-
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`

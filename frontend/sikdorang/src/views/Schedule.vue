@@ -33,6 +33,7 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
+import { mapActions } from "vuex"
 
 export default {
   name: "Schedule",
@@ -87,6 +88,9 @@ export default {
     this.getTripdata();
   },
   methods: {
+    ...mapActions("schedule", [
+      "actionSchedule"
+    ]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -130,6 +134,7 @@ export default {
         return false;
       }
       let plan = "";
+      this.actionSchedule(clonedItems)
       for (let i = 0; i < this.clonedItems.length; i++) {
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
