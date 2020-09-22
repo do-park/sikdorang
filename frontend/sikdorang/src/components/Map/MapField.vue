@@ -34,6 +34,8 @@ export default {
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
+			// store에 저장하기 위해 올라가는 Index
+			selectingIndex: 0,
 		}
 	},
 	mounted() {
@@ -52,7 +54,10 @@ export default {
 			'getThreeRes',
 			'getSelectedRest',
 			'getPlanList'
-		])
+		]),
+		...mapGetters("schedule", [
+			"getSchedules",
+		]),
 	},
 	watch : {
 		getFlip(){
@@ -75,6 +80,9 @@ export default {
 			'actionThreeRes',
 			'actionSelectedRest',
 			'actionPlanList',
+		]),
+		...mapActions("schedule", [
+			"actionStore"
 		]),
 		divideRecommendation(cf) {
 			if (cf === "식당" | cf === "카페"){
@@ -258,7 +266,8 @@ export default {
 			}
 		},
 		selectRest(idx) {
-            this.actionSelectedRest(this.getThreeRes[idx])
+			this.actionSelectedRest(this.getThreeRes[idx])
+			const self = this
             var Rest = this.getSelectedRest
             swal({
             title: Rest.title,
@@ -274,9 +283,10 @@ export default {
                     if (res) {
                         swal(`${Rest.title}을 일정에 추가할까요?`,{
 						icon : "success"
+						})
 						// store에 올리는 로직.
-                        })
-                        
+						self.actionStore({ sotre: Rest,  index: self.selectingIndex })
+						self.selectingIndex += 1
                     }
                 })
             } 
