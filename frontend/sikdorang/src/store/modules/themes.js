@@ -16,7 +16,7 @@ const themes = {
             {"id":11, "theme_name":"고속도로 휴게소 맛집"},
         ],
         themeClear :
-        [ true, false, false, true, true, false, false, false, true, false, true ],
+        [ 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1 ],
     },
     getters : {
         getThemes : state => {
