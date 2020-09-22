@@ -48,7 +48,6 @@ def idealcategory(request):
     
 
 # @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
 # def create_trip(request):
 #     serializer = TripSerializer(data=request.data)
 #     if serializer.is_valid(raise_exception=True):

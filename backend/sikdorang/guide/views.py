@@ -30,3 +30,20 @@ def list_guide(request, username):
     trips = user.TripItemModel_set.all()
     serializer = GuideSerializer(trips, many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def paid(request, trip_pk):
+    trip = get_object_or_404(TripItemModel, pk=trip_pk)
+    tour, flag = GuideTour.objects.get_or_create(user=request.user.pk, trip_item=trip)
+    if flag:
+        return HttpResponse('결제되었습니다.')
+    else:
+        return HttpResponse('이미 결제된 여행입니다.')
+
+@api_view(['GET'])
+def paidtour(request):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tours = user.TripItemModel_set.all()
+    serializer = TourSerializer(tours, many=True)
+    return Response(serializer.data)
