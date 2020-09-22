@@ -68,9 +68,12 @@ export default {
         });
     },
     getMyVisited(userId) {
+      //나중에 axios로 받아오면 이거 지워주세요.
       this.userVisited = [1,1,1,0,0,0,0,0,0]
+
       // todo: axios로 Back에서 user의 achievedata 받아오기
       console.log(userId);
+      
       // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
       // .then(res => {
       //     var userVisited = res.data

@@ -35,6 +35,7 @@ export default {
   name: "ThemePage",
   data() {
     return {
+      isLogin: this.$store.state.isLogin,
       themes: [],
       userId: null,
       userAchieve: [],
@@ -65,17 +66,22 @@ export default {
     },
     getAchievedata(userId) { 
       console.log(userId);
-
-    // todo: axios로 Back에서 user의 achievedata 받아오기
-    //   this.$axios.get(`/themeclear/${userId}`)
-    //   .then(res=>{
-    //       console.log(res.data)
-    //       this.acitonThemesClear(res.data)
-    //   })
-    //   .catch(err=>{
-    //       console.log(err)
-    //   })
-      this.userAchieve = this.getThemesClear
+      // todo: axios로 Back에서 user의 achievedata 받아오기
+      if (this.isLogin) {
+        this.userAchieve = this.getThemesClear
+        // this.$axios.get(`/themeclear/${userId}`)
+        // .then(res=>{
+        //     console.log(res.data)
+        //     this.acitonThemesClear(res.data)
+        //     this.userAchieve = this.getThemesClear
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+      }
+      else {
+        this.userAchieve = [0,0,0,0,0,0,0,0,0]
+      }
       console.log(this.userAchieve)
     },
   },
