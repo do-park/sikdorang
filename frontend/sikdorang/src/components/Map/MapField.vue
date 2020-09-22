@@ -112,7 +112,7 @@ export default {
 		getSHRecommendation(cf) {
 			console.log('관광지 / 숙박 정보를 받습니다.')
 			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
-			axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1`)
+			axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
 			.then(res => {
 				console.log(res)
 			})
@@ -152,6 +152,8 @@ export default {
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
+			this.beforeLng = this.startLong
+			this.beforeLat = this.startLat
 		},
 		//cdn 추가
 		addScript() { 
@@ -296,6 +298,8 @@ export default {
 						// store에 올리는 로직.
 						self.actionStore({ sotre: Rest,  index: self.selectingIndex })
 						self.selectingIndex += 1
+						self.beforeLng = Rest.lng
+						self.beforeLat = Rest.lat
                     }
                 })
             } 
