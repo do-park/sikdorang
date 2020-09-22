@@ -196,29 +196,29 @@ def get_tag_recommendation(request):
     )
     recommendation = {}
     # 임시 데이터
-    user_tags = [{tag: 0, count: 2}, {tag: 1, count: 5}, {tag: 6, count: 1}]
-    user_categories = [{category: 2, count: 1}, {category: 7, count: 6}, {category: 8, count: 4}]
+    user_tags = [{"tag": 0, "count": 2}, {"tag": 1, "count": 5}, {"tag": 6, "count": 1}]
+    user_categories = [{"category": 2, "count": 1}, {"category": 7, "count": 6}, {"category": 8, "count": 4}]
     store_tags = [
-        {store_id: 45, tag: 0}, {store_id: 45, tag: 2}, {store_id: 45, tag: 5},
-        {store_id: 525, tag: 2}, {store_id: 525, tag: 6}, {store_id: 525, tag: 7},
-        {store_id: 1244, tag: 1}, {store_id: 975, tag: 0}, {store_id: 975, tag: 1},
-        {store_id: 4, tag: 6}
+        {"store_id": 45, "tag": 0}, {"store_id": 45, "tag": 2}, {"store_id": 45, "tag": 5},
+        {"store_id": 525, "tag": 2}, {"store_id": 525, "tag": 6}, {"store_id": 525, "tag": 7},
+        {"store_id": 1244, "tag": 1}, {"store_id": 975, "tag": 0}, {"store_id": 975, "tag": 1},
+        {"store_id": 4, "tag": 6}
     ]
     store_categories = [
-        {store_id: 45, category: 2}, {store_id: 525, category: 8}, {store_id: 1244, category: 2},
-        {store_id: 975, category: 2}, {store_id: 4, category: 7},
+        {"store_id": 45, "category": 2}, {"store_id": 525, "category": 8}, {"store_id": 1244, "category": 2},
+        {"store_id": 975, "category": 2}, {"store_id": 4, "category": 7},
     ]
     for user_tag in user_tags:
-        for store_tag in sotre_tags:
-            if user_tag.tag == store_tag.tag:
-                if store_tag.store_id not in recommendation:
-                    recommendation[store_tag.store_id] = 0
-                recommendation[store_tag.store_id] += user_tag.count
+        for store_tag in store_tags:
+            if user_tag["tag"] == store_tag["tag"]:
+                if store_tag["store_id"] not in recommendation:
+                    recommendation[store_tag["store_id"]] = 0
+                recommendation[store_tag["store_id"]] += user_tag["count"]
     for user_category in user_categories:
         for store_category in store_categories:
-            if user_category.category == store_category.category:
-                if store_tag.store_id not in recommendation:
-                    recommendation[store_category.store_id] = 0
-                recommendation[store_category.store_id] += user_category.count
+            if user_category["category"] == store_category["category"]:
+                if store_category["store_id"] not in recommendation:
+                    recommendation[store_category["store_id"]] = 0
+                recommendation[store_category["store_id"]] += user_category["count"]
     recommendation = sorted(recommendation.items(), key=(lambda x: x[1]), reverse=True)
     print(recommendation)
