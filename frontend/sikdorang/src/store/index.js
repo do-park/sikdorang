@@ -8,6 +8,7 @@ Vue.use(VueCookies)
 import mapEvent from './modules/mapEvent.js'
 import mypage from './modules/mypage.js'
 import schedule from './modules/schedule.js'
+import order from './modules/order.js'
 
 export default new Vuex.Store({
   state: {
@@ -24,5 +25,6 @@ export default new Vuex.Store({
     mypage: mypage,
     mapEvent,
     schedule,
+    order,
   }
 })
