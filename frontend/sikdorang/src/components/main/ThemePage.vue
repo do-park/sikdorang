@@ -44,6 +44,7 @@ export default {
   },
   mounted() {
     this.themes = this.getThemes;
+    this.getAchievedata(this.userId);
     // console.log(this.themes)
   },
   methods: {
@@ -86,7 +87,6 @@ export default {
   display: inline-block;
   overflow: hidden;
   padding: 1px;
-  background-image: url("../../../public/icons/badge.png");
 }
 .effect:after {
   content: "";
@@ -94,7 +94,6 @@ export default {
   z-index: 1;
   width: 70px;
   height: auto;
-  /* background-image: url("../../../public/icons/badge.png"); */
   background: red;
   border: 3px solid red;
   content: "Clear";
@@ -106,6 +105,5 @@ export default {
   transform: rotate(-25deg);
   left: 3px;
   top: 20px;
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); */
 }
 </style>
