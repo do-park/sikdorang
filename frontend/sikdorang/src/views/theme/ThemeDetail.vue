@@ -10,10 +10,9 @@
           class="box col-sm-4 m-0"
         >
           <span v-if="userVisited[index] === 1" class="effect">
-            <div
-              class="img-card"
-              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
-            >{{restuarant.store_name}}</div>
+            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
+              <p class="store_name">{{restuarant.store_name}}</p>
+            </div>
           </span>
           <span v-else>
             <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
@@ -99,7 +98,7 @@ export default {
           console.log(this.userVisited);
           // todo: axios 처리도 해야할 것 같은데 Swal 안에서 할 수 있는지 모르겠군요
           // axios로 지금 이 식당에 방문했음으로 변경
-          // axios로 이 카테고리가
+          // 테마가 완료되었다면, axios로 테마 완성
         }
       });
     },
@@ -109,14 +108,13 @@ export default {
 
 <style scoped>
 .box {
-  height: 200px;
-  width: 200px;
+  height: 100px;
+  width: 100px;
   background: blanchedalmond;
 }
 .img-card {
-  /* width : 500px; */
-  height: 200px;
-  width: 200px;
+  height: 100px;
+  width: 100px;
   background-size: cover;
 }
 .store_name {
@@ -128,7 +126,6 @@ export default {
 }
 .effect {
   position: relative;
-  /* display: inline-block; */
   display: block;
   overflow: hidden;
   padding: 1px;
