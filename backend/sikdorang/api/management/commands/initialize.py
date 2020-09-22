@@ -51,7 +51,7 @@ class Command(BaseCommand):
                 store_name = i['store_name'],
                 tel = i['tel'],
                 address = i['address'],
-                image = settings.BASE_DIR+"/media/achieveimg/" + i['image'],
+                image = "/media/achieveimg/" + i['image'],
                 theme_id = i['theme'],
                 description = i['description'],
             )
