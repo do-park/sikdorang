@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # 계정
     'accounts',
     'review',
+    'guide',
 
     # 여행
     'trip',
