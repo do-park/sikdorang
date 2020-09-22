@@ -1,7 +1,13 @@
 <template>
   <div class="row text-center m-1">
-    <div v-for="(theme, index) in themes" :key="theme.id" class="m-1">
-      <span v-if="userAchieve[index] == 'True'" class="effect">
+    <div 
+    v-for="(theme, index) in themes" 
+    :key="theme.id" 
+    class="m-1">
+      <span 
+      v-if="userAchieve[index]" 
+      class="effect"
+      >
         <img
           @click="goDetail(theme)"
           class="img-circle"
@@ -22,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 const themes = "themes";
 
 export default {
@@ -35,7 +41,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(themes, ["getThemes"]),
+    ...mapGetters(themes, [
+      "getThemes",
+      "getThemesClear",
+    ]),
   },
   created() {
     // todo: userId에 현재 로그인한 유저의 id 넣어주기
@@ -44,21 +53,31 @@ export default {
   },
   mounted() {
     this.themes = this.getThemes;
-    this.getAchievedata(this.userId);
-    // console.log(this.themes)
   },
   methods: {
+    ...mapActions(themes, [
+          "actionThemesClear",
+      ]),
     goDetail(theme) {
       this.$cookies.set("theme_id", theme.id);
       this.$cookies.set("theme_name", theme.theme_name);
       this.$router.push("/themedetail");
     },
-    getAchievedata(userId) {
-      // todo: axios로 Back에서 user의 achievedata 받아오기
+    getAchievedata(userId) { 
       console.log(userId);
-      const data =
-        "False,True,True,False,False,True,False,True,True,False,False";
-      this.userAchieve = data.split(",");
+
+    // todo: axios로 Back에서 user의 achievedata 받아오기
+    //   this.$axios.get(`/themeclear/${userId}`)
+    //   .then(res=>{
+    //       console.log(res.data)
+    //       this.acitonThemesClear(res.data)
+    //   })
+    //   .catch(err=>{
+    //       console.log(err)
+    //   })
+        
+      this.userAchieve = this.getThemesClear
+      console.log(this.userAchieve)
     },
   },
 };
