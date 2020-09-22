@@ -14,11 +14,16 @@ const themes = {
             {"id":9, "theme_name":"전국 터미널 맛집"},
             {"id":10, "theme_name":"기차역 맛집"},
             {"id":11, "theme_name":"고속도로 휴게소 맛집"},
-            ],
+        ],
+        themeClear :
+        [ true, false, false, true, true, false, false, false, true, false, true ],
     },
     getters : {
         getThemes : state => {
             return state.themes
+        },
+        getThemesClear : state => {
+            return state.themeClear
         },
       
     },
@@ -26,11 +31,17 @@ const themes = {
         mutationThemes: (state,payload) => {
             state.themes = payload
         },
+        mutationThemesClear: (state,payload) => {
+            state.themeClear = payload
+        },
        
     },
     actions : {
         actionThemes: ({commit}, payload) => {
             commit("mutationThemes", payload)
+        },
+        actionThemesClear: ({commit}, payload) => {
+            commit("mutationThemesClear", payload)
         },
         
     }
