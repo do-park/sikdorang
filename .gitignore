@@ -1,7 +1,5 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,vue
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,vue
-*.json
-data/
 
 ### Django ###
 *.log

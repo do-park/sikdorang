@@ -9,7 +9,9 @@ import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import ThemeDetail from "../views/theme/ThemeDetail.vue"
-
+import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
+import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
+import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 
 Vue.use(VueRouter)
 
@@ -50,7 +52,7 @@ const routes = [
     component: Recommend,
   },
   {
-    path: "/application",
+    path: "/guide/application",
     name: "ApplicationGuideView",
     component: ApplicationGuideView,
   },
@@ -59,7 +61,21 @@ const routes = [
     name: "ThemeDetail",
     component:ThemeDetail,
   },
-  
+  {
+    path: "/trip/createchedule",
+    name: "TripScheduleFormView",
+    component: TripScheduleFormView,
+  },
+  {
+    path: "/trip/detail/:item_pk",
+    name: "TripProductDetailView",
+    component: TripProductDetailView,
+  },
+  {
+    path: "/trip/list",
+    name: "TripProductsView",
+    component: TripProductsView,
+  }
 ]
 
 const router = new VueRouter({

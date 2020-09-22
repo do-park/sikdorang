@@ -9,6 +9,7 @@ import mapEvent from './modules/mapEvent.js'
 import mypage from './modules/mypage.js'
 import schedule from './modules/schedule.js'
 import themes from './modules/themes.js'
+import order from './modules/order.js'
 
 export default new Vuex.Store({
   state: {
@@ -29,5 +30,6 @@ export default new Vuex.Store({
     mapEvent,
     schedule,
     themes,
+    order,
   }
 })

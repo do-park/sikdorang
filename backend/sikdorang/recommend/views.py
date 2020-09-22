@@ -184,7 +184,7 @@ def user_based(dataframe, for_user):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_tag_recommendation(request):
     user_pk = request.META['auth-token']
     user = request.user
