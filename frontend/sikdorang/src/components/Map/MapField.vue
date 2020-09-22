@@ -12,6 +12,7 @@
 <script>
 import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
+import axios from "axios"
 
 const mapEvent = "mapEvent"
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
@@ -36,6 +37,9 @@ export default {
 			clickedOverlay : null,
 			// store에 저장하기 위해 올라가는 Index
 			selectingIndex: 0,
+			// 이전에 선택한 지점의 x , y 좌표
+			beforeLng: null,
+			beforeLat: null,
 		}
 	},
 	mounted() {
@@ -107,7 +111,12 @@ export default {
 		},
 		getSHRecommendation(cf) {
 			console.log('관광지 / 숙박 정보를 받습니다.')
-			// const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+			axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1`)
+			.then(res => {
+				console.log(res)
+			})
+			.catch(err => console.error(err))
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
