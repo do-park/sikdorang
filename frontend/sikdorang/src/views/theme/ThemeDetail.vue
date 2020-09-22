@@ -68,17 +68,17 @@ export default {
         });
     },
     getMyVisited(userId) {
+      this.userVisited = [1,1,1,0,0,0,0,0,0]
       // todo: axios로 Back에서 user의 achievedata 받아오기
       console.log(userId);
-      var user_id = 1
-      this.$axios.get(`/achievement/${this.theme_id}/${user_id}`)
-      .then(res => {
-          var userVisited = res.data
-          this.userVisited = userVisited
-      })
-      .catch(err => {
-          console.log(err)
-      }) 
+      // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
+      // .then(res => {
+      //     var userVisited = res.data
+      //     this.userVisited = userVisited
+      // })
+      // .catch(err => {
+      //     console.log(err)
+      // }) 
     },
     goDetail(rest, index) {
       //   swal(rest.store_name, rest.description);
