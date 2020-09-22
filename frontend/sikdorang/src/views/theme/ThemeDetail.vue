@@ -10,16 +10,14 @@
           class="box col-sm-4 m-0"
         >
           <span v-if="userVisited[index] == 'True'" class="effect">
-            <div
-              class="img-card"
-              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
-            >{{restuarant.store_name}}</div>
+            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
+              <p class="store_name">{{restuarant.store_name}}</p>
+            </div>
           </span>
           <span v-else>
-            <div
-              class="img-card"
-              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
-            >{{restuarant.store_name}}</div>
+            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
+              <p class="store_name">{{restuarant.store_name}}</p>
+            </div>
           </span>
         </div>
       </div>
@@ -74,6 +72,9 @@ export default {
       console.log(userId);
       const data =
         "False,True,True,False,False,True,False,True,True,False,False";
+      //   const data = "True,True,True,True,True,True,True,True,True,True,";
+      //   const data =
+      //     "False,False,False,False,False,False,False,False,False,False,False";
       this.userVisited = data.split(",");
     },
     goDetail(rest, index) {
@@ -92,6 +93,8 @@ export default {
           Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
           console.log(this.userVisited);
           // todo: axios 처리도 해야할 것 같은데 Swal 안에서 할 수 있는지 모르겠군요
+          // axios로 지금 이 식당에 방문했음으로 변경
+          // axios로 이 카테고리가
         }
       });
     },
@@ -101,20 +104,27 @@ export default {
 
 <style scoped>
 .box {
-  height: 400px;
-  width: auth;
-  max-width: 400px;
+  height: 200px;
+  width: 200px;
   background: blanchedalmond;
 }
 .img-card {
   /* width : 500px; */
-  height: 400px;
-  width: auto;
-  max-width: 400px;
+  height: 200px;
+  width: 200px;
+  background-size: cover;
+}
+.store_name {
+  text-align: right;
+  text-shadow: -1px 0 blanchedalmond, 0 1px blanchedalmond, 1px 0 blanchedalmond,
+    0 -1px blanchedalmond;
+  font-size: 14px;
+  /* background-color: rgba(240, 240, 240, 0.3); */
 }
 .effect {
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
+  display: block;
   overflow: hidden;
   padding: 1px;
 }
@@ -122,7 +132,7 @@ export default {
   content: "";
   position: absolute;
   z-index: 1;
-  width: 100px;
+  width: 70px;
   height: auto;
   background: red;
   border: 3px solid red;
