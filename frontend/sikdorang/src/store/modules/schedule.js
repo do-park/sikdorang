@@ -15,9 +15,6 @@ const schedule = {
         mutationStore: (state, payload) => {
             state.schedule[payload.index].store = payload.store
         },
-        mutationLatlng: (state, payload) => {
-            state.schedule[payload.index].latlng = payload.latlng
-        }
     },
     actions: {
         actionSchedule: ({ commit }, payload) => {
@@ -26,9 +23,6 @@ const schedule = {
         actionStore: ({ commit }, payload) => {
             commit("mutationStore", payload)
         },
-        actionLatlng: ({ commit }, payload) => {
-            commit("mutationLatlng", payload)
-        }
     }
 }
 

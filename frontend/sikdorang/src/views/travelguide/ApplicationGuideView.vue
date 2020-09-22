@@ -31,6 +31,7 @@ export default {
                 this.$axios.post("guide/apply", null, requestHeaders)
                 .then(res => {
                     console.log(res)
+                    this.$router.push('/')
                 })
                 .catch(err => console.error(err))
             }

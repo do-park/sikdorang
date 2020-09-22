@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import MapTest from '../views/MapTest.vue'
 import Signup from '../views/Signup.vue'
 import MapMain from '../views/MapMain.vue'
 import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
@@ -11,9 +10,11 @@ import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import Payment from "../views/pay/Payment.vue"
 import Result from "../views/pay/Result.vue"
+import ThemeDetail from "../views/theme/ThemeDetail.vue"
 import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
+import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 
 Vue.use(VueRouter)
 
@@ -22,11 +23,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-  },
-  {
-    path: "/maptest",
-    name: "MapTest",
-    component: MapTest,
   },
   {
     path: "/signup",
@@ -74,6 +70,11 @@ const routes = [
     component: Result,
   },
   {
+    path: "/themedetail",
+    name: "ThemeDetail",
+    component:ThemeDetail,
+  },
+  {
     path: "/trip/createchedule",
     name: "TripScheduleFormView",
     component: TripScheduleFormView,
@@ -87,8 +88,12 @@ const routes = [
     path: "/trip/list",
     name: "TripProductsView",
     component: TripProductsView,
+  },
+  {
+    path: "/trip/order",
+    name: "TripProductOrder",
+    component: TripProductOrder,
   }
-
 ]
 
 const router = new VueRouter({
