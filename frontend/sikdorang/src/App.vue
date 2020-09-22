@@ -6,6 +6,7 @@
       <router-link to="/schedule">schedule</router-link>|
       <router-link to="/recommend">recommend</router-link>|
       <router-link to="/trip/list">여행 리스트</router-link>|
+      <router-link to="/trip/createchedule">여행 생성(가이드)</router-link>|
       <span v-if="$store.state.isLogin"><a @click="tryLogout">로그아웃</a></span>
       <router-view />
   </div>
