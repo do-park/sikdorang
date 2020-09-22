@@ -5,7 +5,7 @@
     :key="theme.id" 
     class="m-1">
       <span 
-      v-if="userAchieve[index]" 
+      v-if="userAchieve[index] === 1" 
       class="effect"
       >
         <img
@@ -75,7 +75,6 @@ export default {
     //   .catch(err=>{
     //       console.log(err)
     //   })
-        
       this.userAchieve = this.getThemesClear
       console.log(this.userAchieve)
     },
