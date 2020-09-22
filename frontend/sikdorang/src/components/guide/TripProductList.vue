@@ -35,6 +35,7 @@ export default {
             this.$axios.get(`/trip/list/${this.targetGuide}`)
             .then(res => {
                 console.log(res)
+                // this.tripProductList = res.data
             })
             .catch(err => console.log(err))
         },

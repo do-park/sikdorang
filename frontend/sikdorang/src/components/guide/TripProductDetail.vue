@@ -41,6 +41,7 @@ export default {
         ]),
         onClick() {
             this.actionOrderTrip(this.detail)
+            this.$router.push("/trip/order")
         },
     }
 }

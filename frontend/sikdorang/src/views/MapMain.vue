@@ -11,7 +11,6 @@
           <MapTheme/>
           <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
           <MapCards :kakao="kakao" :selected="selected"/>
-      
       </div>    
        
   </div>

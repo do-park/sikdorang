@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters } from 'vuex'
+
 export default {
     name: "TripProductOrder",
     computed: {
@@ -39,11 +40,12 @@ export default {
     mounted() {
         const requestHeaders = {
             headers: {
-                Authorization: `JWT ${this.$cookies.get('auth-token')}`
+                Authorization: `JWT ${this.$cookies.get("auth-token")}`
             }
         }
         this.$axios.get("rest-auth/user/", requestHeaders)
         .then(res => {
+            // user 정보를 userInfo에 우선적으로 저장
             console.log(res)
         })
         .catch(err => console.error(err))
