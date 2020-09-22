@@ -5,11 +5,12 @@
         </div>
         <div>
             <h3>{{ detail.title }}</h3>
-            <span>{{ detail.startDate }} ~ {{ detail.endDate }} 인당 / {{ detail.price }}</span>
+            <span>{{ detail.start_date.substr(0,10) }} ~ {{ detail.end_date.substr(0,10) }} 1인 ￦{{ detail.price }}</span>
         </div>
-        <button @click="onClick()">신청하기</button>
+        <button v-if="isLogin" class="btn btn-primary" @click="onClick()">신청하기</button>
+        <div v-else>로그인시 신청이 가능합니다.</div>
         <hr>
-        <viewer/>
+        <viewer v-if="detail.content !== null" :initialValue="detail.content"/>
     </div>
 </template>
 
@@ -24,15 +25,28 @@ export default {
         viewer: Viewer,
     },
     mounted() {
-        this.$axios.get(`trip/detail/${this.$route.params.item_pk}`)
-        .then(res => {
-            console.log(res)
-        })
-        .catch(err => console.error(err))
+        // this.$axios.get(`trip/detail/${this.$route.params.item_pk}`)
+        // .then(res => {
+        //     console.log(res)
+        // })
+        // .catch(err => console.error(err))
     },
     data() {
         return {
-            detail: null,
+            isLogin: this.$store.state.isLogin,
+            detail: {
+                id: 1,
+                user: 1,
+                title_img: '이미지',
+                title: '가을 여행',
+                area: '구미',
+                start_date: Date(2020-9-22),
+                end_date: Date(2020-9-26),
+                price: 100,
+                start_point: '인동 입석',
+                start_time: '09:00',
+                content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
+            },
         }
     },
     methods: {
