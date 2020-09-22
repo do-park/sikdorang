@@ -59,7 +59,9 @@ urlpatterns = [
     # 추천
     path('recommend/', include('recommend.urls')),
     url(r'^',include(router.urls)),
-
+    #인증
+    path('account/', include('accounts.urls')),
+    
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
