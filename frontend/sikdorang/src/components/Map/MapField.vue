@@ -12,6 +12,7 @@
 <script>
 import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
+import axios from "axios"
 
 const mapEvent = "mapEvent"
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
@@ -34,6 +35,11 @@ export default {
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
+			// store에 저장하기 위해 올라가는 Index
+			selectingIndex: 0,
+			// 이전에 선택한 지점의 x , y 좌표
+			beforeLng: null,
+			beforeLat: null,
 		}
 	},
 	mounted() {
@@ -52,8 +58,10 @@ export default {
 			'getThreeRes',
 			'getSelectedRest',
 			'getPlanList'
-		])
-
+		]),
+		...mapGetters("schedule", [
+			"getSchedules",
+		]),
 	},
 	watch : {
 		getFlip(){
@@ -64,8 +72,7 @@ export default {
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
-		getClicked(){	
-                    
+		getClicked(){	     
 			this.showCandidates(this.recommends)  
 		},
 	},
@@ -77,31 +84,38 @@ export default {
 			'actionSelectedRest',
 			'actionPlanList',
 		]),
+		...mapActions("schedule", [
+			"actionStore"
+		]),
 		divideRecommendation(cf) {
 			if (cf === "식당" | cf === "카페"){
-				this.getSCRecommendation()
+				this.getSCRecommendation(cf)
 			} else {
-				this.getSHRecommendation()
+				this.getSHRecommendation(cf)
 			}
 		},
-		getSCRecommendation() {
+		getSCRecommendation(cf) {
 			console.log('음식점 / 카페를 추천 받습니다.')
-
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('recommendation/tag-based/', requestHeaders)
+			this.$axios.post('recommendation/tag-based/', {category: cf}, requestHeaders)
 			.then(res => {
 				console.log(res)
-				this.recommends = res.data
+				// this.recommends = res.data
 			})
 			.catch(err => console.error(err))
 		},
-		getSHRecommendation() {
-			console.log('관광지 / 숙박 정보를 받습니다.')
-			// const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+		getSHRecommendation(cf) {
+			console.log('관광지 / 숙박 정보를 받습니다.', cf)
+			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+			axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
+			.then(res => {
+				console.log(res)
+			})
+			.catch(err => console.error(err))
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
@@ -137,6 +151,8 @@ export default {
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
+			this.beforeLng = this.startLong
+			this.beforeLat = this.startLat
 		},
 		//cdn 추가
 		addScript() { 
@@ -260,29 +276,33 @@ export default {
 			}
 		},
 		selectRest(idx) {
-            this.actionSelectedRest(this.getThreeRes[idx])
+			this.actionSelectedRest(this.getThreeRes[idx])
+			const self = this
             var Rest = this.getSelectedRest
             swal({
-            title: Rest.title,
-            text: "이런이런 맛집입니다아",
-            buttons: ["취소","추가"],
+				title: Rest.title,
+				text: "이런이런 맛집입니다아",
+				buttons: ["취소","추가"],
             })
             .then((res) => {
-            if (res) {
-                swal(`${Rest.title}을 일정에 추가할까요?`,{
-                    buttons: ["아니오","네"],
-                })
-                .then((res)=>{
-                    if (res) {
-                        swal(`${Rest.title}을 일정에 추가할까요?`,{
-						icon : "success"
-						// store에 올리는 로직.
-                        })
-                        
-                    }
-                })
-            } 
-		});
+				if (res) {
+					swal(`${Rest.title}을 일정에 추가할까요?`,{
+						buttons: ["아니오","네"],
+					})
+					.then((res)=>{
+						if (res) {
+							swal(`${Rest.title}을 일정에 추가할까요?`,{
+								icon : "success"
+							})
+							// store에 올리는 로직.
+							self.actionStore({ sotre: Rest,  index: self.selectingIndex })
+							self.selectingIndex += 1
+							self.beforeLng = Rest.lng
+							self.beforeLat = Rest.lat
+						}
+					})
+				} 
+			});
 		},
 
 		//카드 누르면 마커 이미지 변경

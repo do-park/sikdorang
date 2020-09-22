@@ -8,10 +8,13 @@ import MyPageView from '../views/mypage/MyPageView.vue'
 import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
+import Payment from "../views/pay/Payment.vue"
+import Result from "../views/pay/Result.vue"
 import ThemeDetail from "../views/theme/ThemeDetail.vue"
 import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
+import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 
 Vue.use(VueRouter)
 
@@ -57,6 +60,16 @@ const routes = [
     component: ApplicationGuideView,
   },
   {
+    path: "/payment",
+    name: "Payment",
+    component: Payment,
+  },
+  {
+    path: "/result",
+    name: "Result",
+    component: Result,
+  },
+  {
     path: "/themedetail",
     name: "ThemeDetail",
     component:ThemeDetail,
@@ -75,6 +88,11 @@ const routes = [
     path: "/trip/list",
     name: "TripProductsView",
     component: TripProductsView,
+  },
+  {
+    path: "/trip/order",
+    name: "TripProductOrder",
+    component: TripProductOrder,
   }
 ]
 
