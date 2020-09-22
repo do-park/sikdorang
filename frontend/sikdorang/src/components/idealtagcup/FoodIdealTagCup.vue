@@ -85,7 +85,6 @@ export default {
 		},
 		// 4강(3강이 되는 경우는 3강)이 되면 정보를 저장합니다.
 		tagsSave() {
-			console.log('Tags saving', this.tags)
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`

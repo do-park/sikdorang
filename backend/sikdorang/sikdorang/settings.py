@@ -69,6 +69,7 @@ INSTALLED_APPS = [
 
     # 데이터베이스 추가
     'api',
+    'achievement',
 
     'drf_yasg',
 ]
@@ -194,3 +195,6 @@ JWT_AUTH = {
    'JWT_ALLOW_REFRESH' : False,
    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

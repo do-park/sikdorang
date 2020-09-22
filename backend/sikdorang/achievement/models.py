@@ -1,0 +1,19 @@
+from django.db import models
+from django.conf import settings
+
+class Themes(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=20)
+    def __str__ (self):
+        return self.name
+
+class AchiveStore(models.Model):
+    id = models.IntegerField(primary_key=True)
+    store_name = models.CharField(max_length=20)
+    tel = models.CharField(max_length=20, null=True)
+    address = models.CharField(max_length=200, null=True)
+    image = models.ImageField()
+    theme = models.ForeignKey(Themes, on_delete=models.CASCADE)
+    description = models.TextField()
+    def __str__ (self):
+        return self.store_name

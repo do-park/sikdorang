@@ -17,6 +17,8 @@ export default {
     methods: {
         onClick() {
             console.log("핸드폰 인증 절차를 실행합니다.", this.number)
+            // 인증이 완료되면 authenticated를 emit으로 올립니다.
+            this.$emit("authenticated")
         }
     },
 }
