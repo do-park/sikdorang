@@ -4,20 +4,23 @@
         <div class="item-wrap" v-for="item in tripProductList" :key="item.id" @click="goTripProductDetailPage(item.id)">
             <TripProductItem :item="item"/>
         </div>
+        <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
     </div>
 </template>
 
 <script>
 import TripProductItem from "./TripProductItem.vue"
+import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
     name: "TripProductList",
     components: {
         TripProductItem,
+        InfiniteLoading
     },
     data() {
         return {
-            index: 1,
+            limit: 0,
             tripProductList: [
                 {id: 1,
                 user: 1,
@@ -56,15 +59,30 @@ export default {
             targetGuide: null,
         }
     },
-    mounted() {
-        // this.$axios.get(`/trip/list/${this.index}`)
-        // .then(res => {
-        //     console.log(res)
-        //     this.index += 1
-        // })
-        // .catch(err => console.error(err))
-    },
     methods: {
+        infiniteHandler($state) {
+            this.$axios.get(`/trip/list/${this.limit}`)
+            .then(res => {
+                // console.log(res)
+                setTimeout(()=> {
+                    if (res.data.content.length) {
+                        this.yogaList = this.tripProductList.concat(res.data.content);
+                        $state.loaded();
+                        this.limit += 10
+                        if (this.tripProductList.length / 10 === 0){
+                            $state.complete();
+                        }
+                    } else {
+                        $state.complete();
+                    }
+                    
+                }, 500)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        },
+
         goTripProductDetailPage(item_pk) {
             this.$router.push(`/trip/detail/${item_pk}`)
         },
