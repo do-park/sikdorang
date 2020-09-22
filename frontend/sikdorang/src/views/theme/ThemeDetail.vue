@@ -1,60 +1,140 @@
 <template>
   <div>
-      <h1>명예의 전당 [{{theme_name}}]편</h1>
-      <div class="container">
+    <h1>명예의 전당 [ {{theme_name}} ]편</h1>
+    <div class="container">
       <div class="row text-center">
-      <div @click="goDetail(restuarant)" v-for="restuarant in restaurants" :key="restuarant.id" class="box col-sm-4 m-0">
-          <div>
-              {{restuarant.store_name}}
-          </div>
+        <div
+          @click="goDetail(restuarant, index)"
+          v-for="(restuarant, index) in restaurants"
+          :key="restuarant.id"
+          class="box col-sm-4 m-0"
+        >
+          <span v-if="userVisited[index] == 'True'" class="effect">
+            <div
+              class="img-card"
+              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
+            >{{restuarant.store_name}}</div>
+          </span>
+          <span v-else>
+            <div
+              class="img-card"
+              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
+            >{{restuarant.store_name}}</div>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-     
   </div>
 </template>
 
 <script>
-import swal from 'sweetalert'
-
+// import swal from "sweetalert";
+import Swal from "sweetalert2";
+var BASE_URL = "http://j3d202.p.ssafy.io:8080";
 export default {
-    name : "ThemeDetail",
-    data() {
-        return {
-            theme_name : this.$cookies.get('theme_name'),
-            theme_id : this.$cookies.get('theme_id'),
-            restaurants : [{"id" : 111, "store_name" : "빵집1"},{"id" : 222, "store_name" : "빵집2"},{"id" : 333, "store_name" : "빵집3"}],
-        }
+  name: "ThemeDetail",
+  data() {
+    return {
+      theme_name: this.$cookies.get("theme_name"),
+      theme_id: this.$cookies.get("theme_id"),
+      restaurants: [
+        { id: 111, store_name: "빵집1" },
+        { id: 222, store_name: "빵집2" },
+        { id: 333, store_name: "빵집3" },
+      ],
+      IMG_URL: `${BASE_URL}`,
+      userId: null,
+      userVisited: [],
+    };
+  },
+  created() {
+    // todo: userId에 현재 로그인한 유저의 id 넣어주기
+    this.userId = 1;
+    this.getRestarants();
+    this.getMyVisited(1);
+  },
+  methods: {
+    getCardBgImage(image_url) {
+      return 'background-image: url("' + image_url + '")';
     },
-    created() {
-        this.showAlert()
-        this.getRestarants()
+    getRestarants() {
+      console.log(this.theme_id);
+      this.$axios
+        .get(`/achievement/${this.theme_id}`)
+        .then((res) => {
+          var restaurants = res.data;
+          this.restaurants = restaurants;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    methods : {
-        showAlert() {
-            swal("방문한 음식점은 clear로 표시됩니다 ^^.")
-        },
-        getRestarants() {
-            this.$axios.get(`/achievement/${this.theme_id}`)
-            .then(res => {
-                var restaurants = res.data
-                this.restaurants = restaurants
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        
-        },
-        goDetail(rest) {
-            swal(rest.store_name,rest.description)
+    getMyVisited(userId) {
+      // todo: axios로 Back에서 user의 achievedata 받아오기
+      console.log(userId);
+      const data =
+        "False,True,True,False,False,True,False,True,True,False,False";
+      this.userVisited = data.split(",");
+    },
+    goDetail(rest, index) {
+      //   swal(rest.store_name, rest.description);
+      Swal.fire({
+        title: rest.store_name,
+        text: rest.description,
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "방문하기",
+        cancelButtonText: "OK",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.userVisited[index] = "True";
+          Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
+          console.log(this.userVisited);
+          // todo: axios 처리도 해야할 것 같은데 Swal 안에서 할 수 있는지 모르겠군요
         }
-    }, 
-}
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
 .box {
-    height : 100px;
-    background: blanchedalmond;
+  height: 400px;
+  width: auth;
+  max-width: 400px;
+  background: blanchedalmond;
+}
+.img-card {
+  /* width : 500px; */
+  height: 400px;
+  width: auto;
+  max-width: 400px;
+}
+.effect {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 1px;
+}
+.effect:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 100px;
+  height: auto;
+  background: red;
+  border: 3px solid red;
+  content: "Clear";
+  text-align: center;
+  color: #fff;
+  font-family: "Arial";
+  font-weight: bold;
+  /* padding: 5px 10px; */
+  transform: rotate(-25deg);
+  left: 3px;
+  top: 20px;
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); */
 }
 </style>
