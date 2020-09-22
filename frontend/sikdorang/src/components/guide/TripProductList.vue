@@ -26,7 +26,7 @@ export default {
                 area: '구미',
                 start_date: Date(2020-9-22),
                 end_date: Date(2020-9-26),
-                price: 50000,
+                price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00'
                 },
@@ -37,7 +37,7 @@ export default {
                 area: '구미',
                 start_date: Date(2020,9,22),
                 end_date: Date(2020,9,23),
-                price: 50000,
+                price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00'
                 },
@@ -48,7 +48,7 @@ export default {
                 area: '구미',
                 start_date: Date(2020,9,22),
                 end_date: Date(2020,9,23),
-                price: 50000,
+                price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00'
                 }

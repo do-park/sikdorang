@@ -1,9 +1,9 @@
 <template>
     <div>
         <img :src="item.img" alt="">
-        <h3>{{ item.title }}</h3>
-        <span>{{ item.start_date.substr(0,10) }} ~ {{item.end_date.substr(0,10) }}</span>
-        <span>{{ item.price }} 원</span>
+        <h3>[{{ item.area }}]{{ item.title }}</h3>
+        <div>{{ item.start_date.substr(0,10) }} ~ {{item.end_date.substr(0,10) }}</div>
+        <div>{{ item.price }} 원</div>
     </div>
 </template>
 
