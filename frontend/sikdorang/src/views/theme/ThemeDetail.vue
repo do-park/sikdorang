@@ -35,10 +35,10 @@ export default {
             swal("방문한 음식점은 clear로 표시됩니다 ^^.")
         },
         getRestarants() {
-            this.$axios.get(`/theme/${this.theme_id}/`)
+            this.$axios.get(`/achievement/${this.theme_id}`)
             .then(res => {
-                console.log(res)
-                this.resturants = res.data
+                var restaurants = res.data
+                this.restaurants = restaurants
             })
             .catch(err => {
                 console.log(err)
@@ -46,8 +46,7 @@ export default {
         
         },
         goDetail(rest) {
-            console.log(rest,"눌렀다")
-            swal(`${rest.store_name}에 대한 정보`)
+            swal(rest.store_name,rest.description)
         }
     }, 
 }
