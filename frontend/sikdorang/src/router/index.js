@@ -12,6 +12,7 @@ import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
+import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 
 Vue.use(VueRouter)
 
@@ -75,8 +76,12 @@ const routes = [
     path: "/trip/list",
     name: "TripProductsView",
     component: TripProductsView,
+  },
+  {
+    path: "/trip/order",
+    name: "TripProductOrder",
+    component: TripProductOrder,
   }
-
 ]
 
 const router = new VueRouter({
