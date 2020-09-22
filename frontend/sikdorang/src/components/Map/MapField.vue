@@ -72,8 +72,7 @@ export default {
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
-		getClicked(){	
-                    
+		getClicked(){	     
 			this.showCandidates(this.recommends)  
 		},
 	},
@@ -281,29 +280,29 @@ export default {
 			const self = this
             var Rest = this.getSelectedRest
             swal({
-            title: Rest.title,
-            text: "이런이런 맛집입니다아",
-            buttons: ["취소","추가"],
+				title: Rest.title,
+				text: "이런이런 맛집입니다아",
+				buttons: ["취소","추가"],
             })
             .then((res) => {
-            if (res) {
-                swal(`${Rest.title}을 일정에 추가할까요?`,{
-                    buttons: ["아니오","네"],
-                })
-                .then((res)=>{
-                    if (res) {
-                        swal(`${Rest.title}을 일정에 추가할까요?`,{
-						icon : "success"
-						})
-						// store에 올리는 로직.
-						self.actionStore({ sotre: Rest,  index: self.selectingIndex })
-						self.selectingIndex += 1
-						self.beforeLng = Rest.lng
-						self.beforeLat = Rest.lat
-                    }
-                })
-            } 
-		});
+				if (res) {
+					swal(`${Rest.title}을 일정에 추가할까요?`,{
+						buttons: ["아니오","네"],
+					})
+					.then((res)=>{
+						if (res) {
+							swal(`${Rest.title}을 일정에 추가할까요?`,{
+							icon : "success"
+							})
+							// store에 올리는 로직.
+							self.actionStore({ sotre: Rest,  index: self.selectingIndex })
+							self.selectingIndex += 1
+							self.beforeLng = Rest.lng
+							self.beforeLat = Rest.lat
+						}
+					})
+				} 
+			});
 		},
 
 		//카드 누르면 마커 이미지 변경
