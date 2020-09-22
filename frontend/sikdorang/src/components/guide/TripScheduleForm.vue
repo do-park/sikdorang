@@ -1,40 +1,48 @@
 <template>
     <div>
-        <label for="t-i">대표이미지</label><br>
-        <input
-            type="file"
-            ref="tI"
-            id="t-i"
-            accept=".jpg, .jpeg, .gif, .png"
-        />
-        <br>
-        <label for="area">지역</label>
-        <!-- Area 도 - 시/군/구 선택 -->
-        <br>
-
-        <label for="start_date">시작일</label>
-        <label for="end_date">종료일</label>
-        <!-- 시작 날짜 - 종료 날짜 -->
-        <br>
-        <label for="price">가격</label>
-        <input type="text" id="price"/>
-        <br>
-
-        <label for="time">출발시간</label>
-        <input type="text" id="time">
-        <br>
-        <label for="start_point">출발장소</label>
-        <!-- 주소검색 -->
-        <input type="text" id="start_point">
-        <br>
+        <div>
+            <label for="t-i">대표이미지</label><br>
+            <input
+                @change="fileChange"
+                type="file"
+                ref="tI"
+                id="t-i"
+                accept=".jpg, .jpeg, .gif, .png" />
+        </div>
+        <div>
+            <label for="area">지역</label>
+            <!-- Area 도 - 시/군/구 선택 -->
+        </div>
+        <div>
+            <label for="start_date">시작일</label>
+            <input type="date" name="start_date" id="start_date" v-model="tripSchedule.startDate">
+        </div>
+        <div>
+            <label for="end_date">종료일</label>
+            <input type="date" name="end_date" id="end_date" v-model="tripSchedule.endDate">
+        </div>
+        <div>
+            <label for="price">가격</label>
+            <input class="form-control d-inline-block" type="number" id="price" v-model="tripSchedule.price"/>원
+        </div>
+        <div>
+            <label for="time">출발시간</label>
+            <input type="time" name="time" id="time" v-model="tripSchedule.time">
+        </div>
+        <div>
+            <label for="start_point">출발장소</label>
+            <input class="form-control" type="text" id="start_point" v-model="tripSchedule.startPoint">
+        </div>
         <editor
+            v-model="tripSchedule.editorText"
+            ref="toastuiEditor"
             :initialValue="tripSchedule.editorText"
             :options="editorOptions"
             height="500px"
             initialEditType="wysiwyg"
             previewStyle="vertical"
         />
-        <button @click="onClick()">생성</button>
+        <button class="btn btn-primary" @click="onClick()">생성</button>
     </div>
 </template>
 
@@ -55,6 +63,8 @@ export default {
     data() {
         return {
             tripSchedule: {
+                image: null,
+                imageUrl: null,
                 title: null,
                 area: null,
                 startDate: null,
@@ -71,6 +81,7 @@ export default {
     },
     methods: {
         onClick() {
+            this.getHtml()
             console.log(this.tripSchedule)
             const requestHeaders = {
 				headers: {
@@ -85,7 +96,22 @@ export default {
                 // this.$router.push(`/trip/detail/${res.data.id}`)
 			})
 			.catch(err => console.error(err))
-        }
+        },
+        getHtml() {
+            console.log(this.$refs)
+            let html = this.$refs.toastuiEditor.invoke('getHtml')
+            this.tripSchedule.editorText = html
+        },
+        fileChange(e) {
+            console.log("!!", e)
+            var file = e.target.files[0]
+            if (file && file.type.match(/^image\/(png|jpeg)$/)) {
+                this.tripSchedule.imageUrl = window.URL.createObjectURL(file)
+            }
+            this.tripSchedule.image = this.$refs.tI.files[0]
+        },
+
+
     }
 }
 </script>
