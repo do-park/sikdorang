@@ -8,21 +8,19 @@
         v-on:toLoginPageOrMyPage="changeToLoginPageOrMyPage"
         ></component>
     </transition>
-    <ThemePage/>
+    
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import MainPage from '@/components/main/MainPage.vue'
-import ThemePage from '@/components/main/ThemePage.vue'
 import LoginPage from '@/components/main/LoginPage.vue'
 
 export default {
   name: 'Home',
   components: {
     MainPage,
-    ThemePage,
     LoginPage
   },
   data() {

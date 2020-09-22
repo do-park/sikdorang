@@ -44,8 +44,8 @@ export default {
 }
 .img-circle {
   display: inline-block;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 40%;
   border : 3px solid black;
   background-color: rgba(0, 0, 0, 0.445);
