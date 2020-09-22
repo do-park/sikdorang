@@ -8,6 +8,8 @@ import MyPageView from '../views/mypage/MyPageView.vue'
 import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
+import Payment from "../views/pay/Payment.vue"
+import Result from "../views/pay/Result.vue"
 import ThemeDetail from "../views/theme/ThemeDetail.vue"
 import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
@@ -56,6 +58,16 @@ const routes = [
     path: "/guide/application",
     name: "ApplicationGuideView",
     component: ApplicationGuideView,
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    component: Payment,
+  },
+  {
+    path: "/result",
+    name: "Result",
+    component: Result,
   },
   {
     path: "/themedetail",

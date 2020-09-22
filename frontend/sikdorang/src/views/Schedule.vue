@@ -134,7 +134,7 @@ export default {
         return false;
       }
       let plan = "";
-      this.actionSchedule(clonedItems)
+      this.actionSchedule(this.clonedItems)
       for (let i = 0; i < this.clonedItems.length; i++) {
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }

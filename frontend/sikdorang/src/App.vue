@@ -5,7 +5,9 @@
       <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>|
       <router-link to="/schedule">schedule</router-link>|
       <router-link to="/recommend">recommend</router-link>|
-      
+      <router-link to="/payment">결제 테스트</router-link>|
+      <router-link to="/trip/list">여행 리스트</router-link>|
+      <router-link to="/trip/detail/1">1번 여행 상세페이지</router-link>|
       <span v-if="$store.state.isLogin"><a @click="tryLogout">로그아웃</a></span>
       <router-view />
   </div>
