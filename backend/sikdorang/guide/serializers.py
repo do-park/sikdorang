@@ -1,13 +1,14 @@
+from rest_framework.serializers import ModelSerialzer, ReadOnlyField
 from rest_framework import serializers
 from accounts.serializers import UserSerializer
 
 from .models import *
 
 class GuideItemSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    guide_user = ReadOnlyField(source=user.id)
     class Meta: 
         model = TripItemModel
-        fields = '__all__'
+        fields = ['guide_user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
 
 class GuideSerializer(serializers.ModelSerializer):
     class Meta: 
