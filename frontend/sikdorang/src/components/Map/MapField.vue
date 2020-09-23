@@ -14,7 +14,6 @@ import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 import axios from "axios"
 
-const mapEvent = "mapEvent"
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 
 export default {
@@ -51,7 +50,7 @@ export default {
         }
 	},
 	computed : {
-		...mapGetters(mapEvent, [
+		...mapGetters("mapEvent", [
 			'getFlip',
 			'getMouseOver',
 			'getClicked',
@@ -77,7 +76,7 @@ export default {
 		},
 	},
 	methods : {
-		...mapActions(mapEvent,[
+		...mapActions("mapEvent",[
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
@@ -142,12 +141,14 @@ export default {
             this.map = map;
 			this.$emit('getKakao',window.kakao)
 
+			this.startWithMap()
+		},
+		startWithMap() {
 			this.setStartCoords();
 			this.fillPositions();
 			this.initCurLocation();
 			this.showCandidates(this.recommends)
 		},
-
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
@@ -172,7 +173,7 @@ export default {
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 		showMarkers(markers) {
 			for (var i = 0; i < markers.length; i++) {
-				console.log(i,markers[i])
+				console.log("!!!!!",i,markers[i])
 				markers[i].setMap(this.map);
 			}    
 		},
@@ -229,10 +230,18 @@ export default {
 					else{
 						console.log("검색 결과 오류입니다.")
 					}
+					this.changeThreeResByFlip()
                 })
             }
 		},
-		
+		changeThreeResByFlip() {
+			if (this.getFlip) {
+				this.actionThreeRes(this.recommends.slice(0,3))
+			}
+			else {
+				this.actionThreeRes(this.recommends.slice(3,6))
+			}
+		},
 		fillPositions() {
 			this.recommends = [
 				{   
@@ -267,13 +276,6 @@ export default {
 					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
 				}
 			]
-			if (this.getFlip) {
-				this.actionThreeRes(this.recommends.slice(0,3))
-
-			}
-			else {
-				this.actionThreeRes(this.recommends.slice(3,6))
-			}
 		},
 		selectRest(idx) {
 			this.actionSelectedRest(this.getThreeRes[idx])
@@ -321,10 +323,10 @@ export default {
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
-			
+			console.log(this.getThreeRes)
+			console.log("showCandidates - flip",this.gerFlip)
 			if (this.getFlip) {
 				this.actionThreeRes(locs.slice(0,3))
-
 			}
 			else {
 				this.actionThreeRes(locs.slice(3,6))

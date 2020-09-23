@@ -85,8 +85,11 @@ export default {
       this.changeOverBox(this.getMouseOver);
     },
     getClicked() {
-      this.actionSelectedRest(this.getThreeRes[this.getClicked]);
-      this.selectRest(this.getClicked);
+      if ( this.getClicked) {
+        this.actionSelectedRest(this.getThreeRes[this.getClicked]);
+        this.selectRest(this.getClicked);
+      }
+      
     },
   },
   mounted() {
