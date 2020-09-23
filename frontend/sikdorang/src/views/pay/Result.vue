@@ -21,6 +21,7 @@ export default {
     const { type } = query;
     return {
       type,
+      tour: window.$cookies.get('ordertrip'), // 투어 pk
       success: this.getSuccess(query),
       impUid: query.imp_uid,
       merchantUid: query.merchant_uid,
@@ -30,9 +31,24 @@ export default {
     };
   },
   methods: {
+    postData() {
+      const tripId = window.$cookies.get('ordertrip')
+      const requestHeaders = {
+          headers: {
+              Authorization: `JWT ${this.$cookies.get("auth-token")}`
+          }
+      }
+      this.$axios.post(`guide/paid/${tripId}`, requestHeaders)
+			.then(res => {
+                console.log(res)
+			})
+			.catch(err => console.error(err))
+    },
     getSuccess(query) {
-      console.log(query)
       const { success } = query;
+      if (success === 'true') {
+        this.postData()
+      }
       const impSuccess = query.imp_success;
       if (impSuccess === undefined) {
         if (typeof success === 'string') {

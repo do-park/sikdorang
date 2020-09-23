@@ -23,10 +23,11 @@ export default {
   props: [
     'userName',
     'userPhone',
-    'amount'
+    'orderTrip'
   ],
   methods: {
     handleSubmit(e) {
+      window.$cookies.set('ordertrip',this.orderTrip.id)
       e.preventDefault();
 
       const { IMP } = window;
@@ -36,7 +37,7 @@ export default {
         pay_method: 'card',
         merchant_uid: `mid_${new Date().getTime()}`,
         name: '식도랑 가이드투어 결제',
-        amount: this.amount,
+        amount: this.orderTrip.price,
         buyer_name: this.userName,
         buyer_tel: this.userPhone,
         buyer_email: 'example@example.com',

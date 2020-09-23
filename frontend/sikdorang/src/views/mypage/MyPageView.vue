@@ -1,6 +1,6 @@
 <template>
     <div>
-        <MyPage v-if="isUser"/>
+        <MyPage v-if="isLogin"/>
         <AchievementBadge/>
         <GuideMyPage v-if="isGuide"/>
         <AdminMyPage v-if="isAdmin"/>
@@ -45,7 +45,7 @@ export default {
     },
     data() {
         return {
-            isUser: false,
+            isLogin: this.$store.state.isLogin,
             isGuide: false,
             isAdmin: false,
         }
