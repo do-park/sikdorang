@@ -17,3 +17,15 @@ class AchiveStore(models.Model):
     description = models.TextField()
     def __str__ (self):
         return self.store_name
+
+class ThemeUser(models.Model):
+    count = models.IntegerField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    def __str__ (self):
+        return self.name
+
+class AchieveUser(models.Model):
+    count = models.IntegerField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    def __str__ (self):
+        return self.name
