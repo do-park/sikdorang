@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <label for="title">이름</label>
-      <input type="text" id="title" v-model="tripSchedule.title" />
+      <label for="title">제목</label>
+      <input class="form-control" type="text" id="title" v-model="tripSchedule.title" />
     </div>
     <div>
       <label for="t-i">대표이미지</label>
@@ -10,8 +10,8 @@
       <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif, .png" />
     </div>
     <div>
-      <label for="area">지역</label>
-      <input type="text" id="area" v-model="tripSchedule.area" />
+      <label for="area">여행지역</label>
+      <input class="form-control" type="text" id="area" v-model="tripSchedule.area" />
       <!-- Area 도 - 시/군/구 선택 -->
     </div>
     <div>
