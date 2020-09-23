@@ -69,6 +69,7 @@ export default {
     return {
       tripSchedule: {
         title: null,
+        title_img: null,
         area: null,
         start_date: null,
         end_date: null,
@@ -91,12 +92,12 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      //   if (
-      //     this.tripSchedule.title_img === null ||
-      //     this.tripSchedule.title_img === undefined
-      //   ) {
-      //     this.tripSchedule.title_img = "";
-      //   }
+        // if (
+        //   this.tripSchedule.title_img === null ||
+        //   this.tripSchedule.title_img === undefined
+        // ) {
+        //   this.tripSchedule.title_img = "";
+        // }
       console.log(this.tripSchedule);
 
       this.$axios
@@ -113,13 +114,13 @@ export default {
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.tripSchedule.content = html;
     },
-    fileChange() {
-      // console.log("!!", e)
-      // var file = e.target.files[0]
-      // if (file && file.type.match(/^image\/(png|jpeg)$/)) {
-      //     this.tripSchedule.imageUrl = window.URL.createObjectURL(file)
-      // }
-      this.tripSchedule.title_img = this.$refs.tI.files[0];
+    fileChange(e) {
+      console.log("!!", e)
+      var file = e.target.files[0]
+      if (file && file.type.match(/^image\/(png|jpeg)$/)) {
+          this.tripSchedule.title_img = window.URL.createObjectURL(file)
+      }
+      // this.tripSchedule.title_img = this.$refs.tI.files[0];
     },
   },
 };
