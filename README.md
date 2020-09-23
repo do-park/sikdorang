@@ -18,7 +18,7 @@
 
 ### 성취(맛집 도장깨기)
 
-![ERD_achievement](README_img/ERD_achievement.PNG)
+![ERD_achievement](README_img/ERD_Achievement.PNG)
 
 
 
