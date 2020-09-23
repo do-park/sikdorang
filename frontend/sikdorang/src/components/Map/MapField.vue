@@ -28,7 +28,7 @@ export default {
 			recommendMarkers : [],
 			selectedMarker : null,
 			plans : [],
-			schedule : [],
+			//추천해 줄 음식점/관광지/카페/숙박 
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
@@ -176,7 +176,6 @@ export default {
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 		showMarkers(markers) {
 			for (var i = 0; i < markers.length; i++) {
-				console.log("!!!!!",i,markers[i])
 				markers[i].setMap(this.map);
 			}    
 		},
@@ -368,15 +367,12 @@ export default {
 					normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
 					clickOrigin = new kakao.maps.Point(gapX, originY), // 스프라이트 이미지에서 마우스오버 마커로 사용할 영역의 좌상단 좌표
 					overOrigin = new kakao.maps.Point(gapX * 2, overOriginY); // 스프라이트 이미지에서 클릭 마커로 사용할 영역의 좌상단 좌표
-
-				
+		
 				// 기본 마커이미지, 오버 마커이미지, 클릭 마커이미지를 생성합니다
 				const normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 
-				
-					
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
 					map: map,

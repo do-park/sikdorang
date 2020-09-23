@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{getSchedules}}
     <div class="d-flex flex-column align-items-center">
       <div>
         <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
@@ -79,6 +80,10 @@ export default {
       "getSelectedRest",
       "getPlanList",
     ]),
+    ...mapGetters("schedule",[
+      "getSchedules",
+      "getScheduleIdx",
+    ])
   },
   watch: {
     getMouseOver() {
@@ -89,8 +94,10 @@ export default {
         this.actionSelectedRest(this.getThreeRes[this.getClicked]);
         this.selectRest(this.getClicked);
       }
-      
     },
+    getSchedules() {
+      console.log(this.getSchedules)
+    }
   },
   mounted() {
     this.fillPositions();
@@ -105,6 +112,10 @@ export default {
       "actionSelectedRest",
       "actionClicked",
       "actionPlanList",
+    ]),
+    ...mapActions("schedule",[
+      "actionStore",
+      "actionScheduleIdx"
     ]),
     selectRest(idx) {
       var plans = this.getPlanList;
@@ -127,6 +138,11 @@ export default {
                 });
                 plans.push(this.getSelectedRest);
                 this.actionPlanList(plans);
+                console.log("getSchedules!!!!!",this.getSchedules)
+                this.actionStore(Rest)
+                console.log(">>>>>>",this.getScheduleIdx, typeof(this.getScheduleIdx))
+                this.actionScheduleIdx(this.getScheduleIdx+1)
+                console.log("getSchedules",this.getSchedules)
                 console.log("일정", this.getPlanList);
               }
             });
