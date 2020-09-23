@@ -85,15 +85,18 @@ export default {
       this.changeOverBox(this.getMouseOver);
     },
     getClicked() {
-      this.actionSelectedRest(this.getThreeRes[this.getClicked]);
-      this.selectRest(this.getClicked);
+      if ( this.getClicked) {
+        this.actionSelectedRest(this.getThreeRes[this.getClicked]);
+        this.selectRest(this.getClicked);
+      }
+      
     },
   },
   mounted() {
     this.fillPositions();
     this.checkFilp();
     if (this.getThreeRes) {
-      this.actionSelectedRest = this.getThreeRes[0];
+      this.actionSelectedRest(this.getThreeRes[0]);
     }
   },
   methods: {
