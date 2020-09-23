@@ -90,9 +90,23 @@ export default {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
-			}
+            }
+            if (this.tripSchedule.title_img === null || this.tripSchedule.title_img === undefined) {
+                this.tripSchedule.title_img = ""
+            }
             console.log(this.tripSchedule)
-			this.$axios.post('guide/', this.tripSchedule, requestHeaders)
+            const dummyData = {
+                "title": "gd",
+                "area": "qd",
+                "start_date": "123",
+                "end_date": "23",
+                "price": 0,
+                "start_point": "qwe",
+                "start_time": "123",
+                "content": "ㅎㅇ",
+            }
+            console.log(dummyData)
+			this.$axios.post('guide/', dummyData, requestHeaders)
 			.then(res => {
                 console.log(res)
                 // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
