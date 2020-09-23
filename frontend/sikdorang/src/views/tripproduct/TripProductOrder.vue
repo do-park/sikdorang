@@ -3,12 +3,12 @@
         <!-- <img :src="getOrderTrip.img" alt=""> -->
         <h3>{{ getOrderTrip.title }}</h3>
         <span>{{ startDate }} ~ {{ endDate }}</span>
-        <span> 가이드: {{ getOrderTrip.userName }}</span>
+        <span> 가이드: {{ getOrderTrip.guide_user }}</span>
         <hr>
         <div>
             <h5>가격: {{ getOrderTrip.price }}원</h5>
         </div>
-        <h5>{{ getOrderTrip.start_point }} / {{ getOrderTrip.start_time }}</h5>
+        <h5>집결지 / 시간 : {{ getOrderTrip.start_point }} / {{ getOrderTrip.start_time }}</h5>
         <hr>
         <div>
             <h3>예약자 정보</h3>

@@ -5,7 +5,7 @@
         </div>
         <div>
             <h3>{{ detail.title }}</h3>
-            <span>{{ startDate }} ~ {{ endDate }} 1인 ￦{{ detail.price }}</span>
+            <span>{{ detail.start_date }} ~ {{ detail.end_date }} 1인 ￦{{ detail.price }}</span>
         </div>
         <button v-if="isLogin" class="btn btn-primary" @click="onClick()">신청하기</button>
         <div v-else>로그인시 신청이 가능합니다.</div>
@@ -25,15 +25,16 @@ export default {
         viewer: Viewer,
     },
     mounted() {
-        // this.$axios.get(`trip/detail/${this.$route.params.item_pk}`)
-        // .then(res => {
-        //     console.log(res)
-        //     this.detail = res.data
-        //     this.startDate = `${this.detail.start_date.split('-')[0]}년 ${this.item.start_date.split('-')[1]}월 ${this.item.start_date.split('-')[2]}일`
-        //     this.endDate = `${this.detail.end_date.split('-')[0]}년 ${this.item.end_date.split('-')[1]}월 ${this.item.end_date.split('-')[2]}일`
+        this.$axios.get(`guide/${this.$route.params.item_pk}`)
+        .then(res => {
+            console.log(res)
+            this.detail = res.data
+            
         
-        // })
-        // .catch(err => console.error(err))
+        })
+        .catch(err => console.error(err))
+
+        this.changeDate // 어디에 넣지
     },
     data() {
         return {
@@ -51,14 +52,17 @@ export default {
                 start_time: '09:00',
                 content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
             },
-            startDate: '',
-            endDate: '',
         }
     },
     methods: {
         ...mapActions('order', [
             "actionOrderTrip",
         ]),
+        changeDate() {
+            console.log(this.detail)
+            this.detail.start_date = `${this.detail.start_date.split('-')[0]}년 ${this.item.start_date.split('-')[1]}월 ${this.item.start_date.split('-')[2]}일`
+            this.detail.end_date = `${this.detail.end_date.split('-')[0]}년 ${this.item.end_date.split('-')[1]}월 ${this.item.end_date.split('-')[2]}일`
+        },
         onClick() {
             this.actionOrderTrip(this.detail)
             this.$router.push("/trip/order")
