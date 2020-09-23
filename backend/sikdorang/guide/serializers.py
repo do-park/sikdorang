@@ -8,9 +8,7 @@ class GuideItemSerializer(serializers.ModelSerializer):
     class Meta: 
         model = TripItemModel
         fields = '__all__'
-        
-    def create(self, data):
-        print('@@@@@@@@@@@@@@@@@@@@@@@@', self.__dict__, data.user.pk)
+    
 
 class GuideSerializer(serializers.ModelSerializer):
     
