@@ -91,12 +91,12 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-        // if (
-        //   this.tripSchedule.title_img === null ||
-        //   this.tripSchedule.title_img === undefined
-        // ) {
-        //   this.tripSchedule.title_img = "";
-        // }
+        if (
+          this.tripSchedule.title_img === null ||
+          this.tripSchedule.title_img === undefined
+        ) {
+          this.tripSchedule.title_img = "";
+        }
       console.log(this.tripSchedule);
 
       this.$axios
@@ -117,9 +117,9 @@ export default {
       console.log("!!", e)
       var file = e.target.files[0]
       if (file && file.type.match(/^image\/(png|jpeg)$/)) {
-          this.tripSchedule.title_img = window.URL.createObjectURL(file)
+          // this.tripSchedule.title_img = window.URL.createObjectURL(file)
       }
-      // this.tripSchedule.title_img = this.$refs.tI.files[0];
+      this.tripSchedule.title_img = this.$refs.tI.files[0];
     },
   },
 };
