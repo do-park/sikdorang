@@ -10,16 +10,14 @@
           class="box col-sm-4 m-0"
         >
           <span v-if="userVisited[index] === 1" class="effect">
-            <div
-              class="img-card"
-              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
-            >{{restuarant.store_name}}</div>
+            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
+              <p class="store_name">{{restuarant.store_name}}</p>
+            </div>
           </span>
           <span v-else>
-            <div
-              class="img-card"
-              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
-            >{{restuarant.store_name}}</div>
+            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
+              <p class="store_name">{{restuarant.store_name}}</p>
+            </div>
           </span>
         </div>
       </div>
@@ -69,11 +67,11 @@ export default {
     },
     getMyVisited(userId) {
       //나중에 axios로 받아오면 이거 지워주세요.
-      this.userVisited = [1,1,1,0,0,0,0,0,0]
+      this.userVisited = [1, 1, 1, 0, 0, 0, 0, 0, 0];
 
       // todo: axios로 Back에서 user의 achievedata 받아오기
       console.log(userId);
-      
+
       // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
       // .then(res => {
       //     var userVisited = res.data
@@ -81,7 +79,7 @@ export default {
       // })
       // .catch(err => {
       //     console.log(err)
-      // }) 
+      // })
     },
     goDetail(rest, index) {
       //   swal(rest.store_name, rest.description);
@@ -95,10 +93,12 @@ export default {
         cancelButtonText: "OK",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.userVisited[index] = "True";
+          this.userVisited[index] = 1;
           Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
           console.log(this.userVisited);
           // todo: axios 처리도 해야할 것 같은데 Swal 안에서 할 수 있는지 모르겠군요
+          // axios로 지금 이 식당에 방문했음으로 변경
+          // 테마가 완료되었다면, axios로 테마 완성
         }
       });
     },
@@ -108,20 +108,25 @@ export default {
 
 <style scoped>
 .box {
-  height: 400px;
-  width: auth;
-  max-width: 400px;
+  height: 100px;
+  width: 100px;
   background: blanchedalmond;
 }
 .img-card {
-  /* width : 500px; */
-  height: 400px;
-  width: auto;
-  max-width: 400px;
+  height: 100px;
+  width: 100px;
+  background-size: cover;
+}
+.store_name {
+  text-align: right;
+  text-shadow: -1px 0 blanchedalmond, 0 1px blanchedalmond, 1px 0 blanchedalmond,
+    0 -1px blanchedalmond;
+  font-size: 14px;
+  /* background-color: rgba(240, 240, 240, 0.3); */
 }
 .effect {
   position: relative;
-  display: inline-block;
+  display: block;
   overflow: hidden;
   padding: 1px;
 }
@@ -129,7 +134,7 @@ export default {
   content: "";
   position: absolute;
   z-index: 1;
-  width: 100px;
+  width: 70px;
   height: auto;
   background: red;
   border: 3px solid red;

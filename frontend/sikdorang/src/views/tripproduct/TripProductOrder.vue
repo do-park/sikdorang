@@ -21,7 +21,7 @@
         <label for="orderPhone">연락처 : </label>
         <input class="form-control" type="text" id="orderPhone" v-model="userPhone">
         <hr>
-        <Payment :amount="getOrderTrip.price" :userName="userName" :userPhone="userPhone" />
+        <Payment :orderTrip="getOrderTrip" :userName="userName" :userPhone="userPhone" />
         <button class="btn btn-secondary">취소</button>
     </div>
 </template>

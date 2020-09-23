@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.deletion import CASCADE
 
 # Create your models here.
 
@@ -14,3 +15,7 @@ class TripItemModel(models.Model):
     start_point = models.CharField(max_length=50)
     start_time = models.CharField(max_length=30)
     content = models.TextField()
+
+class GuideTour(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    trip_item = models.ForeignKey(TripItemModel, on_delete=models.CASCADE)
