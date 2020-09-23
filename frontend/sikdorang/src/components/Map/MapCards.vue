@@ -96,7 +96,7 @@ export default {
     this.fillPositions();
     this.checkFilp();
     if (this.getThreeRes) {
-      this.actionSelectedRest = this.getThreeRes[0];
+      this.actionSelectedRest(this.getThreeRes[0]);
     }
   },
   methods: {

@@ -3,9 +3,6 @@
 	<div class="map-wrap">
 		<div id="map"></div>
 	</div>
-	<div>
-		
-	</div>
   </div>
 </template>
 
@@ -31,6 +28,7 @@ export default {
 			recommendMarkers : [],
 			selectedMarker : null,
 			plans : [],
+			schedule : [],
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
@@ -47,7 +45,9 @@ export default {
 		}
 		else {
 			this.addScript();
-        }
+		}
+		console.log(this.getSchedules)
+		this.divideRecommendation()
 	},
 	computed : {
 		...mapGetters("mapEvent", [
@@ -64,6 +64,7 @@ export default {
 	},
 	watch : {
 		getFlip(){
+			this.changeThreeResByFlip()
 			if (window.kakao) {
 				this.showCandidates(this.recommends)
 			}
@@ -73,6 +74,9 @@ export default {
 		},
 		getClicked(){	     
 			this.showCandidates(this.recommends)  
+		},
+		startCoords() {
+			this.showCandidates(this.recommends)
 		},
 	},
 	methods : {
@@ -143,11 +147,10 @@ export default {
 
 			this.startWithMap()
 		},
-		startWithMap() {
-			this.setStartCoords();
+		async startWithMap() {
+			await this.setStartCoords();
 			this.fillPositions();
 			this.initCurLocation();
-			this.showCandidates(this.recommends)
 		},
 		initCurLocation() {
 			this.curLat = this.startLat
@@ -185,7 +188,7 @@ export default {
 			} 
 		},
 
-        setStartCoords() {
+        async setStartCoords() {
 			var map = this.map
 			
             if (this.$cookies.get("searchMethod")==="myLocation"){
@@ -210,7 +213,7 @@ export default {
                 var geocoder = new kakao.maps.services.Geocoder();
 
                 // 주소로 좌표를 검색합니다
-                geocoder.addressSearch(this.destination, (result, status) => {
+                await geocoder.addressSearch(this.destination, (result, status) => {
 
                     // 정상적으로 검색이 완료됐으면 
                     if (status === kakao.maps.services.Status.OK) {
@@ -297,7 +300,7 @@ export default {
 							icon : "success"
 							})
 							// store에 올리는 로직.
-							self.actionStore({ sotre: Rest,  index: self.selectingIndex })
+							self.actionStore({ store: Rest,  index: self.selectingIndex })
 							self.selectingIndex += 1
 							self.beforeLng = Rest.lng
 							self.beforeLat = Rest.lat
@@ -323,8 +326,6 @@ export default {
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
-			console.log(this.getThreeRes)
-			console.log("showCandidates - flip",this.gerFlip)
 			if (this.getFlip) {
 				this.actionThreeRes(locs.slice(0,3))
 			}
@@ -333,12 +334,13 @@ export default {
 			}
 			var positions = this.getThreeRes;
 			var bounds = new kakao.maps.LatLngBounds();
+
 			//현재 위치도 지도 범위에 포함  
 			bounds.extend(self.startCoords);
-			// console.log(bounds.length,"bounds",bounds)
 
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
+
 			//커스텀 마커 정보
 			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
 				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
@@ -394,11 +396,10 @@ export default {
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
 				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,normalImage));
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
-			
+		
+				//지도 범위에 추가
 				bounds.extend(positions[i].latlng);
-				// console.log(typeof(bounds),bounds.length,"bounds",bounds)
 				this.recommendMarkers.push(marker)
-
 				selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {
