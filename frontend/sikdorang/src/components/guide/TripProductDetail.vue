@@ -5,7 +5,7 @@
         </div>
         <div>
             <h3>{{ detail.title }}</h3>
-            <span>{{ detail.start_date.substr(0,10) }} ~ {{ detail.end_date.substr(0,10) }} 1인 ￦{{ detail.price }}</span>
+            <span>{{ startDate }} ~ {{ endDate }} 1인 ￦{{ detail.price }}</span>
         </div>
         <button v-if="isLogin" class="btn btn-primary" @click="onClick()">신청하기</button>
         <div v-else>로그인시 신청이 가능합니다.</div>
@@ -28,6 +28,10 @@ export default {
         // this.$axios.get(`trip/detail/${this.$route.params.item_pk}`)
         // .then(res => {
         //     console.log(res)
+        //     this.detail = res.data
+        //     this.startDate = `${this.detail.start_date.split('-')[0]}년 ${this.item.start_date.split('-')[1]}월 ${this.item.start_date.split('-')[2]}일`
+        //     this.endDate = `${this.detail.end_date.split('-')[0]}년 ${this.item.end_date.split('-')[1]}월 ${this.item.end_date.split('-')[2]}일`
+        
         // })
         // .catch(err => console.error(err))
     },
@@ -40,13 +44,15 @@ export default {
                 title_img: '이미지',
                 title: '가을 여행',
                 area: '구미',
-                start_date: Date(2020-9-22),
-                end_date: Date(2020-9-26),
+                start_date: '2020-9-22',
+                end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00',
                 content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
             },
+            startDate: '',
+            endDate: '',
         }
     },
     methods: {
