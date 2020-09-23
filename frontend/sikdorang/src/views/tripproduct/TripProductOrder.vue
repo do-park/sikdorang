@@ -2,12 +2,11 @@
     <div>
         <img :src="getOrderTrip.img" alt="">
         <h3>{{ getOrderTrip.title }}</h3>
-        <span>{{ getOrderTrip.startDate }} ~ {{ getOrderTrip.endDate }}</span>
+        <span>{{ getOrderTrip.start_date.substr(0,10) }} ~ {{ getOrderTrip.end_date.substr(0,10) }}</span>
         <span> 가이드: {{ getOrderTrip.userName }}</span>
         <hr>
         <div>
-            <h5>가격:</h5>
-            <h5>{{ getOrderTrip.price }}</h5>
+            <h5>가격: {{ getOrderTrip.price }}원</h5>
         </div>
         <h5>{{ getOrderTrip.start_point }} / {{ getOrderTrip.start_time }}</h5>
         <hr>
@@ -17,21 +16,25 @@
             <label for="isSame">주문자와 같음</label>
         </div>
         <label for="orderName">이름 : </label>
-        <input type="text" id="orderName" v-model="userName">
+        <input class="form-control" type="text" id="orderName" v-model="userName">
         <br>
         <label for="orderPhone">연락처 : </label>
-        <input type="text" id="orderPhone" v-model="userPhone">
+        <input class="form-control" type="text" id="orderPhone" v-model="userPhone">
         <hr>
-        <button>결제하기</button>
-        <button>취소</button>
+        <Payment :amount="getOrderTrip.price" :userName="userName" :userPhone="userPhone" />
+        <button class="btn btn-secondary">취소</button>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Payment from "@/views/pay/Payment.vue"
 
 export default {
     name: "TripProductOrder",
+    components: {
+        Payment
+    },
     computed: {
         ...mapGetters("order", [
             "getOrderTrip"

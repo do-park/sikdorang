@@ -22,6 +22,9 @@ def apply_guide(request):
 class GuideViewSet(viewsets.ModelViewSet):
     queryset = TripItemModel.objects.all()
     serializer_class = GuideItemSerializer
+    
+    def create(self, data):
+        print('@@@@@@@@@@@@@@@@@@@@@@@@', self.user, data.user.pk)
 
 # @api_view(['POST'])
 # def tour_create(request):
