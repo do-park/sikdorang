@@ -4,7 +4,7 @@ const mapEvent = {
         flip : false,
         mouseOver : null,
         clicked : null,
-        threeRes : null,
+        threeRes : [],
         selectedRest : null,
         planList : [],
     },
