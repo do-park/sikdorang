@@ -1,8 +1,8 @@
 # 식도랑
 
 - 음식점 기반 여행 기획 및 추천 플랫폼
-
 - [식도랑_와이어프레임.pdf](README_img/식도랑_와이어프레임.pdf) 
+- [식도랑_와이어프레임2.pdf](README_img/식도랑_와이어프레임2.pdf) 
 
 
 
@@ -10,9 +10,15 @@
 
 # ERD
 
-
+### 여행 일정
 
 ![ERD](README_img/ERD.PNG)
+
+
+
+### 성취(맛집 도장깨기)
+
+![ERD_achievement](README_img/ERD_achievement.PNG)
 
 
 
