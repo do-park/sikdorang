@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>명예의 전당 [ {{theme_name}} ]편</h1>
+    <h1>명예의 전당 [ {{ theme_name }} ]편</h1>
     <div class="container">
       <div class="row text-center">
         <div
@@ -9,14 +9,20 @@
           :key="restuarant.id"
           class="box col-sm-4 m-0"
         >
-          <span v-if="userVisited[index] === 1" class="effect">
-            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
-              <p class="store_name">{{restuarant.store_name}}</p>
+          <span v-if="userVisited[restuarant.id] === 1" class="effect">
+            <div
+              class="img-card"
+              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
+            >
+              <p class="store_name">{{ restuarant.store_name }}</p>
             </div>
           </span>
           <span v-else>
-            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
-              <p class="store_name">{{restuarant.store_name}}</p>
+            <div
+              class="img-card"
+              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
+            >
+              <p class="store_name">{{ restuarant.store_name }}</p>
             </div>
           </span>
         </div>
@@ -33,28 +39,20 @@ export default {
     return {
       theme_name: this.$cookies.get("theme_name"),
       theme_id: this.$cookies.get("theme_id"),
-      restaurants: [
-        { id: 111, store_name: "빵집1" },
-        { id: 222, store_name: "빵집2" },
-        { id: 333, store_name: "빵집3" },
-      ],
+      restaurants: [],
       IMG_URL: "http://j3d202.p.ssafy.io:8080",
-      userId: null,
       userVisited: [],
     };
   },
   created() {
-    // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    this.userId = 1;
     this.getRestarants();
-    this.getMyVisited(1);
+    this.getMyVisited();
   },
   methods: {
     getCardBgImage(image_url) {
       return 'background-image: url("' + image_url + '")';
     },
     getRestarants() {
-      console.log(this.theme_id);
       this.$axios
         .get(`/achievement/${this.theme_id}`)
         .then((res) => {
@@ -65,13 +63,7 @@ export default {
           console.log(err);
         });
     },
-    getMyVisited(userId) {
-      //나중에 axios로 받아오면 이거 지워주세요.
-      this.userVisited = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-
-      // todo: axios로 Back에서 user의 achievedata 받아오기
-      console.log(userId);
-
+    getMyVisited() {
       // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
       // .then(res => {
       //     var userVisited = res.data

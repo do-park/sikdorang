@@ -1,13 +1,7 @@
 <template>
   <div class="row text-center m-1">
-    <div 
-    v-for="(theme, index) in themes" 
-    :key="theme.id" 
-    class="m-1">
-      <span 
-      v-if="userAchieve[index] === 1" 
-      class="effect"
-      >
+    <div v-for="(theme, index) in themes" :key="theme.id" class="m-1">
+      <span v-if="userAchieve[index] === 1" class="effect">
         <img
           @click="goDetail(theme)"
           class="img-circle"
@@ -22,7 +16,7 @@
         />
       </span>
 
-      <div>{{theme.theme_name}}</div>
+      <div>{{ theme.theme_name }}</div>
     </div>
   </div>
 </template>
@@ -37,52 +31,44 @@ export default {
     return {
       isLogin: this.$store.state.isLogin,
       themes: [],
-      userId: null,
       userAchieve: [],
     };
   },
   computed: {
-    ...mapGetters(themes, [
-      "getThemes",
-      "getThemesClear",
-    ]),
+    ...mapGetters(themes, ["getThemes", "getThemesClear"]),
   },
-  created() {
-    // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    this.userId = 1;
-    this.getAchievedata(this.userId);
-  },
+  created() {},
   mounted() {
     this.themes = this.getThemes;
+    this.getAchievedata();
   },
   methods: {
-    ...mapActions(themes, [
-          "actionThemesClear",
-      ]),
+    ...mapActions(themes, ["actionThemesClear"]),
     goDetail(theme) {
       this.$cookies.set("theme_id", theme.id);
       this.$cookies.set("theme_name", theme.theme_name);
       this.$router.push("/themedetail");
     },
-    getAchievedata(userId) { 
-      console.log(userId);
+    getAchievedata() {
       // todo: axios로 Back에서 user의 achievedata 받아오기
       if (this.isLogin) {
-        this.userAchieve = this.getThemesClear
-        // this.$axios.get(`/themeclear/${userId}`)
-        // .then(res=>{
-        //     console.log(res.data)
-        //     this.acitonThemesClear(res.data)
-        //     this.userAchieve = this.getThemesClear
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
+        const requestHeaders = {
+          headers: {
+            Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+          },
+        };
+        this.$axios
+          .get(`achievement/theme_clear`, requestHeaders)
+          .then((res) => {
+            this.actionThemesClear(res.data);
+            this.userAchieve = res.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        this.userAchieve = [0, 0, 0, 0, 0, 0, 0, 0, 0];
       }
-      else {
-        this.userAchieve = [0,0,0,0,0,0,0,0,0]
-      }
-      console.log(this.userAchieve)
     },
   },
 };
