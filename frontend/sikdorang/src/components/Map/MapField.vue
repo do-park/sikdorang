@@ -3,9 +3,6 @@
 	<div class="map-wrap">
 		<div id="map"></div>
 	</div>
-	<div>
-		
-	</div>
   </div>
 </template>
 
@@ -14,7 +11,6 @@ import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 import axios from "axios"
 
-const mapEvent = "mapEvent"
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 
 export default {
@@ -32,6 +28,7 @@ export default {
 			recommendMarkers : [],
 			selectedMarker : null,
 			plans : [],
+			schedule : [],
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
@@ -48,10 +45,12 @@ export default {
 		}
 		else {
 			this.addScript();
-        }
+		}
+		console.log(this.getSchedules)
+		this.divideRecommendation()
 	},
 	computed : {
-		...mapGetters(mapEvent, [
+		...mapGetters("mapEvent", [
 			'getFlip',
 			'getMouseOver',
 			'getClicked',
@@ -65,6 +64,7 @@ export default {
 	},
 	watch : {
 		getFlip(){
+			this.changeThreeResByFlip()
 			if (window.kakao) {
 				this.showCandidates(this.recommends)
 			}
@@ -75,9 +75,12 @@ export default {
 		getClicked(){	     
 			this.showCandidates(this.recommends)  
 		},
+		startCoords() {
+			this.showCandidates(this.recommends)
+		},
 	},
 	methods : {
-		...mapActions(mapEvent,[
+		...mapActions("mapEvent",[
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
@@ -162,12 +165,13 @@ export default {
             this.map = map;
 			this.$emit('getKakao',window.kakao)
 
-			this.setStartCoords();
+			this.startWithMap()
+		},
+		async startWithMap() {
+			await this.setStartCoords();
 			this.fillPositions();
 			this.initCurLocation();
-			this.showCandidates(this.recommends)
 		},
-
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
@@ -192,7 +196,7 @@ export default {
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 		showMarkers(markers) {
 			for (var i = 0; i < markers.length; i++) {
-				console.log(i,markers[i])
+				console.log("!!!!!",i,markers[i])
 				markers[i].setMap(this.map);
 			}    
 		},
@@ -204,7 +208,7 @@ export default {
 			} 
 		},
 
-        setStartCoords() {
+        async setStartCoords() {
 			var map = this.map
 			
             if (this.$cookies.get("searchMethod")==="myLocation"){
@@ -229,7 +233,7 @@ export default {
                 var geocoder = new kakao.maps.services.Geocoder();
 
                 // 주소로 좌표를 검색합니다
-                geocoder.addressSearch(this.destination, (result, status) => {
+                await geocoder.addressSearch(this.destination, (result, status) => {
 
                     // 정상적으로 검색이 완료됐으면 
                     if (status === kakao.maps.services.Status.OK) {
@@ -249,10 +253,18 @@ export default {
 					else{
 						console.log("검색 결과 오류입니다.")
 					}
+					this.changeThreeResByFlip()
                 })
             }
 		},
-		
+		changeThreeResByFlip() {
+			if (this.getFlip) {
+				this.actionThreeRes(this.recommends.slice(0,3))
+			}
+			else {
+				this.actionThreeRes(this.recommends.slice(3,6))
+			}
+		},
 		fillPositions() {
 			this.recommends = [
 				{   
@@ -287,13 +299,6 @@ export default {
 					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
 				}
 			]
-			if (this.getFlip) {
-				this.actionThreeRes(this.recommends.slice(0,3))
-
-			}
-			else {
-				this.actionThreeRes(this.recommends.slice(3,6))
-			}
 		},
 		selectRest(idx) {
 			this.actionSelectedRest(this.getThreeRes[idx])
@@ -315,7 +320,7 @@ export default {
 								icon : "success"
 							})
 							// store에 올리는 로직.
-							self.actionStore({ sotre: Rest,  index: self.selectingIndex })
+							self.actionStore({ store: Rest,  index: self.selectingIndex })
 							self.selectingIndex += 1
 							self.beforeLng = Rest.lng
 							self.beforeLat = Rest.lat
@@ -341,22 +346,21 @@ export default {
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
-			
 			if (this.getFlip) {
 				this.actionThreeRes(locs.slice(0,3))
-
 			}
 			else {
 				this.actionThreeRes(locs.slice(3,6))
 			}
 			var positions = this.getThreeRes;
 			var bounds = new kakao.maps.LatLngBounds();
+
 			//현재 위치도 지도 범위에 포함  
 			bounds.extend(self.startCoords);
-			// console.log(bounds.length,"bounds",bounds)
 
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
+
 			//커스텀 마커 정보
 			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
 				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
@@ -412,11 +416,10 @@ export default {
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
 				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,normalImage));
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
-			
+		
+				//지도 범위에 추가
 				bounds.extend(positions[i].latlng);
-				// console.log(typeof(bounds),bounds.length,"bounds",bounds)
 				this.recommendMarkers.push(marker)
-
 				selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {

@@ -100,7 +100,7 @@ export default {
       console.log(this.tripSchedule);
 
       this.$axios
-        .post("guide/", this.tripSchedule, requestHeaders)
+        .post("guide/create_tour", this.tripSchedule, requestHeaders)
         .then((res) => {
           console.log(res);
           // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
