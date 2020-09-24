@@ -95,27 +95,47 @@ export default {
 			}
 		},
 		getSCRecommendation(cf) {
-			console.log('음식점 / 카페를 추천 받습니다.')
+            console.log('음식점 / 카페를 추천 받습니다.')
+            this.recommends = []
+            
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('recommendation/tag-based/', {category: cf}, requestHeaders)
+			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
 				console.log(res)
-				// this.recommends = res.data
+				this.recommends = res.data.result
 			})
 			.catch(err => console.error(err))
 		},
 		getSHRecommendation(cf) {
-			console.log('관광지 / 숙박 정보를 받습니다.', cf)
+            console.log('관광지 / 숙박 정보를 받습니다.', cf)
+            this.recommends = []
 			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
-			axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
-			.then(res => {
-				console.log(res)
-			})
-			.catch(err => console.error(err))
+            let contentTypeId = 32
+            if (cf ==="관광지") { contentTypeId = 12 }
+            axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
+            .then(res => {
+                const items = res.data.response.body.items.item
+                for (let i=0;i<items.length;i++) {
+                    this.recommends.push({
+                        "id": items[i].contentid,
+                        "name": items[i].title,
+                        "branch": "",
+                        "tel": items[i].tel,
+                        "address": items[i].addr1 + items[i].addr2,
+                        "latitude": items[i].mapy,
+                        "longtitude": items[i].mapx,
+                        "category": "관광지",
+                        "tags": "",
+                        "img": items[i].firstimage,
+                    })
+                }
+                console.log(items)
+            })
+            .catch(err => console.error(err))
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
