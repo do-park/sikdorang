@@ -1,10 +1,10 @@
 <template>
   <div>
-    {{getSchedules}}
     <div class="d-flex flex-column align-items-center">
       <div>
         <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
       </div>
+    
       <div class="d-flex justify-content-center">
         <transition enter-active-class="animated flipInY">
           <div
@@ -15,7 +15,7 @@
             data-toggle="modal"
             data-target="#exampleModal"
           >
-            A.{{getThreeRes[0].title}}
+            A.{{getThreeRes[0].name}}
             <p>@ 맛집 정보 @</p>
           </div>
         </transition>
@@ -28,7 +28,7 @@
             data-toggle="modal"
             data-target="#exampleModal"
           >
-            B.{{getThreeRes[1].title}}
+            B.{{getThreeRes[1].name}}
             <p>@ 맛집 정보 @</p>
           </div>
         </transition>
@@ -41,7 +41,7 @@
             data-toggle="modal"
             data-target="#exampleModal"
           >
-            C.{{getThreeRes[2].title}}
+            C.{{getThreeRes[2].name}}
             <p>@ 맛집 정보 @</p>
           </div>
         </transition>
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       plans: this.getPlanList,
-      recommendations: [],
+
       isActive0: false,
       isActive1: false,
       isActive2: false,
@@ -85,22 +85,22 @@ export default {
       "getScheduleIdx",
     ])
   },
+
+
   watch: {
     getMouseOver() {
       this.changeOverBox(this.getMouseOver);
     },
     getClicked() {
-      if ( this.getClicked) {
+      if ( this.getClicked !== null ) {
         this.actionSelectedRest(this.getThreeRes[this.getClicked]);
         this.selectRest(this.getClicked);
       }
+      
     },
-    getSchedules() {
-      console.log(this.getSchedules)
-    }
   },
   mounted() {
-    this.fillPositions();
+   
     this.checkFilp();
     if (this.getThreeRes) {
       this.actionSelectedRest(this.getThreeRes[0]);
@@ -117,23 +117,25 @@ export default {
       "actionStore",
       "actionScheduleIdx"
     ]),
+
     selectRest(idx) {
       var plans = this.getPlanList;
       if (idx < 3 && idx >= 0) {
         this.actionClicked(idx);
         this.actionSelectedRest(this.getThreeRes[idx]);
+        console.log(this.getSelectedRest)
         var Rest = this.getSelectedRest;
         swal({
-          title: Rest.title,
+          title: Rest.name,
           text: "이런이런 맛집입니다아",
           buttons: ["닫기", "추가"],
         }).then((res) => {
           if (res) {
-            swal(`${Rest.title}을 일정에 추가할까요?`, {
+            swal(`${Rest.name}을 일정에 추가할까요?`, {
               buttons: ["아니오", "네"],
             }).then((res) => {
               if (res) {
-                swal(`${Rest.title}을 일정에 추가했습니다`, {
+                swal(`${Rest.name}을 일정에 추가했습니다`, {
                   icon: "success",
                 });
                 plans.push(this.getSelectedRest);
@@ -144,12 +146,14 @@ export default {
                 this.actionScheduleIdx(this.getScheduleIdx+1)
                 console.log("getSchedules",this.getSchedules)
                 console.log("일정", this.getPlanList);
+
               }
             });
           }
         });
       }
     },
+
     changeOverBox(overidx) {
       this.isActive0 = false;
       this.isActive1 = false;
@@ -166,46 +170,6 @@ export default {
         this.isActive1 = false;
         this.isActive2 = false;
       }
-    },
-    fillPositions() {
-      this.recommendations = [
-        {
-          id: 1,
-          title: "승희 위치",
-          latitude: 36.1406514,
-          longitude: 128.3271104,
-        },
-        {
-          id: 2,
-          title: "인영이집",
-          latitude: 36.1035992,
-          longitude: 128.4162945,
-        },
-        {
-          id: 3,
-          title: "규성집",
-          latitude: 36.0954328,
-          longitude: 128.3963511,
-        },
-        {
-          id: 4,
-          title: "성수집근처쨈나",
-          latitude: 36.1115959,
-          longitude: 128.4303873,
-        },
-        {
-          id: 5,
-          title: "도희동아백화점",
-          latitude: 36.119735,
-          longitude: 128.3463003,
-        },
-        {
-          id: 6,
-          title: "인동스타벅스",
-          latitude: 36.1073795,
-          longitude: 128.4174558,
-        },
-      ];
     },
     checkFilp() {
       this.actionFlip(!this.getFlip);

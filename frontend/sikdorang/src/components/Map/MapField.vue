@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import swal from 'sweetalert';
+// import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 import axios from "axios"
 
@@ -28,7 +28,7 @@ export default {
 			recommendMarkers : [],
 			selectedMarker : null,
 			plans : [],
-			//추천해 줄 음식점/관광지/카페/숙박 
+			schedule : [],
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
@@ -40,6 +40,8 @@ export default {
 		}
 	},
 	mounted() {
+		console.log("Index는",this.getScheduleIdx)
+		this.initCurLocation()
 		if (window.kakao && window.kakao.map) {
 			this.initMap();
 		}
@@ -47,7 +49,9 @@ export default {
 			this.addScript();
 		}
 		console.log(this.getSchedules)
-		this.divideRecommendation()
+		// console.log(this.getScedules[this.getScheduleIdx].name)
+		this.divideRecommendation("식당")
+		
 	},
 	computed : {
 		...mapGetters("mapEvent", [
@@ -60,6 +64,7 @@ export default {
 		]),
 		...mapGetters("schedule", [
 			"getSchedules",
+			"getScheduleIdx",
 		]),
 	},
 	watch : {
@@ -72,12 +77,24 @@ export default {
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
-		getClicked(){	     
-			this.showCandidates(this.recommends)  
-		},
+		// getClicked(){	     
+		// 	this.showCandidates(this.recommends)  
+		// },
 		startCoords() {
 			this.showCandidates(this.recommends)
 		},
+		recommends() {
+			console.log(this.recommends)
+			this.showCandidates(this.recommends)
+		},
+		getScheduleIdx() {
+			console.log(this.getScheduleIdx)
+			console.log(this.getSchedules[Number(this.getScheduleIdx)].name)
+			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+			this.showCandidates(this.recommends)
+		},
+		
+
 	},
 	methods : {
 		...mapActions("mapEvent",[
@@ -98,41 +115,60 @@ export default {
 			}
 		},
 		getSCRecommendation(cf) {
-			console.log('음식점 / 카페를 추천 받습니다.')
+            console.log('음식점 / 카페를 추천 받습니다.')
+            this.recommends = []
+            
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('recommendation/tag-based/', {category: cf}, requestHeaders)
+			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
-				console.log(res)
-				// this.recommends = res.data
+				this.recommends = res.data.result
 			})
 			.catch(err => console.error(err))
 		},
 		getSHRecommendation(cf) {
-			console.log('관광지 / 숙박 정보를 받습니다.', cf)
+            console.log('관광지 / 숙박 정보를 받습니다.', cf)
+            this.recommends = []
 			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
-			axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
-			.then(res => {
-				console.log(res)
-			})
-			.catch(err => console.error(err))
+            let contentTypeId = 32
+            if (cf ==="관광지") { contentTypeId = 12 }
+            axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
+            .then(res => {
+                const items = res.data.response.body.items.item
+                for (let i=0;i<items.length;i++) {
+                    this.recommends.push({
+                        "id": items[i].contentid,
+                        "name": items[i].title,
+                        "branch": "",
+                        "tel": items[i].tel,
+                        "address": items[i].addr1 + items[i].addr2,
+                        "latitude": items[i].mapy,
+                        "longtitude": items[i].mapx,
+                        "category": "관광지",
+                        "tags": "",
+                        "img": items[i].firstimage,
+                    })
+                }
+                // console.log(items)
+            })
+            .catch(err => console.error(err))
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
 			if (this.getClicked) {
-				var moveLatLon = this.getThreeRes[this.getClicked].latlng;
+				// var moveLatLon = this.getThreeRes[this.getClicked].latlng;
 
-			// 나중에 음식점 리스트 받아오면 바뀔 코드
-			// var lat = this.getThreeRes[this.getClicked].latitude;
-			// var long = this.getThreeRes[this.getClicked].longitude;
-            // var moveLatLon = new kakao.maps.LatLng(lat,long)
+				//나중에 음식점 리스트 받아오면 바뀔 코드
+				var lat = this.getThreeRes[this.getClicked].latitude;
+				var long = this.getThreeRes[this.getClicked].longitude;
+				var moveLatLon = new kakao.maps.LatLng(lat,long)
 
-            // 지도 중심을 부드럽게 이동시킵니다
-            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-			this.map.panTo(moveLatLon);  
+				// 지도 중심을 부드럽게 이동시킵니다
+				// 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+				this.map.panTo(moveLatLon);  
 			}
 		},
 		initMap() { 
@@ -143,20 +179,19 @@ export default {
 			}; 
 			var map = new kakao.maps.Map(container, options); 
             this.map = map;
-			this.$emit('getKakao',window.kakao)
+			this.$emit('getKakao', window.kakao)
 
 			this.startWithMap()
 		},
 		async startWithMap() {
 			await this.setStartCoords();
-			this.fillPositions();
 			this.initCurLocation();
 		},
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
-			this.beforeLng = this.startLong
-			this.beforeLat = this.startLat
+			this.beforeLng = this.$cookies.get("startLongitude")
+			this.beforeLat = this.$cookies.get("startLatitude")
 		},
 		//cdn 추가
 		addScript() { 
@@ -216,11 +251,13 @@ export default {
 
                     // 정상적으로 검색이 완료됐으면 
                     if (status === kakao.maps.services.Status.OK) {
-                        this.startCoords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						this.startCoords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						this.startLat = result[0].y
+						this.startLong = result[0].x
 
                         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 						map.setCenter(this.startCoords);
-						console.log(`${this.destination} 좌표 : ${this.startCoords} `)
+						// console.log(`${this.destination} 좌표 : ${this.startCoords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
 					
 						// 마커를 추가
@@ -237,6 +274,7 @@ export default {
             }
 		},
 		changeThreeResByFlip() {
+			
 			if (this.getFlip) {
 				this.actionThreeRes(this.recommends.slice(0,3))
 			}
@@ -244,70 +282,35 @@ export default {
 				this.actionThreeRes(this.recommends.slice(3,6))
 			}
 		},
-		fillPositions() {
-			this.recommends = [
-				{   
-					id : 1,
-					title: '승희 위치', 
-					latlng: new kakao.maps.LatLng(36.1406514,128.3271104)
-				},
-				{   
-					id : 2,
-					title: '인영이집', 
-					latlng: new kakao.maps.LatLng(36.1035992,128.4162945)
-				},
-				{   
-					id : 3,
-					title: '규성집', 
-					latlng: new kakao.maps.LatLng(36.0954328,128.3963511)
-				},
-				{   
-					id : 4,
-					title: '성수집근처쨈나',
-					latlng: new kakao.maps.LatLng(36.1115959,128.4303873)
-
-				},
-				{   
-					id : 5,
-					title: '도희동아백화점',
-					latlng: new kakao.maps.LatLng(36.119735,128.3463003)
-				},
-				{   
-					id : 6,
-					title: '인동스타벅스',
-					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
-				}
-			]
-		},
-		selectRest(idx) {
-			this.actionSelectedRest(this.getThreeRes[idx])
-			const self = this
-            var Rest = this.getSelectedRest
-            swal({
-				title: Rest.title,
-				text: "이런이런 맛집입니다아",
-				buttons: ["취소","추가"],
-            })
-            .then((res) => {
-				if (res) {
-					swal(`${Rest.title}을 일정에 추가할까요?`,{
-						buttons: ["아니오","네"],
-					})
-					.then((res)=>{
-						if (res) {
-							swal(`${Rest.title}을 일정에 추가할까요?`,{
-							icon : "success"
-							})
-							// store에 올리는 로직.
-							self.actionStore({ store: Rest,  index: self.selectingIndex })
-							self.selectingIndex += 1
-							self.beforeLng = Rest.lng
-							self.beforeLat = Rest.lat
-						}
-					})
-				} 
-			});
-		},
+		// selectRest(idx) {
+		// 	this.actionSelectedRest(this.getThreeRes[idx])
+		// 	const self = this
+        //     var Rest = this.getSelectedRest
+        //     swal({
+		// 		title: Rest.name,
+		// 		text: "이런이런 맛집입니다아",
+		// 		buttons: ["취소","추가"],
+        //     })
+        //     .then((res) => {
+		// 		if (res) {
+		// 			swal(`${Rest.name}을 일정에 추가할까요?`,{
+		// 				buttons: ["아니오","네"],
+		// 			})
+		// 			.then((res)=>{
+		// 				if (res) {
+		// 					swal(`${Rest.name}을 일정에 추가할까요?`,{
+		// 						icon : "success"
+		// 					})
+		// 					// store에 올리는 로직.
+		// 					self.actionStore({ store: Rest,  index: self.selectingIndex })
+		// 					self.selectingIndex += 1
+		// 					self.beforeLng = Rest.longtitude
+		// 					self.beforeLat = Rest.latitude
+		// 				}
+		// 			})
+		// 		} 
+		// 	});
+		// },
 
 		//카드 누르면 마커 이미지 변경
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
@@ -367,17 +370,20 @@ export default {
 					normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
 					clickOrigin = new kakao.maps.Point(gapX, originY), // 스프라이트 이미지에서 마우스오버 마커로 사용할 영역의 좌상단 좌표
 					overOrigin = new kakao.maps.Point(gapX * 2, overOriginY); // 스프라이트 이미지에서 클릭 마커로 사용할 영역의 좌상단 좌표
-		
+
+				
 				// 기본 마커이미지, 오버 마커이미지, 클릭 마커이미지를 생성합니다
 				const normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 
+				var position = new kakao.maps.LatLng(positions[i].latitude, positions[i].longtitude);
+					
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
 					map: map,
-					position: positions[i].latlng,
-					title : positions[i].title, 
+					position: position,
+					title : positions[i].name, 
 					image : normalImage
 				});
 
@@ -386,7 +392,7 @@ export default {
 
 				// 마커에 표시할 인포윈도우를 생성합니다 
 				var infowindow = new kakao.maps.InfoWindow({
-					content: positions[i].title // 인포윈도우에 표시할 내용
+					content: positions[i].name // 인포윈도우에 표시할 내용
 				});
 
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
@@ -394,7 +400,7 @@ export default {
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
 		
 				//지도 범위에 추가
-				bounds.extend(positions[i].latlng);
+				bounds.extend(position);
 				this.recommendMarkers.push(marker)
 				selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
@@ -440,7 +446,7 @@ export default {
 					infowindow.close();
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
-					self.selectRest(selectedMarker.idx)
+					// self.selectRest(selectedMarker.idx)
 					
 				};
 			}
@@ -532,8 +538,7 @@ export default {
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			var bounds = new kakao.maps.LatLngBounds();   
 						
-			for (var i = 1; i < positions.length; i ++) {
-					
+			for (var i = 1; i < positions.length; i ++) {	
 				var linePath = [
 					positions[i-1].latlng,
 					positions[i].latlng 

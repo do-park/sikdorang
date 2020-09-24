@@ -65,10 +65,10 @@ export default {
                     .then((res)=>{
                         if (res) {
                             //시작 위도,경도 쿠키에 올리기
-                            // this.$cookies.set('startLatitude',this.Latitude)
-                            // this.$cookies.set('startLongitude',this.Longitude)
-                            this.$cookies.set('startLatitude',36.0954341)
-                            this.$cookies.set('startLongitude',128.4138607)
+                            this.$cookies.set('startLatitude',this.Latitude)
+                            this.$cookies.set('startLongitude',this.Longitude)
+                            // this.$cookies.set('startLatitude',36.0954341)
+                            // this.$cookies.set('startLongitude',128.4138607)
                             this.$cookies.set("searchMethod", "myLocation")
                             this.$emit("flag",false)
                         }
