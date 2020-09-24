@@ -60,8 +60,9 @@ export default {
         this.$axios
           .get(`achievement/theme_clear`, requestHeaders)
           .then((res) => {
-            this.actionThemesClear(res.data);
-            this.userAchieve = res.data;
+            console.log(res);
+            // this.actionThemesClear(res.data);
+            // this.userAchieve = res.data;
           })
           .catch((err) => {
             console.log(err);
