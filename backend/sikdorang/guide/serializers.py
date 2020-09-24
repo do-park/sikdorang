@@ -4,11 +4,17 @@ from accounts.serializers import UserSerializer
 
 from .models import *
 
+# class GuideItemSerializer(serializers.ModelSerializer):
+#     guide_user = ReadOnlyField(source='user.id')
+#     class Meta: 
+#         model = TripItemModel
+#         fields = ['guide_user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
+
 class GuideItemSerializer(serializers.ModelSerializer):
-    guide_user = ReadOnlyField(source='user.id')
+    title_img = serializers.ImageField(use_url=True)
     class Meta: 
         model = TripItemModel
-        fields = ['guide_user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
+        fields = ['title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
 
 class GuideSerializer(serializers.ModelSerializer):
     
@@ -18,6 +24,7 @@ class GuideSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time']
 
 class TourSerializer(serializers.ModelSerializer):
+    title_img = serializers.ImageField(use_url=True)
     class Meta: 
         model = TripItemModel
         fields = ['id', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price']

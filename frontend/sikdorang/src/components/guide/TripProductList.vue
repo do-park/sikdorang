@@ -6,6 +6,8 @@
         </div>
         <!-- <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading> -->
     </div>
+    <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
+  </div>
 </template>
 
 <script>
@@ -109,7 +111,6 @@ export default {
 
 <style>
 .item-wrap {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 </style>
