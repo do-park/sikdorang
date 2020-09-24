@@ -3,7 +3,7 @@
         <button @click="divideRecommendation('식당')">식당추천</button>
         <br>
         <button @click="divideRecommendation('카페')">카페추천</button>
-        <br>
+        <br>s
         <button @click="divideRecommendation('관광지')">관광지추천</button>
         <br>
         <button @click="divideRecommendation('숙박')">숙박추천</button>

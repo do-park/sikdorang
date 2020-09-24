@@ -184,16 +184,22 @@ def user_based(dataframe, for_user):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
 def get_tag_recommendation(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     data = request.data
-    lat = data.lat
-    lng = data.lng
+    category = data["category"]
+    lat = float(data["lat"])
+    lng = float(data["lng"])
+    g_lat = lat + 0.04
+    l_lat = lat - 0.04
+    g_lng = lng + 0.04
+    l_lng = lng - 0.04
+    print(g_lat, l_lat, g_lng, l_lng)
     stores = Store.objects.filter(
-        Q(latitude__lte=lat+0.04) & Q(latitude__gte=lat-0.04) & Q(longitude__lte=lng+0.04) & Q(longitude__gte=lng-0.04)
+        Q(latitude__lte=g_lat) & Q(latitude__gte=l_lat) & Q(longitude__lte=g_lng) & Q(longitude__gte=l_lng)
     )
+    print(stores)
     recommendation = {}
     # 임시 데이터
     user_tags = [{"tag": 0, "count": 2}, {"tag": 1, "count": 5}, {"tag": 6, "count": 1}]

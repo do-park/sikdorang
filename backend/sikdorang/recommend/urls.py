@@ -5,5 +5,5 @@ app_name = 'recommend'
 
 urlpatterns = [
     path('<int:user_pk>', views.recommend),
-    path('tag-based-rec/', views.get_tag_recommendation),
+    path('tag-recommend/', views.get_tag_recommendation),
 ]

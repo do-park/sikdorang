@@ -192,7 +192,7 @@ ACCOUNT_EMAIL_REQUIRED = False
 JWT_AUTH = {
    'JWT_SECRET_KEY' : SECRET_KEY,
    'JWT_ALGORITHM' : 'HS256',
-   'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
+   'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=30000),
    'JWT_ALLOW_REFRESH' : False,
    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
 }
