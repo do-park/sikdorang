@@ -1,7 +1,6 @@
 <template>
   <div id="app">
       <router-link to="/">Home</router-link>|
-      <router-link to="/map">Map 시작하기</router-link>|
       <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>|
       <router-link to="/schedule">schedule</router-link>|
       <router-link to="/recommend">recommend</router-link>|

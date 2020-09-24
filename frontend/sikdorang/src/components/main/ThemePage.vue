@@ -3,7 +3,7 @@
     <div 
     v-for="(theme, index) in themes" 
     :key="theme.id" 
-    class="m-1">
+    class="m-0 col-4">
       <span 
       v-if="userAchieve[index] === 1" 
       class="effect"

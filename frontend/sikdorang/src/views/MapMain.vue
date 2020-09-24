@@ -1,6 +1,5 @@
 <template>
   <div>
-      <h1>MAP MAIN</h1>
       <div v-if="flag">
           <SelectStart   
           @flag="flagValue"
