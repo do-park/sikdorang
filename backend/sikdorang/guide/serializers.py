@@ -17,7 +17,6 @@ class GuideItemSerializer(serializers.ModelSerializer):
         fields = ['title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
 
 class GuideSerializer(serializers.ModelSerializer):
-    
     class Meta: 
         model = TripItemModel
         depth = 1
