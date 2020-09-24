@@ -1,23 +1,33 @@
 <template>
-  <div class="main-wrap">
+  <div>
+    <hr>
     <div v-if="!isLogin">여행을 시작할까요?</div>
-    <div v-else>
+    <div v-else class="text-left">
       <h2>{{ username }}님,</h2>
       <h2>제주를 만나보세요!</h2>
     </div>
-    <div class="myChoice">
-      <button
-        class="btn btn-danger"
-        @click="clickMyChoice"
-      >내가 고르기</button>
+    <hr>
+    <div class="btn-wrap row m-0 justify-content-around">
+      <div class="w-100 col-4">
+        <button
+          class="btn btn-danger main-btn"
+          @click="clickMyChoice">
+          <div>내가</div>
+          <div>고르기</div>
+        </button>
+      </div>
+      <div class="w-100 col-4">
+        <button
+          class="btn btn-danger main-btn d-inline-block"
+          @click="clickRecommend">
+          <div>식도랑</div>
+          <div>추천코스</div>  
+        </button>
+      </div>
     </div>
-    <div class="recommend">
-      <button
-        class="btn btn-danger"
-        @click="clickRecommend"
-      >식도랑 추천 코스</button>
-    </div>
+    <hr>
     <ThemePage/>
+    <hr>
     <button 
       class="btn btn-primary" 
       @click="clickToLoginPageOrMyPage">{{ loginOrMypage }}</button>
@@ -72,9 +82,6 @@ export default {
 </script>
 
 <style scoped>
-.myChoice, .recommend {
-  margin-top: 3rem
-}
 
 .main-wrap {
   width: 400px;
@@ -82,6 +89,11 @@ export default {
   margin-left: auto;
 	margin-right: auto;
   text-align: center;
+}
+
+.main-btn {
+  width: 100px;
+  height: 100px;
 }
 
 </style>

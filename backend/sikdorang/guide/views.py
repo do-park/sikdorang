@@ -31,7 +31,7 @@ def create_tour(request):
         serializer.save(user=user)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     else:
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors)
 
 @api_view(['GET'])
 def list_tour(request):

@@ -69,6 +69,7 @@ export default {
     return {
       tripSchedule: {
         title: null,
+        title_img: null,
         area: null,
         start_date: null,
         end_date: null,

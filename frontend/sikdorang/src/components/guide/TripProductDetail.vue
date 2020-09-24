@@ -4,13 +4,13 @@
             <img :src="detail.img" alt="">
         </div>
         <div>
-            <h3>{{ detail.title }}</h3>
+            <h3>[{{ detail.area }}]{{ detail.title }}</h3>
             <span>{{ detail.start_date }} ~ {{ detail.end_date }} 1인 ￦{{ detail.price }}</span>
         </div>
         <button v-if="isLogin" class="btn btn-primary" @click="onClick()">신청하기</button>
         <div v-else>로그인시 신청이 가능합니다.</div>
         <hr>
-        <viewer v-if="detail.content !== null" :initialValue="detail.content"/>
+        <viewer v-if="detail.content" :initialValue="detail.content"/>
     </div>
 </template>
 
@@ -25,10 +25,10 @@ export default {
         viewer: Viewer,
     },
     mounted() {
-        this.$axios.get(`guide/${this.$route.params.item_pk}`)
+        this.$axios.get(`/guide/detail_tour/${this.$route.params.item_pk}`)
         .then(res => {
             console.log(res)
-            this.detail = res.data
+            this.detail = res.data[0]
             
         
         })
@@ -50,7 +50,7 @@ export default {
                 price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00',
-                content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
+                content: "",
             },
         }
     },
