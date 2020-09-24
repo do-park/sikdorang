@@ -50,7 +50,6 @@ export default {
       this.$router.push("/themedetail");
     },
     getAchievedata() {
-      // todo: axios로 Back에서 user의 achievedata 받아오기
       if (this.isLogin) {
         const requestHeaders = {
           headers: {
@@ -60,9 +59,9 @@ export default {
         this.$axios
           .get(`achievement/theme_clear`, requestHeaders)
           .then((res) => {
-            console.log(res);
-            // this.actionThemesClear(res.data);
-            // this.userAchieve = res.data;
+            this.actionThemesClear(res.data[0]);
+            this.userAchieve = res.data[0];
+            this.actionStoreClear(res.data[1]);
           })
           .catch((err) => {
             console.log(err);

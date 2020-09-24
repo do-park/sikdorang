@@ -32,11 +32,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+const themes = "themes";
 import Swal from "sweetalert2";
+
 export default {
   name: "ThemeDetail",
   data() {
     return {
+      storeClear: [],
       theme_name: this.$cookies.get("theme_name"),
       theme_id: this.$cookies.get("theme_id"),
       restaurants: [],
@@ -46,7 +50,11 @@ export default {
   },
   created() {
     this.getRestarants();
-    this.getMyVisited();
+    this.storeClear = this.getStoreClear;
+    console.log(this.storeClear);
+  },
+  computed: {
+    ...mapGetters(themes, ["getStoreClear"]),
   },
   methods: {
     getCardBgImage(image_url) {
