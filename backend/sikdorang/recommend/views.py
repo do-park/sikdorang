@@ -4,7 +4,7 @@ import shutil
 import scipy.sparse as sps
 from sklearn.metrics.pairwise import cosine_similarity
 import os
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.contrib.auth import get_user_model
@@ -184,30 +184,48 @@ def user_based(dataframe, for_user):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
 def get_tag_recommendation(request):
+    category_name = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     data = request.data
-    lat = data.lat
-    lng = data.lng
+    div = data["category"]
+    lat = float(data["lat"])
+    lng = float(data["lng"])
+    g_lat = lat + 0.02
+    l_lat = lat - 0.02
+    g_lng = lng + 0.02
+    l_lng = lng - 0.02
     stores = Store.objects.filter(
-        Q(latitude__lte=lat+0.04) & Q(latitude__gte=lat-0.04) & Q(longitude__lte=lng+0.04) & Q(longitude__gte=lng-0.04)
+        Q(latitude__lte=g_lat) & Q(latitude__gte=l_lat) & Q(longitude__lte=g_lng) & Q(longitude__gte=l_lng)
     )
     recommendation = {}
-    # 임시 데이터
-    user_tags = [{"tag": 0, "count": 2}, {"tag": 1, "count": 5}, {"tag": 6, "count": 1}]
-    user_categories = [{"category": 2, "count": 1}, {"category": 7, "count": 6}, {"category": 8, "count": 4}]
-    store_tags = [
-        {"store_id": 45, "tag": 0}, {"store_id": 45, "tag": 2}, {"store_id": 45, "tag": 5},
-        {"store_id": 525, "tag": 2}, {"store_id": 525, "tag": 6}, {"store_id": 525, "tag": 7},
-        {"store_id": 1244, "tag": 1}, {"store_id": 975, "tag": 0}, {"store_id": 975, "tag": 1},
-        {"store_id": 4, "tag": 6}
-    ]
-    store_categories = [
-        {"store_id": 45, "category": 2}, {"store_id": 525, "category": 8}, {"store_id": 1244, "category": 2},
-        {"store_id": 975, "category": 2}, {"store_id": 4, "category": 7},
-    ]
+    user_tags_queryset = user.tagmodel_set.all()
+    user_tags = []
+    for tag in user_tags_queryset:
+        user_tags.append({"tag": tag.name, "count": tag.count})
+    user_categories_queryset = user.categoryuser_set.all()
+    user_categories = []
+    for category in user_categories_queryset:
+        user_categories.append({"category": category_name[int(category.name)], "count": category.count})
+    store_tags = []
+    store_categories = []
+    for store in stores:
+        if div=="식당" and store.category.name == "카페/디저트/베이커리":
+            continue
+        elif div=="카페" and store.category.name != "카페/디저트/베이커리":
+            continue
+        if store.tags:
+            tag = ""
+            for i in range(len(store.tags)):
+                if store.tags[i] != ",":
+                    tag += store.tags[i]
+                elif (store.tags[i] == ","):
+                    store_tags.append({"store_id": store.id, "tag": int(tag)})
+                    tag = ""
+            store_tags.append({"store_id": store.id, "tag": int(tag)})
+        store_categories.append({"store_id": store.id, "category": store.category.name})
+
     for user_tag in user_tags:
         for store_tag in store_tags:
             if user_tag["tag"] == store_tag["tag"]:
@@ -216,9 +234,27 @@ def get_tag_recommendation(request):
                 recommendation[store_tag["store_id"]] += user_tag["count"]
     for user_category in user_categories:
         for store_category in store_categories:
-            if user_category["category"] == store_category["category"]:
+            if div == "식당":
+                if user_category["category"] == store_category["category"]:
+                    if store_category["store_id"] not in recommendation:
+                        recommendation[store_category["store_id"]] = 0
+            elif div=="카페":
                 if store_category["store_id"] not in recommendation:
                     recommendation[store_category["store_id"]] = 0
                 recommendation[store_category["store_id"]] += user_category["count"]
-    recommendation = sorted(recommendation.items(), key=(lambda x: x[1]), reverse=True)
-    print(recommendation)
+    recommendation = sorted(recommendation.items(), key=(lambda x: x[1]), reverse=True)[:6]
+    result = []
+    for rec in recommendation:
+        store = Store.objects.filter(id=rec[0])[0]
+        result.append({
+            "id": store.id,
+            "name": store.store_name,
+            "branch": store.branch,
+            "tel": store.tel,
+            "address": store.address,
+            "latitude": store.latitude,
+            "longtitude": store.longitude,
+            "category": store.category.name,
+            "tags": store.tags
+        })
+    return JsonResponse({"result": result})
