@@ -8,12 +8,7 @@ class GuideItemSerializer(serializers.ModelSerializer):
     guide_user = ReadOnlyField(source='user.id')
     class Meta: 
         model = TripItemModel
-<<<<<<< HEAD
-        fields = '__all__'
-    
-=======
         fields = ['guide_user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
->>>>>>> 529558e0f5ad1a93b2c15478d30eabfd1adb7172
 
 class GuideSerializer(serializers.ModelSerializer):
     
