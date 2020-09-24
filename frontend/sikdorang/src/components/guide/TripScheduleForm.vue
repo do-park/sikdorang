@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <label for="title">이름</label>
-      <input type="text" id="title" v-model="tripSchedule.title" />
+      <label for="title">제목</label>
+      <input class="form-control" type="text" id="title" v-model="tripSchedule.title" />
     </div>
     <div>
       <label for="t-i">대표이미지</label>
@@ -10,8 +10,8 @@
       <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif, .png" />
     </div>
     <div>
-      <label for="area">지역</label>
-      <input type="text" id="area" v-model="tripSchedule.area" />
+      <label for="area">여행지역</label>
+      <input class="form-control" type="text" id="area" v-model="tripSchedule.area" />
       <!-- Area 도 - 시/군/구 선택 -->
     </div>
     <div>
@@ -91,12 +91,12 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      //   if (
-      //     this.tripSchedule.title_img === null ||
-      //     this.tripSchedule.title_img === undefined
-      //   ) {
-      //     this.tripSchedule.title_img = "";
-      //   }
+        if (
+          this.tripSchedule.title_img === null ||
+          this.tripSchedule.title_img === undefined
+        ) {
+          this.tripSchedule.title_img = "";
+        }
       console.log(this.tripSchedule);
 
       this.$axios
@@ -113,12 +113,12 @@ export default {
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.tripSchedule.content = html;
     },
-    fileChange() {
-      // console.log("!!", e)
-      // var file = e.target.files[0]
-      // if (file && file.type.match(/^image\/(png|jpeg)$/)) {
-      //     this.tripSchedule.imageUrl = window.URL.createObjectURL(file)
-      // }
+    fileChange(e) {
+      console.log("!!", e)
+      var file = e.target.files[0]
+      if (file && file.type.match(/^image\/(png|jpeg)$/)) {
+          // this.tripSchedule.title_img = window.URL.createObjectURL(file)
+      }
       this.tripSchedule.title_img = this.$refs.tI.files[0];
     },
   },
