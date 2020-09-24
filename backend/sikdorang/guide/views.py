@@ -47,7 +47,7 @@ def list_tour(request):
 @api_view(['GET'])
 def detail_tour(request, tour_pk):
     tour = TripItemModel.objects.filter(pk=tour_pk)
-    serializer = TourSerializer(tour, many=True)
+    serializer = TourDetailSerializer(tour, many=True)
     return Response(serializer.data)
 
 
