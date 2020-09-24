@@ -6,8 +6,6 @@
         </div>
         <!-- <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading> -->
     </div>
-    <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
-  </div>
 </template>
 
 <script>
@@ -62,7 +60,7 @@ export default {
         }
     },
     mounted() {
-        this.$axios.get(`/guide`)
+        this.$axios.get(`/guide/list_tour`)
         .then(res => {
             this.tripProductList = res.data
         })
