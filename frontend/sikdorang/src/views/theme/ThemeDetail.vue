@@ -4,17 +4,19 @@
     <div class="container">
       <div class="row text-center">
         <div
-          @click="goDetail(restuarant, index)"
-          v-for="(restuarant, index) in restaurants"
+          @click="goDetail(restuarant)"
+          v-for="restuarant in restaurants"
           :key="restuarant.id"
           class="box col-sm-4 m-0"
         >
-          <span v-if="userVisited[restuarant.id] === 1" class="effect">
+          <span v-if="storeClear[restuarant.id] === 1" class="effect">
             <div
               class="img-card"
               :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
             >
-              <p class="store_name">{{ restuarant.store_name }}</p>
+              <p class="store_name">
+                {{ restuarant.store_name }}
+              </p>
             </div>
           </span>
           <span v-else>
@@ -32,7 +34,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 const themes = "themes";
 import Swal from "sweetalert2";
 
@@ -45,7 +47,6 @@ export default {
       theme_id: this.$cookies.get("theme_id"),
       restaurants: [],
       IMG_URL: "http://j3d202.p.ssafy.io:8080",
-      userVisited: [],
     };
   },
   created() {
@@ -56,6 +57,7 @@ export default {
     ...mapGetters(themes, ["getStoreClear"]),
   },
   methods: {
+    ...mapActions(themes, ["actionStoreClear"]),
     getCardBgImage(image_url) {
       return 'background-image: url("' + image_url + '")';
     },
@@ -70,8 +72,7 @@ export default {
           console.log(err);
         });
     },
-    goDetail(rest, index) {
-      //   swal(rest.store_name, rest.description);
+    goDetail(rest) {
       Swal.fire({
         title: rest.store_name,
         text: rest.description,
@@ -82,12 +83,21 @@ export default {
         cancelButtonText: "OK",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.userVisited[index] = 1;
+          const requestHeaders = {
+            headers: {
+              Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+            },
+          };
+          this.$axios
+            .post(`achievement/visit_create/${rest.id}`, null, requestHeaders)
+            .then((res) => {
+              this.storeClear[res.id] = 1;
+              this.actionStoreClear(this.storeClear);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
-          console.log(this.userVisited);
-          // todo: axios 처리도 해야할 것 같은데 Swal 안에서 할 수 있는지 모르겠군요
-          // axios로 지금 이 식당에 방문했음으로 변경
-          // 테마가 완료되었다면, axios로 테마 완성
         }
       });
     },

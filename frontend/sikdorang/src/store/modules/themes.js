@@ -15,7 +15,7 @@ const themes = {
       { id: 11, theme_name: "휴게소" },
     ],
     themeClear: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    storeClear: [],
+    storeClear: [0] * 100,
   },
   getters: {
     getThemes: (state) => {
