@@ -15,7 +15,7 @@ import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
-import RECTEST from "../views/RECTEST.vue"
+import RECTEST from "../views/rectest.vue"
 
 Vue.use(VueRouter)
 
