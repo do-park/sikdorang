@@ -51,7 +51,6 @@ export default {
   created() {
     this.getRestarants();
     this.storeClear = this.getStoreClear;
-    console.log(this.storeClear);
   },
   computed: {
     ...mapGetters(themes, ["getStoreClear"]),
@@ -70,16 +69,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    },
-    getMyVisited() {
-      // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
-      // .then(res => {
-      //     var userVisited = res.data
-      //     this.userVisited = userVisited
-      // })
-      // .catch(err => {
-      //     console.log(err)
-      // })
     },
     goDetail(rest, index) {
       //   swal(rest.store_name, rest.description);

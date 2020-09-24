@@ -43,7 +43,7 @@ export default {
     this.getAchievedata();
   },
   methods: {
-    ...mapActions(themes, ["actionThemesClear"]),
+    ...mapActions(themes, ["actionThemesClear", "actionStoreClear"]),
     goDetail(theme) {
       this.$cookies.set("theme_id", theme.id);
       this.$cookies.set("theme_name", theme.theme_name);
