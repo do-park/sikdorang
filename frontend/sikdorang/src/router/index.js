@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Signup from '../views/Signup.vue'
-import MapMain from '../views/MapMain.vue'
-import IdealTagCupView from '../views/idealtagcup/IdealTagCupView.vue'
-import MyPageView from '../views/mypage/MyPageView.vue'
+import Vue from "vue"
+import VueRouter from "vue-router"
+import Home from "../views/Home.vue"
+import Signup from "../views/Signup.vue"
+import MapMain from "../views/MapMain.vue"
+import IdealTagCupView from "../views/idealtagcup/IdealTagCupView.vue"
+import MyPageView from "../views/mypage/MyPageView.vue"
 import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
 import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
@@ -15,7 +15,7 @@ import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
 import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
-import RECTEST from "../views/RECTEST.vue"
+import RECTEST from "../views/rectest.vue"
 
 Vue.use(VueRouter)
 
@@ -46,8 +46,8 @@ const routes = [
     component: IdealTagCupView,
   },
   {
-    path: '/mypage',
-    name: 'MyPageView',
+    path: "/mypage",
+    name: "MyPageView",
     component: MyPageView,
   },
   {
@@ -78,7 +78,7 @@ const routes = [
   {
     path: "/themedetail",
     name: "ThemeDetail",
-    component:ThemeDetail,
+    component: ThemeDetail,
   },
   {
     path: "/trip/createchedule",
@@ -99,7 +99,7 @@ const routes = [
     path: "/trip/order",
     name: "TripProductOrder",
     component: TripProductOrder,
-  }
+  },
 ]
 
 const router = new VueRouter({
