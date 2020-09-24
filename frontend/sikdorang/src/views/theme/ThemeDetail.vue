@@ -55,7 +55,7 @@ export default {
     },
     getRestarants() {
       console.log(this.theme_id);
-      this.$axios
+      this.$axios  
         .get(`/achievement/${this.theme_id}`)
         .then((res) => {
           var restaurants = res.data;
