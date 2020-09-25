@@ -1,10 +1,13 @@
 <template>
 	<div>
 		<div>
-			<img :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
+			<img class="img" :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
+		</div>
+		<div class="vs-wrap">
+			<img class="vs" v-if="!isDone" src="@/assets/vs.png">
 		</div>
 		<div>
-			<img :src="imgs[tags[rightIndex]]" alt="right Image" @click="onClick('right')" v-if="!isDone">
+			<img class="img" :src="imgs[tags[rightIndex]]" alt="right Image" @click="onClick('right')" v-if="!isDone">
 		</div>
 		<div v-if="isDone" @click="done">
 			<h2>1위</h2>
@@ -97,8 +100,19 @@ export default {
 </script>
 
 <style scoped>
-img {
-	width: 100vh;
-	height: 50vh;
+.img {
+	width: 400px;
+	cursor: pointer;
+}
+.vs-wrap {
+	position: relative;
+	widows: 400px;
+}
+.vs {
+	width: 100px;
+	left: 50%;
+	transform:translateX(-50%);
+	bottom: -40px;
+	position: absolute;
 }
 </style>
