@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
@@ -11,9 +11,9 @@ from rest_framework import viewsets
 
 # Create your views here.
 @api_view(['GET'])
-def trip_list(request, user_pk):
+def trip_list(request):
     User = get_user_model()
-    user = get_object_or_404(User, pk=user_pk)
+    user = get_object_or_404(User, pk=request.user.pk)
     trips = user.trip_set.all()
     serializer = TripListSerializer(trips, many=True)
     return Response(serializer.data)
@@ -48,7 +48,6 @@ def idealcategory(request):
     
 
 # @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
 # def create_trip(request):
 #     serializer = TripSerializer(data=request.data)
 #     if serializer.is_valid(raise_exception=True):

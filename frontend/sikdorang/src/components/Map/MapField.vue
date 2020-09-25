@@ -3,17 +3,14 @@
 	<div class="map-wrap">
 		<div id="map"></div>
 	</div>
-	<div>
-		
-	</div>
   </div>
 </template>
 
 <script>
 import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
+import axios from "axios"
 
-const mapEvent = "mapEvent"
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 
 export default {
@@ -31,9 +28,15 @@ export default {
 			recommendMarkers : [],
 			selectedMarker : null,
 			plans : [],
+			schedule : [],
 			recommends : [],
 			flip : false,
 			clickedOverlay : null,
+			// store에 저장하기 위해 올라가는 Index
+			selectingIndex: 0,
+			// 이전에 선택한 지점의 x , y 좌표
+			beforeLng: null,
+			beforeLat: null,
 		}
 	},
 	mounted() {
@@ -42,21 +45,26 @@ export default {
 		}
 		else {
 			this.addScript();
-        }
+		}
+		console.log(this.getSchedules)
+		this.divideRecommendation()
 	},
 	computed : {
-		...mapGetters(mapEvent, [
+		...mapGetters("mapEvent", [
 			'getFlip',
 			'getMouseOver',
 			'getClicked',
 			'getThreeRes',
 			'getSelectedRest',
 			'getPlanList'
-		])
-
+		]),
+		...mapGetters("schedule", [
+			"getSchedules",
+		]),
 	},
 	watch : {
 		getFlip(){
+			this.changeThreeResByFlip()
 			if (window.kakao) {
 				this.showCandidates(this.recommends)
 			}
@@ -64,44 +72,73 @@ export default {
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
-		getClicked(){	
-                    
+		getClicked(){	     
 			this.showCandidates(this.recommends)  
+		},
+		startCoords() {
+			this.showCandidates(this.recommends)
 		},
 	},
 	methods : {
-		...mapActions(mapEvent,[
+		...mapActions("mapEvent",[
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
 			'actionSelectedRest',
 			'actionPlanList',
 		]),
+		...mapActions("schedule", [
+			"actionStore"
+		]),
 		divideRecommendation(cf) {
 			if (cf === "식당" | cf === "카페"){
-				this.getSCRecommendation()
+				this.getSCRecommendation(cf)
 			} else {
-				this.getSHRecommendation()
+				this.getSHRecommendation(cf)
 			}
 		},
-		getSCRecommendation() {
-			console.log('음식점 / 카페를 추천 받습니다.')
-
+		getSCRecommendation(cf) {
+            console.log('음식점 / 카페를 추천 받습니다.')
+            this.recommends = []
+            
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('recommendation/tag-based/', requestHeaders)
+			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
 				console.log(res)
-				this.recommends = res.data
+				this.recommends = res.data.result
 			})
 			.catch(err => console.error(err))
 		},
-		getSHRecommendation() {
-			console.log('관광지 / 숙박 정보를 받습니다.')
-			// const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+		getSHRecommendation(cf) {
+            console.log('관광지 / 숙박 정보를 받습니다.', cf)
+            this.recommends = []
+			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+            let contentTypeId = 32
+            if (cf ==="관광지") { contentTypeId = 12 }
+            axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
+            .then(res => {
+                const items = res.data.response.body.items.item
+                for (let i=0;i<items.length;i++) {
+                    this.recommends.push({
+                        "id": items[i].contentid,
+                        "name": items[i].title,
+                        "branch": "",
+                        "tel": items[i].tel,
+                        "address": items[i].addr1 + items[i].addr2,
+                        "latitude": items[i].mapy,
+                        "longtitude": items[i].mapx,
+                        "category": "관광지",
+                        "tags": "",
+                        "img": items[i].firstimage,
+                    })
+                }
+                console.log(items)
+            })
+            .catch(err => console.error(err))
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
@@ -128,15 +165,18 @@ export default {
             this.map = map;
 			this.$emit('getKakao',window.kakao)
 
-			this.setStartCoords();
+			this.startWithMap()
+		},
+		async startWithMap() {
+			await this.setStartCoords();
 			this.fillPositions();
 			this.initCurLocation();
-			this.showCandidates(this.recommends)
 		},
-
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
+			this.beforeLng = this.startLong
+			this.beforeLat = this.startLat
 		},
 		//cdn 추가
 		addScript() { 
@@ -156,7 +196,7 @@ export default {
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 		showMarkers(markers) {
 			for (var i = 0; i < markers.length; i++) {
-				console.log(i,markers[i])
+				console.log("!!!!!",i,markers[i])
 				markers[i].setMap(this.map);
 			}    
 		},
@@ -168,7 +208,7 @@ export default {
 			} 
 		},
 
-        setStartCoords() {
+        async setStartCoords() {
 			var map = this.map
 			
             if (this.$cookies.get("searchMethod")==="myLocation"){
@@ -193,7 +233,7 @@ export default {
                 var geocoder = new kakao.maps.services.Geocoder();
 
                 // 주소로 좌표를 검색합니다
-                geocoder.addressSearch(this.destination, (result, status) => {
+                await geocoder.addressSearch(this.destination, (result, status) => {
 
                     // 정상적으로 검색이 완료됐으면 
                     if (status === kakao.maps.services.Status.OK) {
@@ -213,10 +253,18 @@ export default {
 					else{
 						console.log("검색 결과 오류입니다.")
 					}
+					this.changeThreeResByFlip()
                 })
             }
 		},
-		
+		changeThreeResByFlip() {
+			if (this.getFlip) {
+				this.actionThreeRes(this.recommends.slice(0,3))
+			}
+			else {
+				this.actionThreeRes(this.recommends.slice(3,6))
+			}
+		},
 		fillPositions() {
 			this.recommends = [
 				{   
@@ -251,38 +299,35 @@ export default {
 					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
 				}
 			]
-			if (this.getFlip) {
-				this.actionThreeRes(this.recommends.slice(0,3))
-
-			}
-			else {
-				this.actionThreeRes(this.recommends.slice(3,6))
-			}
 		},
 		selectRest(idx) {
-            this.actionSelectedRest(this.getThreeRes[idx])
+			this.actionSelectedRest(this.getThreeRes[idx])
+			const self = this
             var Rest = this.getSelectedRest
             swal({
-            title: Rest.title,
-            text: "이런이런 맛집입니다아",
-            buttons: ["취소","추가"],
+				title: Rest.title,
+				text: "이런이런 맛집입니다아",
+				buttons: ["취소","추가"],
             })
             .then((res) => {
-            if (res) {
-                swal(`${Rest.title}을 일정에 추가할까요?`,{
-                    buttons: ["아니오","네"],
-                })
-                .then((res)=>{
-                    if (res) {
-                        swal(`${Rest.title}을 일정에 추가할까요?`,{
-						icon : "success"
-						// store에 올리는 로직.
-                        })
-                        
-                    }
-                })
-            } 
-		});
+				if (res) {
+					swal(`${Rest.title}을 일정에 추가할까요?`,{
+						buttons: ["아니오","네"],
+					})
+					.then((res)=>{
+						if (res) {
+							swal(`${Rest.title}을 일정에 추가할까요?`,{
+								icon : "success"
+							})
+							// store에 올리는 로직.
+							self.actionStore({ store: Rest,  index: self.selectingIndex })
+							self.selectingIndex += 1
+							self.beforeLng = Rest.lng
+							self.beforeLat = Rest.lat
+						}
+					})
+				} 
+			});
 		},
 
 		//카드 누르면 마커 이미지 변경
@@ -301,22 +346,21 @@ export default {
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
-			
 			if (this.getFlip) {
 				this.actionThreeRes(locs.slice(0,3))
-
 			}
 			else {
 				this.actionThreeRes(locs.slice(3,6))
 			}
 			var positions = this.getThreeRes;
 			var bounds = new kakao.maps.LatLngBounds();
+
 			//현재 위치도 지도 범위에 포함  
 			bounds.extend(self.startCoords);
-			// console.log(bounds.length,"bounds",bounds)
 
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
+
 			//커스텀 마커 정보
 			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
 				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
@@ -372,11 +416,10 @@ export default {
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
 				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,normalImage));
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
-			
+		
+				//지도 범위에 추가
 				bounds.extend(positions[i].latlng);
-				// console.log(typeof(bounds),bounds.length,"bounds",bounds)
 				this.recommendMarkers.push(marker)
-
 				selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
 			function makeOverListener(map, marker, infowindow, overImage) {

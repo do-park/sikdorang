@@ -5,7 +5,7 @@
     <draggable v-model="clonedItems" :options="clonedItemOptions" style="border: 1px solid blue;">
       <v-btn
         v-for="(item, index) in clonedItems"
-        :key="uuid(item)"
+        :key="index"
         @click="deleteItem(index)"
         class="clickable"
       >{{item.name}}</v-btn>
@@ -14,17 +14,17 @@
     <div style="height:50px;"></div>
 
     <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
-      <v-btn v-for="item in availableItems" :key="uuid(item)">{{item.name}}</v-btn>
+      <v-btn v-for="(item, index) in availableItems" :key="index">{{item.name}}</v-btn>
     </draggable>
 
     <div style="height:50px;"></div>
 
     <v-btn @click="createTrip()">CREATE</v-btn>
     <br />
-    <span v-for="(item, i) in saved" :key="item">
-      <v-btn @click="readTrip(item)">READ {{i}}</v-btn>
-      <v-btn @click="updateTrip(item)">UPDATE {{i}}</v-btn>
-      <v-btn @click="deleteTrip(item)">DELETE {{i}}</v-btn>
+    <span v-for="(item, index) in saved" :key="index">
+      <v-btn @click="readTrip(item)">READ {{index}}</v-btn>
+      <v-btn @click="updateTrip(item)">UPDATE {{index}}</v-btn>
+      <v-btn @click="deleteTrip(item)">DELETE {{index}}</v-btn>
       <br />
     </span>
   </div>
@@ -33,6 +33,7 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
+import { mapActions } from "vuex"
 
 export default {
   name: "Schedule",
@@ -50,18 +51,22 @@ export default {
         {
           name: "식당",
           id: "R",
+          userChoice: null,
         },
         {
           name: "카페",
           id: "C",
+          userChoice: null,
         },
         {
           name: "관광지",
           id: "S",
+          userChoice: null,
         },
         {
           name: "숙박",
           id: "A",
+          userChoice: null,
         },
       ],
       clonedItemOptions: {
@@ -83,6 +88,9 @@ export default {
     this.getTripdata();
   },
   methods: {
+    ...mapActions("schedule", [
+      "actionSchedule"
+    ]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -126,6 +134,7 @@ export default {
         return false;
       }
       let plan = "";
+      this.actionSchedule(this.clonedItems)
       for (let i = 0; i < this.clonedItems.length; i++) {
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }

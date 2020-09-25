@@ -1,6 +1,5 @@
 <template>
   <div>
-      <h1>MAP MAIN</h1>
       <div v-if="flag">
           <SelectStart   
           @flag="flagValue"
@@ -11,7 +10,6 @@
           <MapTheme/>
           <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
           <MapCards :kakao="kakao" :selected="selected"/>
-      
       </div>    
        
   </div>

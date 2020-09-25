@@ -3,6 +3,7 @@
 - 음식점 기반 여행 기획 및 추천 플랫폼
  
 - [식도랑_와이어프레임.pdf](README_img/식도랑_와이어프레임.pdf) 
+- [식도랑_와이어프레임2.pdf](README_img/식도랑_와이어프레임2.pdf) 
 
 
 
@@ -10,9 +11,15 @@
 
 # ERD
 
-
+### 여행 일정
 
 ![ERD](README_img/ERD.PNG)
+
+
+
+### 성취(맛집 도장깨기)
+
+![ERD_achievement](README_img/ERD_Achievement.PNG)
 
 
 
@@ -147,5 +154,18 @@ FrontPage ->> FrontPage : 스크롤 혹은 버튼클릭 마이페이지 진입
 FrontPage ->> DjangoServer : 유저 정보
 DjangoServer ->> DB : 유저 정보를 참조하는 일정 요청
 DB -->> FrontPage : 해당 정보 없음
+```
+
+## 8. 업적 페이지 (음식점 테마 별로 업적 갱신)
+
+메인 페이지에서 테마별 아이콘을 누르면  해당 테마 음식점 (최대 9개)을 소개해준다. 방문한 가게는 clear로 도장깨기가 되고, 그 테마의 모든 음식점을 다 방문하면 메인페이지에서 해당 테마 아이콘에 clear가 찍힌다. 또한 마이페이지에 배찌로 업적이 등록된다.
+
+```mermaid
+sequenceDiagram
+FrontPage ->> DjangoServer : 유저 정보/테마 id
+DjangoServer ->> DB : 해당 유저 참조하는 테마/모든 테마 음식점 정보 요청
+DB -->> DjangoServer : 해당 유저 참조하는 테마/테마 음식점 정보
+DjangoServer -->> FrontPage : 테마 clear/모든 테마 음식점 방문 여부
+FrontPage ->> FrontPage : 버튼클릭 테마 상세페이지 진입
 ```
 
