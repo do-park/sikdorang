@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-xl navbar-dark bg-primary">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="/">Navbar</a>
       <button
         class="navbar-toggler"
         type="button"
