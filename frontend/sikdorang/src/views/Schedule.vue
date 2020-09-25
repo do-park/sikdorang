@@ -2,19 +2,30 @@
   <div>
     <h1>오늘의 일정</h1>
     <p>일정을 삭제하려면 클릭하세요.</p>
-    <draggable v-model="clonedItems" :options="clonedItemOptions" style="border: 1px solid blue;">
+    <draggable
+      v-model="clonedItems"
+      :options="clonedItemOptions"
+      style="border: 1px solid blue;"
+    >
       <v-btn
         v-for="(item, index) in clonedItems"
         :key="index"
         @click="deleteItem(index)"
         class="clickable"
-      >{{item.name}}</v-btn>
+        >{{ item.name }}</v-btn
+      >
     </draggable>
 
     <div style="height:50px;"></div>
 
-    <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
-      <v-btn v-for="(item, index) in availableItems" :key="index">{{item.name}}</v-btn>
+    <draggable
+      v-model="availableItems"
+      :options="availableItemOptions"
+      :clone="handleClone"
+    >
+      <v-btn v-for="(item, index) in availableItems" :key="index">{{
+        item.name
+      }}</v-btn>
     </draggable>
 
     <div style="height:50px;"></div>
@@ -22,9 +33,9 @@
     <v-btn @click="createTrip()">CREATE</v-btn>
     <br />
     <span v-for="(item, index) in saved" :key="index">
-      <v-btn @click="readTrip(item)">READ {{index}}</v-btn>
-      <v-btn @click="updateTrip(item)">UPDATE {{index}}</v-btn>
-      <v-btn @click="deleteTrip(item)">DELETE {{index}}</v-btn>
+      <v-btn @click="readTrip(item)">READ {{ index }}</v-btn>
+      <v-btn @click="updateTrip(item)">UPDATE {{ index }}</v-btn>
+      <v-btn @click="deleteTrip(item)">DELETE {{ index }}</v-btn>
       <br />
     </span>
   </div>
@@ -33,7 +44,7 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
-import { mapActions } from "vuex"
+import { mapActions } from "vuex";
 
 export default {
   name: "Schedule",
@@ -88,9 +99,7 @@ export default {
     this.getTripdata();
   },
   methods: {
-    ...mapActions("schedule", [
-      "actionSchedule"
-    ]),
+    ...mapActions("schedule", ["actionSchedule"]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -102,7 +111,9 @@ export default {
     },
     uuid(e) {
       if (e.uid) return e.uid;
-      const key = Math.random().toString(10).slice(2);
+      const key = Math.random()
+        .toString(10)
+        .slice(2);
       this.$set(e, "uid", key);
       return e.uid;
     },
@@ -134,8 +145,7 @@ export default {
         return false;
       }
       let plan = "";
-      const schedule = [];
-      console.log("일정을 추가했습니다.",this.clonedItems)
+      this.actionSchedule(this.clonedItems);
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i]
         item["idx"] = i;
@@ -179,6 +189,7 @@ export default {
                   icon: "success",
                   title: "일정을 등록했습니다.",
                 });
+                this.$router.push({ name: "MapMain" });
               }
             })
             .catch((error) => {
@@ -288,5 +299,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
