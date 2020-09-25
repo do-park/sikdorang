@@ -93,7 +93,7 @@ export default {
           this.$axios
             .post(`achievement/visit_create/${rest.id}`, null, requestHeaders)
             .then(() => {
-              this.storeClear[rest.id] = 1;
+              this.$set(this.storeClear, rest.id, 1);
               this.actionStoreClear(this.storeClear);
               this.updateClear(rest.id);
             })
@@ -145,7 +145,7 @@ export default {
         this.$axios
           .post(`achievement/theme_create/${theme}`, null, requestHeaders)
           .then(() => {
-            this.themeClear[theme] = 1;
+            this.$set(this.themeClear, theme, 1);
             this.actionThemesClear(this.themeClear);
           })
           .catch((err) => {
