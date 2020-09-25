@@ -1,13 +1,7 @@
 <template>
   <div class="row text-center m-1">
-    <div 
-    v-for="(theme, index) in themes" 
-    :key="theme.id" 
-    class="m-0 col-4">
-      <span 
-      v-if="userAchieve[index] === 1" 
-      class="effect"
-      >
+    <div v-for="theme in themes" :key="theme.id" class="m-0 col-4">
+      <span v-if="userAchieve[theme.db_id] === 1" class="effect">
         <img
           @click="goDetail(theme)"
           class="img-circle"
@@ -26,6 +20,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { mapGetters, mapActions } from "vuex";

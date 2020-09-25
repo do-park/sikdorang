@@ -42,6 +42,7 @@ export default {
   name: "ThemeDetail",
   data() {
     return {
+      themeClear: [],
       storeClear: [],
       theme_name: this.$cookies.get("theme_name"),
       theme_id: this.$cookies.get("theme_id"),
@@ -51,13 +52,14 @@ export default {
   },
   created() {
     this.getRestarants();
+    this.themeClear = this.getThemesClear;
     this.storeClear = this.getStoreClear;
   },
   computed: {
-    ...mapGetters(themes, ["getStoreClear"]),
+    ...mapGetters(themes, ["getThemesClear", "getStoreClear"]),
   },
   methods: {
-    ...mapActions(themes, ["actionStoreClear"]),
+    ...mapActions(themes, ["actionThemesClear", "actionStoreClear"]),
     getCardBgImage(image_url) {
       return 'background-image: url("' + image_url + '")';
     },
@@ -90,9 +92,10 @@ export default {
           };
           this.$axios
             .post(`achievement/visit_create/${rest.id}`, null, requestHeaders)
-            .then((res) => {
-              this.storeClear[res.id] = 1;
+            .then(() => {
+              this.storeClear[rest.id] = 1;
               this.actionStoreClear(this.storeClear);
+              this.updateClear(rest.id);
             })
             .catch((err) => {
               console.log(err);
@@ -100,6 +103,55 @@ export default {
           Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
         }
       });
+    },
+    updateClear(restId) {
+      const theme = parseInt(restId / 10);
+      let clear = true;
+      if (theme <= 7) {
+        for (let i = 1; i < 10; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      } else if ((theme === 8) | (theme === 11)) {
+        for (let i = 1; i < 7; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      } else if (theme === 9) {
+        for (let i = 1; i < 9; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      } else {
+        for (let i = 1; i < 8; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      }
+      if (clear === true) {
+        const requestHeaders = {
+          headers: {
+            Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+          },
+        };
+        this.$axios
+          .post(`achievement/theme_create/${theme}`, null, requestHeaders)
+          .then(() => {
+            this.themeClear[theme] = 1;
+            this.actionThemesClear(this.themeClear);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
 };
