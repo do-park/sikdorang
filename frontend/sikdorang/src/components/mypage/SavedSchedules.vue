@@ -31,8 +31,42 @@ export default {
         }
     },
     methods : {
-       
-       //오늘의 스케줄과 모든 스케줄을 받아온다.
+       saveSchedule() {
+           const scheduleData = []
+           if (this.getSchedules.length > 0) {
+               this.getSchedules.forEach(schedule => {
+                   scheduleData.push({
+                       "schedule_idx" : schedule.idx,
+                       "category_id" : schedule.id,
+                       "category_name" : schedule.name,
+                       "store_id" : schedule.userChoice.id,
+                       "store_name" : schedule.userChoice.name,
+                       "address" : schedule.userChoice.address,
+                       "latitude" : schedule.userChoice.latitude,
+                       "longtitude" : schedule.userChoice.longtitude,
+                       "store_category" : schedule.userChoice.category,
+                       "store_tags" : schedule.userChoice.tags
+                   })
+               });
+           }
+
+           console.log(scheduleData)
+           const requestHeaders = {
+                headers: {
+                    Authorization: `JWT ${this.$cookies.get('auth-token')}`
+                },
+                scheduleData : scheduleData
+            }
+           this.$axios.post(`/saveschedule/`, requestHeaders )
+            .then((res) => {
+              console.log("일정을 저장했습니다.",res)
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+       },
+
+       //오늘의 스케줄과 모든 스케줄을 받아온다
         getTodayAndAllSchedules() {
             const requestHeaders = {
                 headers: {
@@ -49,34 +83,34 @@ export default {
             })
         },
 
-        getTodaySchedules() {
-            const requestHeaders = {
-                headers: {
-                    Authorization: `JWT ${this.$cookies.get('auth-token')}`
-                }
-            }
-            this.$axios.get('schedules',requestHeaders)
-            .then(res=>{
-                this.todaySchedule = res.data
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        },
-        getAllSchedules() {
-            const requestHeaders = {
-                headers: {
-                    Authorization: `JWT ${this.$cookies.get('auth-token')}`
-                }
-            }
-            this.$axios.get('schedules',requestHeaders)
-            .then(res=>{
-                this.allSchedule = res.data
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        },
+        // getTodaySchedules() {
+        //     const requestHeaders = {
+        //         headers: {
+        //             Authorization: `JWT ${this.$cookies.get('auth-token')}`
+        //         }
+        //     }
+        //     this.$axios.get('schedules',requestHeaders)
+        //     .then(res=>{
+        //         this.todaySchedule = res.data
+        //     })
+        //     .catch(err=>{
+        //         console.log(err)
+        //     })
+        // },
+        // getAllSchedules() {
+        //     const requestHeaders = {
+        //         headers: {
+        //             Authorization: `JWT ${this.$cookies.get('auth-token')}`
+        //         }
+        //     }
+        //     this.$axios.get('schedules',requestHeaders)
+        //     .then(res=>{
+        //         this.allSchedule = res.data
+        //     })
+        //     .catch(err=>{
+        //         console.log(err)
+        //     })
+        // },
      
     },
 }
