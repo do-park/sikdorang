@@ -40,7 +40,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log("Index는",this.getScheduleIdx)
 		this.initCurLocation()
 		if (window.kakao && window.kakao.map) {
 			this.initMap();
@@ -48,9 +47,6 @@ export default {
 		else {
 			this.addScript();
 		}
-		console.log(this.getSchedules)
-		// this.divideRecommendation(this.getScedules[this.getScheduleIdx].name)
-		// this.divideRecommendation("식당")
 		
 	},
 	computed : {
@@ -82,13 +78,12 @@ export default {
 		},
 		recommends() {
 			if (window.kakao && this.recommends) {
-				console.log("recommends입니다",this.recommends)
 				this.showCandidates(this.recommends)
 			}
 		},
 		getScheduleIdx() {
-			console.log(this.getScheduleIdx)
-			console.log(this.getSchedules[Number(this.getScheduleIdx)].name)
+			// console.log(this.getScheduleIdx)
+			// console.log(this.getSchedules[Number(this.getScheduleIdx)].name)
 			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 			this.showCandidates(this.recommends)
 		},
@@ -114,7 +109,7 @@ export default {
 			}
 		},
 		getSCRecommendation(cf) {
-            console.log(cf,'음식점 / 카페를 추천 받습니다.')
+            console.log('음식점 / 카페를 추천 받습니다.',cf)
             this.recommends = []
             
 			const requestHeaders = {
@@ -124,8 +119,9 @@ export default {
 			}
 			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
+				
 				this.recommends = res.data.result
-				console.log("추천 성공",this.recommends)
+			
 			})
 			.catch(err => console.error("알고리즘 추천 실패야",err))
 		},
@@ -159,11 +155,9 @@ export default {
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
 			if (this.getClicked) {
-				// var moveLatLon = this.getThreeRes[this.getClicked].latlng;
-
-				//나중에 음식점 리스트 받아오면 바뀔 코드
+			
 				var lat = this.getThreeRes[this.getClicked].latitude;
-				var long = this.getThreeRes[this.getClicked].longitude;
+				var long = this.getThreeRes[this.getClicked].longtitude;
 				var moveLatLon = new kakao.maps.LatLng(lat,long)
 
 				// 지도 중심을 부드럽게 이동시킵니다
@@ -186,9 +180,7 @@ export default {
 		async startWithMap() {
 			await this.setStartCoords();
 			this.initCurLocation();
-			console.log("startWithMap입니다")
 			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
-			console.log("추천 알고리즘 후에",this.recommends)
 			this.showCandidates(this.recommends)
 		},
 		initCurLocation() {
@@ -330,7 +322,7 @@ export default {
 		},
         
 		showCandidates(locs) {
-			console.log("showCandidates",locs)
+
 			const self = this
 			var map = this.map;
 			if (this.getFlip) {

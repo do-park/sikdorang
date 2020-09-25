@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-      {{getSchedules}}
+      <!-- {{getSchedules}} -->
       <!-- <div v-for="schedule in schedules" :key="schedule.id">
           {{schedule}}
       </div> -->

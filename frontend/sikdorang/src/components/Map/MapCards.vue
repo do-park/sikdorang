@@ -6,19 +6,6 @@
       </div>
     
       <div class="d-flex justify-content-center">
-        <!-- <transition enter-active-class="animated flipInY">
-          <div
-            v-for="Rest in getThreeRes"
-            :key="Rest.id"
-
-            :class="{ 'active': isActive0 }"
-            class="box"
-            @click="selectRest(getClicked)"
-          >
-            A.{{getThreeRes[0].name}}
-            <p>@ 맛집 정보 @</p>
-          </div>
-        </transition> -->
         <transition enter-active-class="animated flipInY">
           <div
             :class="{ 'active': isActive0 }"
@@ -130,7 +117,6 @@ export default {
       if (idx < 3 && idx >= 0) {
         this.actionClicked(idx);
         this.actionSelectedRest(this.getThreeRes[idx]);
-        console.log(this.getSelectedRest)
         var Rest = this.getSelectedRest;
         swal({
           title: Rest.name,
@@ -147,13 +133,9 @@ export default {
                 });
                 plans.push(this.getSelectedRest);
                 this.actionPlanList(plans);
-                console.log("getSchedules!!!!!",this.getSchedules)
                 this.actionStore(Rest)
-                console.log(">>>>>>",this.getScheduleIdx, typeof(this.getScheduleIdx))
                 this.actionScheduleIdx(this.getScheduleIdx+1)
-                console.log("getSchedules",this.getSchedules)
-                console.log("일정", this.getPlanList);
-
+              
               }
             });
           }
