@@ -6,14 +6,25 @@
       </div>
     
       <div class="d-flex justify-content-center">
+        <!-- <transition enter-active-class="animated flipInY">
+          <div
+            v-for="Rest in getThreeRes"
+            :key="Rest.id"
+
+            :class="{ 'active': isActive0 }"
+            class="box"
+            @click="selectRest(getClicked)"
+          >
+            A.{{getThreeRes[0].name}}
+            <p>@ 맛집 정보 @</p>
+          </div>
+        </transition> -->
         <transition enter-active-class="animated flipInY">
           <div
             :class="{ 'active': isActive0 }"
             v-if="animatechk"
             class="box"
             @click="selectRest(0)"
-            data-toggle="modal"
-            data-target="#exampleModal"
           >
             A.{{getThreeRes[0].name}}
             <p>@ 맛집 정보 @</p>
@@ -25,8 +36,6 @@
             v-if="animatechk"
             class="box"
             @click="selectRest(1)"
-            data-toggle="modal"
-            data-target="#exampleModal"
           >
             B.{{getThreeRes[1].name}}
             <p>@ 맛집 정보 @</p>
@@ -38,8 +47,6 @@
             v-if="animatechk"
             class="box"
             @click="selectRest(2)"
-            data-toggle="modal"
-            data-target="#exampleModal"
           >
             C.{{getThreeRes[2].name}}
             <p>@ 맛집 정보 @</p>

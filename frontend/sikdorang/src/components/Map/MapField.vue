@@ -49,8 +49,8 @@ export default {
 			this.addScript();
 		}
 		console.log(this.getSchedules)
-		// console.log(this.getScedules[this.getScheduleIdx].name)
-		this.divideRecommendation("식당")
+		// this.divideRecommendation(this.getScedules[this.getScheduleIdx].name)
+		// this.divideRecommendation("식당")
 		
 	},
 	computed : {
@@ -77,15 +77,14 @@ export default {
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
-		// getClicked(){	     
-		// 	this.showCandidates(this.recommends)  
-		// },
 		startCoords() {
 			this.showCandidates(this.recommends)
 		},
 		recommends() {
-			console.log(this.recommends)
-			this.showCandidates(this.recommends)
+			if (window.kakao && this.recommends) {
+				console.log("recommends입니다",this.recommends)
+				this.showCandidates(this.recommends)
+			}
 		},
 		getScheduleIdx() {
 			console.log(this.getScheduleIdx)
@@ -115,7 +114,7 @@ export default {
 			}
 		},
 		getSCRecommendation(cf) {
-            console.log('음식점 / 카페를 추천 받습니다.')
+            console.log(cf,'음식점 / 카페를 추천 받습니다.')
             this.recommends = []
             
 			const requestHeaders = {
@@ -126,8 +125,9 @@ export default {
 			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
 				this.recommends = res.data.result
+				console.log("추천 성공",this.recommends)
 			})
-			.catch(err => console.error(err))
+			.catch(err => console.error("알고리즘 추천 실패야",err))
 		},
 		getSHRecommendation(cf) {
             console.log('관광지 / 숙박 정보를 받습니다.', cf)
@@ -186,6 +186,10 @@ export default {
 		async startWithMap() {
 			await this.setStartCoords();
 			this.initCurLocation();
+			console.log("startWithMap입니다")
+			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+			console.log("추천 알고리즘 후에",this.recommends)
+			this.showCandidates(this.recommends)
 		},
 		initCurLocation() {
 			this.curLat = this.startLat
@@ -279,7 +283,7 @@ export default {
 				this.actionThreeRes(this.recommends.slice(0,3))
 			}
 			else {
-				this.actionThreeRes(this.recommends.slice(3,6))
+				this.actionThreeRes(this.recommends.slice(3))
 			}
 		},
 		// selectRest(idx) {
@@ -326,6 +330,7 @@ export default {
 		},
         
 		showCandidates(locs) {
+			console.log("showCandidates",locs)
 			const self = this
 			var map = this.map;
 			if (this.getFlip) {
