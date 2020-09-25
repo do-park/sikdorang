@@ -7,7 +7,7 @@
 </template>
 
 <script>
-// import swal from 'sweetalert';
+import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex"
 import axios from "axios"
 
