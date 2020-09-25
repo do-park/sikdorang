@@ -82,16 +82,26 @@ export default {
 			}
 		},
 		getScheduleIdx() {
-			// console.log(this.getScheduleIdx)
-			// console.log(this.getSchedules[Number(this.getScheduleIdx)].name)
-			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
-			this.showCandidates(this.recommends)
+			if (this.getScheduleIdx < this.getSchedules.length)
+			{
+				// console.log(this.getScheduleIdx)
+				// console.log(this.getSchedules[Number(this.getScheduleIdx)].name)
+				this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+				this.actionFlip(true)
+				this.showCandidates(this.recommends)
+
+			}
+			else {
+				this.$router.push('/mypage')
+			}
+			
 		},
 		
 
 	},
 	methods : {
 		...mapActions("mapEvent",[
+			'actionFlip',
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',

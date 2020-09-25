@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex flex-column align-items-center">
       <div>
-        <button class="btn btn-secondary" @click="checkFilp">다른거 볼래요</button>
+        <button class="btn btn-secondary" @click="checkFilp">다른 {{getSchedules[getScheduleIdx].name}} 볼래요!</button>
       </div>
     
       <div class="d-flex justify-content-center">
