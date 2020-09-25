@@ -8,6 +8,7 @@
       </div>
       <div v-if="!flag">
           <MapTheme/>
+          <ScheduleProgress/>
           <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
           <MapCards :kakao="kakao" :selected="selected"/>
       </div>    
@@ -19,6 +20,7 @@
 import SelectStart from '../components/Map/SelectStart'
 import MapField from '../components/Map/MapField'
 import MapTheme from '../components/Map/MapTheme'
+import ScheduleProgress from '../components/Map/ScheduleProgress'
 import MapCards from '../components/Map/MapCards'
 
 
@@ -29,6 +31,7 @@ export default {
         MapField,
         MapTheme,
         MapCards,
+        ScheduleProgress
     
     },
     mounted() {
