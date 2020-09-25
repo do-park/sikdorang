@@ -22,7 +22,11 @@ def theme_clear(request):
     print(themes)
     for i in themes:
         theme_count[i['count']] = 1
-    return Response(theme_count)
+    visited_count = [0]*100
+    visited = AchieveUser.objects.filter(user=user).values()
+    for i in visited:
+        visited_count[i['count']] = 1
+    return Response(theme_count, visited_count)
 
 @api_view(['POST'])
 def theme_create(request, theme_pk):
@@ -34,8 +38,12 @@ def theme_create(request, theme_pk):
     else:
         return HttpResponse('이미 클리어된 테마입니다.')
 
-@api_view(['GET'])
-def visited(request, theme_pk):
-    astores = AchiveStore.objects.filter(theme=theme_pk)
-    serializer = AStoreListSerializer(astores, many=True)
-    return Response(serializer.data)
+@api_view(['POST'])
+def visit_create(request, theme_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    CVisite, flag = AchieveUser.objects.get_or_create(count=theme_pk ,user=user)
+    if flag:
+        return HttpResponse('방문 클리어 등록.')
+    else:
+        return HttpResponse('이미 방문한 곳 입니다.')
