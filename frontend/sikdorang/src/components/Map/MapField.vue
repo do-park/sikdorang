@@ -40,14 +40,14 @@ export default {
 		}
 	},
 	mounted() {
+		this.initCurLocation()
 		if (window.kakao && window.kakao.map) {
 			this.initMap();
 		}
 		else {
 			this.addScript();
 		}
-		console.log(this.getSchedules)
-		this.divideRecommendation()
+		
 	},
 	computed : {
 		...mapGetters("mapEvent", [
@@ -60,6 +60,7 @@ export default {
 		]),
 		...mapGetters("schedule", [
 			"getSchedules",
+			"getScheduleIdx",
 		]),
 	},
 	watch : {
@@ -72,15 +73,35 @@ export default {
 		selectedMarker(){
 			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
 		},
-		getClicked(){	     
-			this.showCandidates(this.recommends)  
-		},
 		startCoords() {
 			this.showCandidates(this.recommends)
 		},
+		recommends() {
+			if (window.kakao && this.recommends) {
+				this.showCandidates(this.recommends)
+			}
+		},
+		getScheduleIdx() {
+			if (this.getScheduleIdx < this.getSchedules.length)
+			{
+				// console.log(this.getScheduleIdx)
+				// console.log(this.getSchedules[Number(this.getScheduleIdx)].name)
+				this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+				this.actionFlip(true)
+				this.showCandidates(this.recommends)
+
+			}
+			else {
+				this.$router.push('/mypage')
+			}
+			
+		},
+		
+
 	},
 	methods : {
 		...mapActions("mapEvent",[
+			'actionFlip',
 			'actionMouseOver',
 			'actionClicked',
 			'actionThreeRes',
@@ -108,10 +129,11 @@ export default {
 			}
 			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
-				console.log(res)
+				
 				this.recommends = res.data.result
+			
 			})
-			.catch(err => console.error(err))
+			.catch(err => console.error("알고리즘 추천 실패야",err))
 		},
 		getSHRecommendation(cf) {
             console.log('관광지 / 숙박 정보를 받습니다.', cf)
@@ -136,23 +158,21 @@ export default {
                         "img": items[i].firstimage,
                     })
                 }
-                console.log(items)
+                // console.log(items)
             })
             .catch(err => console.error(err))
 		},
 		moveSmoothly() {
 			// 이동할 위도 경도 위치를 생성합니다 
 			if (this.getClicked) {
-				var moveLatLon = this.getThreeRes[this.getClicked].latlng;
+			
+				var lat = this.getThreeRes[this.getClicked].latitude;
+				var long = this.getThreeRes[this.getClicked].longtitude;
+				var moveLatLon = new kakao.maps.LatLng(lat,long)
 
-			// 나중에 음식점 리스트 받아오면 바뀔 코드
-			// var lat = this.getThreeRes[this.getClicked].latitude;
-			// var long = this.getThreeRes[this.getClicked].longitude;
-            // var moveLatLon = new kakao.maps.LatLng(lat,long)
-
-            // 지도 중심을 부드럽게 이동시킵니다
-            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-			this.map.panTo(moveLatLon);  
+				// 지도 중심을 부드럽게 이동시킵니다
+				// 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+				this.map.panTo(moveLatLon);  
 			}
 		},
 		initMap() { 
@@ -163,20 +183,21 @@ export default {
 			}; 
 			var map = new kakao.maps.Map(container, options); 
             this.map = map;
-			this.$emit('getKakao',window.kakao)
+			this.$emit('getKakao', window.kakao)
 
 			this.startWithMap()
 		},
 		async startWithMap() {
 			await this.setStartCoords();
-			this.fillPositions();
 			this.initCurLocation();
+			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+			this.showCandidates(this.recommends)
 		},
 		initCurLocation() {
 			this.curLat = this.startLat
 			this.curLong = this.startLong
-			this.beforeLng = this.startLong
-			this.beforeLat = this.startLat
+			this.beforeLng = this.$cookies.get("startLongitude")
+			this.beforeLat = this.$cookies.get("startLatitude")
 		},
 		//cdn 추가
 		addScript() { 
@@ -196,7 +217,6 @@ export default {
 		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 		showMarkers(markers) {
 			for (var i = 0; i < markers.length; i++) {
-				console.log("!!!!!",i,markers[i])
 				markers[i].setMap(this.map);
 			}    
 		},
@@ -237,11 +257,13 @@ export default {
 
                     // 정상적으로 검색이 완료됐으면 
                     if (status === kakao.maps.services.Status.OK) {
-                        this.startCoords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						this.startCoords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						this.startLat = result[0].y
+						this.startLong = result[0].x
 
                         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 						map.setCenter(this.startCoords);
-						console.log(`${this.destination} 좌표 : ${this.startCoords} `)
+						// console.log(`${this.destination} 좌표 : ${this.startCoords} `)
                         var marker = new kakao.maps.Marker({ position: map.getCenter() });
 					
 						// 마커를 추가
@@ -258,11 +280,12 @@ export default {
             }
 		},
 		changeThreeResByFlip() {
+			
 			if (this.getFlip) {
 				this.actionThreeRes(this.recommends.slice(0,3))
 			}
 			else {
-				this.actionThreeRes(this.recommends.slice(3,6))
+				this.actionThreeRes(this.recommends.slice(3))
 			}
 		},
 		fillPositions() {
@@ -344,6 +367,7 @@ export default {
 		},
         
 		showCandidates(locs) {
+
 			const self = this
 			var map = this.map;
 			if (this.getFlip) {
@@ -395,13 +419,13 @@ export default {
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 
-				
+				var position = new kakao.maps.LatLng(positions[i].latitude, positions[i].longtitude);
 					
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
 					map: map,
-					position: positions[i].latlng,
-					title : positions[i].title, 
+					position: position,
+					title : positions[i].name, 
 					image : normalImage
 				});
 
@@ -410,7 +434,7 @@ export default {
 
 				// 마커에 표시할 인포윈도우를 생성합니다 
 				var infowindow = new kakao.maps.InfoWindow({
-					content: positions[i].title // 인포윈도우에 표시할 내용
+					content: positions[i].name // 인포윈도우에 표시할 내용
 				});
 
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
@@ -418,7 +442,7 @@ export default {
 				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
 		
 				//지도 범위에 추가
-				bounds.extend(positions[i].latlng);
+				bounds.extend(position);
 				this.recommendMarkers.push(marker)
 				selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
 			}
@@ -464,7 +488,7 @@ export default {
 					infowindow.close();
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
 					self.actionClicked(selectedMarker.idx)
-					self.selectRest(selectedMarker.idx)
+					// self.selectRest(selectedMarker.idx)
 					
 				};
 			}
@@ -556,8 +580,7 @@ export default {
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			var bounds = new kakao.maps.LatLngBounds();   
 						
-			for (var i = 1; i < positions.length; i ++) {
-					
+			for (var i = 1; i < positions.length; i ++) {	
 				var linePath = [
 					positions[i-1].latlng,
 					positions[i].latlng 
