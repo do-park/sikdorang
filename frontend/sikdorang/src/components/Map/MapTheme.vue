@@ -1,17 +1,14 @@
 <template>
   <div>
       <div class="map-top">
-			<div class="search-tap">	
-				<!-- 길찾기  -->
-				<span> 
-					<input
-					id="search-box"
-					v-model="destination" 
-					@keyup.enter="findPath()"
-					placeholder="어디갈래?">
-					<button id="search-btn" @click="findPath()" >아이콘</button>
-				</span>
-			</div>
+			<!-- <div class="search-tap">	
+				<input
+				id="search-box"
+				v-model="destination" 
+				@keyup.enter="findPath()"
+				placeholder="어디갈래?">
+				<button id="search-btn" @click="findPath()" >아이콘</button>
+			</div> -->
 			
 			<div class="tag-tap">
 				<button>#위대한</button>
@@ -41,7 +38,7 @@ export default {
 .map-top {
 	position: absolute;
 	z-index: 10;
-	width: 100%;
+	width: 400px;
 	margin: auto;
 	
 }
@@ -49,6 +46,7 @@ export default {
 .search-tap {
 	background-color: rgba(255, 255, 255, 0.8);
 	width: 400px;
+	height: 30px;
 	margin: auto;
 }
 

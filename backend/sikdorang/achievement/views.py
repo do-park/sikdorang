@@ -17,7 +17,7 @@ def astore_list(request, theme_pk):
 def theme_clear(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    theme_count = [0]*20
+    theme_count = [0]*12
     themes = ThemeUser.objects.filter(user=user).values()
     print(themes)
     for i in themes:

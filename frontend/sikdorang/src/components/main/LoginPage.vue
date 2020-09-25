@@ -2,7 +2,7 @@
   <div class="login-box">
     <button 
       class="btn btn-primary" 
-      @click="clickToMainPage">btn</button>
+      @click="clickToMainPage">메인으로</button>
     <div>로그인 페이지</div>
     <div>
       <input
