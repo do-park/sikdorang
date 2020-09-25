@@ -4,7 +4,7 @@
     <div v-if="!isLogin">여행을 시작할까요?</div>
     <div v-else class="text-left">
       <h2>{{ username }}님,</h2>
-      <h2>제주를 만나보세요!</h2>
+      <h2>삼겹살을 만나보세요!</h2>
     </div>
     <hr>
     <div class="btn-wrap row m-0 justify-content-around">

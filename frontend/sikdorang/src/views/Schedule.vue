@@ -172,6 +172,7 @@ export default {
                   icon: "success",
                   title: "일정을 등록했습니다.",
                 });
+                this.$router.push('/map')
               }
             })
             .catch((error) => {
