@@ -36,6 +36,9 @@ export default {
            if (this.getSchedules.length > 0) {
                this.getSchedules.forEach(schedule => {
                    scheduleData.push({
+                       //스케줄의 이름은 어디서 확인이 가능한가?????????
+                       //스케줄 ERD는 있는건가?
+                       //스케줄은 어디 저장되고 있나?
                        "schedule_idx" : schedule.idx,
                        "category_id" : schedule.id,
                        "category_name" : schedule.name,
