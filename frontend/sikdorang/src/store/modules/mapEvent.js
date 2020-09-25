@@ -1,7 +1,7 @@
 const mapEvent = {
     namespaced : true,
     state : {
-        flip : false,
+        flip : true,
         mouseOver : null,
         clicked : null,
         threeRes : [],

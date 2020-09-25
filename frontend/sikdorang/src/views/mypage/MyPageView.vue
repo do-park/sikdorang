@@ -1,7 +1,6 @@
 <template>
     <div>
         <MyPage v-if="isLogin"/>
-        <AchievementBadge/>
         <GuideMyPage v-if="isGuide"/>
         <AdminMyPage v-if="isAdmin"/>
     </div>
@@ -10,7 +9,6 @@
 <script>
 import { mapActions } from 'vuex'
 import MyPage from '@/components/mypage/MyPage.vue'
-import AchievementBadge from '@/components/mypage/AchievementBadge.vue'
 import GuideMyPage from '@/components/mypage/GuideMyPage.vue'
 import AdminMyPage from '@/components/mypage/AdminMyPage.vue'
 
@@ -19,7 +17,6 @@ export default {
     name: "MyPageView",
     components: {
         MyPage,
-        AchievementBadge,
         GuideMyPage,
         AdminMyPage,
     },
