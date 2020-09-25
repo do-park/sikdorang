@@ -1,12 +1,12 @@
 <template>
   <div>
       <h3>저장된 여행 일정</h3>
-      <div class="d-flex">
+      <div>
           <div
-          v-for="schedule in getSchedules"
-          :key="schedule.index"
+          v-for="(schedule, index) in getSchedules"
+          :key="schedule.idx"
           >
-            {{schedule.userChoice.name}} -->
+            {{index+1}}.{{schedule.userChoice.name}}
           </div>
       </div>
   </div>
