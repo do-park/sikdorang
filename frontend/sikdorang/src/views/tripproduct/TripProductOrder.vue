@@ -1,14 +1,14 @@
 <template>
     <div>
-        <img :src="getOrderTrip.img" alt="">
+        <!-- <img :src="getOrderTrip.img" alt=""> -->
         <h3>{{ getOrderTrip.title }}</h3>
-        <span>{{ getOrderTrip.start_date.substr(0,10) }} ~ {{ getOrderTrip.end_date.substr(0,10) }}</span>
-        <span> 가이드: {{ getOrderTrip.userName }}</span>
+        <span>{{ startDate }} ~ {{ endDate }}</span>
+        <span> 가이드: {{ getOrderTrip.guide_user }}</span>
         <hr>
         <div>
             <h5>가격: {{ getOrderTrip.price }}원</h5>
         </div>
-        <h5>{{ getOrderTrip.start_point }} / {{ getOrderTrip.start_time }}</h5>
+        <h5>집결지 / 시간 : {{ getOrderTrip.start_point }} / {{ getOrderTrip.start_time }}</h5>
         <hr>
         <div>
             <h3>예약자 정보</h3>
@@ -38,7 +38,7 @@ export default {
     computed: {
         ...mapGetters("order", [
             "getOrderTrip"
-        ])
+        ]),
     },
     mounted() {
         const requestHeaders = {
@@ -58,10 +58,13 @@ export default {
             userName: null,
             userPhone: null,
             userInfo: null,
+            startDate: `${this.getOrderTrip.start_date.split('-')[0]}년 ${this.getOrderTrip.start_date.split('-')[1]}월 ${this.getOrderTrip.start_date.split('-')[2]}일`,
+            endDate: `${this.getOrderTrip.end_date.split('-')[0]}년 ${this.getOrderTrip.end_date.split('-')[1]}월 ${this.getOrderTrip.end_date.split('-')[2]}일`,
         }
     },
     methods: {
         onClick() {
+            console.log(this.getOrderTrip)
             this.userName = this.userInfo.userName
             this.userPhone = this.userInfo.userPhone
         }

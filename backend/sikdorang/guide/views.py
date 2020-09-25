@@ -10,6 +10,7 @@ from .models import *
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework import status
 
+
 # Create your views here.
 @api_view(['POST'])
 def apply_guide(request):
@@ -30,7 +31,7 @@ def create_tour(request):
         serializer.save(user=user)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     else:
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors)
 
 @api_view(['GET'])
 def list_tour(request):
@@ -42,6 +43,12 @@ def list_tour(request):
 #     serializer_class = GuideItemSerializer
 #     def perform_create(self, serializer):
 #         serializer.save(user_id=self.request.user.pk)
+
+@api_view(['GET'])
+def detail_tour(request, tour_pk):
+    tour = TripItemModel.objects.filter(pk=tour_pk)
+    serializer = TourDetailSerializer(tour, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

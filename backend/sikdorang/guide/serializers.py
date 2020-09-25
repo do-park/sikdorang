@@ -10,6 +10,13 @@ from .models import *
 #         model = TripItemModel
 #         fields = ['guide_user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
 
+class TourDetailSerializer(serializers.ModelSerializer):
+    title_img = serializers.ImageField(use_url=True)
+    class Meta: 
+        model = TripItemModel
+        depth = 1
+        fields = '__all__'
+
 class GuideItemSerializer(serializers.ModelSerializer):
     title_img = serializers.ImageField(use_url=True)
     class Meta: 
@@ -17,7 +24,6 @@ class GuideItemSerializer(serializers.ModelSerializer):
         fields = ['title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'start_point', 'start_time', 'content']
 
 class GuideSerializer(serializers.ModelSerializer):
-    
     class Meta: 
         model = TripItemModel
         depth = 1

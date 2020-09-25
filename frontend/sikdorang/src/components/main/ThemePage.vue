@@ -3,7 +3,7 @@
     <div 
     v-for="(theme, index) in themes" 
     :key="theme.id" 
-    class="m-1">
+    class="m-0 col-4">
       <span 
       v-if="userAchieve[index] === 1" 
       class="effect"
@@ -69,15 +69,15 @@ export default {
       // todo: axios로 Back에서 user의 achievedata 받아오기
       if (this.isLogin) {
         this.userAchieve = this.getThemesClear
-        // this.$axios.get(`/themeclear/${userId}`)
-        // .then(res=>{
-        //     console.log(res.data)
-        //     this.acitonThemesClear(res.data)
-        //     this.userAchieve = this.getThemesClear
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
+        this.$axios.get("/achievement/theme_clear")
+        .then(res=>{
+            console.log(res.data)
+            this.acitonThemesClear(res.data)
+            this.userAchieve = this.getThemesClear
+        })
+        .catch(err=>{
+            console.log(err)
+        })
       }
       else {
         this.userAchieve = [0,0,0,0,0,0,0,0,0]
