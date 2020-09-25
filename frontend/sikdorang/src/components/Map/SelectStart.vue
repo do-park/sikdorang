@@ -1,9 +1,16 @@
 <template>
   <div>
     <div class="text-center">
-        <button type="button" class="btn btn-secondary" @click="getMyLocation">내 위치</button>
-        <button class="btn btn-secondary" @click="search">다른 지역</button>
-
+        <hr>
+        <div class="top-place">대충 뭐 들어가는곳</div>
+        <hr>
+        <div>
+            <button type="button" class="btn btn-primary m-3 go-btn" @click="getMyLocation">내 위치에서 볼래요!</button>
+        </div>
+        <div>
+            <button class="btn btn-primary m-3 go-btn" @click="search">다른 지역으로 갈래요!</button>
+        </div>
+        <hr>
     </div>
   </div>
 </template>
@@ -94,5 +101,11 @@ export default {
 </script>
 
 <style>
+    .top-place {
+        height: 300px;
+    }
 
+    .go-btn {
+        width: 200px;
+    }
 </style>

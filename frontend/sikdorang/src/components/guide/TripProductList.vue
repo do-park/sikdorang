@@ -4,31 +4,31 @@
         <div class="item-wrap" v-for="item in tripProductList" :key="item.id" @click="goTripProductDetailPage(item.id)">
             <TripProductItem :item="item"/>
         </div>
-        <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
+        <!-- <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading> -->
     </div>
 </template>
 
 <script>
 import TripProductItem from "./TripProductItem.vue"
-import InfiniteLoading from 'vue-infinite-loading'
+// import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
     name: "TripProductList",
     components: {
         TripProductItem,
-        InfiniteLoading
+        // InfiniteLoading
     },
     data() {
         return {
-            limit: 0,
+            // limit: 0,
             tripProductList: [
                 {id: 1,
                 user: 1,
                 title_img: '이미지',
                 title: '가을 여행',
                 area: '구미',
-                start_date: Date(2020-9-22),
-                end_date: Date(2020-9-26),
+                start_date: '2020-9-22',
+                end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00'
@@ -38,8 +38,8 @@ export default {
                 title_img: '이미지',
                 title: '가을 여행',
                 area: '구미',
-                start_date: Date(2020,9,22),
-                end_date: Date(2020,9,23),
+                start_date: '2020-9-22',
+                end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00'
@@ -49,8 +49,8 @@ export default {
                 title_img: '이미지',
                 title: '가을 여행',
                 area: '구미',
-                start_date: Date(2020,9,22),
-                end_date: Date(2020,9,23),
+                start_date: '2020-9-22',
+                end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
                 start_time: '09:00'
@@ -59,29 +59,38 @@ export default {
             targetGuide: null,
         }
     },
+    mounted() {
+        this.$axios.get(`/guide/list_tour`)
+        .then(res => {
+            this.tripProductList = res.data
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    },
     methods: {
-        infiniteHandler($state) {
-            this.$axios.get(`/trip/list/${this.limit}`)
-            .then(res => {
-                // console.log(res)
-                setTimeout(()=> {
-                    if (res.data.content.length) {
-                        this.yogaList = this.tripProductList.concat(res.data.content);
-                        $state.loaded();
-                        this.limit += 10
-                        if (this.tripProductList.length / 10 === 0){
-                            $state.complete();
-                        }
-                    } else {
-                        $state.complete();
-                    }
+        // infiniteHandler($state) {
+        //     this.$axios.get(`/trip/${this.limit}`)
+        //     .then(res => {
+        //         // console.log(res)
+        //         setTimeout(()=> {
+        //             if (res.data.content.length) {
+        //                 this.yogaList = this.tripProductList.concat(res.data.content);
+        //                 $state.loaded();
+        //                 this.limit += 10
+        //                 if (this.tripProductList.length / 10 === 0){
+        //                     $state.complete();
+        //                 }
+        //             } else {
+        //                 $state.complete();
+        //             }
                     
-                }, 500)
-            })
-            .catch(err => {
-                console.error(err)
-            })
-        },
+        //         }, 500)
+        //     })
+        //     .catch(err => {
+        //         console.error(err)
+        //     })
+        // },
 
         goTripProductDetailPage(item_pk) {
             this.$router.push(`/trip/detail/${item_pk}`)
@@ -100,7 +109,6 @@ export default {
 
 <style>
 .item-wrap {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 </style>

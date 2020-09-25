@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from sikdorang import settings
 from trip.views import TripViewSet
 from review.views import ReviewViewSet
+# from guide.views import GuideViewSet
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -42,6 +43,7 @@ schema_view = get_schema_view(
 router = routers.DefaultRouter()
 router.register('trip', TripViewSet) # prefix = movies , viewset = MovieViewSet
 router.register('review', ReviewViewSet)
+# router.register('guide', GuideViewSet)
 
 
 urlpatterns = [
@@ -56,10 +58,14 @@ urlpatterns = [
     path('trip/', include('trip.urls')),
     path('review/', include('review.urls')),
     path('achievement/', include('achievement.urls')),
+    path('guide/', include('guide.urls')),
+
     # 추천
     path('recommend/', include('recommend.urls')),
     url(r'^',include(router.urls)),
-
+    #인증
+    path('account/', include('accounts.urls')),
+    
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

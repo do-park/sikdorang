@@ -109,7 +109,7 @@ export default {
 			}
 		},
 		getSCRecommendation(cf) {
-            console.log('음식점 / 카페를 추천 받습니다.',cf)
+            console.log('음식점 / 카페를 추천 받습니다.')
             this.recommends = []
             
 			const requestHeaders = {
@@ -278,35 +278,70 @@ export default {
 				this.actionThreeRes(this.recommends.slice(3))
 			}
 		},
-		// selectRest(idx) {
-		// 	this.actionSelectedRest(this.getThreeRes[idx])
-		// 	const self = this
-        //     var Rest = this.getSelectedRest
-        //     swal({
-		// 		title: Rest.name,
-		// 		text: "이런이런 맛집입니다아",
-		// 		buttons: ["취소","추가"],
-        //     })
-        //     .then((res) => {
-		// 		if (res) {
-		// 			swal(`${Rest.name}을 일정에 추가할까요?`,{
-		// 				buttons: ["아니오","네"],
-		// 			})
-		// 			.then((res)=>{
-		// 				if (res) {
-		// 					swal(`${Rest.name}을 일정에 추가할까요?`,{
-		// 						icon : "success"
-		// 					})
-		// 					// store에 올리는 로직.
-		// 					self.actionStore({ store: Rest,  index: self.selectingIndex })
-		// 					self.selectingIndex += 1
-		// 					self.beforeLng = Rest.longtitude
-		// 					self.beforeLat = Rest.latitude
-		// 				}
-		// 			})
-		// 		} 
-		// 	});
-		// },
+		fillPositions() {
+			this.recommends = [
+				{   
+					id : 1,
+					title: '승희 위치', 
+					latlng: new kakao.maps.LatLng(36.1406514,128.3271104)
+				},
+				{   
+					id : 2,
+					title: '인영이집', 
+					latlng: new kakao.maps.LatLng(36.1035992,128.4162945)
+				},
+				{   
+					id : 3,
+					title: '규성집', 
+					latlng: new kakao.maps.LatLng(36.0954328,128.3963511)
+				},
+				{   
+					id : 4,
+					title: '성수집근처쨈나',
+					latlng: new kakao.maps.LatLng(36.1115959,128.4303873)
+
+				},
+				{   
+					id : 5,
+					title: '도희동아백화점',
+					latlng: new kakao.maps.LatLng(36.119735,128.3463003)
+				},
+				{   
+					id : 6,
+					title: '인동스타벅스',
+					latlng: new kakao.maps.LatLng(36.1073795,128.4174558)
+				}
+			]
+		},
+		selectRest(idx) {
+			this.actionSelectedRest(this.getThreeRes[idx])
+			const self = this
+            var Rest = this.getSelectedRest
+            swal({
+				title: Rest.title,
+				text: "이런이런 맛집입니다아",
+				buttons: ["취소","추가"],
+            })
+            .then((res) => {
+				if (res) {
+					swal(`${Rest.title}을 일정에 추가할까요?`,{
+						buttons: ["아니오","네"],
+					})
+					.then((res)=>{
+						if (res) {
+							swal(`${Rest.title}을 일정에 추가할까요?`,{
+								icon : "success"
+							})
+							// store에 올리는 로직.
+							self.actionStore({ store: Rest,  index: self.selectingIndex })
+							self.selectingIndex += 1
+							self.beforeLng = Rest.lng
+							self.beforeLat = Rest.lat
+						}
+					})
+				} 
+			});
+		},
 
 		//카드 누르면 마커 이미지 변경
 		clickCardChangeMarker(marker, normalImage, overImage,clickImage) {
