@@ -134,10 +134,17 @@ export default {
         return false;
       }
       let plan = "";
-      this.actionSchedule(this.clonedItems)
+      const schedule = [];
+      console.log("일정을 추가했습니다.",this.clonedItems)
       for (let i = 0; i < this.clonedItems.length; i++) {
+        const item = this.clonedItems[i]
+        item["index"] = i;
+        console.log(item)
+        schedule.push(item)
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
+      console.log(schedule)
+      this.actionSchedule(schedule)
       return plan;
     },
     createTrip() {
