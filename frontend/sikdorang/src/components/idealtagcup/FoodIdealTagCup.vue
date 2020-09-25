@@ -2,13 +2,18 @@
   <div>
     <div v-if="!isDone">
       <img
+        class="img"
         :src="imgs[tags[leftIndex]]"
         alt="left Image"
         @click="onClick('left')"
       />
     </div>
+    <div class="vs-wrap" v-if="!isDone">
+      <img class="vs" src="@/assets/vs.png" />
+    </div>
     <div v-if="!isDone">
       <img
+        class="img"
         :src="imgs[tags[rightIndex]]"
         alt="right Image"
         @click="onClick('right')"
@@ -114,8 +119,19 @@ export default {
 </script>
 
 <style scoped>
-img {
-  width: 100vh;
-  height: 50vh;
+.img {
+  width: 400px;
+  cursor: pointer;
+}
+.vs-wrap {
+  position: relative;
+  widows: 400px;
+}
+.vs {
+  width: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -40px;
+  position: absolute;
 }
 </style>
