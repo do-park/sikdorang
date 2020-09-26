@@ -1,23 +1,23 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Signup from "../views/Signup.vue";
-import MapMain from "../views/MapMain.vue";
-import IdealTagCupView from "../views/idealtagcup/IdealTagCupView.vue";
-import MyPageView from "../views/mypage/MyPageView.vue";
-import Schedule from "../views/Schedule.vue";
-import Recommend from "../views/Recommend.vue";
-import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue";
-import Payment from "../views/pay/Payment.vue";
-import Result from "../views/pay/Result.vue";
-import ThemeDetail from "../views/theme/ThemeDetail.vue";
-import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue";
-import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue";
-import TripProductsView from "../views/tripproduct/TripProductsView.vue";
-import TripProductOrder from "../views/tripproduct/TripProductOrder.vue";
-import RECTEST from "../views/rectest.vue";
+import Vue from "vue"
+import VueRouter from "vue-router"
+import Home from "../views/Home.vue"
+import Signup from "../views/Signup.vue"
+import MapMain from "../views/MapMain.vue"
+import IdealTagCupView from "../views/idealtagcup/IdealTagCupView.vue"
+import MyPageView from "../views/mypage/MyPageView.vue"
+import Schedule from "../views/Schedule.vue"
+import Recommend from "../views/Recommend.vue"
+import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
+import Payment from "../views/pay/Payment.vue"
+import Result from "../views/pay/Result.vue"
+import ThemeDetail from "../views/theme/ThemeDetail.vue"
+import TripScheduleFormView from "../views/travelguide/TripScheduleFormView.vue"
+import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vue"
+import TripProductsView from "../views/tripproduct/TripProductsView.vue"
+import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
+import RECTEST from "../views/rectest.vue"
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
@@ -100,12 +100,12 @@ const routes = [
     name: "TripProductOrder",
     component: TripProductOrder,
   },
-];
+]
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-});
+})
 
-export default router;
+export default router
