@@ -75,9 +75,15 @@ export default {
         });
     },
     goDetail(rest) {
+      console.log(rest);
       Swal.fire({
         title: rest.store_name,
-        text: rest.description,
+        html:
+          rest.address +
+          "<br />" +
+          rest.tel +
+          "<br /><br />" +
+          rest.description,
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
