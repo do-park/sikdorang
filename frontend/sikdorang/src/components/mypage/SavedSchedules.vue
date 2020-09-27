@@ -11,7 +11,9 @@
         :key="schedule.id"
         >
              <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
-                [{{schedule.type}}] {{schedule.store_name}} | <button>리뷰쓰기</button>
+                [{{schedule.type}}] {{schedule.store_name}} | 
+                <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성 테스트</button>
+                <!-- 리뷰 작성 완료시 작성완료 버튼(비활성화) 있어야함 -->
             </div>
             <div v-else>
                 [{{schedule.type}}] {{schedule.name}}
@@ -58,6 +60,11 @@ export default {
         this.getAllSchedules()
     },
     methods : {
+      goReviewForm(store_id) {
+        console.log(store_id)
+        this.$cookies.set("review-store-id", store_id);
+        this.$router.push({ name: "ReviewForm" });
+      },
        getSightseeing() {
            const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
            
