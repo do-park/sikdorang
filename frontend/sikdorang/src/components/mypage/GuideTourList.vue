@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="guideTourList">
         <h2>가이드 투어 목록</h2>
         <div v-for="tour in tourList" :key="tour.id">
             <GuideTourListItem :tour="tour" />
@@ -14,6 +14,9 @@ export default {
     name: 'GuideTourList',
     components: {
         GuideTourListItem,
+    },
+    props : {
+        guideTourList : Boolean,
     },
     data() {
         return {
