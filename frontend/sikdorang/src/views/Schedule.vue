@@ -99,7 +99,11 @@ export default {
     this.getTripdata();
   },
   methods: {
-    ...mapActions("schedule", ["actionSchedule"]),
+    ...mapActions("schedule", [
+      "actionSchedule",
+      "actionScheduleName",
+      "actionScheduleDate",
+      ]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -146,9 +150,7 @@ export default {
       }
       let plan = "";
       const schedule = [];
-      console.log("일정을 추가했습니다.", this.clonedItems);
 
-      // this.actionSchedule(this.clonedItems);
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
         item["idx"] = i;
@@ -179,25 +181,26 @@ export default {
         },
       }).then((result) => {
         if (result.isConfirmed) {
+          this.actionScheduleName(result.value)
           // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
-          this.$axios
-            .post(`/trip/`, {
-              user: this.userId,
-              name: result.value,
-              plan: plan.slice(0, -1),
-            })
-            .then((response) => {
-              if (parseInt(response.status / 100) == 2) {
+          // this.$axios
+          //   .post(`/trip/`, {
+          //     user: this.userId,
+          //     name: result.value,
+          //     plan: plan.slice(0, -1),
+          //   })
+            // .then((response) => {
+            //   if (parseInt(response.status / 100) == 2) {
                 Swal.fire({
                   icon: "success",
                   title: "일정을 등록했습니다.",
                 });
                 this.$router.push({ name: "MapMain" });
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+            //   }
+            // })
+            // .catch((error) => {
+            //   console.error(error);
+            // });
         }
       });
     },
