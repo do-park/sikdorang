@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="savedSchedules">
       <h3>오늘의 일정</h3>
       <div v-if="todaySchedule.name">
         {{todaySchedule.name}} | {{todaySchedule.date}} | <button>동행구하기</button> 
@@ -39,6 +39,9 @@ import { mapGetters } from "vuex"
 
 export default {
     name : "SavedSchedules",
+    props : {
+        savedSchedules : Boolean,
+    },
     computed : {
         ...mapGetters("schedule",[
             "getSchedules",
