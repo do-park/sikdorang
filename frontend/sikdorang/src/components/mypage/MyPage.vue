@@ -11,6 +11,8 @@
 		<TripList/>
 		<hr>
 		<GuideTourList/>
+		<hr>
+		<ReviewList/>
 	</div>
 </template>
 
@@ -20,6 +22,7 @@ import SavedSchedules from './SavedSchedules.vue'
 import GuideTourList from './GuideTourList.vue'
 import UserProfile from './UserProfile.vue'
 import MyPageMap from './MyPageMap.vue'
+import ReviewList from '../../views/review/ReviewList'
 
 export default {
 	name: "MyPage",
@@ -29,6 +32,7 @@ export default {
 		GuideTourList,
 		UserProfile,
 		MyPageMap,
+		ReviewList,
 	},
 }
 </script>

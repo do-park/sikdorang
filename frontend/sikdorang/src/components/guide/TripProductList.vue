@@ -10,13 +10,11 @@
 
 <script>
 import TripProductItem from "./TripProductItem.vue"
-// import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
     name: "TripProductList",
     components: {
         TripProductItem,
-        // InfiniteLoading
     },
     data() {
         return {
