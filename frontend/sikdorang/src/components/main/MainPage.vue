@@ -29,7 +29,6 @@
     </div>
     <hr />
     <ThemePage />
-    <Recommend />
     <hr />
     <button class="btn btn-primary" @click="clickToLoginPageOrMyPage">
       {{ loginOrMypage }}

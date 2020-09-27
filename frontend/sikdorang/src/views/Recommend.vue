@@ -7,13 +7,11 @@ export default {
   name: "Recommend",
   data() {
     return {
-      userId: null,
       result: null,
       address: null,
     };
   },
   created() {
-    // this.userId = 744;
     this.getRecommend();
   },
   methods: {
