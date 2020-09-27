@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <v-btn @click="getRecommend()">식당 추천받기!</v-btn>
-    {{ result }}
-  </div>
+  <div>{{ address }}의<br />{{ result.store_name }}</div>
 </template>
 
 <script>
@@ -12,21 +9,30 @@ export default {
     return {
       userId: null,
       result: null,
+      address: null,
     };
   },
   created() {
-    this.userId = 744;
+    // this.userId = 744;
+    this.getRecommend();
   },
   methods: {
     getRecommend() {
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+        },
+      };
       this.$axios
-        .get(`/recommend/${this.userId}`)
+        .get("/recommend/coldstart", requestHeaders)
         .then((response) => {
-          this.result = response;
+          console.log(response.data);
+          this.result = response.data;
+          const temp = this.result.address.split(" ");
+          this.address = temp[0] + " " + temp[1];
+          console.log(this.address);
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .catch((err) => console.error(err));
     },
   },
 };
