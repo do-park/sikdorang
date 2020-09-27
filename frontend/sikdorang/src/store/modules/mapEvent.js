@@ -3,6 +3,7 @@ const mapEvent = {
     state : {
         flip : true,
         mouseOver : null,
+        mouseOverToCard : null,
         clicked : null,
         threeRes : [],
         selectedRest : null,
@@ -29,6 +30,9 @@ const mapEvent = {
         getPlanList : state => {
             return state.planList
         },
+        getmouseOverToCard : state => {
+            return state.mouseOverToCard
+        }
     },
     mutations : {
         mutationFlip: (state,payload) => {
@@ -56,6 +60,9 @@ const mapEvent = {
             state.threeRes = []
             state.selectedRest = null
             state.planList = []
+        },
+        mutationMouseOverToCard: (state, payload) => {
+            state.mouseOverToCard = payload
         }
     },
     actions : {
@@ -79,6 +86,9 @@ const mapEvent = {
         },
         actionMapEventClear: ({commit}, payload) => {
             commit("mutationMapEventClear", payload)
+        },
+        actionMouseOverToCard: ({commit}, payload) => {
+            commit("mutationMouseOverToCard", payload)
         },
     }
 }

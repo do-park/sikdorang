@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="threeRes">
     <div class="d-flex flex-column align-items-center">
       <div>
         <button class="btn btn-secondary" @click="checkFilp">다른 {{getSchedules[getScheduleIdx].name}} 볼래요!</button>
@@ -49,7 +49,7 @@ export default {
   computed: {
     ...mapGetters(mapEvent, [
       "getFlip",
-      "getMouseOver",
+      "getmouseOverToCard",
       "getClicked",
       "getThreeRes",
       "getSelectedRest",
@@ -61,8 +61,8 @@ export default {
     ])
   },
   watch: {
-    getMouseOver() {
-      this.changeOverBox(this.getMouseOver);
+    getmouseOverToCard() {
+      this.changeOverBox(this.getmouseOverToCard);
     },
     getClicked() {
       if ( this.getClicked !== null ) {
