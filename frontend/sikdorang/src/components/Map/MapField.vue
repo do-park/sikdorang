@@ -187,8 +187,8 @@ export default {
 
 			this.startWithMap()
 		},
-		async startWithMap() {
-			await this.setStartCoords();
+		startWithMap() {
+			this.setStartCoords();
 			this.initCurLocation();
 			this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 			this.showCandidates(this.recommends)

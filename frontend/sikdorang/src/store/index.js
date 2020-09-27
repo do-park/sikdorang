@@ -10,6 +10,10 @@ import mypage from './modules/mypage.js'
 import schedule from './modules/schedule.js'
 import themes from './modules/themes.js'
 import order from './modules/order.js'
+import vuexPersistedstate from 'vuex-persistedstate'
+import SecureLS from "secure-ls"
+
+var ls = new SecureLS({ isCompression: false });
 
 export default new Vuex.Store({
   state: {
@@ -17,8 +21,6 @@ export default new Vuex.Store({
     isLogin: !!window.$cookies.get('auth-token'),
     SERVER_URL: 'http://j3d202.p.ssafy.io:8080/',
     LOCAL_URL: 'http://j3d202.p.ssafy.io:8181/project/sikdorang',
-
-
   },
   mutations: {
 
@@ -31,5 +33,14 @@ export default new Vuex.Store({
     schedule,
     themes,
     order,
-  }
+  },
+  plugins: [
+    vuexPersistedstate({
+      storage: {
+        getItem: (key) => ls.get(key),
+        setItem: (key, value) => ls.set(key, value),
+        removeItem: (key) => ls.remove(key),
+      },
+    })
+  ]
 })
