@@ -2,12 +2,12 @@
   <div>
     <div class="rating">
         <ul class="list">
-            <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= reviewData.stars }" :key="star.stars" class="star">
-                <i :class="star <= reviewData.stars ? 'fas fa-star' : 'far fa-star'"></i> 
+            <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= reviewData.score }" :key="star.stars" class="star">
+                <i :class="star <= reviewData.score ? 'fas fa-star' : 'far fa-star'"></i> 
             </li>
         </ul>
         <div v-if="hasCounter" class="info counter">
-            <span class="score-rating">{{ reviewData.stars }}</span>
+            <span class="score-rating">{{ reviewData.score }}</span>
             <span class="divider">/</span>
             <span class="score-max">{{ maxStars }}</span>
         </div>
@@ -30,7 +30,7 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/vue-editor";
 
 export default {
-  name: "TripScheduleForm",
+  name: "ReviewForm",
   components: {
     editor: Editor,
   },
@@ -40,7 +40,7 @@ export default {
       hasCounter: "true",
       reviewData: {
         store: this.$cookies.get("review-store-id"),
-        stars: 3,
+        score: 3,
         content: null,
       },
       editorText: "방문 후기를 작성해주세요.",
@@ -52,30 +52,29 @@ export default {
   methods: {
     rate(star) {
       if (typeof star === 'number' && star <= this.maxStars && star >= 0) {
-        this.reviewData.stars = this.reviewData.stars === star ? star - 1 : star
+        this.reviewData.score = this.reviewData.score === star ? star - 1 : star
       }
     },
-    // onClick() {
-    //   this.getHtml();
-    //   const requestHeaders = {
-    //     headers: {
-    //       Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-    //     },
-    //   };
-
-    //   this.$axios
-    //     .post("review", this.reviewData, requestHeaders)
-    //     .then((res) => {
-    //       console.log(res);
-    //       // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
-    //       // this.$router.push(`/trip/detail/${res.data.id}`);
-    //     })
-    //     .catch((err) => console.error(err));
-    // },
+    onClick() {
+      this.getHtml();
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+        },
+      };
+      this.$axios
+        .post("review", this.reviewData, requestHeaders)
+        .then((res) => {
+          console.log(res);
+          // 등록이 완료되면 마이페이지로 이동
+          this.$router.push({ name: 'MyPageView' })
+        })
+        .catch((err) => console.error(err));
+    },
     getHtml() {
       console.log(this.$refs);
       let html = this.$refs.toastuiEditor.invoke("getHtml");
-      this.tripSchedule.content = html;
+      this.reviewData.content = html;
     },
   },
 };

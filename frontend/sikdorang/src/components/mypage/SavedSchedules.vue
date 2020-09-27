@@ -11,7 +11,9 @@
         :key="schedule.id"
         >
              <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
-                [{{schedule.type}}] {{schedule.store_name}} | <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성 테스트</button>
+                [{{schedule.type}}] {{schedule.store_name}} | 
+                <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성 테스트</button>
+                <!-- 리뷰 작성 완료시 작성완료 버튼(비활성화) 있어야함 -->
             </div>
             <div v-else>
                 [{{schedule.type}}] {{schedule.name}}
