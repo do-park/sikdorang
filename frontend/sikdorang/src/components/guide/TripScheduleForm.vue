@@ -32,6 +32,24 @@
       />원
     </div>
     <div>
+      <label for="limit_person">제한인원</label>
+      <input
+        class="form-control d-inline-block"
+        type="number"
+        id="limit_person"
+        v-model="tripSchedule.limit_person"
+      />명
+    </div>
+    <div>
+      <label for="departure_person">최소 출발인원</label>
+      <input
+        class="form-control d-inline-block"
+        type="number"
+        id="departure_person"
+        v-model="tripSchedule.departure_person"
+      />명
+    </div>
+    <div>
       <label for="time">출발시간</label>
       <input type="time" name="time" id="time" v-model="tripSchedule.start_time" />
     </div>
@@ -77,6 +95,8 @@ export default {
         start_point: null,
         start_time: null,
         content: null,
+        limit_person: null,
+        departure_person: null,
       },
       editorText: "여행 일정에 대한 자세한 설명을 추가해주세요.",
       editorOptions: {
