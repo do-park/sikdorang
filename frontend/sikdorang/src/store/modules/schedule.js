@@ -3,6 +3,8 @@ const schedule = {
     state: {
         schedule: [],
         scheduleIdx : 0,
+        scheduleName : '',
+        scheduleDate : '',
     },
     getters: {
         getSchedules: state => {
@@ -10,6 +12,12 @@ const schedule = {
         },
         getScheduleIdx: state => {
             return state.scheduleIdx
+        },
+        getScheduleName: state => {
+            return state.scheduleName
+        },
+        getScheduleDate: state => {
+            return state.scheduleDate
         },
     },
     mutations: {
@@ -23,6 +31,12 @@ const schedule = {
         mutationScheduleIdx: (state, payload) => {
             state.scheduleIdx = payload
         },
+        mutationScheduleName: (state, payload) => {
+            state.scheduleName = payload
+        },
+        mutationScheduleDate: (state, payload) => {
+            state.scheduleDate = payload
+        },
     },
     actions: {
         actionSchedule: ({ commit }, payload) => {
@@ -33,6 +47,12 @@ const schedule = {
         },
         actionScheduleIdx: ({ commit }, payload) => {
             commit("mutationScheduleIdx", payload)
+        },
+        actionScheduleName: ({ commit }, payload) => {
+            commit("mutationScheduleName", payload)
+        },
+        actionScheduleDate: ({ commit }, payload) => {
+            commit("mutationScheduleDate", payload)
         },
     }
 }

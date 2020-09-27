@@ -99,7 +99,11 @@ export default {
     this.getTripdata();
   },
   methods: {
-    ...mapActions("schedule", ["actionSchedule"]),
+    ...mapActions("schedule", [
+      "actionSchedule",
+      "actionScheduleName",
+      "actionScheduleDate",
+    ]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -144,9 +148,7 @@ export default {
       }
       let plan = "";
       const schedule = [];
-      console.log("일정을 추가했습니다.", this.clonedItems);
 
-      // this.actionSchedule(this.clonedItems);
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
         item["idx"] = i;
@@ -202,24 +204,26 @@ export default {
         ])
         .then((result) => {
           if (result.value) {
-            this.$axios
-              .post(`/trip/`, {
-                user: this.userId,
-                name: result.value,
-                plan: plan.slice(0, -1),
-              })
-              .then((response) => {
-                if (parseInt(response.status / 100) == 2) {
-                  Swal.fire({
-                    icon: "success",
-                    title: "일정을 등록했습니다.",
-                  });
-                  this.$router.push({ name: "MapMain" });
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+            this.actionScheduleName(result.value[0]);
+            this.actionScheduleDate(result.value[1]);
+            // this.$axios
+            //   .post(`/trip/`, {
+            //     user: this.userId,
+            //     name: result.value,
+            //     plan: plan.slice(0, -1),
+            //   })
+            // .then((response) => {
+            //   if (parseInt(response.status / 100) == 2) {
+            Swal.fire({
+              icon: "success",
+              title: "일정을 등록했습니다.",
+            });
+            this.$router.push({ name: "MapMain" });
+            //   }
+            // })
+            // .catch((error) => {
+            //   console.error(error);
+            // });
           }
         });
     },
@@ -259,7 +263,8 @@ export default {
       if (!plan) {
         return;
       }
-      const inputValue = item.name;
+      const inputName = item.name;
+      const inputDate = item.date;
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
@@ -271,7 +276,7 @@ export default {
             icon: "info",
             title: "일정의 이름을 입력하세요.",
             input: "text",
-            inputValue: inputValue,
+            inputValue: inputName,
             inputValidator: (value) => {
               return new Promise((resolve) => {
                 if (value.length === 0) {
@@ -291,13 +296,15 @@ export default {
               if (document.getElementById("datepicker").value) {
                 return document.getElementById("datepicker").value;
               } else {
-                return inputValue;
+                return inputDate;
               }
             },
           },
         ])
         .then((result) => {
-          if (result.isConfirmed) {
+          if (result.value) {
+            this.actionScheduleName(result.value[0]);
+            this.actionScheduleDate(result.value[1]);
             this.$axios
               .put(`/trip/${item.id}/`, {
                 user: this.userId,
