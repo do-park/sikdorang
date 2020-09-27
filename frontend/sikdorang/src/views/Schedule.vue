@@ -5,7 +5,7 @@
     <draggable
       v-model="clonedItems"
       :options="clonedItemOptions"
-      style="border: 1px solid blue;"
+      style="border: 1px solid blue"
     >
       <v-btn
         v-for="(item, index) in clonedItems"
@@ -16,7 +16,7 @@
       >
     </draggable>
 
-    <div style="height:50px;"></div>
+    <div style="height: 50px"></div>
 
     <draggable
       v-model="availableItems"
@@ -28,7 +28,7 @@
       }}</v-btn>
     </draggable>
 
-    <div style="height:50px;"></div>
+    <div style="height: 50px"></div>
 
     <v-btn @click="createTrip()">CREATE</v-btn>
     <br />
@@ -103,7 +103,7 @@ export default {
       "actionSchedule",
       "actionScheduleName",
       "actionScheduleDate",
-      ]),
+    ]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -115,9 +115,7 @@ export default {
     },
     uuid(e) {
       if (e.uid) return e.uid;
-      const key = Math.random()
-        .toString(10)
-        .slice(2);
+      const key = Math.random().toString(10).slice(2);
       this.$set(e, "uid", key);
       return e.uid;
     },
@@ -167,42 +165,67 @@ export default {
       if (!plan) {
         return;
       }
-      const inputValue = String(new Date()).slice(4, 24);
-      Swal.fire({
-        icon: "info",
-        title: "일정의 이름을 입력하세요.",
-        input: "text",
-        inputValue: inputValue,
+      const inputValue = new Date().toISOString().substring(0, 10);
+
+      Swal.mixin({
+        confirmButtonText: "Next &rarr;",
         showCancelButton: true,
-        inputValidator: (value) => {
-          if (value === "") {
-            return "일정의 이름을 입력하세요!";
-          }
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.actionScheduleName(result.value)
-          // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
-          // this.$axios
-          //   .post(`/trip/`, {
-          //     user: this.userId,
-          //     name: result.value,
-          //     plan: plan.slice(0, -1),
-          //   })
+        progressSteps: ["1", "2"],
+      })
+        .queue([
+          {
+            icon: "info",
+            title: "일정의 이름을 입력하세요.",
+            input: "text",
+            inputValue: inputValue,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value.length === 0) {
+                  resolve("일정의 이름을 입력하세요.");
+                } else {
+                  resolve();
+                }
+              });
+            },
+          },
+          {
+            icon: "info",
+            title: "일정의 날짜를 입력하세요.",
+            html: `<input id="datepicker" type="date" value="inputValue">`,
+            focusConfirm: false,
+            preConfirm: () => {
+              if (document.getElementById("datepicker").value) {
+                return document.getElementById("datepicker").value;
+              } else {
+                return inputValue;
+              }
+            },
+          },
+        ])
+        .then((result) => {
+          if (result.value) {
+            this.actionScheduleName(result.value[0]);
+            this.actionScheduleDate(result.value[1]);
+            // this.$axios
+            //   .post(`/trip/`, {
+            //     user: this.userId,
+            //     name: result.value,
+            //     plan: plan.slice(0, -1),
+            //   })
             // .then((response) => {
             //   if (parseInt(response.status / 100) == 2) {
-                Swal.fire({
-                  icon: "success",
-                  title: "일정을 등록했습니다.",
-                });
-                this.$router.push({ name: "MapMain" });
+            Swal.fire({
+              icon: "success",
+              title: "일정을 등록했습니다.",
+            });
+            this.$router.push({ name: "MapMain" });
             //   }
             // })
             // .catch((error) => {
             //   console.error(error);
             // });
-        }
-      });
+          }
+        });
     },
     readTrip(item) {
       let trip = item.plan.split("-");
@@ -240,40 +263,67 @@ export default {
       if (!plan) {
         return;
       }
-      const inputValue = item.name;
-      Swal.fire({
-        icon: "info",
-        title: "일정의 이름을 입력하세요.",
-        input: "text",
-        inputValue: inputValue,
+      const inputName = item.name;
+      const inputDate = item.date;
+
+      Swal.mixin({
+        confirmButtonText: "Next &rarr;",
         showCancelButton: true,
-        inputValidator: (value) => {
-          if (value === "") {
-            return "일정의 이름을 입력하세요!";
-          }
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // to do: name을 title로 바꾸는 것이 더 의미를 잘 전달할 수 있을 것 같음
-          this.$axios
-            .put(`/trip/${item.id}/`, {
-              user: this.userId,
-              name: result.value,
-              plan: plan.slice(0, -1),
-            })
-            .then((response) => {
-              if (parseInt(response.status / 100) == 2) {
-                Swal.fire({
-                  icon: "success",
-                  title: "일정을 수정했습니다.",
-                });
+        progressSteps: ["1", "2"],
+      })
+        .queue([
+          {
+            icon: "info",
+            title: "일정의 이름을 입력하세요.",
+            input: "text",
+            inputValue: inputName,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value.length === 0) {
+                  resolve("일정의 이름을 입력하세요.");
+                } else {
+                  resolve();
+                }
+              });
+            },
+          },
+          {
+            icon: "info",
+            title: "일정의 날짜를 입력하세요.",
+            html: `<input id="datepicker" type="date" value="inputValue">`,
+            focusConfirm: false,
+            preConfirm: () => {
+              if (document.getElementById("datepicker").value) {
+                return document.getElementById("datepicker").value;
+              } else {
+                return inputDate;
               }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-      });
+            },
+          },
+        ])
+        .then((result) => {
+          if (result.value) {
+            this.actionScheduleName(result.value[0]);
+            this.actionScheduleDate(result.value[1]);
+            this.$axios
+              .put(`/trip/${item.id}/`, {
+                user: this.userId,
+                name: result.value,
+                plan: plan.slice(0, -1),
+              })
+              .then((response) => {
+                if (parseInt(response.status / 100) == 2) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "일정을 수정했습니다.",
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        });
     },
     deleteTrip(item) {
       Swal.fire({
@@ -305,4 +355,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>
