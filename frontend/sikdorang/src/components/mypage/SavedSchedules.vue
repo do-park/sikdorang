@@ -116,7 +116,7 @@ export default {
             this.$axios.get('/trip/list',requestHeaders)
             .then(res=>{
                 console.log(res)
-                // this.allSchedule = res.data
+                this.allSchedule = res.data
             })
             .catch(err=>{
                 console.log(err)
