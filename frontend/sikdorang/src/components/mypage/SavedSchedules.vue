@@ -36,6 +36,8 @@ export default {
         this.saveSchedule()
         console.log(this.getScheduleName)
         console.log(this.getScheduleDate)
+        this.getTodaySchedules()
+        this.getAllSchedules()
     },
     methods : {
        getSightseeing() {
@@ -84,7 +86,7 @@ export default {
             this.$axios.get('/trip/today',requestHeaders)
             .then(res=>{
                 console.log(res)
-                // this.todaySchedule = res.data
+                this.makeScheduleList(res.data)
             })
             .catch(err=>{
                 console.log(err)
@@ -108,7 +110,8 @@ export default {
         },
         //일정 정보 가져오면 스케줄 리스트로 만들기
         makeScheduleList(info) {
-
+            console.log(info)
+            
         },
     },
 }
