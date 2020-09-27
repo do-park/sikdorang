@@ -29,7 +29,7 @@ export default {
         this.$axios.get("rest-auth/user/", requestHeaders)
         .then(res => {
             console.log(res)
-            // this.actionUserInfo(userInfo)
+            this.actionUserInfo(res.data)
             // this.actionTripList(tripItems)
         })
         .catch(err => console.error(err))
