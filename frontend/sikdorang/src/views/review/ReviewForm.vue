@@ -39,6 +39,7 @@ export default {
       maxStars: 5,
       hasCounter: "true",
       reviewData: {
+        store: this.$cookies.get("review-store-id"),
         stars: 3,
         content: null,
       },

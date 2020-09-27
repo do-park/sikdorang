@@ -11,7 +11,7 @@
         :key="schedule.id"
         >
              <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
-                [{{schedule.type}}] {{schedule.store_name}} | <button class="btn btn-primary" @click="goReviewForm">리뷰작성 테스트</button>
+                [{{schedule.type}}] {{schedule.store_name}} | <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성 테스트</button>
             </div>
             <div v-else>
                 [{{schedule.type}}] {{schedule.name}}
@@ -58,7 +58,9 @@ export default {
         this.getAllSchedules()
     },
     methods : {
-      goReviewForm() {
+      goReviewForm(store_id) {
+        console.log(store_id)
+        this.$cookies.set("review-store-id", store_id);
         this.$router.push({ name: "ReviewForm" });
       },
        getSightseeing() {
