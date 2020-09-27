@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from .serializers import *
 from .models import Trip
 from api.models import *
+from api.serializers import *
+import datetime
 
 from rest_framework import viewsets
 
@@ -63,3 +65,21 @@ def idealcategory(request):
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user.pk)
+
+@api_view(['GET'])
+def store_detail(request, store_pk):
+    store = get_object_or_404(Store, pk=store_pk)
+    serializer = StoreSerializer(store)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def trip_today(request):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y-%m-%d')
+    trips = Trip.objects.filter(user=user, date=nowDate)
+    serializer = TripListSerializer(trips, many=True)
+    return Response(serializer.data)

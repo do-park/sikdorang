@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <nav class="navbar navbar-expand-xl navbar-dark bg-primary">
+  <nav class="navbar navbar-expand-* navbar-light bg-light sticky-top">
+    <div class="container">
       <a class="navbar-brand" href="/">Navbar</a>
       <button
         class="navbar-toggler"
@@ -27,8 +27,8 @@
           >
         </div>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </template>
 
 <script>

@@ -1,22 +1,30 @@
 <template>
   <div>
-    <h1>명예의 전당 [ {{theme_name}} ]편</h1>
+    <h1>명예의 전당 [ {{ theme_name }} ]편</h1>
     <div class="container">
       <div class="row text-center">
         <div
-          @click="goDetail(restuarant, index)"
-          v-for="(restuarant, index) in restaurants"
+          @click="goDetail(restuarant)"
+          v-for="restuarant in restaurants"
           :key="restuarant.id"
           class="box col-sm-4 m-0"
         >
-          <span v-if="userVisited[index] === 1" class="effect">
-            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
-              <p class="store_name">{{restuarant.store_name}}</p>
+          <span v-if="storeClear[restuarant.id] === 1" class="effect">
+            <div
+              class="img-card"
+              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
+            >
+              <p class="store_name">
+                {{ restuarant.store_name }}
+              </p>
             </div>
           </span>
           <span v-else>
-            <div class="img-card" :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)">
-              <p class="store_name">{{restuarant.store_name}}</p>
+            <div
+              class="img-card"
+              :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
+            >
+              <p class="store_name">{{ restuarant.store_name }}</p>
             </div>
           </span>
         </div>
@@ -26,36 +34,37 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+const themes = "themes";
 import Swal from "sweetalert2";
+
 export default {
   name: "ThemeDetail",
   data() {
     return {
+      themeClear: [],
+      storeClear: [],
       theme_name: this.$cookies.get("theme_name"),
       theme_id: this.$cookies.get("theme_id"),
-      restaurants: [
-        { id: 111, store_name: "빵집1" },
-        { id: 222, store_name: "빵집2" },
-        { id: 333, store_name: "빵집3" },
-      ],
+      restaurants: [],
       IMG_URL: "http://j3d202.p.ssafy.io:8080",
-      userId: null,
-      userVisited: [],
     };
   },
   created() {
-    // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    this.userId = 1;
     this.getRestarants();
-    this.getMyVisited(1);
+    this.themeClear = this.getThemesClear;
+    this.storeClear = this.getStoreClear;
+  },
+  computed: {
+    ...mapGetters(themes, ["getThemesClear", "getStoreClear"]),
   },
   methods: {
+    ...mapActions(themes, ["actionThemesClear", "actionStoreClear"]),
     getCardBgImage(image_url) {
       return 'background-image: url("' + image_url + '")';
     },
     getRestarants() {
-      console.log(this.theme_id);
-      this.$axios  
+      this.$axios
         .get(`/achievement/${this.theme_id}`)
         .then((res) => {
           var restaurants = res.data;
@@ -65,27 +74,16 @@ export default {
           console.log(err);
         });
     },
-    getMyVisited(userId) {
-      //나중에 axios로 받아오면 이거 지워주세요.
-      this.userVisited = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-
-      // todo: axios로 Back에서 user의 achievedata 받아오기
-      console.log(userId);
-
-      // this.$axios.get(`/achievement/${this.theme_id}/${userId}`)
-      // .then(res => {
-      //     var userVisited = res.data
-      //     this.userVisited = userVisited
-      // })
-      // .catch(err => {
-      //     console.log(err)
-      // })
-    },
-    goDetail(rest, index) {
-      //   swal(rest.store_name, rest.description);
+    goDetail(rest) {
+      console.log(rest);
       Swal.fire({
         title: rest.store_name,
-        text: rest.description,
+        html:
+          rest.address +
+          "<br />" +
+          rest.tel +
+          "<br /><br />" +
+          rest.description,
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
@@ -93,14 +91,73 @@ export default {
         cancelButtonText: "OK",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.userVisited[index] = 1;
+          const requestHeaders = {
+            headers: {
+              Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+            },
+          };
+          this.$axios
+            .post(`achievement/visit_create/${rest.id}`, null, requestHeaders)
+            .then(() => {
+              this.$set(this.storeClear, rest.id, 1);
+              this.actionStoreClear(this.storeClear);
+              this.updateClear(rest.id);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
-          console.log(this.userVisited);
-          // todo: axios 처리도 해야할 것 같은데 Swal 안에서 할 수 있는지 모르겠군요
-          // axios로 지금 이 식당에 방문했음으로 변경
-          // 테마가 완료되었다면, axios로 테마 완성
         }
       });
+    },
+    updateClear(restId) {
+      const theme = parseInt(restId / 10);
+      let clear = true;
+      if (theme <= 7) {
+        for (let i = 1; i < 10; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      } else if ((theme === 8) | (theme === 11)) {
+        for (let i = 1; i < 7; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      } else if (theme === 9) {
+        for (let i = 1; i < 9; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      } else {
+        for (let i = 1; i < 8; i++) {
+          if (this.storeClear[theme * 10 + i] != 1) {
+            clear = false;
+            break;
+          }
+        }
+      }
+      if (clear === true) {
+        const requestHeaders = {
+          headers: {
+            Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+          },
+        };
+        this.$axios
+          .post(`achievement/theme_create/${theme}`, null, requestHeaders)
+          .then(() => {
+            this.$set(this.themeClear, theme, 1);
+            this.actionThemesClear(this.themeClear);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
 };

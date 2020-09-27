@@ -22,11 +22,12 @@ def theme_clear(request):
     print(themes)
     for i in themes:
         theme_count[i['count']] = 1
-    visited_count = [0]*100
+    visited_count = [0]*150
     visited = AchieveUser.objects.filter(user=user).values()
     for i in visited:
         visited_count[i['count']] = 1
-    return Response(theme_count, visited_count)
+    visitchk = [theme_count, visited_count]
+    return Response(visitchk)
 
 @api_view(['POST'])
 def theme_create(request, theme_pk):
