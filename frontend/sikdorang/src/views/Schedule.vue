@@ -99,7 +99,11 @@ export default {
     this.getTripdata();
   },
   methods: {
-    ...mapActions("schedule", ["actionSchedule"]),
+    ...mapActions("schedule", [
+      "actionSchedule",
+      "actionScheduleName",
+      "actionScheduleDate",
+      ]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
