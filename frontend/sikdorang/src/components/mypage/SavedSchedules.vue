@@ -28,7 +28,7 @@ export default {
     },
     data() {
         return {
-            todaySchedule : [],
+            todaySchedule : {"name" : "", "date" : "", "schedules" : []},
             allSchedule : [],
         }
     },
@@ -109,9 +109,61 @@ export default {
             })
         },
         //일정 정보 가져오면 스케줄 리스트로 만들기
-        makeScheduleList(info) {
-            console.log(info)
-            
+        makeScheduleList(data) {
+            console.log(data)
+            this.todaySchedule.name = data.name
+            this.todaySchedule.date = data.date
+            //일정 리스트로 만들기
+            const plans = data.plan.split('-')
+            console.log(plans)
+            plans.forEach(plan=>{
+                const type = plan.slice(0,1)
+                const typeName = "식당"
+                const id = plan.slice(1,)
+                // 식당/카페이면
+                if (type === "R" | type === "C"  ) {
+                    this.$axios.get(`trip/store_detail/${id}`)
+                    .then(res=>{
+                        const result = res.data
+                        //가게의 타입도 구분
+                        if (type === "C") { typeName = "카페" }
+                        result["type"] = typeName 
+                        this.todaySchedule.schedules.push(result)
+                    })
+                    .catch(err=>{
+                        console.log(err)
+                    })
+                }
+                // 관광지/숙박이면
+                else {
+                    const contentTypeId = 32
+                    typeName ='숙박'
+                    if (type === "S") { contentTypeId = 12; typeName = "관광지"; }
+                    const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+                    const contentId = id
+                    this.$axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`)
+                    .then(res => {
+                        const items = res.data.response.body.items.item
+                        for (let i=0;i<items.length;i++) {
+                            this.recommends.push({
+                                "id": items[i].contentid,
+                                "name": items[i].title,
+                                "branch": "",
+                                "tel": items[i].tel,
+                                "address": items[i].addr1 + items[i].addr2,
+                                "latitude": items[i].mapy,
+                                "longtitude": items[i].mapx,
+                                "category": "관광지",
+                                "tags": "",
+                                "img": items[i].firstimage,
+                    })
+                }
+                        console.log(items)
+                    })
+                    .catch(err => console.error(err))
+                }
+                
+            })
         },
     },
 }
