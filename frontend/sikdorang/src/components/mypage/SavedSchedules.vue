@@ -1,7 +1,10 @@
 <template>
   <div>
       <h3>오늘의 일정</h3>
+      <div v-if="todaySchedule.name">
         {{todaySchedule.name}} | {{todaySchedule.date}} | <button>동행구하기</button> 
+      </div>
+      <div v-else>오늘 일정이 없습니다.</div>
         <hr>
         <div
         v-for="schedule in todaySchedule.schedules"
@@ -17,7 +20,7 @@
         </div>
       <h3>저장된 여행 일정</h3>
       <hr>
-      <div>
+      <div v-if="AllSchedules">
           <div
           v-for="(schedule, index) in AllSchedules"
           :key="schedule.idx"
@@ -25,6 +28,7 @@
             {{index+1}} | {{schedule.name}} | {{schedule.date}}
           </div>
       </div>
+      <div v-else>등록된 일정이 없습니다.</div>
   </div>
 </template>
 
@@ -133,7 +137,7 @@ export default {
             console.log(plans)
             plans.forEach(plan=>{
                 const type = plan.slice(0,1)
-                const typeName = "식당"
+                let typeName = "식당"
                 const id = plan.slice(1,)
 
                 // 식당/카페이면
@@ -153,8 +157,8 @@ export default {
                 }
                 // 관광지/숙박이면
                 else {
-                    const contentTypeId = 32
-                    typeName ="숙박"
+                    let contentTypeId = 32
+                    let typeName ="숙박"
                     if (type === "S") { contentTypeId = 12; typeName = "관광지"; }
                     const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
                     const contentId = id
