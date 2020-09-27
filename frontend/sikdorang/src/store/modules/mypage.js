@@ -1,11 +1,12 @@
 const mypage = {
     namespaced: true,
     state: {
-        userInfo: {
-            userName: null,
-            userBirth: null,
-            userPhone: null,
-        },
+        // userInfo: {
+        //     userName: null,
+        //     userBirth: null,
+        //     userPhone: null,
+        // },
+        userInfo : {},
         tripList: [],
         clickedIndex: null,
     },
