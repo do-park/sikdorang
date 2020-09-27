@@ -5,10 +5,21 @@
         </div>
         <div>
             <h3>[{{ detail.area }}]{{ detail.title }}</h3>
-            <span>{{ detail.start_date }} ~ {{ detail.end_date }} 1인 ￦{{ detail.price }}</span>
+            <span>{{ startDate }} ~ {{ endDate }} 1인 ￦{{ detail.price }}</span>
         </div>
-        <button v-if="isLogin" class="btn btn-primary" @click="onClick()">신청하기</button>
-        <div v-else>로그인시 신청이 가능합니다.</div>
+        <div>
+            {{ detail.now_person }} / {{ detail.limit_person }}
+        </div>
+        <div>
+            {{ detail.departure_person }}명 이상 신청 시 출발
+        </div>
+        <div v-if="!finish">
+            <button v-if="isLogin" class="btn btn-primary" @click="onClick()">신청하기</button>
+            <div v-else>로그인시 신청이 가능합니다.</div>
+        </div>
+        <div v-else>
+            마감되었습니다.
+        </div>        
         <hr>
         <viewer v-if="detail.content" :initialValue="detail.content"/>
     </div>
@@ -25,20 +36,23 @@ export default {
         viewer: Viewer,
     },
     mounted() {
-        this.$axios.get(`/guide/detail_tour/${this.$route.params.item_pk}`)
-        .then(res => {
-            console.log(res)
-            this.detail = res.data[0]
+        // this.$axios.get(`/guide/detail_tour/${this.$route.params.item_pk}`)
+        // .then(res => {
+        //     console.log(res)
+        //     this.detail = res.data[0]
             
         
-        })
-        .catch(err => console.error(err))
+        // })
+        // .catch(err => console.error(err))
 
-        this.changeDate // 어디에 넣지
+        // this.changeDate // 어디에 넣지
     },
     data() {
         return {
             isLogin: this.$store.state.isLogin,
+            startDate: '2020-01-01',
+            endDate: '2020-01-02',
+            finish: false,
             detail: {
                 id: 1,
                 user: 1,
@@ -51,6 +65,9 @@ export default {
                 start_point: '인동 입석',
                 start_time: '09:00',
                 content: "",
+                limit_person: 10,
+                departure_person: 5,
+                now_person: 2,
             },
         }
     },
@@ -60,8 +77,9 @@ export default {
         ]),
         changeDate() {
             console.log(this.detail)
-            this.detail.start_date = `${this.detail.start_date.split('-')[0]}년 ${this.item.start_date.split('-')[1]}월 ${this.item.start_date.split('-')[2]}일`
-            this.detail.end_date = `${this.detail.end_date.split('-')[0]}년 ${this.item.end_date.split('-')[1]}월 ${this.item.end_date.split('-')[2]}일`
+            this.start_date = `${this.detail.start_date.split('-')[0]}년 ${this.item.start_date.split('-')[1]}월 ${this.item.start_date.split('-')[2]}일`
+            this.end_date = `${this.detail.end_date.split('-')[0]}년 ${this.item.end_date.split('-')[1]}월 ${this.item.end_date.split('-')[2]}일`,
+            this.finish = (this.item.limit_person === this.item.now_person)
         },
         onClick() {
             this.actionOrderTrip(this.detail)
