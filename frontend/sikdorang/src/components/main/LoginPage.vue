@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name:'LoginPage',
   data() {
@@ -40,12 +42,14 @@ export default {
     }
   },
   methods : {
+    ...mapActions('mypage', ['actionUserInfo']),
     clickLogin() {
       this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
         console.log(response)
         window.$cookies.set('auth-token',response.data.token)
         this.$store.state.isLogin = true
+        this.actionUserInfo(response.data.user)
         this.$emit('toMainPage');
       })
       .catch(err => {

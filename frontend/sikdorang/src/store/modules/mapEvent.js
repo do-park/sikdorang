@@ -19,7 +19,9 @@ const mapEvent = {
             return state.clicked
         },
         getThreeRes : state => {
-            return state.threeRes
+            if (state.threeRes) {
+                return state.threeRes
+            }
         },
         getSelectedRest : state => {
             return state.selectedRest
@@ -47,6 +49,14 @@ const mapEvent = {
         mutationPlanList: (state,payload) => {
             state.planList = payload
         },
+        mutationMapEventClear: (state) => {
+            state.flip = true
+            state.mouseOver = null
+            state.clicked = null
+            state.threeRes = []
+            state.selectedRest = null
+            state.planList = []
+        }
     },
     actions : {
         actionFlip: ({commit}, payload) => {
@@ -66,6 +76,9 @@ const mapEvent = {
         },
         actionPlanList: ({commit}, payload) => {
             commit("mutationPlanList", payload)
+        },
+        actionMapEventClear: ({commit}, payload) => {
+            commit("mutationMapEventClear", payload)
         },
     }
 }

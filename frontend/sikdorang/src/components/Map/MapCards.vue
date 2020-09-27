@@ -6,40 +6,20 @@
       </div>
     
       <div class="d-flex justify-content-center">
-        <transition enter-active-class="animated flipInY">
+        <transition v-for="(res, idx) in threeRes" :key="res.id"  enter-active-class="animated flipInY">
           <div
-            :class="{ 'active': isActive0 }"
+            :class="{ 'active': isActive(idx) }"
             v-if="animatechk"
             class="box"
-            @click="selectRest(0)"
+            @click="selectRest(idx)"
+            @mouseover="actionMouseOver(idx)"
+            @mouseleave="actionMouseOver(null)"
           >
-            A.{{getThreeRes[0].name}}
+            {{index[idx]}}.{{res.name}}
             <p>@ 맛집 정보 @</p>
           </div>
         </transition>
-        <transition enter-active-class="animated flipInY">
-          <div
-            :class="{ 'active': isActive1 }"
-            v-if="animatechk"
-            class="box"
-            @click="selectRest(1)"
-          >
-            B.{{getThreeRes[1].name}}
-            <p>@ 맛집 정보 @</p>
-          </div>
-        </transition>
-        <transition enter-active-class="animated flipInY">
-          <div
-            :class="{ 'active': isActive2 }"
-            v-if="animatechk"
-            class="box"
-            @click="selectRest(2)"
-          >
-            C.{{getThreeRes[2].name}}
-            <p>@ 맛집 정보 @</p>
-          </div>
-        </transition>
-        <br />
+        <br/>
       </div>
     </div>
   </div>
@@ -55,11 +35,12 @@ export default {
   data() {
     return {
       plans: this.getPlanList,
-
+      threeRes: this.getThreeRes,
       isActive0: false,
       isActive1: false,
       isActive2: false,
       animatechk: true,
+      index: ['A', 'B', 'C'],
     };
   },
   props: {
@@ -79,8 +60,6 @@ export default {
       "getScheduleIdx",
     ])
   },
-
-
   watch: {
     getMouseOver() {
       this.changeOverBox(this.getMouseOver);
@@ -90,12 +69,15 @@ export default {
         this.actionSelectedRest(this.getThreeRes[this.getClicked]);
         this.selectRest(this.getClicked);
       }
-      
     },
+    getThreeRes() {
+      if (this.getThreeRes !== []) {
+        this.threeRes = this.getThreeRes
+      }
+    }
   },
   mounted() {
-   
-    this.checkFilp();
+    // this.checkFilp();
     if (this.getThreeRes) {
       this.actionSelectedRest(this.getThreeRes[0]);
     }
@@ -106,6 +88,7 @@ export default {
       "actionSelectedRest",
       "actionClicked",
       "actionPlanList",
+      "actionMouseOver",
     ]),
     ...mapActions("schedule",[
       "actionStore",
@@ -135,14 +118,23 @@ export default {
                 this.actionPlanList(plans);
                 this.actionStore(Rest)
                 this.actionScheduleIdx(this.getScheduleIdx+1)
-              
               }
             });
           }
         });
       }
     },
-
+    isActive(idx) {
+      if (this.isActive0 && idx === 0) {
+        return true
+      } else if (this.isActive1 && idx === 1) {
+        return true
+      } else if (this.isActive2 && idx === 2) {
+        return true
+      } else {
+        return false
+      }
+    },
     changeOverBox(overidx) {
       this.isActive0 = false;
       this.isActive1 = false;
@@ -162,7 +154,7 @@ export default {
     },
     checkFilp() {
       this.actionFlip(!this.getFlip);
-      this.actionClicked(null);
+      // this.actionClicked(null);
       this.animatechk = false;
       setTimeout(() => {
         this.animatechk = true;
