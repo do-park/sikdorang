@@ -30,37 +30,39 @@ export default {
             allSchedule : [],
         }
     },
+    mounted() {
+        this.saveSchedule()
+    },
     methods : {
+       getSightseeing() {
+           const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+           
+            this.$axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=126733&contentTypeId=12&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`)
+            .then(res => {
+                const items = res.data.response.body.items.item
+                console.log(items)
+            })
+            .catch(err => console.error(err))
+       },
        saveSchedule() {
            const scheduleData = []
            if (this.getSchedules.length > 0) {
                this.getSchedules.forEach(schedule => {
-                   scheduleData.push({
-                       //스케줄의 이름은 어디서 확인이 가능한가?????????
-                       //스케줄 ERD는 있는건가?
-                       //스케줄은 어디 저장되고 있나?
-                       "schedule_idx" : schedule.idx,
-                       "category_id" : schedule.id,
-                       "category_name" : schedule.name,
-                       "store_id" : schedule.userChoice.id,
-                       "store_name" : schedule.userChoice.name,
-                       "address" : schedule.userChoice.address,
-                       "latitude" : schedule.userChoice.latitude,
-                       "longtitude" : schedule.userChoice.longtitude,
-                       "store_category" : schedule.userChoice.category,
-                       "store_tags" : schedule.userChoice.tags
-                   })
+                   scheduleData.push(schedule.id+String(schedule.userChoice.id))
                });
            }
-
-           console.log(scheduleData)
+           const data = {
+               "plan" :scheduleData.join('-'),
+               "name" : "",
+               "data" : ""
+           }
            const requestHeaders = {
                 headers: {
-                    Authorization: `JWT ${this.$cookies.get('auth-token')}`
+                    Authorization: `JWT ${this.$cookies.get('auth-token')}`,
                 },
-                scheduleData : scheduleData
+
             }
-           this.$axios.post(`/saveschedule/`, requestHeaders )
+           this.$axios.post('/trip/', data , requestHeaders)
             .then((res) => {
               console.log("일정을 저장했습니다.",res)
             })
@@ -68,53 +70,42 @@ export default {
               console.error(err);
             });
        },
-
-       //오늘의 스케줄과 모든 스케줄을 받아온다
-        getTodayAndAllSchedules() {
+        //오늘 일정 가져오기
+        getTodaySchedules() {
             const requestHeaders = {
                 headers: {
                     Authorization: `JWT ${this.$cookies.get('auth-token')}`
                 }
             }
-            this.$axios.get('schedules',requestHeaders)
+            this.$axios.get('/trip/today',requestHeaders)
             .then(res=>{
-                this.todaySchedule = res.data[0]
-                this.allSchedule = res.data[1]
+                console.log(res)
+                // this.todaySchedule = res.data
             })
             .catch(err=>{
                 console.log(err)
             })
         },
+        //모든 일정 가져오기
+        getAllSchedules() {
+            const requestHeaders = {
+                headers: {
+                    Authorization: `JWT ${this.$cookies.get('auth-token')}`
+                }
+            }
+            this.$axios.get('/trip/list',requestHeaders)
+            .then(res=>{
+                console.log(res)
+                // this.allSchedule = res.data
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        },
+        //일정 정보 가져오면 스케줄 리스트로 만들기
+        makeScheduleList(info) {
 
-        // getTodaySchedules() {
-        //     const requestHeaders = {
-        //         headers: {
-        //             Authorization: `JWT ${this.$cookies.get('auth-token')}`
-        //         }
-        //     }
-        //     this.$axios.get('schedules',requestHeaders)
-        //     .then(res=>{
-        //         this.todaySchedule = res.data
-        //     })
-        //     .catch(err=>{
-        //         console.log(err)
-        //     })
-        // },
-        // getAllSchedules() {
-        //     const requestHeaders = {
-        //         headers: {
-        //             Authorization: `JWT ${this.$cookies.get('auth-token')}`
-        //         }
-        //     }
-        //     this.$axios.get('schedules',requestHeaders)
-        //     .then(res=>{
-        //         this.allSchedule = res.data
-        //     })
-        //     .catch(err=>{
-        //         console.log(err)
-        //     })
-        // },
-     
+        },
     },
 }
 </script>
