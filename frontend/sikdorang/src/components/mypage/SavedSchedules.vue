@@ -16,12 +16,13 @@
 
         </div>
       <h3>저장된 여행 일정</h3>
+      <hr>
       <div>
           <div
-          v-for="(schedule, index) in getSchedules"
+          v-for="(schedule, index) in AllSchedules"
           :key="schedule.idx"
           >
-            {{index+1}}.{{schedule.userChoice.name}}
+            {{index+1}} | {{schedule.name}} | {{schedule.date}}
           </div>
       </div>
   </div>
