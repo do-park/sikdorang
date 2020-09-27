@@ -1,7 +1,18 @@
 <template>
     <div>
-      <div>{{ review.score }}</div>
+      <h3>{{ storeName }}</h3>
+      <div class="rating">
+        <ul class="list">
+          <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= review.score }" :key="star.stars" class="star">
+            <i :class="star <= review.score ? 'fas fa-star' : 'far fa-star'"></i> 
+          </li>
+        </ul>
+      </div>
       <viewer v-if="review.content" :initialValue="review.content"/>
+      <div class="text-right">
+        <small>{{ review.updated_at }}</small>
+      </div>
+      <hr>
     </div>
 </template>
 
@@ -17,12 +28,45 @@ export default {
     props: {
         review: Object,
     },
+    data() {
+      return {
+        maxStars: 5,
+        storeName: null,
+      }
+    },
+    mounted() {
+      this.getStore()
+    },
     methods: {
-     
+      getStore() {
+        console.log('ㅇㅇㅇ')
+        this.$axios.get(`trip/store_detail/${this.review.store}`)
+        .then(res => {
+            console.log(res)
+            this.storeName = res.data.store_name
+        })
+        .catch(err => console.error(err))
+      }
     }
 }
 </script>
 
-<style>
-
+<style scoped lang="scss">
+.rating {
+    color: #b7b7b7;
+    .list {
+        padding: 0;
+        margin: 0;
+        .star {
+            display: inline-block;
+            font-size: 15px; 
+            &:first-child {
+                margin-left: 0;
+            }
+            &.active {
+                color: #ffe100;
+            }
+        }
+    }
+}
 </style>
