@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.serializers import ReadOnlyField
 
 from .models import Trip
 from accounts.serializers import UserSerializer
@@ -9,7 +10,7 @@ class TripListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TripSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False)  # required=False => is_valid() 에서 유무검증 pass
+    trip_user = ReadOnlyField(source='user.id')
     class Meta: 
         model = Trip
-        fields = '__all__'
+        fields = ['trip_user','name', 'plan', 'date']
