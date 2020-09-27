@@ -3,6 +3,7 @@ const schedule = {
     state: {
         schedule: [],
         scheduleIdx : 0,
+        scheduleProgressIdx: -1,
     },
     getters: {
         getSchedules: state => {
@@ -10,6 +11,9 @@ const schedule = {
         },
         getScheduleIdx: state => {
             return state.scheduleIdx
+        },
+        getScheduleProgressIdx: state => {
+            return state.scheduleProgressIdx
         },
     },
     mutations: {
@@ -23,6 +27,9 @@ const schedule = {
         mutationScheduleIdx: (state, payload) => {
             state.scheduleIdx = payload
         },
+        mutationScheduleProgressIdx: (state, payload) => {
+            state.scheduleProgressIdx = payload
+        },
     },
     actions: {
         actionSchedule: ({ commit }, payload) => {
@@ -33,6 +40,9 @@ const schedule = {
         },
         actionScheduleIdx: ({ commit }, payload) => {
             commit("mutationScheduleIdx", payload)
+        },
+        actionscheduleProgressIdx: ({ commit }, payload) => {
+            commit("mutationScheduleProgressIdx", payload)
         },
     }
 }

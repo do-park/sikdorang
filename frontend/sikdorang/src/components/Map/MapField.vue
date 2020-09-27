@@ -56,6 +56,7 @@ export default {
 		...mapGetters("schedule", [
 			"getSchedules",
 			"getScheduleIdx",
+			"getScheduleProgressIdx",
 		]),
 	},
 	watch : {
@@ -77,7 +78,6 @@ export default {
 			}
 		},
 		getPlanList() {
-			this.plans = this.getPlanList
 			this.showPaths()
 		},
 		getMouseOver() {
@@ -88,6 +88,12 @@ export default {
 		getClicked() {
 			if (this.getClicked !== null) {
 				this.moveSmoothly('click')
+			}
+		},
+		getScheduleProgressIdx() {
+			if (this.getScheduleProgressIdx !== -1){
+				console.log('이동')
+				this.moveSmoothly('progress')
 			}
 		}
 	},
@@ -102,7 +108,8 @@ export default {
 			'actionPlanList',
 		]),
 		...mapActions("schedule", [
-			"actionStore"
+			"actionStore",
+			"actionscheduleProgressIdx",
 		]),
 		divideRecommendation(cf) {
 			if (cf === "식당" | cf === "카페"){
@@ -153,22 +160,27 @@ export default {
 		},
 		moveSmoothly(cd) {
 			// 이동할 위도 경도 위치를 생성합니다 
+		var lat = null,
+			long = null;
 			if (cd === 'over' && this.getMouseOver !== null) {
-				let lat = this.getThreeRes[this.getMouseOver].latitude;
-				let long = this.getThreeRes[this.getMouseOver].longtitude;
-				let moveLatLon = new kakao.maps.LatLng(lat,long)
-				// 지도 중심을 부드럽게 이동시킵니다
-				// 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-				this.map.panTo(moveLatLon);
+				lat = this.getThreeRes[this.getMouseOver].latitude
+				long = this.getThreeRes[this.getMouseOver].longtitude
 			} else if (cd === 'click' && this.getClicked !== null) {
-				console.log('이동')
-				let lat = this.getThreeRes[this.getClicked].latitude;
-				let long = this.getThreeRes[this.getClicked].longtitude;
-				let moveLatLon = new kakao.maps.LatLng(lat,long)
-				// 지도 중심을 부드럽게 이동시킵니다
-				// 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-				this.map.panTo(moveLatLon);
+				lat = this.getThreeRes[this.getClicked].latitude
+				long = this.getThreeRes[this.getClicked].longtitude
+			} else if (cd === 'progress' && this.getProgressClicked !== null) {
+				console.log(this.getSchedules)
+				try {
+					lat = this.getSchedules[this.getScheduleProgressIdx].userChoice.latitude
+					long = this.getSchedules[this.getScheduleProgressIdx].userChoice.longtitude
+				} catch (err) {
+					lat = this.beforeLat
+					long = this.beforeLng
+				}
 			}
+			let moveLatLon = new kakao.maps.LatLng(lat,long)
+			this.map.panTo(moveLatLon);
+			this.actionscheduleProgressIdx(-1)
 		},
 		initMap() { 
 			var container = document.getElementById('map'); 
@@ -219,7 +231,7 @@ export default {
 
         setStartCoords() {
 			var map = this.map
-			
+			this.showPaths()
             if (this.$cookies.get("searchMethod")==="myLocation"){
 				this.startLat = this.$cookies.get("startLatitude")
 				this.startLong = this.$cookies.get("startLongitude")
@@ -414,7 +426,6 @@ export default {
 			// 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
 			map.setBounds(bounds);
 			this.showMarkers(this.recommendMarkers);
-			self.moveSmoothly();
 		},	
 	
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
@@ -509,9 +520,8 @@ export default {
 		},
 
 		showPaths() {
-			var plans = this.plans;
+			var plans = this.getPlanList;
 			var map = this.map;
-			// var positions = plans;
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			plans.forEach(plan => {
 				var position = new kakao.maps.LatLng(plan.latitude, plan.longtitude)

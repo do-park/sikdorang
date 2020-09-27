@@ -32,7 +32,7 @@ const mapEvent = {
         },
         getmouseOverToCard : state => {
             return state.mouseOverToCard
-        }
+        },
     },
     mutations : {
         mutationFlip: (state,payload) => {

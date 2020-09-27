@@ -103,7 +103,7 @@ export default {
         var Rest = this.getSelectedRest;
         swal({
           title: Rest.name,
-          text: "이런이런 맛집입니다아",
+          text: Rest.tel,
           buttons: ["닫기", "추가"],
         }).then((res) => {
           if (res) {
@@ -118,8 +118,14 @@ export default {
                 this.actionPlanList(plans);
                 this.actionStore(Rest)
                 this.actionScheduleIdx(this.getScheduleIdx+1)
+              } else {
+                console.log('취소 확인')
+                this.actionClicked(null);
               }
             });
+          } else {
+            console.log('취소 확인')
+            this.actionClicked(null);
           }
         });
       }
