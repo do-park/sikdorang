@@ -21,7 +21,9 @@ export default {
     name : "SavedSchedules",
     computed : {
         ...mapGetters("schedule",[
-            "getSchedules"
+            "getSchedules",
+            "getScheduleName",
+            "getScheduleDate"
         ])
     },
     data() {
@@ -32,6 +34,8 @@ export default {
     },
     mounted() {
         this.saveSchedule()
+        console.log(this.getScheduleName)
+        console.log(this.getScheduleDate)
     },
     methods : {
        getSightseeing() {
@@ -53,8 +57,8 @@ export default {
            }
            const data = {
                "plan" :scheduleData.join('-'),
-               "name" : "",
-               "data" : ""
+               "name" : this.getScheduleName,
+               "date" : this.getScheduleDate
            }
            const requestHeaders = {
                 headers: {
