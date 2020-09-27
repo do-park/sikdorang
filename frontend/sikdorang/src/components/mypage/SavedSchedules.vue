@@ -1,7 +1,20 @@
 <template>
   <div>
       <h3>오늘의 일정</h3>
+        {{todaySchedule.name}} | {{todaySchedule.date}} | <button>동행구하기</button> 
+        <hr>
+        <div
+        v-for="schedule in todaySchedule.schedules"
+        :key="schedule.id"
+        >
+             <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
+                [{{schedule.type}}] {{schedule.store_name}} | <button>리뷰쓰기</button>
+            </div>
+            <div v-else>
+                [{{schedule.type}}] {{schedule.name}}
+            </div>
 
+        </div>
       <h3>저장된 여행 일정</h3>
       <div>
           <div
@@ -113,6 +126,7 @@ export default {
             console.log(data)
             this.todaySchedule.name = data.name
             this.todaySchedule.date = data.date
+
             //일정 리스트로 만들기
             const plans = data.plan.split('-')
             console.log(plans)
@@ -120,11 +134,13 @@ export default {
                 const type = plan.slice(0,1)
                 const typeName = "식당"
                 const id = plan.slice(1,)
+
                 // 식당/카페이면
                 if (type === "R" | type === "C"  ) {
                     this.$axios.get(`trip/store_detail/${id}`)
                     .then(res=>{
                         const result = res.data
+
                         //가게의 타입도 구분
                         if (type === "C") { typeName = "카페" }
                         result["type"] = typeName 
@@ -137,7 +153,7 @@ export default {
                 // 관광지/숙박이면
                 else {
                     const contentTypeId = 32
-                    typeName ='숙박'
+                    typeName ="숙박"
                     if (type === "S") { contentTypeId = 12; typeName = "관광지"; }
                     const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
                     const contentId = id
@@ -153,7 +169,9 @@ export default {
                                 "address": items[i].addr1 + items[i].addr2,
                                 "latitude": items[i].mapy,
                                 "longtitude": items[i].mapx,
-                                "category": "관광지",
+                                //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
+                                "type" :`${typeName}`,
+                                "category": `${typeName}`,
                                 "tags": "",
                                 "img": items[i].firstimage,
                     })
@@ -164,6 +182,7 @@ export default {
                 }
                 
             })
+            console.log("오늘의 일정",this.todaySchedule)
         },
     },
 }
