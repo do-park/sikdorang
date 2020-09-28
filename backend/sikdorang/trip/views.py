@@ -7,6 +7,7 @@ from .serializers import *
 from .models import Trip
 from api.models import *
 from api.serializers import *
+from review.models import Review
 import datetime
 
 from rest_framework import viewsets
@@ -80,6 +81,33 @@ def trip_today(request):
     user = get_object_or_404(User, pk=request.user.pk)
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-    trips = Trip.objects.filter(user=user, date=nowDate)
-    serializer = TripListSerializer(trips, many=True)
-    return Response(serializer.data)
+    trip = get_object_or_404(Trip, user=user, date=nowDate)
+    serializer = TripListSerializer(trip)
+    tplan = trip.plan
+    plan_id = []
+    chk = 0
+    num = ''
+    for i in tplan:
+        if i == 'R' or i == 'C':
+            chk = 1
+        elif i == 'S' or i == 'A':
+            chk = 0
+            plan_id.append(-1)
+        elif i == '-':
+            plan_id.append(num)
+            num = ''
+            chk = 0
+        elif chk == 1:
+            num += i
+    if chk:
+        plan_id.append(num)
+    res = [0]*len(plan_id)
+    for i in range(len(res)):
+        if i == -1:
+            continue
+        else:
+            tstore = Review.objects.filter(user=user, store_id=i)
+            if tstore.exists():
+                res[i] = 1
+    result = [serializer.data, res]
+    return Response(result)

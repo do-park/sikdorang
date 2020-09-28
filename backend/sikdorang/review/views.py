@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -33,3 +34,13 @@ def store_review(request, store_pk):
     reviews = Review.objects.filter(store_id=store_pk)
     serializer = ReviewListSerializer(reviews, many=True)
     return Response(serializer.data)
+
+# @api_view(['GET'])
+# def review_chk(request, store_pk):
+#     User = get_user_model()
+#     user = get_object_or_404(User, pk=request.user.pk)
+#     review = Review.objects.filter(user=user, store_id=store_pk)
+#     if review.exists():
+#         return HttpResponse('1')
+#     else:
+#         return HttpResponse('0')
