@@ -117,7 +117,9 @@ export default {
     },
     uuid(e) {
       if (e.uid) return e.uid;
-      const key = Math.random().toString(10).slice(2);
+      const key = Math.random()
+        .toString(10)
+        .slice(2);
       this.$set(e, "uid", key);
       return e.uid;
     },
@@ -373,5 +375,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

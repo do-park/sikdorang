@@ -103,11 +103,23 @@ def trip_today(request):
         plan_id.append(num)
     res = [0]*len(plan_id)
     for i in range(len(res)):
-        if i == -1:
+        print(plan_id[i])
+        if plan_id[i] == -1:
             continue
         else:
-            tstore = Review.objects.filter(user=user, store_id=i)
+            tchk = Store.objects.get(id=plan_id[i])
+            tstore = Review.objects.filter(user=user, store_id=tchk)
             if tstore.exists():
                 res[i] = 1
     result = [serializer.data, res]
     return Response(result)
+
+@api_view(['DELETE'])
+def delete_trip(request, trip_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    trip = get_object_or_404(Trip, id=trip_pk)
+    if trip.user == user:
+        trip.delete()
+        return HttpResponse('잘 지워짐')
+    return HttpResponse('니 글 아님 ㅅㄱ')
