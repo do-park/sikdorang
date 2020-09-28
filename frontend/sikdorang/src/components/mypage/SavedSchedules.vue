@@ -30,6 +30,7 @@
     <div v-if="allSchedule">
       <div v-for="(schedule, index) in allSchedule" :key="schedule.idx">
         {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }}
+        <button v-if="stringtodate(schedule.date) > today">동행 구하기</button>
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -56,6 +57,7 @@ export default {
       todaySchedule: { name: "", date: "", schedules: [] },
       todayReviewList: [],
       allSchedule: [],
+      today: "",
     };
   },
   mounted() {
@@ -68,6 +70,7 @@ export default {
     console.log(this.getScheduleDate);
     this.getTodaySchedules();
     this.getAllSchedules();
+    this.today = new Date();
   },
   methods: {
     ...mapActions("schedule", [
@@ -122,9 +125,8 @@ export default {
       this.$axios
         .post("/trip/", data, requestHeaders)
         .then((res) => {
-          console.log("일정을 저장했습니다.", res);
+          console.log(res);
           this.initiateSchedule();
-          console.log("지워졌나?", this.getSchedules);
         })
         .catch((err) => {
           console.error(err);
@@ -237,6 +239,12 @@ export default {
         }
       });
       console.log("오늘의 일정", this.todaySchedule);
+    },
+    stringtodate(str) {
+      const y = str.substr(0, 4);
+      const m = str.substr(5, 2);
+      const d = str.substr(8, 2);
+      return new Date(y, m - 1, d);
     },
   },
 };
