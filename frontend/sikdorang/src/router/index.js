@@ -18,6 +18,7 @@ import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 import ReviewForm from "../views/review/ReviewForm.vue"
 import PartyList from "../views/party/PartyList.vue"
 import PartyListItemDetail from "../views/party/PartyListItemDetail.vue"
+import MessageForm from "../components/message/MessageForm.vue"
 
 Vue.use(VueRouter)
 
@@ -112,6 +113,10 @@ const routes = [
     name: "PartyListItemDetail",
     component: PartyListItemDetail,
   },
+    path: "/message/test",
+    name: "MessageForm",
+    component: MessageForm,
+  }
 ]
 
 const router = new VueRouter({
