@@ -35,7 +35,7 @@ export default {
         // 기본 데이터 추가
 
       },
-      editorText: "여행 일정에 대한 자세한 설명을 추가해주세요.",
+      editorText: "일정에 대한 소개를 해주세요.",
       editorOptions: {
         hideModeSwitch: true,
       },

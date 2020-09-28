@@ -28,10 +28,10 @@
     <h3>저장된 여행 일정</h3>
     <hr />
     <div v-if="allSchedule">
-      <div v-for="(schedule, index) in allSchedule" :key="schedule.idx">
+      <div v-for="(schedule, index) in allSchedule" :key="schedule.id">
         {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }}
-        <button>동행구하기버튼</button>
-        <PartyForm />
+        <button @click="popupPartyForm(schedule.id)">동행구하기</button>
+        <PartyForm :id="schedule.id" class="party-form d-none" />
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -71,8 +71,6 @@ export default {
     } else {
       this.saveSchedule();
     }
-    console.log(this.getScheduleName);
-    console.log(this.getScheduleDate);
     this.getTodaySchedules();
     this.getAllSchedules();
   },
@@ -82,10 +80,21 @@ export default {
       "actionScheduleName",
       "actionScheduleDate",
     ]),
-    popupPartyForm(e) {
-        console.log(e.target)
-        document.getEleme
-      },
+    popupPartyForm(targetId) {
+      if (document.getElementById(targetId).classList.contains('d-none')) {
+        var forms = document.getElementsByClassName('party-form')
+        console.log('this',forms)
+        for (let form of forms) {
+          if (!(form.classList.contains('d-none'))) {
+            form.classList.add('d-none')
+          }
+        }
+        document.getElementById(targetId).classList.remove('d-none')
+      } else {
+        document.getElementById(targetId).classList.add('d-none')
+      }
+  
+    },
     initiateSchedule() {
       this.actionSchedule([]);
       this.actionScheduleName("");
@@ -93,7 +102,6 @@ export default {
     },
     
     goReviewForm(store_id) {
-      console.log(store_id);
       this.$cookies.set("review-store-id", store_id);
       this.$router.push({ name: "ReviewForm" });
     },
@@ -113,7 +121,6 @@ export default {
     },
     saveSchedule() {
       const scheduleData = [];
-      console.log(this.getSchedules);
       if (this.getSchedules.length > 0) {
         this.getSchedules.forEach((schedule) => {
           scheduleData.push(schedule.id + String(schedule.userChoice.id));
@@ -136,7 +143,6 @@ export default {
         .then((res) => {
           console.log("일정을 저장했습니다.", res);
           this.initiateSchedule();
-          console.log("지워졌나?", this.getSchedules);
         })
         .catch((err) => {
           console.error(err);
@@ -152,7 +158,6 @@ export default {
       this.$axios
         .get("/trip/today", requestHeaders)
         .then((res) => {
-          console.log(res);
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
         })
@@ -170,7 +175,6 @@ export default {
       this.$axios
         .get("/trip/list", requestHeaders)
         .then((res) => {
-          console.log(res);
           this.allSchedule = res.data;
         })
         .catch((err) => {
@@ -179,13 +183,11 @@ export default {
     },
     //일정 정보 가져오면 스케줄 리스트로 만들기
     makeScheduleList(data) {
-      console.log(data);
       this.todaySchedule.name = data.name;
       this.todaySchedule.date = data.date;
 
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
-      console.log(plans);
       plans.forEach((plan) => {
         const type = plan.slice(0, 1);
         let typeName = "식당";
@@ -225,7 +227,6 @@ export default {
               `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
             )
             .then((res) => {
-              console.log("!!!", res);
               const items = res.data.response.body.items.item;
 
               this.todaySchedule.schedules.push({
@@ -243,7 +244,6 @@ export default {
                 img: items.firstimage,
               });
 
-              console.log(items);
             })
             .catch((err) => console.error(err));
         }
