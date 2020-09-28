@@ -117,7 +117,7 @@ export default {
     makeScheduleList(data) {
       this.scheduleList["name"] = data.name;
       this.scheduleList["date"] = data.date;
-
+      this.scheduleList["schedules"] = [];
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
       plans.forEach((plan) => {
