@@ -19,11 +19,10 @@
     </b-modal>
     <div v-if="allSchedule">
       <div @click="goScheduleDetail(schedule)" v-for="(schedule, index) in allSchedule" :key="schedule.idx">
-        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} | <b-button v-b-modal.modal-scrollable>상세보기</b-button> | <button @click="popupPartyForm(schedule.id)">동행구하기</button>
+        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} | <b-button v-b-modal.modal-scrollable>상세보기</b-button> | <button class="btn btn-success" @click="popupPartyForm(schedule.id)">동행구하기</button>
         <PartyForm :id="schedule.id" class="party-form d-none" />
         <hr />
           <PartyRequests />
-        </div>
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -31,8 +30,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-// import Swal from "sweetalert2";
+import { mapGetters } from "vuex";
+
 import PartyForm from "../mypage/PartyForm.vue"
 import PartyRequests from "../mypage/PartyRequests.vue"
 
@@ -116,8 +115,8 @@ export default {
     },
     //일정 정보 가져오면 스케줄 리스트로 만들기
     makeScheduleList(data) {
-      this.todaySchedule.name = data.name;
-      this.todaySchedule.date = data.date;
+      this.scheduleList["name"] = data.name;
+      this.scheduleList["date"] = data.date;
 
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
