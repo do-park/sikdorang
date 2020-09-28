@@ -2,7 +2,7 @@
   <div>
     <div>
       <label for="title">제목</label>
-      <input class="form-control" type="text" id="title" v-model="tripSchedule.title" />
+      <input class="form-control" type="text" id="title" v-model="partyData.title" />
     </div>
     <editor
       ref="toastuiEditor"
@@ -29,9 +29,10 @@ export default {
   },
   data() {
     return {
-      tripSchedule: {
+      partyData: {
         title: null,
         content: null,
+        // 기본 데이터 추가
 
       },
       editorText: "여행 일정에 대한 자세한 설명을 추가해주세요.",
@@ -48,31 +49,20 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-        if (
-          this.tripSchedule.title_img === null ||
-          this.tripSchedule.title_img === undefined
-        ) {
-          this.tripSchedule.title_img = "";
-        }
-      console.log(this.tripSchedule);
-
+       
       this.$axios
-        .post("guide/create_tour", this.tripSchedule, requestHeaders)
+        .post("주소", this.partyData, requestHeaders)
         .then((res) => {
           console.log(res);
-          // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
-          this.$router.push(`/trip/detail/${res.data.id}`);
+          // 등록이 완료되면 상세페이지로 이동
+          this.$router.push(`주소`);
         })
         .catch((err) => console.error(err));
     },
     getHtml() {
       console.log(this.$refs);
       let html = this.$refs.toastuiEditor.invoke("getHtml");
-      this.tripSchedule.content = html;
-    },
-    fileChange() {
-      console.log("!!", this.$refs)
-      this.tripSchedule.title_img = this.$refs.tI.files[0];
+      this.partyData.content = html;
     },
   },
 };

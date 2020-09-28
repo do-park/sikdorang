@@ -29,6 +29,9 @@
           >
             {{index+1}} | {{schedule.name}} | {{schedule.date}}
           </div>
+          {{ schedule.idx }}
+          <button @click="popupPartyForm(schedule.idx)">대충버튼</button>
+          <PartyForm class="bg-secondary d-none"/>
       </div>
       <div v-else>등록된 일정이 없습니다.</div>
   </div>
@@ -36,11 +39,17 @@
 
 <script>
 import { mapGetters } from "vuex"
+// import Swal from "sweetalert2";
+import PartyForm from "../mypage/PartyForm.vue"
+
 
 export default {
     name : "SavedSchedules",
     props : {
         savedSchedules : Boolean,
+    },
+    components: {
+      PartyForm,
     },
     computed : {
         ...mapGetters("schedule",[
@@ -64,6 +73,10 @@ export default {
         this.getAllSchedules()
     },
     methods : {
+      popupPartyForm(e) {
+        console.log(e.target)
+        document.getEleme
+      },
       goReviewForm(store_id) {
         console.log(store_id)
         this.$cookies.set("review-store-id", store_id);
