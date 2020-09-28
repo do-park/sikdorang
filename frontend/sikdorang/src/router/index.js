@@ -16,6 +16,7 @@ import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vu
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 import ReviewForm from "../views/review/ReviewForm.vue"
+import PartyList from "../views/party/PartyList.vue"
 
 Vue.use(VueRouter)
 
@@ -99,7 +100,12 @@ const routes = [
     path: "/review/form",
     name: "ReviewForm",
     component: ReviewForm,
-  }
+  },
+  {
+    path: "/party/list",
+    name: "PartyList",
+    component: PartyList,
+  },
 ]
 
 const router = new VueRouter({

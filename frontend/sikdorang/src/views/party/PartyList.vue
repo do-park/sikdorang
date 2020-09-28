@@ -14,7 +14,9 @@ export default {
   components: {
     PartyListItem,
   },
-  computed: {},
+  data() {
+    return {};
+  },
 };
 </script>
 
