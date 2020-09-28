@@ -1,5 +1,5 @@
 <template>
-  <div>{{ address }}의<br />{{ result.store_name }}</div>
+  <div v-if="result">{{ address }}의<br />{{ result.store_name }}</div>
 </template>
 
 <script>
@@ -24,11 +24,9 @@ export default {
       this.$axios
         .get("/recommend/coldstart", requestHeaders)
         .then((response) => {
-          console.log(response.data);
           this.result = response.data;
           const temp = this.result.address.split(" ");
           this.address = temp[0] + " " + temp[1];
-          console.log(this.address);
         })
         .catch((err) => console.error(err));
     },

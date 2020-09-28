@@ -26,7 +26,7 @@ def create_party(request, trip_pk):
 
 @api_view(['GET'])
 def list_party(request):
-    parties = Party.objects.all()
+    parties = Party.objects.all().order_by('-updated_at')
     serializer = PartyListSerializer(parties, many=True)
     return Response(serializer.data)
 
