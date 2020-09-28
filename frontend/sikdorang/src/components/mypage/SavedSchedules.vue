@@ -12,8 +12,10 @@
         >
              <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
                 [{{schedule.type}}] {{schedule.store_name}} | 
-                <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성 테스트</button>
+                <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성</button>
+                <!-- v-if 넣기 -->
                 <!-- 리뷰 작성 완료시 작성완료 버튼(비활성화) 있어야함 -->
+                <!-- <div v-else >이미 리뷰 작성했음</div> -->
             </div>
             <div v-else>
                 [{{schedule.type}}] {{schedule.name}}
@@ -22,9 +24,9 @@
         </div>
       <h3>저장된 여행 일정</h3>
       <hr>
-      <div v-if="AllSchedules">
+      <div v-if="allSchedule">
           <div
-          v-for="(schedule, index) in AllSchedules"
+          v-for="(schedule, index) in allSchedule"
           :key="schedule.idx"
           >
             {{index+1}} | {{schedule.name}} | {{schedule.date}}
@@ -114,7 +116,7 @@ export default {
             this.$axios.get('/trip/today',requestHeaders)
             .then(res=>{
                 console.log(res)
-                this.makeScheduleList(res.data)
+                this.makeScheduleList(res.data[0])
             })
             .catch(err=>{
                 console.log(err)
@@ -174,23 +176,24 @@ export default {
                     const contentId = id
                     this.$axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`)
                     .then(res => {
+                        console.log('!!!', res)
                         const items = res.data.response.body.items.item
-                        for (let i=0;i<items.length;i++) {
-                            this.recommends.push({
-                                "id": items[i].contentid,
-                                "name": items[i].title,
-                                "branch": "",
-                                "tel": items[i].tel,
-                                "address": items[i].addr1 + items[i].addr2,
-                                "latitude": items[i].mapy,
-                                "longtitude": items[i].mapx,
-                                //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
-                                "type" :`${typeName}`,
-                                "category": `${typeName}`,
-                                "tags": "",
-                                "img": items[i].firstimage,
-                    })
-                }
+                        
+                        this.todaySchedule.schedules.push({
+                            "id": items.contentid,
+                            "name": items.title,
+                            "branch": "",
+                            "tel": items.tel,
+                            "address": items.addr1 + items.addr2,
+                            "latitude": items.mapy,
+                            "longtitude": items.mapx,
+                            //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
+                            "type" :`${typeName}`,
+                            "category": `${typeName}`,
+                            "tags": "",
+                            "img": items.firstimage,
+                        })
+            
                         console.log(items)
                     })
                     .catch(err => console.error(err))
