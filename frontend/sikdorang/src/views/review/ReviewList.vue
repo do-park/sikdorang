@@ -1,6 +1,5 @@
 <template>
   <div v-if="reviewList">
-    리뷰 리스트 페이지
     <div v-for="review in reviews" :key="review.id">
       <ReviewItem :review="review"/>
     </div>
