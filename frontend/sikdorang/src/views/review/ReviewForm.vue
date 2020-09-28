@@ -1,16 +1,17 @@
 <template>
   <div>
+    <h3 class="text-center">{{ storeName }}</h3>
     <div class="rating">
-        <ul class="list">
-            <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= reviewData.score }" :key="star.stars" class="star">
-                <i :class="star <= reviewData.score ? 'fas fa-star' : 'far fa-star'"></i> 
-            </li>
-        </ul>
-        <div v-if="hasCounter" class="info counter">
-            <span class="score-rating">{{ reviewData.score }}</span>
-            <span class="divider">/</span>
-            <span class="score-max">{{ maxStars }}</span>
-        </div>
+      <ul class="list">
+        <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= reviewData.score }" :key="star.stars" class="star">
+          <i :class="star <= reviewData.score ? 'fas fa-star' : 'far fa-star'"></i> 
+        </li>
+      </ul>
+      <div v-if="hasCounter" class="info counter">
+        <span class="score-rating">{{ reviewData.score }}</span>
+        <span class="divider">/</span>
+        <span class="score-max">{{ maxStars }}</span>
+      </div>
     </div>
     <editor
       ref="toastuiEditor"
@@ -38,8 +39,9 @@ export default {
     return {
       maxStars: 5,
       hasCounter: "true",
+      storeId: this.$cookies.get("review-store-id"),
+      storeName: null,
       reviewData: {
-        store: this.$cookies.get("review-store-id"),
         score: 3,
         content: null,
       },
@@ -49,7 +51,17 @@ export default {
       },
     };
   },
+  mounted() {
+    this.getStore()
+  },
   methods: {
+    getStore() {
+      this.$axios.get(`trip/store_detail/${this.$cookies.get("review-store-id")}`)
+      .then(res => {
+          this.storeName = res.data.store_name
+      })
+      .catch(err => console.error(err))
+    },
     rate(star) {
       if (typeof star === 'number' && star <= this.maxStars && star >= 0) {
         this.reviewData.score = this.reviewData.score === star ? star - 1 : star
@@ -63,7 +75,7 @@ export default {
         },
       };
       this.$axios
-        .post("review", this.reviewData, requestHeaders)
+        .post(`review/create_review/${this.storeId}`, this.reviewData, requestHeaders)
         .then((res) => {
           console.log(res);
           // 등록이 완료되면 마이페이지로 이동
