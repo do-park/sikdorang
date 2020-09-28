@@ -5,11 +5,11 @@
         {{todaySchedule.name}} | {{todaySchedule.date}} | <button>동행구하기</button> 
       </div>
       <div v-else>오늘 일정이 없습니다.</div>
-        <hr>
+        <hr> 
         <div
         v-for="(schedule, index) in todaySchedule.schedules"
-        :key="schedule.id"
-        >
+        :key="schedule.id">  
+            {{ schedule.id}}
              <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
                 [{{schedule.type}}] {{schedule.store_name}} | 
                 <button v-if="todayReviewList[index] === 0" class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성</button>
