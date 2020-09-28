@@ -6,6 +6,7 @@ const schedule = {
         scheduleProgressIdx: -1,
         scheduleName : '',
         scheduleDate : '',
+        beforeCat: [],
     },
     getters: {
         getSchedules: state => {
@@ -23,6 +24,9 @@ const schedule = {
         getScheduleDate: state => {
             return state.scheduleDate
         },
+        getBeforeCat: state => {
+            return state.beforeCat
+        }
     },
     mutations: {
         mutationSchedule: (state, payload) => {
@@ -31,6 +35,7 @@ const schedule = {
         mutationStore: (state, payload) => {
             // state.schedule[payload.index].userChoice = payload
             state.schedule[state.scheduleIdx].userChoice = payload
+            state.beforeCat.push(payload.category)
         },
         mutationScheduleIdx: (state, payload) => {
             state.scheduleIdx = payload
@@ -43,6 +48,9 @@ const schedule = {
         },
         mutationScheduleDate: (state, payload) => {
             state.scheduleDate = payload
+        },
+        mutationClearBeforeCat: (state) => {
+            state.beforeCat = []
         },
     },
     actions: {
@@ -63,6 +71,9 @@ const schedule = {
         },
         actionScheduleDate: ({ commit }, payload) => {
             commit("mutationScheduleDate", payload)
+        },
+        actionClearBeforeCat: ({ commit }) => {
+            commit("mutationClearBeforeCat")
         },
     }
 }

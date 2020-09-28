@@ -39,6 +39,8 @@
 <script>
 import ThemePage from "@/components/main/ThemePage.vue";
 import Recommend from "@/views/Recommend.vue";
+import { mapActions } from 'vuex'
+
 export default {
   name: "MainPage",
   data() {
@@ -71,11 +73,13 @@ export default {
     Recommend,
   },
   methods: {
+    ...mapActions('sikRec', ['actionIsSik']),
     clickMyChoice() {
       this.$router.push({ name: "Schedule" });
     },
     clickRecommend() {
-      console.log("추천 코스 누름");
+      this.actionIsSik(true)
+      this.$router.push({name: "Schedule"});
     },
     clickToLoginPageOrMyPage() {
       this.$emit("toLoginPageOrMyPage");

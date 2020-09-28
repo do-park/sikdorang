@@ -44,13 +44,16 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Schedule",
   order: 2,
   components: {
     draggable,
+  },
+  computed:{
+    ...mapGetters('sikRec', ['getIsSik']),
   },
   data() {
     return {
@@ -104,6 +107,7 @@ export default {
       "actionScheduleIdx",
       "actionScheduleName",
       "actionScheduleDate",
+      "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
     // function about drag and drop
@@ -166,6 +170,7 @@ export default {
       this.actionScheduleIdx(0);
       this.actionFlip(true);
       this.actionMapEventClear("clear");
+      this.actionClearBeforeCat();
       return plan;
     },
     createTrip() {
@@ -226,7 +231,11 @@ export default {
               icon: "success",
               title: "일정을 등록했습니다.",
             });
-            this.$router.push({ name: "MapMain" });
+            if (this.getIsSik){
+              this.$router.push({ name: "SikdorangRecommendView"})
+            } else {
+              this.$router.push({ name: "MapMain" });
+            }
             //   }
             // })
             // .catch((error) => {
