@@ -102,13 +102,10 @@ export default {
     ...mapActions("schedule", [
       "actionSchedule",
       "actionScheduleIdx",
-      ]),
-    ...mapActions("mapEvent", [
-      "actionFlip",
-      "actionMapEventClear",
       "actionScheduleName",
       "actionScheduleDate",
     ]),
+    ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -163,10 +160,12 @@ export default {
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
       // console.log(schedule);
-      this.actionSchedule(schedule)
-      this.actionScheduleIdx(0)
-      this.actionFlip(true)
-      this.actionMapEventClear('clear')
+      console.log(this.getSchedules, schedule);
+      console.log("@@@@ i m here");
+      this.actionSchedule(schedule);
+      this.actionScheduleIdx(0);
+      this.actionFlip(true);
+      this.actionMapEventClear("clear");
       return plan;
     },
     createTrip() {
