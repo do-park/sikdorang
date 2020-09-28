@@ -2,7 +2,10 @@
     <div v-if="tripList">
         <div v-if="todaySchedule.name">
       {{ todaySchedule.name }} | {{ todaySchedule.date }} |
-      <button>동행구하기</button>
+      <button class="btn btn-success" @click="popupPartyForm">동행구하기</button>
+      <PartyForm id="partyForm" class="d-none" />
+      <hr />
+      <PartyRequests />
     </div>
     <div v-else>오늘 일정이 없습니다.</div>
     <hr />
@@ -10,7 +13,6 @@
       v-for="(schedule, index) in todaySchedule.schedules"
       :key="schedule.id"
     >
-      {{ schedule.id }}
       <div v-if="(schedule.type === '식당') | (schedule.type === '카페')">
         [{{ schedule.type }}] {{ schedule.store_name }} |
         <button
@@ -29,13 +31,19 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex"
+import PartyForm from "../mypage/PartyForm.vue"
+import PartyRequests from "../mypage/PartyRequests.vue"
 
 const mypage = "mypage"
 
 export default {
     name: 'TripList',
     props : {
-        tripList : Boolean,
+      tripList : Boolean,
+    },
+    components: {
+      PartyForm,
+      PartyRequests
     },
     computed: {
     ...mapGetters("schedule", [
@@ -44,12 +52,12 @@ export default {
       "getScheduleDate",
     ]),
     ...mapGetters(mypage, [
-            'getTripList'
-        ])
+      'getTripList'
+    ])
   },
   data() {
     return {
-      todaySchedule: { name: "", date: "", schedules: [] },
+      todaySchedule: { id: "", name: "", date: "", schedules: [] },
       todayReviewList: [],
      
     };
@@ -71,6 +79,15 @@ export default {
       "actionScheduleName",
       "actionScheduleDate",
     ]),
+    popupPartyForm() {
+      if (document.getElementById('partyForm').classList.contains('d-none')) {
+        document.getElementById('partyForm').classList.remove('d-none')
+        window.$cookies.set("party-trip-id", this.todaySchedule.id);
+      } else {
+        document.getElementById('partyForm').classList.add('d-none')
+      }
+  
+    },
     initiateSchedule() {
       this.actionSchedule([]);
       this.actionScheduleName("");
@@ -136,7 +153,6 @@ export default {
       this.$axios
         .get("/trip/today", requestHeaders)
         .then((res) => {
-          console.log(res);
           // this.todaySchedule["schedules"] = [0]*(res.data[0].length)
           console.log(this.todaySchedule["schedules"])
           this.makeScheduleList(res.data[0]);
@@ -150,6 +166,7 @@ export default {
     //일정 정보 가져오면 스케줄 리스트로 만들기
     makeScheduleList(data) {
       console.log(data);
+      this.todaySchedule.id = data.id;
       this.todaySchedule.name = data.name;
       this.todaySchedule.date = data.date;
 

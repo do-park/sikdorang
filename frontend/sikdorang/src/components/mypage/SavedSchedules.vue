@@ -22,7 +22,7 @@
         {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} | <b-button v-b-modal.modal-scrollable>상세보기</b-button> | <button class="btn btn-success" @click="popupPartyForm(schedule.id)">동행구하기</button>
         <PartyForm :id="schedule.id" class="party-form d-none" />
         <hr />
-          <PartyRequests />
+        <PartyRequests />
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -72,6 +72,7 @@ export default {
           }
         }
         document.getElementById(targetId).classList.remove('d-none')
+        window.$cookies.set("party-trip-id", targetId);
       } else {
         document.getElementById(targetId).classList.add('d-none')
       }
