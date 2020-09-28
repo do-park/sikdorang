@@ -3,9 +3,27 @@
         <div v-if="todaySchedule.name">
       {{ todaySchedule.name }} | {{ todaySchedule.date }} |
       <button class="btn btn-success" @click="popupPartyForm">동행구하기</button>
-      <PartyForm id="partyForm" class="d-none" />
+      <button class="btn btn-primary" data-toggle="modal" data-target="#todayMessage">동행 신청자 보기</button>
+      <PartyForm id="partyForm" class="d-none" />      
+
+      <!-- Modal -->
+      <div class="modal fade" id="todayMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">동행 신청 현황</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <PartyRequests :partyPk=1 />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <hr />
-      <PartyRequests />
     </div>
     <div v-else>오늘 일정이 없습니다.</div>
     <hr />

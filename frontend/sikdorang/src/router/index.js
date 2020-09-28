@@ -113,6 +113,7 @@ const routes = [
     name: "PartyListItemDetail",
     component: PartyListItemDetail,
   },
+  {
     path: "/message/test",
     name: "MessageForm",
     component: MessageForm,

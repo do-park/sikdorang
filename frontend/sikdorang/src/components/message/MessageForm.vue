@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      partyPk: "1",
+      partyPk: "1", // 전단계에서 받아와야함
       messageData: {
         content: null,
       },
