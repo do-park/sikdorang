@@ -21,7 +21,7 @@ export default {
     viewer: Viewer,
   },
   props: {
-    partyPk: String
+    partyPk: Number,
   },
   data() {
     return {
