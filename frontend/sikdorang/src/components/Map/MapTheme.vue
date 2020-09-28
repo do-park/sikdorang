@@ -11,26 +11,37 @@
 			</div> -->
 			
 			<div class="tag-tap">
-				<button>#위대한</button>
-				<button>#가성비</button>
-				<button>#갬성</button>
-				<button>#분위기</button>
-				<!-- <button>#저쩌구</button>
-				<button>#스크롤을</button>
-				<button>#시도해보자</button> -->
+				<button v-for="(tag, idx) in tags" :key="idx" @click="onClick(tag)">{{ tag }}</button>
 			</div>
 		</div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     name : 'MapTheme',
     data() {
         return{
             destination : "",
+			tags: [],
         }
-    },
+	},
+	computed: {
+		...mapGetters('mapEvent', ['getTags'])
+	},
+	watch: {
+		getTags() {
+			this.tags = this.getTags
+		},
+	},
+	methods: {
+		...mapActions('mapEvent', ['actionSelectTag']),
+		onClick(tag) {
+			this.actionSelectTag(tag)
+		}
+	}
 }
 </script>
 

@@ -8,8 +8,8 @@
       </div>
       <div v-if="!flag">
           <MapTheme/>
-          <ScheduleProgress/>
           <MapField @getKakao="getKakao" @selectedMarker="selectedMarker"/>
+          <ScheduleProgress/>
           <MapCards :kakao="kakao" :selected="selected"/>
       </div>    
        

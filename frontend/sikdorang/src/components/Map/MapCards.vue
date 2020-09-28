@@ -1,45 +1,25 @@
 <template>
-  <div>
+  <div v-if="threeRes">
     <div class="d-flex flex-column align-items-center">
       <div>
-        <button class="btn btn-secondary" @click="checkFilp">다른 {{getSchedules[getScheduleIdx].name}} 볼래요!</button>
+        <button class="btn btn-secondary" @click="checkFilp">{{ buttonStr }}</button>
       </div>
     
       <div class="d-flex justify-content-center">
-        <transition enter-active-class="animated flipInY">
+        <transition v-for="(res, idx) in threeRes" :key="res.id"  enter-active-class="animated flipInY">
           <div
-            :class="{ 'active': isActive0 }"
+            :class="{ 'active': isActive(idx) }"
             v-if="animatechk"
             class="box"
-            @click="selectRest(0)"
+            @click="selectRest(idx)"
+            @mouseover="actionMouseOver(idx)"
+            @mouseleave="actionMouseOver(null)"
           >
-            A.{{getThreeRes[0].name}}
+            {{index[idx]}}.{{res.name}}
             <p>@ 맛집 정보 @</p>
           </div>
         </transition>
-        <transition enter-active-class="animated flipInY">
-          <div
-            :class="{ 'active': isActive1 }"
-            v-if="animatechk"
-            class="box"
-            @click="selectRest(1)"
-          >
-            B.{{getThreeRes[1].name}}
-            <p>@ 맛집 정보 @</p>
-          </div>
-        </transition>
-        <transition enter-active-class="animated flipInY">
-          <div
-            :class="{ 'active': isActive2 }"
-            v-if="animatechk"
-            class="box"
-            @click="selectRest(2)"
-          >
-            C.{{getThreeRes[2].name}}
-            <p>@ 맛집 정보 @</p>
-          </div>
-        </transition>
-        <br />
+        <br/>
       </div>
     </div>
   </div>
@@ -55,11 +35,13 @@ export default {
   data() {
     return {
       plans: this.getPlanList,
-
+      threeRes: this.getThreeRes,
       isActive0: false,
       isActive1: false,
       isActive2: false,
       animatechk: true,
+      index: ['A', 'B', 'C'],
+      buttonStr: null,
     };
   },
   props: {
@@ -68,36 +50,50 @@ export default {
   computed: {
     ...mapGetters(mapEvent, [
       "getFlip",
-      "getMouseOver",
+      "getmouseOverToCard",
       "getClicked",
       "getThreeRes",
       "getSelectedRest",
       "getPlanList",
+      "getTagStores",
     ]),
     ...mapGetters("schedule",[
       "getSchedules",
       "getScheduleIdx",
     ])
   },
-
-
   watch: {
-    getMouseOver() {
-      this.changeOverBox(this.getMouseOver);
+    getmouseOverToCard() {
+      this.changeOverBox(this.getmouseOverToCard);
     },
     getClicked() {
       if ( this.getClicked !== null ) {
         this.actionSelectedRest(this.getThreeRes[this.getClicked]);
         this.selectRest(this.getClicked);
       }
-      
     },
+    getThreeRes() {
+      if (this.getThreeRes !== []) {
+        this.threeRes = this.getThreeRes
+      }
+    },
+    getTagStores() {
+			if (this.getTagStores) {
+        this.buttonStr = '추천해주세요!'
+			} else {
+        this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
+			}
+		},
   },
   mounted() {
-   
-    this.checkFilp();
+    // this.checkFilp();
     if (this.getThreeRes) {
       this.actionSelectedRest(this.getThreeRes[0]);
+    }
+    if (this.getTagStores) {
+      this.buttonStr = '추천해주세요!'
+    } else {
+      this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
     }
   },
   methods: {
@@ -106,6 +102,7 @@ export default {
       "actionSelectedRest",
       "actionClicked",
       "actionPlanList",
+      "actionMouseOver",
     ]),
     ...mapActions("schedule",[
       "actionStore",
@@ -120,7 +117,7 @@ export default {
         var Rest = this.getSelectedRest;
         swal({
           title: Rest.name,
-          text: "이런이런 맛집입니다아",
+          text: Rest.tel,
           buttons: ["닫기", "추가"],
         }).then((res) => {
           if (res) {
@@ -135,14 +132,29 @@ export default {
                 this.actionPlanList(plans);
                 this.actionStore(Rest)
                 this.actionScheduleIdx(this.getScheduleIdx+1)
-              
+              } else {
+                console.log('취소 확인')
+                this.actionClicked(null);
               }
             });
+          } else {
+            console.log('취소 확인')
+            this.actionClicked(null);
           }
         });
       }
     },
-
+    isActive(idx) {
+      if (this.isActive0 && idx === 0) {
+        return true
+      } else if (this.isActive1 && idx === 1) {
+        return true
+      } else if (this.isActive2 && idx === 2) {
+        return true
+      } else {
+        return false
+      }
+    },
     changeOverBox(overidx) {
       this.isActive0 = false;
       this.isActive1 = false;
@@ -162,7 +174,7 @@ export default {
     },
     checkFilp() {
       this.actionFlip(!this.getFlip);
-      this.actionClicked(null);
+      // this.actionClicked(null);
       this.animatechk = false;
       setTimeout(() => {
         this.animatechk = true;

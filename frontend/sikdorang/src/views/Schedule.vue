@@ -95,12 +95,17 @@ export default {
   },
   created() {
     // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    this.userId = 1;
-    this.getTripdata();
+    // this.userId = 1;
+    // this.getTripdata();
   },
   methods: {
     ...mapActions("schedule", [
       "actionSchedule",
+      "actionScheduleIdx",
+      ]),
+    ...mapActions("mapEvent", [
+      "actionFlip",
+      "actionMapEventClear",
       "actionScheduleName",
       "actionScheduleDate",
     ]),
@@ -148,16 +153,20 @@ export default {
       }
       let plan = "";
       const schedule = [];
+      // console.log("일정을 추가했습니다.", this.clonedItems);
 
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
         item["idx"] = i;
-        console.log(item);
+        // console.log(item);
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
-      console.log(schedule);
-      this.actionSchedule(schedule);
+      // console.log(schedule);
+      this.actionSchedule(schedule)
+      this.actionScheduleIdx(0)
+      this.actionFlip(true)
+      this.actionMapEventClear('clear')
       return plan;
     },
     createTrip() {
