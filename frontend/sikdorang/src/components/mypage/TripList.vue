@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="tripList">
         <h1>일정목록</h1>
         <div v-for="(tripList, index) in getTripList" :key="index">
             <TripListItem :tripList="tripList" :index="index"/>
@@ -18,6 +18,10 @@ export default {
     components: {
         TripListItem,
     },
+    props : {
+        tripList : Boolean,
+    },
+
     computed: {
         ...mapGetters(mypage, [
             'getTripList'

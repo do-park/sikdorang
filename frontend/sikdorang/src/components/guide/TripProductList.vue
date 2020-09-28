@@ -10,13 +10,11 @@
 
 <script>
 import TripProductItem from "./TripProductItem.vue"
-// import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
     name: "TripProductList",
     components: {
         TripProductItem,
-        // InfiniteLoading
     },
     data() {
         return {
@@ -31,7 +29,10 @@ export default {
                 end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
-                start_time: '09:00'
+                start_time: '09:00',
+                limit_person: 10,
+                departure_person: 5,
+                now_person: 2,
                 },
                 {id: 2,
                 user: 2,
@@ -42,7 +43,10 @@ export default {
                 end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
-                start_time: '09:00'
+                start_time: '09:00',
+                limit_person: 5,
+                departure_person: 2,
+                now_person: 5,
                 },
                 {id: 3,
                 user: 3,
@@ -53,20 +57,23 @@ export default {
                 end_date: '2020-9-26',
                 price: 100,
                 start_point: '인동 입석',
-                start_time: '09:00'
+                start_time: '09:00',
+                limit_person: 10,
+                departure_person: 5,
+                now_person: 6,
                 }
             ],
             targetGuide: null,
         }
     },
     mounted() {
-        this.$axios.get(`/guide/list_tour`)
-        .then(res => {
-            this.tripProductList = res.data
-        })
-        .catch(err => {
-            console.error(err)
-        })
+        // this.$axios.get(`/guide/list_tour`)
+        // .then(res => {
+        //     this.tripProductList = res.data
+        // })
+        // .catch(err => {
+        //     console.error(err)
+        // })
     },
     methods: {
         // infiniteHandler($state) {

@@ -11,8 +11,11 @@ from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
 from api.models import Store
+from api.serializers import StoreSerializer
+
+import datetime
+import random
 
 DATA_DIR = "../../data"
 DUMP_FILE = os.path.join(DATA_DIR, "dump.pkl")
@@ -300,3 +303,28 @@ def get_tag_stores(request):
             "tags": store.tags
         })
     return JsonResponse({"result": result})
+    return JsonResponse({"result": result})
+
+@api_view(['GET'])
+def coldstart(request):
+    startpoint = [[148912, 305741, 161207, 35736, 154632, 236604, 214585, 100791, 261913, 97851, 314528, 3898, 73522, 176721, 68900, 121543, 276131, 278687, 252755, 70953, 83525, 46319, 239444, 304420, 323242, 334509, 138460, 296624],
+    [145030, 346836, 160799, 320057, 319442, 329194, 157481, 239920, 303270, 106124, 119088, 271833, 229027, 166870, 121556, 76200, 353580, 309336, 160821, 117711, 241525, 321485, 307939, 165925, 194238, 195025, 266128, 90383],
+    [147432, 145030, 309336, 321390, 297934, 305906, 267510, 36441, 229027,  288945, 275702, 26012, 119088,  227258, 321485, 348398, 239920, 106124, 43727, 335278, 319442, 132516, 187601, 172674, 134200, 232883, 346836, 353580],
+    [145030, 26012, 187601, 305906, 150885, 317547, 321485, 335279, 106124, 160821, 206721, 36441, 249091, 177298, 322993, 309336, 251106, 312290, 104405, 66900, 61406, 282527, 61747, 40626, 267181, 359300, 213774, 284308],
+    [213774, 187601, 309336, 61406, 168430, 26012, 145030, 70803, 319884, 73001, 332467, 187613, 348398, 203418, 283888, 302264, 29609, 45445, 152068, 20936, 137024, 329491, 296060, 305906, 317547, 147555, 232883, 282973],
+    [327509, 166193, 213577, 2515, 336589, 288140, 179945, 250658, 94409, 173666, 642, 62920, 286236, 187168, 166871, 164392, 280629, 241692, 170604, 186418, 267206, 197226, 164208, 62012, 86697, 106098, 81939, 166898]]
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y')
+    agecode = (int(nowDate) - int(user.age))//10
+    agecode -= 1
+    if agecode < 0:
+        agecode = 0
+    if agecode > 5:
+        agecode = 5
+    rstore = get_object_or_404(Store, id=startpoint[agecode][random.randrange(0, 28)])
+    serializer = StoreSerializer(rstore)
+    return Response(serializer.data)
+
+    

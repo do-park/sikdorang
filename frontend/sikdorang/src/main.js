@@ -12,7 +12,7 @@ import "bootstrap/dist/js/bootstrap.min.js"
 
 Vue.prototype.$axios = axios
 // axios.defaults.baseURL = "http://j3d202.p.ssafy.io:8080/"
-axios.defaults.baseURL = "http://127.0.0.1:8000/"
+axios.defaults.baseURL = "http://127.0.0.1:8080/"
 
 Vue.config.productionTip = false
 Vue.use(VueCookies)

@@ -3,8 +3,11 @@
     <hr />
     <div v-if="!isLogin">여행을 시작할까요?</div>
     <div v-else class="text-left">
-      <h2>{{ username }}님,</h2>
-      <h2>삼겹살을 만나보세요!</h2>
+      <h3>{{ username }}님,</h3>
+      <div class="d-flex justify-content-center">
+        <h3 class="text-center"><Recommend /></h3>
+      </div>
+      <h3 class="text-right">어떠세요?</h3>
     </div>
     <hr />
     <div class="btn-wrap row m-0 justify-content-around">
@@ -35,6 +38,7 @@
 
 <script>
 import ThemePage from "@/components/main/ThemePage.vue";
+import Recommend from "@/views/Recommend.vue";
 export default {
   name: "MainPage",
   data() {
@@ -64,6 +68,7 @@ export default {
   },
   components: {
     ThemePage,
+    Recommend,
   },
   methods: {
     clickMyChoice() {
