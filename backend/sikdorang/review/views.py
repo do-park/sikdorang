@@ -29,9 +29,7 @@ def create_review(request, store_pk):
                 nouns = km.nouns(request.data['content'])
                 print(nouns)
             except:
-                print('분석안됨')
                 pass
-            print('여기까지 오나?')
             tags = set()
             for noun in nouns:
                 if noun in tag_dict.keys():
