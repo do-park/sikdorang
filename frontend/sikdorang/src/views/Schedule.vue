@@ -162,6 +162,8 @@ export default {
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
       // console.log(schedule);
+      console.log(this.getSchedules, schedule);
+      console.log("@@@@ i m here");
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
