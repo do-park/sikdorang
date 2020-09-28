@@ -1,25 +1,37 @@
 <template>
   <div v-if="savedSchedules">
     <hr />
-     <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
-       <h1>썸띵 지도</h1>
-          <div class="my-4" v-for="ListItem in scheduleList['schedules']" :key="ListItem.id">
-              <div v-if="ListItem.type === '식당' | ListItem.type === '카페'">
-                <p>
-                  [{{ListItem.type}}] {{ListItem.store_name}} | {{ListItem.address}}
-                </p>
-              </div>
-              <div v-else>
-                <p>
-                [ {{ListItem.type}} ] {{ListItem.name}} | {{ListItem.address}}
-
-                </p>
-              </div>
-          </div>
+    <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
+      <h1>썸띵 지도</h1>
+      <div
+        class="my-4"
+        v-for="ListItem in scheduleList['schedules']"
+        :key="ListItem.id"
+      >
+        <div v-if="(ListItem.type === '식당') | (ListItem.type === '카페')">
+          <p>
+            [{{ ListItem.type }}] {{ ListItem.store_name }} |
+            {{ ListItem.address }}
+          </p>
+        </div>
+        <div v-else>
+          <p>
+            [ {{ ListItem.type }} ] {{ ListItem.name }} | {{ ListItem.address }}
+          </p>
+        </div>
+      </div>
     </b-modal>
     <div v-if="allSchedule">
-      <div @click="goScheduleDetail(schedule)" v-for="(schedule, index) in allSchedule" :key="schedule.idx">
-        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} | <b-button v-b-modal.modal-scrollable>상세보기</b-button> | <button class="btn btn-success" @click="popupPartyForm(schedule.id)">동행구하기</button>
+      <div
+        @click="goScheduleDetail(schedule)"
+        v-for="(schedule, index) in allSchedule"
+        :key="schedule.idx"
+      >
+        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} |
+        <b-button v-b-modal.modal-scrollable>상세보기</b-button> |
+        <button class="btn btn-success" @click="popupPartyForm(schedule.id)">
+          동행구하기
+        </button>
         <button class="btn btn-primary" data-toggle="modal" data-target="#targetMessage">동행 신청자 보기</button>
         <PartyForm :id="schedule.id" class="party-form d-none" />
         <hr />
@@ -49,8 +61,8 @@
 <script>
 import { mapGetters } from "vuex";
 
-import PartyForm from "../mypage/PartyForm.vue"
-import PartyRequests from "../mypage/PartyRequests.vue"
+import PartyForm from "../mypage/PartyForm.vue";
+import PartyRequests from "../mypage/PartyRequests.vue";
 
 export default {
   name: "SavedSchedules",
@@ -58,8 +70,8 @@ export default {
     savedSchedules: Boolean,
   },
   components: {
-      PartyForm,
-      PartyRequests
+    PartyForm,
+    PartyRequests,
   },
   computed: {
     ...mapGetters("schedule", [
@@ -71,31 +83,31 @@ export default {
   data() {
     return {
       allSchedule: [],
-      scheduleList : { name: "", date: "", schedules: [] },
+      today: "",
+      scheduleList: { name: "", date: "", schedules: [] },
     };
   },
   mounted() {
     this.getAllSchedules();
+    this.today = new Date();
   },
-  
+
   methods: {
     popupPartyForm(targetId) {
-      if (document.getElementById(targetId).classList.contains('d-none')) {
-        var forms = document.getElementsByClassName('party-form')
-        console.log('this',forms)
+      if (document.getElementById(targetId).classList.contains("d-none")) {
+        var forms = document.getElementsByClassName("party-form");
+        console.log("this", forms);
         for (let form of forms) {
-          if (!(form.classList.contains('d-none'))) {
-            form.classList.add('d-none')
+          if (!form.classList.contains("d-none")) {
+            form.classList.add("d-none");
           }
         }
-        document.getElementById(targetId).classList.remove('d-none')
+        document.getElementById(targetId).classList.remove("d-none");
         window.$cookies.set("party-trip-id", targetId);
       } else {
-        document.getElementById(targetId).classList.add('d-none')
+        document.getElementById(targetId).classList.add("d-none");
       }
-  
     },
-
     getSightseeing() {
       const TOUR_API_KEY =
         "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
@@ -111,9 +123,8 @@ export default {
         .catch((err) => console.error(err));
     },
     goScheduleDetail(schedule) {
-      console.log(schedule.name)
-      this.makeScheduleList(schedule)
-      
+      console.log(schedule.name);
+      this.makeScheduleList(schedule);
     },
     //모든 일정 가져오기
     getAllSchedules() {
@@ -193,16 +204,20 @@ export default {
                 tags: "",
                 img: items.firstimage,
               });
-
             })
             .catch((err) => console.error(err));
         }
       });
       console.log("오늘의 일정", this.scheduleList);
     },
+    stringtodate(str) {
+      const y = str.substr(0, 4);
+      const m = str.substr(5, 2);
+      const d = str.substr(8, 2);
+      return new Date(y, m - 1, d);
+    },
   },
 };
-
 </script>
 
 <style>

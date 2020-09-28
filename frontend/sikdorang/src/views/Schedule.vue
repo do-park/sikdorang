@@ -152,30 +152,40 @@ export default {
       }
       let plan = "";
       const schedule = [];
-      // console.log("일정을 추가했습니다.", this.clonedItems);
 
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
         item["idx"] = i;
-        // console.log(item);
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
-      // console.log(schedule);
-      console.log(this.getSchedules, schedule);
-      console.log("@@@@ i m here");
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
       this.actionMapEventClear("clear");
       return plan;
     },
+    datetostring(date) {
+      var y = date.substr(0, 4);
+      var m = parseInt(date.substr(5, 2));
+      if (m < 10) {
+        m = "0" + m;
+      }
+      var d = date.substr(9, 2);
+      return y + "-" + m + "-" + d;
+    },
     createTrip() {
       let plan = this.createPlan();
       if (!plan) {
         return;
       }
-      const inputValue = new Date().toISOString().substring(0, 10);
+      // const inputValue = new Date().toISOString().substring(0, 10);
+      let inputValue = new Date()
+        .toLocaleString({
+          timeZone: "Asia/Seoul",
+        })
+        .substring(0, 12);
+      inputValue = this.datetostring(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
