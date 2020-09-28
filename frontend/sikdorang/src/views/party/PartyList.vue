@@ -15,7 +15,24 @@ export default {
     PartyListItem,
   },
   data() {
-    return {};
+    return {
+      partyList: [
+        {
+          id: 1,
+          plan_id: 1,
+          user_id: 1,
+          updated_at: "2020-09-29",
+          content: "여행을 떠나요",
+        },
+        {
+          id: 2,
+          plan_id: 2,
+          user_id: 1,
+          updated_at: "2020-09-30",
+          content: "여행을 떠나요",
+        },
+      ],
+    };
   },
 };
 </script>

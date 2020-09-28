@@ -163,12 +163,27 @@ export default {
       this.actionMapEventClear("clear");
       return plan;
     },
+    datetostring(date) {
+      var y = date.substr(0, 4);
+      var m = parseInt(date.substr(5, 2));
+      if (m < 10) {
+        m = "0" + m;
+      }
+      var d = date.substr(9, 2);
+      return y + "-" + m + "-" + d;
+    },
     createTrip() {
       let plan = this.createPlan();
       if (!plan) {
         return;
       }
-      const inputValue = new Date().toISOString().substring(0, 10);
+      // const inputValue = new Date().toISOString().substring(0, 10);
+      let inputValue = new Date()
+        .toLocaleString({
+          timeZone: "Asia/Seoul",
+        })
+        .substring(0, 12);
+      inputValue = this.datetostring(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
