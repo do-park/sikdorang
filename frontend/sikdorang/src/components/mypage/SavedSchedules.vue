@@ -32,6 +32,9 @@
         {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }}
         <button @click="popupPartyForm(schedule.id)">동행구하기</button>
         <PartyForm :id="schedule.id" class="party-form d-none" />
+        <div>
+          <PartyRequests />
+        </div>
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -42,6 +45,7 @@
 import { mapGetters, mapActions } from "vuex";
 // import Swal from "sweetalert2";
 import PartyForm from "../mypage/PartyForm.vue"
+import PartyRequests from "../mypage/PartyRequests.vue"
 
 export default {
   name: "SavedSchedules",
@@ -50,6 +54,7 @@ export default {
   },
   components: {
       PartyForm,
+      PartyRequests
   },
   computed: {
     ...mapGetters("schedule", [
