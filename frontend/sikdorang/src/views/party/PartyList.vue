@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1>파티구함</h1>
-    <div v-for="(partyList, index) in getPartyList" :key="index">
-      <PartyListItem :partyList="partyList" :index="index" />
+    <div v-for="(partyItem, index) in PartyList" :key="index">
+      <PartyListItem :partyItem="partyItem" :index="index" />
     </div>
   </div>
 </template>
