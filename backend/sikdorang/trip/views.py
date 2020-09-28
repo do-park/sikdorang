@@ -103,11 +103,14 @@ def trip_today(request):
         plan_id.append(num)
     res = [0]*len(plan_id)
     for i in range(len(res)):
-        if i == -1:
+        print(plan_id[i])
+        if plan_id[i] == -1:
             continue
         else:
-            tstore = Review.objects.filter(user=user, store_id=i)
+            tchk = Store.objects.get(id=plan_id[i])
+            tstore = Review.objects.filter(user=user, store_id=tchk)
             if tstore.exists():
                 res[i] = 1
     result = [serializer.data, res]
+    print(res)
     return Response(result)
