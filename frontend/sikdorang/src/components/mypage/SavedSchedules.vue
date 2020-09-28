@@ -30,7 +30,11 @@
     <div v-if="allSchedule">
       <div v-for="(schedule, index) in allSchedule" :key="schedule.id">
         {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }}
-        <button class="btn btn-primary" @click="popupPartyForm(schedule.id)">
+        <button
+          v-if="stringtodate(schedule.date) > today"
+          class="btn btn-primary"
+          @click="popupPartyForm(schedule.id)"
+        >
           동행구하기
         </button>
         <PartyForm :id="schedule.id" class="party-form d-none" />

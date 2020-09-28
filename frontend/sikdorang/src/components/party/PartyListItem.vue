@@ -1,7 +1,9 @@
 <template>
   <div class="d-flex">
-    <div>
-      {{ partyItem }}
+    <div @click="onClick()">
+      <h5>{{ trip.name }}</h5>
+      날짜: {{ trip.date }}
+      <hr />
     </div>
   </div>
 </template>
@@ -10,8 +12,33 @@
 export default {
   name: "PartyListItem",
   props: {
-    partyItem: Array,
+    partyItem: Object,
     index: Number,
+  },
+  data() {
+    return {
+      trip: Object,
+    };
+  },
+  mounted() {
+    this.getTripdata(this.partyItem.trip_id);
+  },
+  methods: {
+    getTripdata(tripId) {
+      this.$axios
+        .get(`/trip/${tripId}`)
+        .then((res) => {
+          this.trip = res.data;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    onClick() {
+      this.$cookies.set("party", this.partyItem);
+      this.$cookies.set("trip", this.trip);
+      this.$router.push({ name: "PartyListItemDetail" });
+    },
   },
 };
 </script>

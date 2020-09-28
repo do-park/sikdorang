@@ -17,6 +17,7 @@ import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 import ReviewForm from "../views/review/ReviewForm.vue"
 import PartyList from "../views/party/PartyList.vue"
+import PartyListItemDetail from "../views/party/PartyListItemDetail.vue"
 
 Vue.use(VueRouter)
 
@@ -105,6 +106,11 @@ const routes = [
     path: "/party/list",
     name: "PartyList",
     component: PartyList,
+  },
+  {
+    path: "/party/detail",
+    name: "PartyListItemDetail",
+    component: PartyListItemDetail,
   },
 ]
 
