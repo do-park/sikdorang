@@ -57,6 +57,7 @@ urlpatterns = [
     path('review/', include('review.urls')),
     path('achievement/', include('achievement.urls')),
     path('guide/', include('guide.urls')),
+    path('party/', include('party.urls')),
 
     # 추천
     path('recommend/', include('recommend.urls')),
