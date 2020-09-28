@@ -16,6 +16,7 @@ import TripProductDetailView from "../views/tripproduct/TripProductDetailView.vu
 import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 import ReviewForm from "../views/review/ReviewForm.vue"
+import MessageForm from "../components/message/MessageForm.vue"
 
 Vue.use(VueRouter)
 
@@ -99,6 +100,11 @@ const routes = [
     path: "/review/form",
     name: "ReviewForm",
     component: ReviewForm,
+  },
+  {
+    path: "/message/test",
+    name: "MessageForm",
+    component: MessageForm,
   }
 ]
 
