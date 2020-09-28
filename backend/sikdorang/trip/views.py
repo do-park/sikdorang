@@ -112,5 +112,14 @@ def trip_today(request):
             if tstore.exists():
                 res[i] = 1
     result = [serializer.data, res]
-    print(res)
     return Response(result)
+
+@api_view(['DELETE'])
+def delete_trip(request, trip_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    trip = get_object_or_404(Trip, id=trip_pk)
+    if trip.user == user:
+        trip.delete()
+        return HttpResponse('잘 지워짐')
+    return HttpResponse('니 글 아님 ㅅㄱ')

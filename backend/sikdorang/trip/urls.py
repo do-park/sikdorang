@@ -10,5 +10,5 @@ urlpatterns = [
     path('idealcategory', views.idealcategory),
     path('store_detail/<int:store_pk>', views.store_detail),
     path('today', views.trip_today),
-    # path('<int:trip_pk>', views.trip_detail),
+    path('delete/<int:trip_pk>', views.delete_trip),
 ]
