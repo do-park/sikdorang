@@ -1,35 +1,26 @@
 <template>
   <div v-if="savedSchedules">
-    <h3>오늘의 일정</h3>
-    <div v-if="todaySchedule.name">
-      {{ todaySchedule.name }} | {{ todaySchedule.date }} |
-      <button>동행구하기</button>
-    </div>
-    <div v-else>오늘 일정이 없습니다.</div>
     <hr />
-    <div
-      v-for="(schedule, index) in todaySchedule.schedules"
-      :key="schedule.id"
-    >
-      {{ schedule.id }}
-      <div v-if="(schedule.type === '식당') | (schedule.type === '카페')">
-        [{{ schedule.type }}] {{ schedule.store_name }} |
-        <button
-          v-if="todayReviewList[index] === 0"
-          class="btn btn-primary"
-          @click="goReviewForm(schedule.id)"
-        >
-          리뷰작성
-        </button>
-        <span v-else>이미 리뷰 작성했음</span>
-      </div>
-      <div v-else>[{{ schedule.type }}] {{ schedule.name }}</div>
-    </div>
-    <h3>저장된 여행 일정</h3>
-    <hr />
+     <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
+       <h1>썸띵 지도</h1>
+          <div class="my-4" v-for="ListItem in scheduleList['schedules']" :key="ListItem.id">
+              <div v-if="ListItem.type === '식당' | ListItem.type === '카페'">
+                <p>
+                  [{{ListItem.type}}] {{ListItem.store_name}} | {{ListItem.address}}
+                </p>
+              </div>
+              <div v-else>
+                <p>
+                [ {{ListItem.type}} ] {{ListItem.name}} | {{ListItem.address}}
+
+                </p>
+              </div>
+          </div>
+    </b-modal>
     <div v-if="allSchedule">
-      <div v-for="(schedule, index) in allSchedule" :key="schedule.idx">
-        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }}
+      <div @click="goScheduleDetail(schedule)" v-for="(schedule, index) in allSchedule" :key="schedule.idx">
+        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} | <b-button v-b-modal.modal-scrollable>상세보기</b-button>
+        <hr />
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -37,8 +28,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-
+import { mapGetters } from "vuex";
+// import Swal from "sweetalert2"
 export default {
   name: "SavedSchedules",
   props: {
@@ -53,38 +44,15 @@ export default {
   },
   data() {
     return {
-      todaySchedule: { name: "", date: "", schedules: [] },
-      todayReviewList: [],
       allSchedule: [],
+      scheduleList : { name: "", date: "", schedules: [] },
     };
   },
   mounted() {
-    if (this.getSchedules.length === 0) {
-      this.initiateSchedule();
-    } else {
-      this.saveSchedule();
-    }
-    console.log(this.getScheduleName);
-    console.log(this.getScheduleDate);
-    this.getTodaySchedules();
     this.getAllSchedules();
   },
   methods: {
-    ...mapActions("schedule", [
-      "actionSchedule",
-      "actionScheduleName",
-      "actionScheduleDate",
-    ]),
-    initiateSchedule() {
-      this.actionSchedule([]);
-      this.actionScheduleName("");
-      this.actionScheduleDate("");
-    },
-    goReviewForm(store_id) {
-      console.log(store_id);
-      this.$cookies.set("review-store-id", store_id);
-      this.$router.push({ name: "ReviewForm" });
-    },
+    
     getSightseeing() {
       const TOUR_API_KEY =
         "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
@@ -99,55 +67,12 @@ export default {
         })
         .catch((err) => console.error(err));
     },
-    saveSchedule() {
-      const scheduleData = [];
-      console.log(this.getSchedules);
-      if (this.getSchedules.length > 0) {
-        this.getSchedules.forEach((schedule) => {
-          scheduleData.push(schedule.id + String(schedule.userChoice.id));
-        });
-      } else {
-        return;
-      }
-      const data = {
-        plan: scheduleData.join("-"),
-        name: this.getScheduleName,
-        date: this.getScheduleDate,
-      };
-      const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-        },
-      };
-      this.$axios
-        .post("/trip/", data, requestHeaders)
-        .then((res) => {
-          console.log("일정을 저장했습니다.", res);
-          this.initiateSchedule();
-          console.log("지워졌나?", this.getSchedules);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+    goScheduleDetail(schedule) {
+      console.log(schedule.name)
+      this.makeScheduleList(schedule)
+      
     },
-    //오늘 일정 가져오기
-    getTodaySchedules() {
-      const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-        },
-      };
-      this.$axios
-        .get("/trip/today", requestHeaders)
-        .then((res) => {
-          console.log(res);
-          this.makeScheduleList(res.data[0]);
-          this.todayReviewList = res.data[1];
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+ 
     //모든 일정 가져오기
     getAllSchedules() {
       const requestHeaders = {
@@ -168,9 +93,9 @@ export default {
     //일정 정보 가져오면 스케줄 리스트로 만들기
     makeScheduleList(data) {
       console.log(data);
-      this.todaySchedule.name = data.name;
-      this.todaySchedule.date = data.date;
-
+      this.scheduleList["name"] = data.name;
+      this.scheduleList["date"] = data.date;
+      console.log(this.scheduleList)
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
       console.log(plans);
@@ -191,7 +116,7 @@ export default {
                 typeName = "카페";
               }
               result["type"] = typeName;
-              this.todaySchedule.schedules.push(result);
+              this.scheduleList["schedules"].push(result);
             })
             .catch((err) => {
               console.log(err);
@@ -216,7 +141,7 @@ export default {
               console.log("!!!", res);
               const items = res.data.response.body.items.item;
 
-              this.todaySchedule.schedules.push({
+              this.scheduleList["schedules"].push({
                 id: items.contentid,
                 name: items.title,
                 branch: "",
@@ -236,7 +161,7 @@ export default {
             .catch((err) => console.error(err));
         }
       });
-      console.log("오늘의 일정", this.todaySchedule);
+      console.log("오늘의 일정", this.scheduleList);
     },
   },
 };
