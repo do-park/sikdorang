@@ -2,7 +2,7 @@
   <div v-if="threeRes">
     <div class="d-flex flex-column align-items-center">
       <div>
-        <button class="btn btn-secondary" @click="checkFilp">다른 {{getSchedules[getScheduleIdx].name}} 볼래요!</button>
+        <button class="btn btn-secondary" @click="checkFilp">{{ buttonStr }}</button>
       </div>
     
       <div class="d-flex justify-content-center">
@@ -41,6 +41,7 @@ export default {
       isActive2: false,
       animatechk: true,
       index: ['A', 'B', 'C'],
+      buttonStr: null,
     };
   },
   props: {
@@ -54,6 +55,7 @@ export default {
       "getThreeRes",
       "getSelectedRest",
       "getPlanList",
+      "getTagStores",
     ]),
     ...mapGetters("schedule",[
       "getSchedules",
@@ -74,12 +76,24 @@ export default {
       if (this.getThreeRes !== []) {
         this.threeRes = this.getThreeRes
       }
-    }
+    },
+    getTagStores() {
+			if (this.getTagStores) {
+        this.buttonStr = '추천해주세요!'
+			} else {
+        this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
+			}
+		},
   },
   mounted() {
     // this.checkFilp();
     if (this.getThreeRes) {
       this.actionSelectedRest(this.getThreeRes[0]);
+    }
+    if (this.getTagStores) {
+      this.buttonStr = '추천해주세요!'
+    } else {
+      this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
     }
   },
   methods: {

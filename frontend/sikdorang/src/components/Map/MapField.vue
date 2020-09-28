@@ -42,6 +42,7 @@ export default {
 	},
 	mounted() {
 		this.addScript()
+		this.actionMapEventClear()
 		// this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 	},
 	computed : {
@@ -51,7 +52,8 @@ export default {
 			'getClicked',
 			'getThreeRes',
 			'getSelectedRest',
-			'getPlanList'
+			'getPlanList',
+			'getSelectTag',
 		]),
 		...mapGetters("schedule", [
 			"getSchedules",
@@ -92,9 +94,11 @@ export default {
 		},
 		getScheduleProgressIdx() {
 			if (this.getScheduleProgressIdx !== -1){
-				console.log('이동')
 				this.moveSmoothly('progress')
 			}
+		},
+		getSelectTag() {
+			this.getTagStoreList(this.getSelectTag)
 		}
 	},
 	methods : {
@@ -104,14 +108,32 @@ export default {
 			'actionMouseOverToCard',
 			'actionClicked',
 			'actionThreeRes',
+			'actionMapEventClear',
 			'actionSelectedRest',
 			'actionPlanList',
+			'actionTags',
+			'actionTagStores',
 		]),
 		...mapActions("schedule", [
 			"actionStore",
 			"actionscheduleProgressIdx",
 		]),
+		getTagStoreList(tag){
+			const data = {
+				"tag": tag,
+				"lat": this.beforeLat,
+				"lng": this.beforeLng,
+			}
+			this.$axios.post('recommend/tag-store/', data)
+			.then(res => {
+				this.showTagStores(res.data.result)
+				this.actionTagStores(true)
+			})
+			.catch(err => console.error(err))
+		},
 		divideRecommendation(cf) {
+			this.recommends = []
+			this.actionTags([])
 			if (cf === "식당" | cf === "카페"){
 				this.getSCRecommendation(cf)
 			} else {
@@ -119,7 +141,6 @@ export default {
 			}
 		},
 		getSCRecommendation(cf) {
-            this.recommends = []
 			const requestHeaders = {
 				headers: {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
@@ -127,13 +148,13 @@ export default {
 			}
 			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
 			.then(res => {
+				this.actionTags(res.data.tags)
 				this.recommends = res.data.result
 				this.showCandidates(this.recommends)
 			})
 			.catch(err => console.error("알고리즘 추천 실패",err))
 		},
 		getSHRecommendation(cf) {
-            this.recommends = []
 			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
             let contentTypeId = 32
             if (cf ==="관광지") { contentTypeId = 12 }
@@ -169,7 +190,6 @@ export default {
 				lat = this.getThreeRes[this.getClicked].latitude
 				long = this.getThreeRes[this.getClicked].longtitude
 			} else if (cd === 'progress' && this.getProgressClicked !== null) {
-				console.log(this.getSchedules)
 				try {
 					lat = this.getSchedules[this.getScheduleProgressIdx].userChoice.latitude
 					long = this.getSchedules[this.getScheduleProgressIdx].userChoice.longtitude
@@ -297,6 +317,119 @@ export default {
 			}
 			return this.selectedMarker	
 		},
+		showTagStores(stores){
+			const map = this.map
+			this.hideMarkers(this.recommendMarkers)
+			this.recommendMarkers = [];
+			var bounds = new kakao.maps.LatLngBounds();
+
+						//커스텀 마커 정보
+			var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
+				MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
+				OFFSET_X = 12, // 기본, 클릭 마커의 기준 X좌표
+				OFFSET_Y = MARKER_HEIGHT, // 기본, 클릭 마커의 기준 Y좌표
+				OVER_MARKER_WIDTH = 40, // 오버 마커의 너비
+				OVER_MARKER_HEIGHT = 42, // 오버 마커의 높이
+				OVER_OFFSET_X = 13, // 오버 마커의 기준 X좌표
+				OVER_OFFSET_Y = OVER_MARKER_HEIGHT, // 오버 마커의 기준 Y좌표
+				SPRITE_GAP = 10; // 스프라이트 이미지에서 마커간 간격
+		
+
+			var markerSize = new kakao.maps.Size(MARKER_WIDTH, MARKER_HEIGHT), // 기본, 클릭 마커의 크기
+				markerOffset = new kakao.maps.Point(OFFSET_X, OFFSET_Y), // 기본, 클릭 마커의 기준좌표
+				overMarkerSize = new kakao.maps.Size(OVER_MARKER_WIDTH, OVER_MARKER_HEIGHT), // 오버 마커의 크기
+				overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y); // 오버 마커의 기준 좌표
+			
+			// 클릭한 마커를 담을 변수
+			var selectedMarker = this.selectedMarker;
+			for (var i = 0; i < stores.length; i ++) {
+				const gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
+					originY = (MARKER_HEIGHT + SPRITE_GAP), // 스프라이트 이미지에서 기본, 클릭 마커로 사용할 Y좌표 값
+					overOriginY = (OVER_MARKER_HEIGHT + SPRITE_GAP), // 스프라이트 이미지에서 오버 마커로 사용할 Y좌표 값
+					normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
+					clickOrigin = new kakao.maps.Point(gapX, originY), // 스프라이트 이미지에서 마우스오버 마커로 사용할 영역의 좌상단 좌표
+					overOrigin = new kakao.maps.Point(gapX * 2, overOriginY); // 스프라이트 이미지에서 클릭 마커로 사용할 영역의 좌상단 좌표
+
+				
+				// 기본 마커이미지, 오버 마커이미지, 클릭 마커이미지를 생성합니다
+				const normalImage = this.createMarkerImage(markerSize, markerOffset, normalOrigin),
+					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
+					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
+
+				var position = new kakao.maps.LatLng(stores[i].latitude, stores[i].longtitude);
+					
+				// 마커를 생성합니다
+				const marker = new kakao.maps.Marker({
+					map: map,
+					position: position,
+					title : stores[i].name, 
+					image : normalImage
+				});
+
+				marker.normalImage = normalImage;
+				marker.idx = i;
+
+				// 마커에 표시할 인포윈도우를 생성합니다 
+				var infowindow = new kakao.maps.InfoWindow({
+					content: `<h5>${stores[i].name}</h5>` // 인포윈도우에 표시할 내용
+				});
+
+				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
+				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,normalImage));
+				kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker,infowindow,clickImage));
+		
+				//지도 범위에 추가
+				bounds.extend(position);
+				this.recommendMarkers.push(marker)
+				// selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
+			}
+			function makeOverListener(map, marker, infowindow, overImage) {
+				return function() {
+					infowindow.open(map, marker);
+					if (!selectedMarker || selectedMarker !== marker) {
+						marker.setImage(overImage);
+					}
+					// self.actionMouseOverToCard(marker.idx)
+				};
+			}
+			function makeOutListener(map, marker,infowindow,normalImage) {
+				return function() {
+					infowindow.close();
+					//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
+					// 마커의 이미지를 기본 이미지로 변경합니다
+					if (!selectedMarker || selectedMarker !== marker) {
+						marker.setImage(normalImage);
+					}
+					// self.actionMouseOverToCard(null);
+				};
+			}
+			function makeClickListener(map, marker, infowindow, clickImage) {
+				return function() {
+					//클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
+					// 마커의 이미지를 클릭 이미지로 변경합니다
+					if (!selectedMarker || selectedMarker !== marker) {
+							// 클릭된 마커 객체가 null이 아니면
+							// 클릭된 마커의 이미지를 기본 이미지로 변경하고
+							!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+
+							// 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+							marker.setImage(clickImage);
+						// }
+						
+					}
+					// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+					selectedMarker = marker;
+					this.selectedMarker = selectedMarker;
+					infowindow.close();
+					window.$cookies.set('selectedMarker', selectedMarker.idx)
+					// self.actionClicked(selectedMarker.idx)
+					// self.selectRest(selectedMarker.idx)
+				};
+			}
+
+			map.setBounds(bounds);
+			this.showMarkers(this.recommendMarkers);
+		},
 		showCandidates(locs) {
 			const self = this
 			var map = this.map;
@@ -335,7 +468,7 @@ export default {
 				overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y); // 오버 마커의 기준 좌표
 			
 			// 클릭한 마커를 담을 변수
-			var selectedMarker = this.selectedMarker;	
+			var selectedMarker = this.selectedMarker;
 
 			for (var i = 0; i < positions.length; i ++) {
 				const gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
@@ -501,9 +634,9 @@ export default {
 			carMin = '<span class="number">' + carTime % 60 + '</span>분'
 
 			// 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴
-			var content = '<ul style="background-color:white;" class="dotOverlay distanceInfo">';
+			var content = '<ul style="list-style:none; color:black; font-weight: bold;" class="dotOverlay distanceInfo">';
 			content += '    <li>';
-			content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
+			content += '        <span class="label">거리</span><span class="number">' + distance + '</span>m';
 			content += '    </li>';
 			content += '    <li>';
 			content += '        <span class="label">도보</span>' + walkHour + walkMin;

@@ -19,7 +19,6 @@ export default {
     methods: {
         ...mapActions('schedule', ['actionscheduleProgressIdx']),
         onClick(idx) {
-            console.log('클릭됨', idx, this.schedule)
             this.actionscheduleProgressIdx(idx)
         }
     }
@@ -29,7 +28,7 @@ export default {
 <style scoped>
 div {
     width: 20px;
-    height: 20px;
+    height: 20px; 
 }
 .active {
     background-color: crimson !important;

@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-row justify-content-center">
-      <div v-for="(schedule, index) in schedules" :key="schedule.id">
+      <div v-for="(schedule, index) in schedules" :key="schedule.idx">
           <schedule-progress-item class="m-2" :schedule="schedule" :index="index"/>
       </div>
   </div>
