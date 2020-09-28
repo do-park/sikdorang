@@ -134,12 +134,8 @@ export default {
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.tripSchedule.content = html;
     },
-    fileChange(e) {
-      console.log("!!", e)
-      var file = e.target.files[0]
-      if (file && file.type.match(/^image\/(png|jpeg)$/)) {
-          // this.tripSchedule.title_img = window.URL.createObjectURL(file)
-      }
+    fileChange() {
+      console.log("!!", this.$refs)
       this.tripSchedule.title_img = this.$refs.tI.files[0];
     },
   },

@@ -7,15 +7,13 @@
       <div v-else>오늘 일정이 없습니다.</div>
         <hr>
         <div
-        v-for="schedule in todaySchedule.schedules"
+        v-for="(schedule, index) in todaySchedule.schedules"
         :key="schedule.id"
         >
              <div v-if="( schedule.type ==='식당' | schedule.type === '카페')">
                 [{{schedule.type}}] {{schedule.store_name}} | 
-                <button class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성</button>
-                <!-- v-if 넣기 -->
-                <!-- 리뷰 작성 완료시 작성완료 버튼(비활성화) 있어야함 -->
-                <!-- <div v-else >이미 리뷰 작성했음</div> -->
+                <button v-if="todayReviewList[index] === 0" class="btn btn-primary" @click="goReviewForm(schedule.id)">리뷰작성</button>
+                <span v-else >이미 리뷰 작성했음</span>
             </div>
             <div v-else>
                 [{{schedule.type}}] {{schedule.name}}
@@ -54,6 +52,7 @@ export default {
     data() {
         return {
             todaySchedule : {"name" : "", "date" : "", "schedules" : []},
+            todayReviewList: [],
             allSchedule : [],
         }
     },
@@ -117,6 +116,7 @@ export default {
             .then(res=>{
                 console.log(res)
                 this.makeScheduleList(res.data[0])
+                this.todayReviewList = res.data[1]
             })
             .catch(err=>{
                 console.log(err)
