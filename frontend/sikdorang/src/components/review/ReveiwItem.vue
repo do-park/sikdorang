@@ -39,8 +39,7 @@ export default {
     },
     methods: {
       getStore() {
-        console.log('ㅇㅇㅇ')
-        this.$axios.get(`trip/store_detail/${this.review.store}`)
+        this.$axios.get(`trip/store_detail/${this.review.store_id}`)
         .then(res => {
             console.log(res)
             this.storeName = res.data.store_name

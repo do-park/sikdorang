@@ -95,15 +95,17 @@ export default {
   },
   created() {
     // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    this.userId = 1;
-    this.getTripdata();
+    // this.userId = 1;
+    // this.getTripdata();
   },
   methods: {
     ...mapActions("schedule", [
       "actionSchedule",
+      "actionScheduleIdx",
       "actionScheduleName",
       "actionScheduleDate",
     ]),
+    ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -115,7 +117,9 @@ export default {
     },
     uuid(e) {
       if (e.uid) return e.uid;
-      const key = Math.random().toString(10).slice(2);
+      const key = Math.random()
+        .toString(10)
+        .slice(2);
       this.$set(e, "uid", key);
       return e.uid;
     },
@@ -152,20 +156,36 @@ export default {
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
         item["idx"] = i;
-        console.log(item);
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
-      console.log(schedule);
       this.actionSchedule(schedule);
+      this.actionScheduleIdx(0);
+      this.actionFlip(true);
+      this.actionMapEventClear("clear");
       return plan;
+    },
+    datetostring(date) {
+      var y = date.substr(0, 4);
+      var m = parseInt(date.substr(5, 2));
+      if (m < 10) {
+        m = "0" + m;
+      }
+      var d = date.substr(9, 2);
+      return y + "-" + m + "-" + d;
     },
     createTrip() {
       let plan = this.createPlan();
       if (!plan) {
         return;
       }
-      const inputValue = new Date().toISOString().substring(0, 10);
+      // const inputValue = new Date().toISOString().substring(0, 10);
+      let inputValue = new Date()
+        .toLocaleString({
+          timeZone: "Asia/Seoul",
+        })
+        .substring(0, 12);
+      inputValue = this.datetostring(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
@@ -355,5 +375,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

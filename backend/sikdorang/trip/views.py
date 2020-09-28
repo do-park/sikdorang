@@ -7,6 +7,7 @@ from .serializers import *
 from .models import Trip
 from api.models import *
 from api.serializers import *
+from review.models import Review
 import datetime
 
 from rest_framework import viewsets
@@ -80,6 +81,45 @@ def trip_today(request):
     user = get_object_or_404(User, pk=request.user.pk)
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
-    trips = Trip.objects.filter(user=user, date=nowDate)
-    serializer = TripListSerializer(trips, many=True)
-    return Response(serializer.data)
+    trip = get_object_or_404(Trip, user=user, date=nowDate)
+    serializer = TripListSerializer(trip)
+    tplan = trip.plan
+    plan_id = []
+    chk = 0
+    num = ''
+    for i in tplan:
+        if i == 'R' or i == 'C':
+            chk = 1
+        elif i == 'S' or i == 'A':
+            chk = 0
+            plan_id.append(-1)
+        elif i == '-':
+            plan_id.append(num)
+            num = ''
+            chk = 0
+        elif chk == 1:
+            num += i
+    if chk:
+        plan_id.append(num)
+    res = [0]*len(plan_id)
+    for i in range(len(res)):
+        print(plan_id[i])
+        if plan_id[i] == -1:
+            continue
+        else:
+            tchk = Store.objects.get(id=plan_id[i])
+            tstore = Review.objects.filter(user=user, store_id=tchk)
+            if tstore.exists():
+                res[i] = 1
+    result = [serializer.data, res]
+    return Response(result)
+
+@api_view(['DELETE'])
+def delete_trip(request, trip_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    trip = get_object_or_404(Trip, id=trip_pk)
+    if trip.user == user:
+        trip.delete()
+        return HttpResponse('잘 지워짐')
+    return HttpResponse('니 글 아님 ㅅㄱ')

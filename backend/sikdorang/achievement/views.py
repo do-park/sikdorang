@@ -43,7 +43,7 @@ def theme_create(request, theme_pk):
 def visit_create(request, theme_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    CVisite, flag = AchieveUser.objects.get_or_create(count=theme_pk ,user=user)
+    CVisite, flag = AchieveUser.objects.get_or_create(count=theme_pk, user=user)
     if flag:
         return HttpResponse('방문 클리어 등록.')
     else:

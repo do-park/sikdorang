@@ -20,7 +20,6 @@ from rest_framework import routers
 from django.conf.urls.static import static
 from sikdorang import settings
 from trip.views import TripViewSet
-from review.views import ReviewViewSet
 # from guide.views import GuideViewSet
 
 from rest_framework import permissions
@@ -42,7 +41,6 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register('trip', TripViewSet) # prefix = movies , viewset = MovieViewSet
-router.register('review', ReviewViewSet)
 # router.register('guide', GuideViewSet)
 
 
@@ -59,6 +57,7 @@ urlpatterns = [
     path('review/', include('review.urls')),
     path('achievement/', include('achievement.urls')),
     path('guide/', include('guide.urls')),
+    path('party/', include('party.urls')),
 
     # 추천
     path('recommend/', include('recommend.urls')),

@@ -20,7 +20,9 @@ import random
 DATA_DIR = "../../data"
 DUMP_FILE = os.path.join(DATA_DIR, "dump.pkl")
 
-# Create your views here.
+TAG_NAME = ["가성비", "청결", "친절", "분위기", "인테리어", "아침", "점심", "저녁", "친구", "연인", "가족", "주차장"]
+CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
+
 def recommend(request, user_pk):
     dataframe = load_dataframes()
     result = user_based(dataframe,user_pk)
@@ -188,7 +190,6 @@ def user_based(dataframe, for_user):
 
 @api_view(['POST'])
 def get_tag_recommendation(request):
-    category_name = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     data = request.data
@@ -210,7 +211,7 @@ def get_tag_recommendation(request):
     user_categories_queryset = user.categoryuser_set.all()
     user_categories = []
     for category in user_categories_queryset:
-        user_categories.append({"category": category_name[int(category.name)], "count": category.count})
+        user_categories.append({"category": CATEGORY_NAME[int(category.name)], "count": category.count})
     store_tags = []
     store_categories = []
     for store in stores:
@@ -228,15 +229,17 @@ def get_tag_recommendation(request):
                     tag = ""
             store_tags.append({"store_id": store.id, "tag": int(tag)})
         store_categories.append({"store_id": store.id, "category": store.category.name})
-
+    tags = set()
     for user_tag in user_tags:
         for store_tag in store_tags:
+            tags.add(TAG_NAME[store_tag["tag"]])
             if user_tag["tag"] == store_tag["tag"]:
                 if store_tag["store_id"] not in recommendation:
                     recommendation[store_tag["store_id"]] = 0
                 recommendation[store_tag["store_id"]] += user_tag["count"]
     for user_category in user_categories:
         for store_category in store_categories:
+            tags.add(store_category["category"])
             if div == "식당":
                 if user_category["category"] == store_category["category"]:
                     if store_category["store_id"] not in recommendation:
@@ -260,6 +263,46 @@ def get_tag_recommendation(request):
             "category": store.category.name,
             "tags": store.tags
         })
+    return JsonResponse({"result": result, "tags": list(tags)})
+
+
+@api_view(['POST'])
+def get_tag_stores(request):
+    data = request.data
+    tag = data["tag"]
+    lat = float(data["lat"])
+    lng = float(data["lng"])
+    g_lat = lat + 0.02
+    l_lat = lat - 0.02
+    g_lng = lng + 0.02
+    l_lng = lng - 0.02
+    store_list = []
+    result = []
+    stores = Store.objects.filter(
+        Q(latitude__lte=g_lat) & Q(latitude__gte=l_lat) & Q(longitude__lte=g_lng) & Q(longitude__gte=l_lng)
+    )
+    if tag in TAG_NAME:
+        for store in stores:
+            if str(TAG_NAME.index(tag)) in store.tags:
+                store_list.append(store)
+    elif tag in CATEGORY_NAME:
+        for store in stores:
+            if tag == store.category.name:
+                store_list.append(store)
+        
+    for store in store_list:
+        result.append({
+            "id": store.id,
+            "name": store.store_name,
+            "branch": store.branch,
+            "tel": store.tel,
+            "address": store.address,
+            "latitude": store.latitude,
+            "longtitude": store.longitude,
+            "category": store.category.name,
+            "tags": store.tags
+        })
+    return JsonResponse({"result": result})
     return JsonResponse({"result": result})
 
 @api_view(['GET'])

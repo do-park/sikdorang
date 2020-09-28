@@ -39,18 +39,23 @@ export default {
       },],
     }
   },
+  mounted() {
+    this.getReviewData()
+  },
   methods: {
     getReviewData() {
-      this.$axios.get(`주소`)
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+        },
+      };
+      this.$axios.get(`/review/user_review`, requestHeaders)
         .then(res => {
             console.log(res)
             this.reviews = res.data
         })
         .catch(err => console.error(err))
     },
-    getStoreName() {
-
-    }
    
   },
 };
