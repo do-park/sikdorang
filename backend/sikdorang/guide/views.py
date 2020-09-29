@@ -9,6 +9,7 @@ from .serializers import *
 from .models import *
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework import status
+import datetime
 
 
 # Create your views here.
@@ -35,9 +36,12 @@ def create_tour(request):
 
 @api_view(['GET'])
 def list_tour(request):
-    tours = TripItemModel.objects.all()
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    tours = TripItemModel.objects.filter(tirp_date__gte=int(nowDate)).order_by('-trip_date')
     serializer = TourSerializer(tours, many=True)
     return Response(serializer.data)
+
 # class GuideViewSet(viewsets.ModelViewSet):
 #     queryset = TripItemModel.objects.all()
 #     serializer_class = GuideItemSerializer
