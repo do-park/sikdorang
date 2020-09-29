@@ -124,3 +124,15 @@ def delete_trip(request, trip_pk):
         trip.delete()
         return HttpResponse('잘 지워짐')
     return HttpResponse('니 글 아님 ㅅㄱ')
+
+@api_view(['GET'])
+def today_chk(request):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y-%m-%d')
+    trip = get_object_or_404(Trip, user=user, date=nowDate)
+    if trip.exists():
+        return HttpResponse('1')
+    else:
+        return HttpResponse('0')

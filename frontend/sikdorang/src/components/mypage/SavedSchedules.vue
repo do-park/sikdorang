@@ -1,25 +1,21 @@
 <template>
   <div v-if="savedSchedules">
     <hr />
-    <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
-      <h1>썸띵 지도</h1>
-      <div
-        class="my-4"
-        v-for="ListItem in scheduleList['schedules']"
-        :key="ListItem.id"
-      >
-        <div v-if="(ListItem.type === '식당') | (ListItem.type === '카페')">
-          <p>
-            [{{ ListItem.type }}] {{ ListItem.store_name }} |
-            {{ ListItem.address }}
-          </p>
-        </div>
-        <div v-else>
-          <p>
-            [ {{ ListItem.type }} ] {{ ListItem.name }} | {{ ListItem.address }}
-          </p>
-        </div>
-      </div>
+     <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
+       <h1>썸띵 지도 들어갈 곳</h1>
+          <div class="my-4" v-for="(ListItem, index) in scheduleList" :key="ListItem.id">
+              <div v-if="ListItem.type === '식당' | ListItem.type === '카페'">
+                <p>
+                 {{ index + 1 }} | [{{ListItem.type}}] {{ListItem.store_name}} | {{ListItem.address}}
+                </p>
+              </div>
+              <div v-else>
+                <p>
+                {{ index + 1 }} | [ {{ListItem.type}} ] {{ListItem.name}} | {{ListItem.address}}
+
+                </p>
+              </div>
+          </div>
     </b-modal>
     <div v-if="allSchedule">
       <div
@@ -83,20 +79,20 @@ export default {
   data() {
     return {
       allSchedule: [],
-      today: "",
-      scheduleList: { name: "", date: "", schedules: [] },
+      scheduleList :[],
+      scheduleName : '',
+      scheduleDate : '',
     };
   },
   mounted() {
     this.getAllSchedules();
     this.today = new Date();
   },
-
   methods: {
     popupPartyForm(targetId) {
       if (document.getElementById(targetId).classList.contains("d-none")) {
         var forms = document.getElementsByClassName("party-form");
-        console.log("this", forms);
+        // console.log("this", forms);
         for (let form of forms) {
           if (!form.classList.contains("d-none")) {
             form.classList.add("d-none");
@@ -108,23 +104,17 @@ export default {
         document.getElementById(targetId).classList.add("d-none");
       }
     },
-    getSightseeing() {
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
-
-      this.$axios
-        .get(
-          `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=126733&contentTypeId=12&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
-        )
-        .then((res) => {
-          const items = res.data.response.body.items.item;
-          console.log(items);
-        })
-        .catch((err) => console.error(err));
-    },
     goScheduleDetail(schedule) {
-      console.log(schedule.name);
-      this.makeScheduleList(schedule);
+      this.resetScheduleList()
+      console.log(schedule.name)
+      // this.makeScheduleList(schedule)
+      this.makeScheduleList(schedule)
+      
+    },
+    resetScheduleList() {
+      this.scheduleList = [],
+      this.scheduleName = '',
+      this.scheduleDate = ''
     },
     //모든 일정 가져오기
     getAllSchedules() {
@@ -142,20 +132,8 @@ export default {
           console.log(err);
         });
     },
-    //일정 정보 가져오면 스케줄 리스트로 만들기
-    makeScheduleList(data) {
-      this.scheduleList["name"] = data.name;
-      this.scheduleList["date"] = data.date;
-      this.scheduleList["schedules"] = [];
-      //일정 리스트로 만들기
-      const plans = data.plan.split("-");
-      plans.forEach((plan) => {
-        const type = plan.slice(0, 1);
-        let typeName = "식당";
-        const id = plan.slice(1);
-
-        // 식당/카페이면
-        if ((type === "R") | (type === "C")) {
+    
+    async restuarantPlan(i,id,type,typeName) {
           this.$axios
             .get(`trip/store_detail/${id}`)
             .then((res) => {
@@ -165,50 +143,80 @@ export default {
               if (type === "C") {
                 typeName = "카페";
               }
-              result["type"] = typeName;
-              this.scheduleList["schedules"].push(result);
+              result["type"] = typeName;            
+              this.$set(this.scheduleList, i, result)        
+              return result
             })
             .catch((err) => {
               console.log(err);
+              return []
             });
+        },
+      async TourAPIPlan(i,id,type) {
+        let contentTypeId = 32;
+        let typeName = "숙박";
+        if (type === "S") {
+          contentTypeId = 12;
+          typeName = "관광지";
+        }
+        const TOUR_API_KEY =
+          "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
+        const contentId = id;
+        this.$axios
+          .get(
+            `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
+          )
+          .then((res) => {
+            const items = res.data.response.body.items.item;
+
+            // this.scheduleList["schedules"][String(i)] = {
+            let result = {
+              id: items.contentid,
+              name: items.title,
+              branch: "",
+              tel: items.tel,
+              address: items.addr1 + items.addr2,
+              latitude: items.mapy,
+              longtitude: items.mapx,
+              //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
+              type: `${typeName}`,
+              category: `${typeName}`,
+              tags: "",
+              img: items.firstimage,
+            }
+            this.$set(this.scheduleList, i, result)
+            return result
+          })
+          .catch((err) =>{
+            console.error(err);
+            return []
+          }) 
+      },
+        
+    //일정 정보 가져오면 스케줄 리스트로 만들기
+    async makeScheduleList(data) {
+      this.scheduleName = data.name;
+      this.scheduleDate = data.date;
+     
+      //일정 리스트로 만들기
+      const plans = data.plan.split("-");
+      this.scheduleList = new Array(plans.length).fill(0);
+  
+      for (var i = 0; i < plans.length; i ++) {
+        let plan = plans[i]
+        const type = plan.slice(0, 1);
+        let typeName = "식당";
+        const id = plan.slice(1);
+
+        // 식당/카페이면
+        if ((type === "R") | (type === "C")) {
+          await this.restuarantPlan(i,id,type,typeName)
         }
         // 관광지/숙박이면
         else {
-          let contentTypeId = 32;
-          let typeName = "숙박";
-          if (type === "S") {
-            contentTypeId = 12;
-            typeName = "관광지";
-          }
-          const TOUR_API_KEY =
-            "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
-          const contentId = id;
-          this.$axios
-            .get(
-              `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
-            )
-            .then((res) => {
-              const items = res.data.response.body.items.item;
-
-              this.scheduleList["schedules"].push({
-                id: items.contentid,
-                name: items.title,
-                branch: "",
-                tel: items.tel,
-                address: items.addr1 + items.addr2,
-                latitude: items.mapy,
-                longitude: items.mapx,
-                //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
-                type: `${typeName}`,
-                category: `${typeName}`,
-                tags: "",
-                img: items.firstimage,
-              });
-            })
-            .catch((err) => console.error(err));
+          await this.TourAPIPlan(i,id,type)
         }
-      });
-      console.log("오늘의 일정", this.scheduleList);
+      }
     },
     stringtodate(str) {
       const y = str.substr(0, 4);
