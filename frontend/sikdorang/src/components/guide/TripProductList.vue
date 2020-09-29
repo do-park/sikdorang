@@ -67,13 +67,14 @@ export default {
         }
     },
     mounted() {
-        // this.$axios.get(`/guide/list_tour`)
-        // .then(res => {
-        //     this.tripProductList = res.data
-        // })
-        // .catch(err => {
-        //     console.error(err)
-        // })
+        this.$axios.get(`/guide/list_tour`)
+        .then(res => {
+            console.log(res)
+            this.tripProductList = res.data
+        })
+        .catch(err => {
+            console.error(err)
+        })
     },
     methods: {
         // infiniteHandler($state) {
@@ -102,14 +103,14 @@ export default {
         goTripProductDetailPage(item_pk) {
             this.$router.push(`/trip/detail/${item_pk}`)
         },
-        getThatGuideList() {
-            this.$axios.get(`/trip/list/${this.targetGuide}`)
-            .then(res => {
-                console.log(res)
-                // this.tripProductList = res.data
-            })
-            .catch(err => console.log(err))
-        },
+        // getThatGuideList() {
+        //     this.$axios.get(`/trip/list/${this.targetGuide}`)
+        //     .then(res => {
+        //         console.log(res)
+        //         this.tripProductList = res.data
+        //     })
+        //     .catch(err => console.log(err))
+        // },
     }
 }
 </script>

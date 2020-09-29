@@ -7,7 +7,7 @@
     <div>
       <label for="t-i">대표이미지</label>
       <br />
-      <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif, .png" />
+      <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif" />
     </div>
     <div>
       <label for="area">여행지역</label>
@@ -125,7 +125,7 @@ export default {
         .then((res) => {
           console.log(res);
           // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
-          this.$router.push(`/trip/detail/${res.data.id}`);
+          // this.$router.push(`/trip/detail/${res.data.id}`);
         })
         .catch((err) => console.error(err));
     },
