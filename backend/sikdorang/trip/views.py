@@ -125,13 +125,11 @@ def delete_trip(request, trip_pk):
         return HttpResponse('잘 지워짐')
     return HttpResponse('니 글 아님 ㅅㄱ')
 
-@api_view(['GET'])
+@api_view(['POST'])
 def today_chk(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
-    trip = get_object_or_404(Trip, user=user, date=nowDate)
+    trip = get_object_or_404(Trip, user=user, date=request.date['date'])
     if trip.exists():
         return HttpResponse('1')
     else:
