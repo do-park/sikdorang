@@ -115,14 +115,7 @@ export default {
     deleteItem(index) {
       this.clonedItems.splice(index, 1);
     },
-    uuid(e) {
-      if (e.uid) return e.uid;
-      const key = Math.random()
-        .toString(10)
-        .slice(2);
-      this.$set(e, "uid", key);
-      return e.uid;
-    },
+   
     // function about trips
     getTripdata() {
       // getTripdata 유저 정보 받는 쪽으로 수정
