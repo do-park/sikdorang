@@ -44,7 +44,7 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
-import { mapActions } from "vuex";
+import { mapGetters,mapActions } from "vuex";
 
 export default {
   name: "Schedule",
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       userId: null,
+      scheduleDate : '',
       // for test
       saved: [],
       clonedItems: [],
@@ -93,10 +94,24 @@ export default {
       },
     };
   },
-  created() {
-    // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    // this.userId = 1;
-    // this.getTripdata();
+  computed : {
+    ...mapGetters("schedule",[
+      "getScheduleDate",
+    ])
+  },
+  watch : {
+    getScheduleDate(){
+      console.log("watch 실행 : getScheduleDate",this.getScheduleDate)
+      this.getBackSchedule()
+    },
+    scheduleDate() {
+      console.log("watch 실행 : scheduleDate",this.scheduleDate)
+      this.getBackSchedule()
+    }
+  },
+ 
+  mounted() {
+    this.resetScheduleStoreInfo()
   },
   methods: {
     ...mapActions("schedule", [
@@ -106,6 +121,24 @@ export default {
       "actionScheduleDate",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
+    
+    getBackSchedule() {
+      console.log(this.getScheduleDate,", 다시 물어봐")
+      if (this.getScheduleDate) {
+        const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+                },
+        };
+        this.$axios.get('trip/date',this.getScheduleDate,requestHeaders)
+        .then(res=>{
+          console.log("성공",res)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      }
+    },
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -115,7 +148,13 @@ export default {
     deleteItem(index) {
       this.clonedItems.splice(index, 1);
     },
-   
+    resetScheduleStoreInfo() {
+      this.actionScheduleName('')
+      this.actionScheduleDate('')
+      this.actionSchedule([])
+      this.actionScheduleIdx(0)
+      console.log("스케줄 관련 다 초기화 합니다.")
+    },
     // function about trips
     getTripdata() {
       // getTripdata 유저 정보 받는 쪽으로 수정
@@ -167,7 +206,22 @@ export default {
       var d = date.substr(9, 2);
       return y + "-" + m + "-" + d;
     },
-    createTrip() {
+    async checkIsScheduleDate(date) {
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+                },
+        };
+      const data = {
+        date : date
+      }
+      this.$axios.get('trip/date/',data, requestHeaders)
+      .then(res=>{
+        console.log("checkIsScheduleDate",res)
+      })
+      .catch(err=>{console.log(err)})
+    },
+    async createTrip() {
       let plan = this.createPlan();
       if (!plan) {
         return;
@@ -215,10 +269,15 @@ export default {
             },
           },
         ])
-        .then((result) => {
+        .then(async(result) => {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
-            this.actionScheduleDate(result.value[1]);
+            let date = result.value[1]
+            console.log("before",this.getScheduleDate)
+            this.actionScheduleDate(date)
+            this.scheduleDate(date)
+            console.log("after",this.getScheduleDate)
+            console.log("날짜 이거 맞나?",date)
             // this.$axios
             //   .post(`/trip/`, {
             //     user: this.userId,
