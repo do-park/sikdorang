@@ -119,10 +119,20 @@ export default {
         ) {
           this.tripSchedule.title_img = "";
         }
-      console.log(this.tripSchedule);
-
+      const fd = new FormData()
+      fd.append('title_img', this.tripSchedule.title_img)
+      fd.append('title', this.tripSchedule.title)
+      fd.append('area', this.tripSchedule.area)
+      fd.append('start_date', this.tripSchedule.start_date)
+      fd.append('end_date', this.tripSchedule.end_date)
+      fd.append('price', this.tripSchedule.price)
+      fd.append('start_point', this.tripSchedule.start_point)
+      fd.append('start_time', this.tripSchedule.start_time)
+      fd.append('content', this.tripSchedule.content)
+      fd.append('limit_person', this.tripSchedule.limit_person)
+      fd.append('departure_person', this.tripSchedule.departure_person)
       this.$axios
-        .post("guide/create_tour", this.tripSchedule, requestHeaders)
+        .post("guide/create_tour", fd, requestHeaders)
         .then((res) => {
           console.log(res);
           // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
