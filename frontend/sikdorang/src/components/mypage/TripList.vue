@@ -137,8 +137,7 @@ export default {
         .get("/trip/today", requestHeaders)
         .then((res) => {
           console.log(res);
-          // this.todaySchedule["schedules"] = [0]*(res.data[0].length)
-          console.log(this.todaySchedule["schedules"])
+          console.log("오늘의 일정은?",this.todaySchedule.schedules)
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
         })
@@ -146,81 +145,166 @@ export default {
           console.log(err);
         });
     },
-    
-    //일정 정보 가져오면 스케줄 리스트로 만들기
-    makeScheduleList(data) {
-      console.log(data);
-      this.todaySchedule.name = data.name;
-      this.todaySchedule.date = data.date;
-
-      //일정 리스트로 만들기
-      const plans = data.plan.split("-");
-      console.log(plans);
-      plans.forEach((plan) => {
-        const type = plan.slice(0, 1);
-        let typeName = "식당";
-        const id = plan.slice(1);
-
-        // 식당/카페이면
-        if ((type === "R") | (type === "C")) {
+      async restuarantPlan(i,id,type,typeName) {
           this.$axios
             .get(`trip/store_detail/${id}`)
             .then((res) => {
-                console.log(res)
               const result = res.data;
 
               //가게의 타입도 구분
               if (type === "C") {
                 typeName = "카페";
               }
-              result["type"] = typeName;
-              this.todaySchedule.schedules.push(result);
+              result["type"] = typeName;            
+              this.$set(this.scheduleList, i, result)        
+              return result
             })
             .catch((err) => {
               console.log(err);
+              return []
             });
+        },
+      async TourAPIPlan(i,id,type) {
+        let contentTypeId = 32;
+        let typeName = "숙박";
+        if (type === "S") {
+          contentTypeId = 12;
+          typeName = "관광지";
         }
-        // 관광지/숙박이면
-        else {
-          let contentTypeId = 32;
-          let typeName = "숙박";
-          if (type === "S") {
-            contentTypeId = 12;
-            typeName = "관광지";
-          }
-          const TOUR_API_KEY =
-            "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
-          const contentId = id;
-          this.$axios
-            .get(
-              `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
-            )
-            .then((res) => {
-              console.log("!!!", res);
-              const items = res.data.response.body.items.item;
+        const TOUR_API_KEY =
+          "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
+        const contentId = id;
+        this.$axios
+          .get(
+            `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
+          )
+          .then((res) => {
+            const items = res.data.response.body.items.item;
 
-              this.todaySchedule.schedules.push({
-                id: items.contentid,
-                name: items.title,
-                branch: "",
-                tel: items.tel,
-                address: items.addr1 + items.addr2,
-                latitude: items.mapy,
-                longtitude: items.mapx,
-                //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
-                type: `${typeName}`,
-                category: `${typeName}`,
-                tags: "",
-                img: items.firstimage,
-              });
+            // this.scheduleList["schedules"][String(i)] = {
+            let result = {
+              id: items.contentid,
+              name: items.title,
+              branch: "",
+              tel: items.tel,
+              address: items.addr1 + items.addr2,
+              latitude: items.mapy,
+              longtitude: items.mapx,
+              //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
+              type: `${typeName}`,
+              category: `${typeName}`,
+              tags: "",
+              img: items.firstimage,
+            }
+            this.$set(this.scheduleList, i, result)
+            return result
+          })
+          .catch((err) =>{
+            console.error(err);
+            return []
+          }) 
+      },
+      //일정 정보 가져오면 스케줄 리스트로 만들기
+    async makeScheduleList(data) {
+        console.log("오늘은",data)
+        this.todaySchedule.name = data.name;
+        this.todaySchedule.date = data.date;
+     
+    //   //일정 리스트로 만들기
+    //   const plans = data.plan.split("-");
+    //   this.todaySchedule.schedules = new Array(plans.length).fill(0);
+    //   console.log("!!!!!!!!!!",this.todaySchedule.schedules)
+    //   for (var i = 0; i < plans.length; i ++) {
+    //     let plan = plans[i]
+    //     const type = plan.slice(0, 1);
+    //     let typeName = "식당";
+    //     const id = plan.slice(1);
 
-              console.log(items);
-            })
-            .catch((err) => console.error(err));
-        }
-      });
-      console.log("오늘의 일정", this.todaySchedule);
+    //     // 식당/카페이면
+    //     if ((type === "R") | (type === "C")) {
+    //       await this.restuarantPlan(i,id,type,typeName)
+    //     }
+    //     // 관광지/숙박이면
+    //     else {
+    //       await this.TourAPIPlan(i,id,type)
+
+    //     }
+    //   }
     },
+    // //일정 정보 가져오면 스케줄 리스트로 만들기
+    // makeScheduleList(data) {
+    //   console.log(data);
+    //   this.todaySchedule.name = data.name;
+    //   this.todaySchedule.date = data.date;
+
+    //   //일정 리스트로 만들기
+    //   const plans = data.plan.split("-");
+    //   console.log(plans);
+    //   plans.forEach((plan) => {
+    //     const type = plan.slice(0, 1);
+    //     let typeName = "식당";
+    //     const id = plan.slice(1);
+
+    //     // 식당/카페이면
+    //     if ((type === "R") | (type === "C")) {
+    //       this.$axios
+    //         .get(`trip/store_detail/${id}`)
+    //         .then((res) => {
+    //             console.log(res)
+    //           const result = res.data;
+
+    //           //가게의 타입도 구분
+    //           if (type === "C") {
+    //             typeName = "카페";
+    //           }
+    //           result["type"] = typeName;
+    //           this.todaySchedule.schedules.push(result);
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //         });
+    //     }
+    //     // 관광지/숙박이면
+    //     else {
+    //       let contentTypeId = 32;
+    //       let typeName = "숙박";
+    //       if (type === "S") {
+    //         contentTypeId = 12;
+    //         typeName = "관광지";
+    //       }
+    //       const TOUR_API_KEY =
+    //         "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
+    //       const contentId = id;
+    //       this.$axios
+    //         .get(
+    //           `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
+    //         )
+    //         .then((res) => {
+    //           console.log("!!!", res);
+    //           const items = res.data.response.body.items.item;
+
+    //           this.todaySchedule.schedules.push({
+    //             id: items.contentid,
+    //             name: items.title,
+    //             branch: "",
+    //             tel: items.tel,
+    //             address: items.addr1 + items.addr2,
+    //             latitude: items.mapy,
+    //             longtitude: items.mapx,
+    //             //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
+    //             type: `${typeName}`,
+    //             category: `${typeName}`,
+    //             tags: "",
+    //             img: items.firstimage,
+    //           });
+
+    //           console.log(items);
+    //         })
+    //         .catch((err) => console.error(err));
+    //     }
+    //   });
+    //   console.log("오늘의 일정", this.todaySchedule);
+    // },
   },
 };
 </script>
