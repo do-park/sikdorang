@@ -129,7 +129,7 @@ def delete_trip(request, trip_pk):
 def date_chk(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    trip = get_object_or_404(Trip, user=user, date=request.date['date'])
+    trip = Trip.objects.filter(user=user, date=request.data['date'])
     if trip.exists():
         return HttpResponse('1')
     else:

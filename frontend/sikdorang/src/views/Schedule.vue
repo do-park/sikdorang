@@ -54,6 +54,9 @@ export default {
   },
   computed:{
     ...mapGetters('sikRec', ['getIsSik']),
+    ...mapGetters("schedule",[
+      "getScheduleDate",
+    ])
   },
   data() {
     return {
@@ -97,20 +100,9 @@ export default {
       },
     };
   },
-  computed : {
-    ...mapGetters("schedule",[
-      "getScheduleDate",
-    ])
-  },
+
   watch : {
-    // getScheduleDate(){
-    //   console.log("watch 실행 : getScheduleDate",this.getScheduleDate)
-    //   this.getBackSchedule()
-    // },
-    // scheduleDate() {
-    //   console.log("watch 실행 : scheduleDate",this.scheduleDate)
-    //   this.getBackSchedule()
-    // }
+
   },
  
   mounted() {
@@ -126,23 +118,6 @@ export default {
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
     
-    getBackSchedule() {
-      console.log(this.getScheduleDate,", 다시 물어봐")
-      if (this.getScheduleDate) {
-        const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-                },
-        };
-        this.$axios.get('trip/date',this.getScheduleDate,requestHeaders)
-        .then(res=>{
-          console.log("성공",res)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-      }
-    },
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -152,6 +127,8 @@ export default {
     deleteItem(index) {
       this.clonedItems.splice(index, 1);
     },
+
+    //일정 관련 이름,날짜,내용 초기화
     resetScheduleStoreInfo() {
       this.actionScheduleName('')
       this.actionScheduleDate('')
@@ -231,7 +208,8 @@ export default {
       const data = {
         date : date
       }
-      this.$axios.post('trip/todaycheck/',data, requestHeaders)
+      console.log(data)
+      this.$axios.post('trip/date_chk', data, requestHeaders)
       .then(res=>{
         console.log("값 왔냐?",res)
       })
@@ -289,20 +267,10 @@ export default {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
             let date = result.value[1]
+
+            //스케줄 DB에 있나 확인하기
             this.checkIsScheduleDate(date)
-            // console.log("before",this.getScheduleDate)
-            // this.actionScheduleDate(date)
-            // this.scheduleDate(date)
-            // console.log("after",this.getScheduleDate)
-            // console.log("날짜 이거 맞나?",date)
-            // this.$axios
-            //   .post(`/trip/`, {
-            //     user: this.userId,
-            //     name: result.value,
-            //     plan: plan.slice(0, -1),
-            //   })
-            // .then((response) => {
-            //   if (parseInt(response.status / 100) == 2) {
+
             Swal.fire({
               icon: "success",
               title: "일정을 등록했습니다.",
