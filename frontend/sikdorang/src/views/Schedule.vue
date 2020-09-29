@@ -44,13 +44,16 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Schedule",
   order: 2,
   components: {
     draggable,
+  },
+  computed:{
+    ...mapGetters('sikRec', ['getIsSik']),
   },
   data() {
     return {
@@ -104,6 +107,7 @@ export default {
       "actionScheduleIdx",
       "actionScheduleName",
       "actionScheduleDate",
+      "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
     // function about drag and drop
@@ -145,17 +149,29 @@ export default {
       }
       let plan = "";
       const schedule = [];
-
+      // console.log("일정을 추가했습니다.", this.clonedItems);
+      if (this.getIsSik) {
+        this.availableItems[0].idx = 0
+        schedule.push(this.availableItems[0])
+        plan = plan + schedule[0].id + 1234 + "-"
+      }
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
-        item["idx"] = i;
+        if (this.getIsSik) {
+          item["idx"] = i + 1
+        } else {
+          item["idx"] = i;
+        }
+        // console.log(item);
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
+      console.log('확인', plan, schedule)
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
       this.actionMapEventClear("clear");
+      this.actionClearBeforeCat();
       return plan;
     },
     datetostring(date) {
@@ -231,7 +247,11 @@ export default {
               icon: "success",
               title: "일정을 등록했습니다.",
             });
-            this.$router.push({ name: "MapMain" });
+            if (this.getIsSik){
+              this.$router.push({ name: "SikdorangRecommendView"})
+            } else {
+              this.$router.push({ name: "MapMain" });
+            }
             //   }
             // })
             // .catch((error) => {

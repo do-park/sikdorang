@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: "Recommend",
   data() {
@@ -15,6 +16,7 @@ export default {
     this.getRecommend();
   },
   methods: {
+    ...mapActions('sikRec', ['actionForUser']),
     getRecommend() {
       const requestHeaders = {
         headers: {
@@ -25,6 +27,7 @@ export default {
         .get("/recommend/coldstart", requestHeaders)
         .then((response) => {
           this.result = response.data;
+          this.actionForUser(this.result)
           const temp = this.result.address.split(" ");
           this.address = temp[0] + " " + temp[1];
         })

@@ -110,6 +110,7 @@ export default {
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+          'Content-Type': 'multipart/form-data',
         },
       };
         if (
