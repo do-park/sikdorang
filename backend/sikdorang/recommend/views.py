@@ -196,6 +196,7 @@ def get_tag_recommendation(request):
     div = data["category"]
     lat = float(data["lat"])
     lng = float(data["lng"])
+    beforeCategories = data["bc"]
     g_lat = lat + 0.02
     l_lat = lat - 0.02
     g_lng = lng + 0.02
@@ -204,14 +205,39 @@ def get_tag_recommendation(request):
         Q(latitude__lte=g_lat) & Q(latitude__gte=l_lat) & Q(longitude__lte=g_lng) & Q(longitude__gte=l_lng)
     )
     recommendation = {}
+    
+    # 유저 태그 가져오기 - 태그는 보존
     user_tags_queryset = user.tagmodel_set.all()
     user_tags = []
     for tag in user_tags_queryset:
         user_tags.append({"tag": tag.name, "count": tag.count})
+        
+    # 유저 카테고리 가져오기
     user_categories_queryset = user.categoryuser_set.all()
     user_categories = []
+    temp_user_categories = []
+    selected_categories = []
     for category in user_categories_queryset:
-        user_categories.append({"category": CATEGORY_NAME[int(category.name)], "count": category.count})
+        # 저번에 선택한 카테고리는 제외
+        if div == "카페" or CATEGORY_NAME[int(category.name)] not in beforeCategories:
+            temp_user_categories.append(["category", CATEGORY_NAME[int(category.name)], "count", category.count])
+            selected_categories.append(CATEGORY_NAME[int(category.name)])
+
+    # 유저 카테고리 자르기
+    temp_user_categories.sort(key=lambda x: x[3])
+    temp_user_categories = temp_user_categories[:4]
+    for i in range(len(temp_user_categories)-2):
+        ran_num = random.randint(0, len(temp_user_categories)-1)
+        del temp_user_categories[ran_num]
+    for category in temp_user_categories:
+        user_categories.append({"category": category[1], "count": category[3]})
+    # 포함되지 않은 카테고리 추가
+    while 1:
+        ran_num = random.randint(0, len(CATEGORY_NAME)-1)
+        if ran_num not in selected_categories:
+            user_categories.append({"category": CATEGORY_NAME[ran_num], "count": 5})
+            break
+        
     store_tags = []
     store_categories = []
     for store in stores:
@@ -248,9 +274,10 @@ def get_tag_recommendation(request):
                 if store_category["store_id"] not in recommendation:
                     recommendation[store_category["store_id"]] = 0
                 recommendation[store_category["store_id"]] += user_category["count"]
-    recommendation = sorted(recommendation.items(), key=(lambda x: x[1]), reverse=True)[:6]
+    recommendation = sorted(recommendation.items(), key=(lambda x: x[1]), reverse=True)[:30]
+    random.shuffle(recommendation)
     result = []
-    for rec in recommendation:
+    for rec in recommendation[:6]:
         store = Store.objects.filter(id=rec[0])[0]
         result.append({
             "id": store.id,
@@ -259,10 +286,23 @@ def get_tag_recommendation(request):
             "tel": store.tel,
             "address": store.address,
             "latitude": store.latitude,
-            "longtitude": store.longitude,
+            "longitude": store.longitude,
             "category": store.category.name,
             "tags": store.tags
         })
+    if len(result) == 0:
+        for store in stores[:6]:
+            result.append({
+                "id": store.id,
+                "name": store.store_name,
+                "branch": store.branch,
+                "tel": store.tel,
+                "address": store.address,
+                "latitude": store.latitude,
+                "longitude": store.longitude,
+                "category": store.category.name,
+                "tags": store.tags
+            })
     return JsonResponse({"result": result, "tags": list(tags)})
 
 
@@ -272,10 +312,10 @@ def get_tag_stores(request):
     tag = data["tag"]
     lat = float(data["lat"])
     lng = float(data["lng"])
-    g_lat = lat + 0.02
-    l_lat = lat - 0.02
-    g_lng = lng + 0.02
-    l_lng = lng - 0.02
+    g_lat = lat + 0.01
+    l_lat = lat - 0.01
+    g_lng = lng + 0.01
+    l_lng = lng - 0.01
     store_list = []
     result = []
     stores = Store.objects.filter(
@@ -298,11 +338,10 @@ def get_tag_stores(request):
             "tel": store.tel,
             "address": store.address,
             "latitude": store.latitude,
-            "longtitude": store.longitude,
+            "longitude": store.longitude,
             "category": store.category.name,
             "tags": store.tags
         })
-    return JsonResponse({"result": result})
     return JsonResponse({"result": result})
 
 @api_view(['GET'])

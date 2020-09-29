@@ -7,8 +7,6 @@
         class="form-control col-9"
         v-model="signupData.username"
         placeholder="아이디"
-        :rules="usernameRules"
-        hide-details="auto"
         @keyup="turnUsernameOkToFalse"
       />
       <button class="btn btn-secondary col-3" @click="checkUsername">중복확인</button>

@@ -214,7 +214,6 @@ export default {
         // 관광지/숙박이면
         else {
           await this.TourAPIPlan(i,id,type)
-
         }
       }
     },

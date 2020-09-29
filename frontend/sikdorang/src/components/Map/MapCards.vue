@@ -73,7 +73,7 @@ export default {
       }
     },
     getThreeRes() {
-      if (this.getThreeRes !== []) {
+      if (this.getThreeRes.length !== 0) {
         this.threeRes = this.getThreeRes
       }
     },
@@ -83,7 +83,14 @@ export default {
 			} else {
         this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
 			}
-		},
+    },
+    getScheduleIdx() {
+      if (this.getScheduleIdx && this.getTagStores) {
+          this.buttonStr = '추천해주세요!'
+      } else {
+          this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
+      }
+    }
   },
   mounted() {
     // this.checkFilp();
@@ -103,6 +110,8 @@ export default {
       "actionClicked",
       "actionPlanList",
       "actionMouseOver",
+      "actionTagStores",
+      "actionSelectTag",
     ]),
     ...mapActions("schedule",[
       "actionStore",
@@ -133,12 +142,12 @@ export default {
                 this.actionStore(Rest)
                 this.actionScheduleIdx(this.getScheduleIdx+1)
               } else {
-                console.log('취소 확인')
+                // console.log('취소 확인')
                 this.actionClicked(null);
               }
             });
           } else {
-            console.log('취소 확인')
+            // console.log('취소 확인')
             this.actionClicked(null);
           }
         });
@@ -174,6 +183,8 @@ export default {
     },
     checkFilp() {
       this.actionFlip(!this.getFlip);
+      this.actionTagStores(false)
+      this.actionSelectTag(null)
       // this.actionClicked(null);
       this.animatechk = false;
       setTimeout(() => {

@@ -10,6 +10,7 @@ import mypage from './modules/mypage.js'
 import schedule from './modules/schedule.js'
 import themes from './modules/themes.js'
 import order from './modules/order.js'
+import sikRec from './modules/sikRec.js'
 import vuexPersistedstate from 'vuex-persistedstate'
 import SecureLS from "secure-ls"
 
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     schedule,
     themes,
     order,
+    sikRec,
   },
   plugins: [
     vuexPersistedstate({

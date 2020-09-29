@@ -59,6 +59,7 @@ export default {
 			"getSchedules",
 			"getScheduleIdx",
 			"getScheduleProgressIdx",
+			"getBeforeCat",
 		]),
 	},
 	watch : {
@@ -74,6 +75,8 @@ export default {
 		getScheduleIdx() {
 			if (this.getScheduleIdx < this.getSchedules.length){
 				this.actionFlip(true)
+				this.beforeLng = this.getSchedules[Number(this.getScheduleIdx)-1].userChoice.longitude
+				this.beforeLat = this.getSchedules[Number(this.getScheduleIdx)-1].userChoice.latitude
 				this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 			} else {
 				this.$router.push('/mypage')
@@ -98,8 +101,10 @@ export default {
 			}
 		},
 		getSelectTag() {
-			this.getTagStoreList(this.getSelectTag)
-		}
+			if (this.getSelectTag !== null){
+				this.getTagStoreList(this.getSelectTag)
+			}
+		},
 	},
 	methods : {
 		...mapActions("mapEvent",[
@@ -146,7 +151,7 @@ export default {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng }, requestHeaders)
+			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng, bc: this.getBeforeCat }, requestHeaders)
 			.then(res => {
 				this.actionTags(res.data.tags)
 				this.recommends = res.data.result
@@ -169,7 +174,7 @@ export default {
                         "tel": items[i].tel,
                         "address": items[i].addr1 + items[i].addr2,
                         "latitude": items[i].mapy,
-                        "longtitude": items[i].mapx,
+                        "longitude": items[i].mapx,
                         "category": "관광지",
                         "tags": "",
                         "img": items[i].firstimage,
@@ -185,14 +190,14 @@ export default {
 			long = null;
 			if (cd === 'over' && this.getMouseOver !== null) {
 				lat = this.getThreeRes[this.getMouseOver].latitude
-				long = this.getThreeRes[this.getMouseOver].longtitude
+				long = this.getThreeRes[this.getMouseOver].longitude
 			} else if (cd === 'click' && this.getClicked !== null) {
 				lat = this.getThreeRes[this.getClicked].latitude
-				long = this.getThreeRes[this.getClicked].longtitude
+				long = this.getThreeRes[this.getClicked].longitude
 			} else if (cd === 'progress' && this.getProgressClicked !== null) {
 				try {
 					lat = this.getSchedules[this.getScheduleProgressIdx].userChoice.latitude
-					long = this.getSchedules[this.getScheduleProgressIdx].userChoice.longtitude
+					long = this.getSchedules[this.getScheduleProgressIdx].userChoice.longitude
 				} catch (err) {
 					lat = this.beforeLat
 					long = this.beforeLng
@@ -356,7 +361,7 @@ export default {
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 
-				var position = new kakao.maps.LatLng(stores[i].latitude, stores[i].longtitude);
+				var position = new kakao.maps.LatLng(stores[i].latitude, stores[i].longitude);
 					
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
@@ -442,6 +447,9 @@ export default {
 				this.actionThreeRes(locs.slice(3,6))
 			}
 			var positions = this.getThreeRes;
+			if (positions.length === 0) {
+				return
+			}
 			var bounds = new kakao.maps.LatLngBounds();
 
 			//현재 위치도 지도 범위에 포함  
@@ -484,7 +492,7 @@ export default {
 					overImage = this.createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
 					clickImage = this.createMarkerImage(markerSize, markerOffset, clickOrigin);
 
-				var position = new kakao.maps.LatLng(positions[i].latitude, positions[i].longtitude);
+				var position = new kakao.maps.LatLng(positions[i].latitude, positions[i].longitude);
 					
 				// 마커를 생성합니다
 				const marker = new kakao.maps.Marker({
@@ -657,7 +665,7 @@ export default {
 			var map = this.map;
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			plans.forEach(plan => {
-				var position = new kakao.maps.LatLng(plan.latitude, plan.longtitude)
+				var position = new kakao.maps.LatLng(plan.latitude, plan.longitude)
 				plan.latlng = position
 			})
 			if (this.curPath.length) {

@@ -15,7 +15,8 @@ class TripItemModel(models.Model):
     start_point = models.CharField(max_length=50)
     start_time = models.CharField(max_length=30)
     content = models.TextField()
-    limit_person = models.ImageField()
+    limit_person = models.IntegerField()
+    departure_person = models.IntegerField()
 
 class GuideTour(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
