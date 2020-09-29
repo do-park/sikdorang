@@ -126,7 +126,7 @@ def delete_trip(request, trip_pk):
     return HttpResponse('니 글 아님 ㅅㄱ')
 
 @api_view(['POST'])
-def today_chk(request):
+def date_chk(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     trip = get_object_or_404(Trip, user=user, date=request.date['date'])
