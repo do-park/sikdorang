@@ -2,7 +2,6 @@
   <div>
     <h1>오늘의 일정</h1>
     <p>일정을 삭제하려면 클릭하세요.</p>
-    {{ clonedItems }}
     <draggable
       v-model="clonedItems"
       :options="clonedItemOptions"

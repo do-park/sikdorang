@@ -21,7 +21,8 @@ export default {
     };
   },
   mounted() {
-    this.getTripdata(this.partyItem.trip_id);
+    console.log(this.partyItem);
+    this.getTripdata(this.partyItem.id);
   },
   methods: {
     getTripdata(tripId) {
