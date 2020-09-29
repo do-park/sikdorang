@@ -8,6 +8,8 @@
 import { mapGetters } from 'vuex'
 import axios from 'axios'
 
+const CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
+
 export default {
     name: "SikdorangRecommendView",
     computed: {
@@ -60,7 +62,7 @@ export default {
                     "tel": items[0].tel,
                     "address": items[0].addr1 + items[0].addr2,
                     "latitude": items[0].mapy,
-                    "longtitude": items[0].mapx,
+                    "longitude": items[0].mapx,
                     "category": "관광지",
                     "tags": "",
                     "img": items[0].firstimage,
@@ -78,7 +80,18 @@ export default {
         this.beforeLng = this.getForUser.longitude
         for (let i=0; i<this.schedules.length; i++) {
             if (i == 0) {
-                this.schedules[i].userChoice = this.getForUser
+                const forUser = this.getForUser
+                this.schedules[i].userChoice = {
+                    "id": forUser.id,
+                    "name": forUser.store_name,
+                    "branch": forUser.branch,
+                    "tel": forUser.tel,
+                    "address": forUser.address,
+                    "latitude": forUser.latitude,
+                    "longitude": forUser.longitude,
+                    "category": CATEGORY_NAME[forUser.category],
+                    "tags": forUser.tags,
+                }
             } else {
                 await this.divideRecommendation(this.schedules[i].name, i)
             }

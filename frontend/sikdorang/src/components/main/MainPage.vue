@@ -51,6 +51,7 @@ export default {
     };
   },
   mounted() {
+      this.actionIsSik(false)
     if (this.$store.state.isLogin) {
       const requestHeaders = {
         headers: {

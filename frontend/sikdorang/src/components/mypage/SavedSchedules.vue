@@ -223,7 +223,7 @@ export default {
                 tel: items.tel,
                 address: items.addr1 + items.addr2,
                 latitude: items.mapy,
-                longtitude: items.mapx,
+                longitude: items.mapx,
                 //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
                 type: `${typeName}`,
                 category: `${typeName}`,

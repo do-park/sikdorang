@@ -193,7 +193,6 @@ def get_tag_recommendation(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     data = request.data
-    print('@@@@@@@@@@@@@', data)
     div = data["category"]
     lat = float(data["lat"])
     lng = float(data["lng"])
@@ -287,7 +286,7 @@ def get_tag_recommendation(request):
             "tel": store.tel,
             "address": store.address,
             "latitude": store.latitude,
-            "longtitude": store.longitude,
+            "longitude": store.longitude,
             "category": store.category.name,
             "tags": store.tags
         })
@@ -300,7 +299,7 @@ def get_tag_recommendation(request):
                 "tel": store.tel,
                 "address": store.address,
                 "latitude": store.latitude,
-                "longtitude": store.longitude,
+                "longitude": store.longitude,
                 "category": store.category.name,
                 "tags": store.tags
             })
@@ -339,7 +338,7 @@ def get_tag_stores(request):
             "tel": store.tel,
             "address": store.address,
             "latitude": store.latitude,
-            "longtitude": store.longitude,
+            "longitude": store.longitude,
             "category": store.category.name,
             "tags": store.tags
         })

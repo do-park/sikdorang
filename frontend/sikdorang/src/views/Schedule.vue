@@ -154,11 +154,18 @@ export default {
       }
       let plan = "";
       const schedule = [];
-      // console.log("일정을 추가했습니다.", this.clonedItems);
-
+      console.log("일정을 추가했습니다.", this.clonedItems);
+      if (this.getIsSik) {
+        this.availableItems[0].idx = 0
+        schedule.push(this.availableItems[0])
+      }
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
-        item["idx"] = i;
+        if (this.getIsSik) {
+          item["idx"] = i + 1
+        } else {
+          item["idx"] = i;
+        }
         // console.log(item);
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
