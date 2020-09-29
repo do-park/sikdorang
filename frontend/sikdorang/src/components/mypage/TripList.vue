@@ -155,9 +155,7 @@ export default {
       this.$axios
         .post("/trip/", data, requestHeaders)
         .then((res) => {
-          console.log("일정을 저장했습니다.", res);
           this.initiateSchedule();
-        //   console.log("지워졌나?", this.getSchedules);
         })
         .catch((err) => {
           console.error(err);
@@ -173,8 +171,6 @@ export default {
       this.$axios
         .get("/trip/today", requestHeaders)
         .then((res) => {
-          console.log(res);
-          console.log("오늘의 일정은?",this.todaySchedule.schedules)
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
         })
@@ -249,7 +245,7 @@ export default {
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
       this.todaySchedule.schedules = new Array(plans.length).fill(0);
-      console.log("!!!!!!!!!!",this.todaySchedule.schedules)
+
       for (var i = 0; i < plans.length; i ++) {
         let plan = plans[i]
         const type = plan.slice(0, 1);
@@ -263,11 +259,9 @@ export default {
         // 관광지/숙박이면
         else {
           await this.TourAPIPlan(i,id,type)
-
         }
       }
-    },
-   
+    }, 
   },
 };
 </script>
