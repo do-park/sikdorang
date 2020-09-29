@@ -1,5 +1,5 @@
 <template>
-  <div>{{ address }}의<br />{{ result.store_name }}</div>
+  <div v-if="result">{{ address }}의<br />{{ result.store_name }}</div>
 </template>
 
 <script>

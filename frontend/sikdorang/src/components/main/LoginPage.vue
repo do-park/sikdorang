@@ -1,28 +1,33 @@
 <template>
-  <div class="login-box">
+  <div>
     <button 
       class="btn btn-primary" 
       @click="clickToMainPage">메인으로</button>
-    <div>로그인 페이지</div>
-    <div>
-      <input
-        type="text"
-        class="form-control"
-        v-model="loginData.username"
-        placeholder="아이디"
-        hide-details="auto">
-      <input
-        type="password"
-        class="form-control"
-        v-model="loginData.password"
-        placeholder="비밀번호">
-      <button 
-        class="btn btn-primary login-btn" 
-        @click="clickLogin">로그인</button>
+    <div class="login-wrap p-2">
+      <h3 class="my-4">LOGIN</h3>
+      <div class="row m-0">
+        <div class="col-9 p-0 pr-1">
+          <input
+            type="text"
+            class="form-control"
+            v-model="loginData.username"
+            placeholder="아이디"
+            hide-details="auto">
+          <input
+            type="password"
+            class="form-control"
+            v-model="loginData.password"
+            placeholder="비밀번호">
+        </div>
+        <button 
+            class="btn btn-secondary login-btn col-3" 
+            @click="clickLogin">로그인</button>
+      </div>
+      <div class="mt-3">
+        <router-link to="/signup" class="text-dark">아직 회원이 아니세요?</router-link>
+      </div>
     </div>
-    <div>
-      <router-link to="/signup">Signup</router-link>
-    </div>
+    
     
   </div>
 </template>
@@ -67,13 +72,13 @@ export default {
 </script>
 
 <style scoped>
-  .login-box {
-    width: 500px;
-    margin: 5rem auto;
+  .login-wrap {
+    background-color: lightsalmon;
+    border-radius: 1rem;
   }
   .login-btn {
-    margin-top: 2rem;
     float: right;
+    height: 76px;
   }
 
 </style>

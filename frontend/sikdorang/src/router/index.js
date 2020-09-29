@@ -17,6 +17,9 @@ import TripProductsView from "../views/tripproduct/TripProductsView.vue"
 import TripProductOrder from "../views/tripproduct/TripProductOrder.vue"
 import ReviewForm from "../views/review/ReviewForm.vue"
 import SikdorangRecommendView from "../views/recommend/SikdorangRecommendView.vue"
+import PartyList from "../views/party/PartyList.vue"
+import PartyListItemDetail from "../views/party/PartyListItemDetail.vue"
+import MessageForm from "../components/message/MessageForm.vue"
 
 Vue.use(VueRouter)
 
@@ -105,6 +108,21 @@ const routes = [
     path: "/sikdorang/recommendation",
     name: "SikdorangRecommendView",
     component: SikdorangRecommendView,
+  },
+  {
+    path: "/party/list",
+    name: "PartyList",
+    component: PartyList,
+  },
+  {
+    path: "/party/detail",
+    name: "PartyListItemDetail",
+    component: PartyListItemDetail,
+  },
+  {
+    path: "/message/test",
+    name: "MessageForm",
+    component: MessageForm,
   }
 ]
 

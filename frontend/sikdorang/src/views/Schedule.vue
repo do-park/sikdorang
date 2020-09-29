@@ -121,7 +121,9 @@ export default {
     },
     uuid(e) {
       if (e.uid) return e.uid;
-      const key = Math.random().toString(10).slice(2);
+      const key = Math.random()
+        .toString(10)
+        .slice(2);
       this.$set(e, "uid", key);
       return e.uid;
     },
@@ -154,10 +156,11 @@ export default {
       }
       let plan = "";
       const schedule = [];
-      console.log("일정을 추가했습니다.", this.clonedItems);
+      // console.log("일정을 추가했습니다.", this.clonedItems);
       if (this.getIsSik) {
         this.availableItems[0].idx = 0
         schedule.push(this.availableItems[0])
+        plan = plan + schedule[0].id + 1234 + "-"
       }
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
@@ -170,9 +173,7 @@ export default {
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
-      // console.log(schedule);
-      console.log(this.getSchedules, schedule);
-      console.log("@@@@ i m here");
+      console.log('확인', plan, schedule)
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
@@ -180,12 +181,27 @@ export default {
       this.actionClearBeforeCat();
       return plan;
     },
+    datetostring(date) {
+      var y = date.substr(0, 4);
+      var m = parseInt(date.substr(5, 2));
+      if (m < 10) {
+        m = "0" + m;
+      }
+      var d = date.substr(9, 2);
+      return y + "-" + m + "-" + d;
+    },
     createTrip() {
       let plan = this.createPlan();
       if (!plan) {
         return;
       }
-      const inputValue = new Date().toISOString().substring(0, 10);
+      // const inputValue = new Date().toISOString().substring(0, 10);
+      let inputValue = new Date()
+        .toLocaleString({
+          timeZone: "Asia/Seoul",
+        })
+        .substring(0, 12);
+      inputValue = this.datetostring(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
@@ -379,5 +395,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
