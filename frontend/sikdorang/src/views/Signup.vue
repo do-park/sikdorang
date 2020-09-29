@@ -1,57 +1,62 @@
 <template>
-  <div class="signup">
-    <div class="signup-box">
+  <div class="p-2 signup-wrap">
+    <h3 class="my-4 text-center">회원가입</h3>
+    <div class="row m-0">
       <input
         type="text"
-        class="form-control"
+        class="form-control col-9"
         v-model="signupData.username"
         placeholder="아이디"
         :rules="usernameRules"
         hide-details="auto"
         @keyup="turnUsernameOkToFalse"
       />
-      <button class="btn btn-primary" @click="checkUsername">중복확인</button>
-      <div v-if="clickedCheckUsername">
-        <div v-if="!usernameOk">이미 있는 아이디입니다.</div>
-        <div v-else>사용 할 수 있는 아이디입니다.</div>
+      <button class="btn btn-secondary col-3" @click="checkUsername">중복확인</button>
+      <div v-if="clickedCheckUsername" class="col-12 p-0">
+        <div v-if="!usernameOk"><small class="pl-1">이미 있는 아이디입니다.</small></div>
+        <div v-else><small class="pl-1">사용 할 수 있는 아이디입니다.</small></div>
+      </div>
+      <div v-else>
+        <div><small class="pl-1">5자 이상 입력하세요</small></div>
       </div>
 
-      <div class="age">
-        <label for="birthYear">출생년도</label>
+      <div class="col-12 row p-0 m-0 my-3">
+        <label class="col-12 p-0" for="birthYear">출생년도</label>
         <input
           type="range"
-          class="form-control-range"
+          class="form-control-range col-10 btn-secondary"
           id="birthYear"
           :min="1900"
           :max="nowYear"
           v-model="signupData.age"
         />
-        {{ signupData.age }}
+        <div class="col-2">{{ signupData.age }}</div>
       </div>
-      <input
-        type="password"
-        class="form-control"
-        v-model="signupData.password1"
-        placeholder="비밀번호"
-        :rules="password1Rules"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        hint="8자 이상"
-        counter
-        @click:append="show1 = !show1"
-      />
-      <input
-        type="password"
-        class="form-control"
-        v-model="signupData.password2"
-        placeholder="비밀번호 확인"
-        :rules="password2Rules"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        counter
-        @click:append="show1 = !show1"
-      />
-      <button class="btn btn-primary signup-btn" @click="clickSignup">
-        가입하기
-      </button>
+      <div class="col-12 p-0">
+        <input
+          type="password"
+          class="form-control"
+          v-model="signupData.password1"
+          placeholder="비밀번호"    
+        />
+        <small class="pl-1">8자 이상</small>
+      </div>
+      
+      <div class="col-12 p-0">
+        <input
+          type="password"
+          class="form-control"
+          v-model="signupData.password2"
+          placeholder="비밀번호 확인"
+        />
+      </div>
+      
+      <div class="col-12 p-0">
+        <button class="btn btn-secondary signup-btn" @click="clickSignup">
+          가입하기
+        </button>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -69,20 +74,9 @@ export default {
       },
       usernameOk: false,
       clickedCheckUsername: false,
+      password2Ok: false,
       token: "",
-      usernameRules: [
-        (value) => (value && value.length >= 5) || "5자 이상 입력하세요.",
-      ],
       nowYear: new Date().getFullYear(),
-      show1: false,
-      password1Rules: [
-        (value) => (value && value.length >= 8) || "8자 이상 입력하세요.",
-      ],
-      password2Rules: [
-        (value) =>
-          value === this.signupData.password1 ||
-          "비밀번호가 일치하지 않습니다.",
-      ],
     };
   },
   methods: {
@@ -112,8 +106,14 @@ export default {
         if (this.signupData.password1.length >= 8) {
           if (this.signupData.password1 === this.signupData.password2) {
             pass = true;
+          } else {
+            alert("비밀번호가 일치하지 않습니다.")
           }
+        } else {
+          alert("비밀번호를 8자 이상 설정해주세요.")
         }
+      } else {
+        alert("아이디를 확인해주세요.")
       }
 
       if (pass) {
@@ -155,9 +155,9 @@ export default {
 </script>
 
 <style scoped>
-.signup-box {
-  width: 500px;
-  margin: 5rem auto;
+.signup-wrap {
+  background-color: lightsalmon;
+  border-radius: 1rem;
 }
 .age {
   margin-top: 3rem;
