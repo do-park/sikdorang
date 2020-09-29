@@ -7,7 +7,7 @@
     <div>
       <label for="t-i">대표이미지</label>
       <br />
-      <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif, .png" />
+      <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif" />
     </div>
     <div>
       <label for="area">여행지역</label>
