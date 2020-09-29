@@ -134,7 +134,7 @@ export default {
     },
     saveSchedule() {
       const scheduleData = [];
-      console.log(this.getSchedules);
+    //   console.log(this.getSchedules);
       if (this.getSchedules.length > 0) {
         this.getSchedules.forEach((schedule) => {
           scheduleData.push(schedule.id + String(schedule.userChoice.id));
@@ -154,7 +154,7 @@ export default {
       };
       this.$axios
         .post("/trip/", data, requestHeaders)
-        .then((res) => {
+        .then(() => {
           this.initiateSchedule();
         })
         .catch((err) => {
