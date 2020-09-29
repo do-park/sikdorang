@@ -9,6 +9,7 @@ from .serializers import *
 from .models import *
 from trip.models import Trip
 from rest_framework import status
+import datetime
 
 # Create your views here.
 
@@ -25,7 +26,9 @@ def create_party(request, trip_pk):
 
 @api_view(['GET'])
 def list_party(request):
-    parties = Party.objects.all().order_by('-updated_at')
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    parties = Party.objects.filter(tirp_date__gte=int(nowDate))
     serializer = PartyListSerializer(parties, many=True)
     return Response(serializer.data)
 
@@ -72,6 +75,6 @@ def create_message(request, party_pk):
 
 @api_view(['GET'])
 def list_message(request, party_pk):
-    messages = PartyMessage.objects.filter(pk=party_pk)
+    messages = PartyMessage.objects.filter(pk=party_pk).order_by('-created_at')
     serializer = PartyMessageListSerializer(messages, many=True)
     return Response(serializer.data)

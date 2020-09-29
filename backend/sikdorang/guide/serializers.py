@@ -7,6 +7,7 @@ from .models import *
 class TourDetailSerializer(serializers.ModelSerializer):
     class Meta: 
         model = TripItemModel
+        depth = 1
         fields = '__all__'
 
 class GuideItemSerializer(serializers.ModelSerializer):
@@ -24,4 +25,5 @@ class GuideSerializer(serializers.ModelSerializer):
 class TourSerializer(serializers.ModelSerializer):
     class Meta: 
         model = TripItemModel
+        depth = 1
         fields = ['id', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'limit_person', 'departure_person']
