@@ -16,10 +16,9 @@ from rest_framework import status
 def create_party(request, trip_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    trip = get_object_or_404(Trip, pk=trip_pk)
     serializer = PartySerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=user, trip_id = trip)
+        serializer.save(user=user, id=trip_pk)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(data=serializer.errors)
@@ -44,7 +43,7 @@ def update_party(request, party_pk):
     if party.user == user:
         serializer = PartySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=user, trip_id=party.trip_id)
+            serializer.save(user=user, id=party_pk)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         
     return HttpResponse('Something Wrong')
