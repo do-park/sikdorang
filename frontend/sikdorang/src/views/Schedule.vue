@@ -2,6 +2,7 @@
   <div>
     <h1>오늘의 일정</h1>
     <p>일정을 삭제하려면 클릭하세요.</p>
+    {{ clonedItems }}
     <draggable
       v-model="clonedItems"
       :options="clonedItemOptions"
@@ -114,14 +115,6 @@ export default {
     },
     deleteItem(index) {
       this.clonedItems.splice(index, 1);
-    },
-    uuid(e) {
-      if (e.uid) return e.uid;
-      const key = Math.random()
-        .toString(10)
-        .slice(2);
-      this.$set(e, "uid", key);
-      return e.uid;
     },
     // function about trips
     getTripdata() {
