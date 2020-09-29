@@ -104,19 +104,6 @@ export default {
         document.getElementById(targetId).classList.add("d-none");
       }
     },
-    getSightseeing() {
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
-
-      this.$axios
-        .get(
-          `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=126733&contentTypeId=12&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
-        )
-        .then((res) => {
-          const items = res.data.response.body.items.item;
-        })
-        .catch((err) => console.error(err));
-    },
     goScheduleDetail(schedule) {
       this.resetScheduleList()
       console.log(schedule.name)
