@@ -38,6 +38,7 @@ export default {
               Authorization: `JWT ${this.$cookies.get("auth-token")}`
           }
       }
+      // 아까 받은 유저이름과 폰번호 같이주기
       this.$axios.post(`guide/paid/${tripId}`, requestHeaders)
 			.then(res => {
                 console.log(res)
