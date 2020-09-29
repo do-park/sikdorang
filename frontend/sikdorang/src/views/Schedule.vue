@@ -100,14 +100,14 @@ export default {
     ])
   },
   watch : {
-    getScheduleDate(){
-      console.log("watch 실행 : getScheduleDate",this.getScheduleDate)
-      this.getBackSchedule()
-    },
-    scheduleDate() {
-      console.log("watch 실행 : scheduleDate",this.scheduleDate)
-      this.getBackSchedule()
-    }
+    // getScheduleDate(){
+    //   console.log("watch 실행 : getScheduleDate",this.getScheduleDate)
+    //   this.getBackSchedule()
+    // },
+    // scheduleDate() {
+    //   console.log("watch 실행 : scheduleDate",this.scheduleDate)
+    //   this.getBackSchedule()
+    // }
   },
  
   mounted() {
@@ -215,9 +215,9 @@ export default {
       const data = {
         date : date
       }
-      this.$axios.get('trip/date/',data, requestHeaders)
+      this.$axios.post('trip/todaycheck/',data, requestHeaders)
       .then(res=>{
-        console.log("checkIsScheduleDate",res)
+        console.log("값 왔냐?",res)
       })
       .catch(err=>{console.log(err)})
     },
@@ -273,11 +273,12 @@ export default {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
             let date = result.value[1]
-            console.log("before",this.getScheduleDate)
-            this.actionScheduleDate(date)
-            this.scheduleDate(date)
-            console.log("after",this.getScheduleDate)
-            console.log("날짜 이거 맞나?",date)
+            this.checkIsScheduleDate(date)
+            // console.log("before",this.getScheduleDate)
+            // this.actionScheduleDate(date)
+            // this.scheduleDate(date)
+            // console.log("after",this.getScheduleDate)
+            // console.log("날짜 이거 맞나?",date)
             // this.$axios
             //   .post(`/trip/`, {
             //     user: this.userId,
