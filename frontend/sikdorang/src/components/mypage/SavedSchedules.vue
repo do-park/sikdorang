@@ -92,7 +92,7 @@ export default {
     popupPartyForm(targetId) {
       if (document.getElementById(targetId).classList.contains("d-none")) {
         var forms = document.getElementsByClassName("party-form");
-        console.log("this", forms);
+        // console.log("this", forms);
         for (let form of forms) {
           if (!form.classList.contains("d-none")) {
             form.classList.add("d-none");
@@ -114,7 +114,6 @@ export default {
         )
         .then((res) => {
           const items = res.data.response.body.items.item;
-          console.log(items);
         })
         .catch((err) => console.error(err));
     },
@@ -215,7 +214,7 @@ export default {
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
       this.scheduleList = new Array(plans.length).fill(0);
-      console.log("!!!!!!!!!!",this.scheduleList)
+  
       for (var i = 0; i < plans.length; i ++) {
         let plan = plans[i]
         const type = plan.slice(0, 1);
