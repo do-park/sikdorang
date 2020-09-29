@@ -107,7 +107,6 @@ export default {
     goScheduleDetail(schedule) {
       this.resetScheduleList()
       console.log(schedule.name)
-      // this.makeScheduleList(schedule)
       this.makeScheduleList(schedule)
       
     },
