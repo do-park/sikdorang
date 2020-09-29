@@ -2,7 +2,28 @@
     <div v-if="tripList">
         <div v-if="todaySchedule.name">
       {{ todaySchedule.name }} | {{ todaySchedule.date }} |
-      <button>동행구하기</button>
+      <button class="btn btn-success" @click="popupPartyForm">동행구하기</button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#todayMessage">동행 신청자 보기</button>
+      <PartyForm id="partyForm" class="d-none" />      
+
+      <!-- Modal -->
+      <div class="modal fade" id="todayMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">동행 신청 현황</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <PartyRequests :partyPk=1 />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
     </div>
     <div v-else>오늘 일정이 없습니다.</div>
     <hr />
@@ -10,7 +31,6 @@
       v-for="(schedule, index) in todaySchedule.schedules"
       :key="schedule.id"
     >
-      {{ schedule.id }}
       <div v-if="(schedule.type === '식당') | (schedule.type === '카페')">
         [{{ schedule.type }}] {{ schedule.store_name }} |
         <button
@@ -29,13 +49,19 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex"
+import PartyForm from "../mypage/PartyForm.vue"
+import PartyRequests from "../mypage/PartyRequests.vue"
 
 const mypage = "mypage"
 
 export default {
     name: 'TripList',
     props : {
-        tripList : Boolean,
+      tripList : Boolean,
+    },
+    components: {
+      PartyForm,
+      PartyRequests
     },
     computed: {
     ...mapGetters("schedule", [
@@ -44,12 +70,12 @@ export default {
       "getScheduleDate",
     ]),
     ...mapGetters(mypage, [
-            'getTripList'
-        ])
+      'getTripList'
+    ])
   },
   data() {
     return {
-      todaySchedule: { name: "", date: "", schedules: [] },
+      todaySchedule: { id: "", name: "", date: "", schedules: [] },
       todayReviewList: [],
      
     };
@@ -71,6 +97,15 @@ export default {
       "actionScheduleName",
       "actionScheduleDate",
     ]),
+    popupPartyForm() {
+      if (document.getElementById('partyForm').classList.contains('d-none')) {
+        document.getElementById('partyForm').classList.remove('d-none')
+        window.$cookies.set("party-trip-id", this.todaySchedule.id);
+      } else {
+        document.getElementById('partyForm').classList.add('d-none')
+      }
+  
+    },
     initiateSchedule() {
       this.actionSchedule([]);
       this.actionScheduleName("");

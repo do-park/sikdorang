@@ -18,11 +18,36 @@
           </div>
     </b-modal>
     <div v-if="allSchedule">
-      <div @click="goScheduleDetail(schedule)" v-for="(schedule, index) in allSchedule" :key="schedule.idx">
-        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} | <b-button v-b-modal.modal-scrollable>상세보기</b-button> | <button class="btn btn-success" @click="popupPartyForm(schedule.id)">동행구하기</button>
+      <div
+        @click="goScheduleDetail(schedule)"
+        v-for="(schedule, index) in allSchedule"
+        :key="schedule.idx"
+      >
+        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} |
+        <b-button v-b-modal.modal-scrollable>상세보기</b-button> |
+        <button class="btn btn-success" @click="popupPartyForm(schedule.id)">
+          동행구하기
+        </button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#targetMessage">동행 신청자 보기</button>
         <PartyForm :id="schedule.id" class="party-form d-none" />
         <hr />
-          <PartyRequests />
+        <!-- Modal -->
+        <div class="modal fade" id="targetMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">동행 신청 현황</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <PartyRequests :partyPk=1 />
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -32,8 +57,8 @@
 <script>
 import { mapGetters } from "vuex";
 
-import PartyForm from "../mypage/PartyForm.vue"
-import PartyRequests from "../mypage/PartyRequests.vue"
+import PartyForm from "../mypage/PartyForm.vue";
+import PartyRequests from "../mypage/PartyRequests.vue";
 
 export default {
   name: "SavedSchedules",
@@ -41,8 +66,8 @@ export default {
     savedSchedules: Boolean,
   },
   components: {
-      PartyForm,
-      PartyRequests
+    PartyForm,
+    PartyRequests,
   },
   computed: {
     ...mapGetters("schedule", [
@@ -61,33 +86,24 @@ export default {
   },
   mounted() {
     this.getAllSchedules();
-  },
-  watch : {
-    temp() {
-      if (this.temp !== null && this.temp !== undefined){
-      // if (this.temp){
-        console.log("temp가 변경되었습니다.",this.temp.type)
-        this.scheduleList.schedules.push(this.temp)
-      }
-    }
+    this.today = new Date();
   },
   methods: {
     popupPartyForm(targetId) {
-      if (document.getElementById(targetId).classList.contains('d-none')) {
-        var forms = document.getElementsByClassName('party-form')
-        console.log('this',forms)
+      if (document.getElementById(targetId).classList.contains("d-none")) {
+        var forms = document.getElementsByClassName("party-form");
+        console.log("this", forms);
         for (let form of forms) {
-          if (!(form.classList.contains('d-none'))) {
-            form.classList.add('d-none')
+          if (!form.classList.contains("d-none")) {
+            form.classList.add("d-none");
           }
         }
-        document.getElementById(targetId).classList.remove('d-none')
+        document.getElementById(targetId).classList.remove("d-none");
+        window.$cookies.set("party-trip-id", targetId);
       } else {
-        document.getElementById(targetId).classList.add('d-none')
+        document.getElementById(targetId).classList.add("d-none");
       }
-  
     },
-
     getSightseeing() {
       const TOUR_API_KEY =
         "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
@@ -217,9 +233,14 @@ export default {
         }
       }
     },
+    stringtodate(str) {
+      const y = str.substr(0, 4);
+      const m = str.substr(5, 2);
+      const d = str.substr(8, 2);
+      return new Date(y, m - 1, d);
+    },
   },
 };
-
 </script>
 
 <style>

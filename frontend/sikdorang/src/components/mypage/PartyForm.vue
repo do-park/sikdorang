@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      tripPk: "",
       partyData: {
         title: null,
         content: null,
@@ -43,19 +44,19 @@ export default {
   },
   methods: {
     onClick() {
+      this.tripPk = window.$cookies.get("party-trip-id")
       this.getHtml();
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-       
       this.$axios
-        .post("주소", this.partyData, requestHeaders)
+        .post(`party/create_party/${this.tripPk}`, this.partyData, requestHeaders)
         .then((res) => {
           console.log(res);
           // 등록이 완료되면 상세페이지로 이동
-          this.$router.push(`주소`);
+          // this.$router.push(`주소`);
         })
         .catch((err) => console.error(err));
     },

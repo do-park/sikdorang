@@ -103,8 +103,9 @@ def trip_today(request):
         plan_id.append(num)
     res = [0]*len(plan_id)
     for i in range(len(res)):
-        print(plan_id[i])
         if plan_id[i] == -1:
+            continue
+        elif plan_id[i] == '':
             continue
         else:
             tchk = Store.objects.get(id=plan_id[i])
