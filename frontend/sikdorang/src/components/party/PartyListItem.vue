@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex">
     <div @click="onClick()">
-      <h5>{{ trip.name }}</h5>
-      날짜: {{ trip.date }}
+      <h5>{{ partyItem.title }}</h5>
+      날짜: {{ partyItem.trip_date }} 작성자: {{ partyItem.user.username }}
       <hr />
     </div>
   </div>

@@ -31,7 +31,7 @@ def create_party(request, trip_pk):
 def list_party(request):
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y%m%d')
-    parties = Party.objects.filter(trip_date__gte=int(nowDate)).order_by('-trip_date')
+    parties = Party.objects.filter(trip_date__gte=int(nowDate)).order_by('trip_date')
     serializer = PartyListSerializer(parties, many=True)
     return Response(serializer.data)
 

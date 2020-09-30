@@ -5,7 +5,7 @@
       <h4>제목: {{ tripSchedule.name }}</h4>
       날짜: {{ tripSchedule.date }} <br />
       <button
-        v-if="stringtodate(tripSchedule.date) > today"
+        v-if="tripSchedule.date > today"
         class="btn btn-primary"
         @click="onClick()"
       >
@@ -46,9 +46,21 @@ export default {
   },
   mounted() {
     this.makeScheduleList();
-    this.today = new Date();
+    this.today = this.datetoint(
+      new Date()
+        .toLocaleString({
+          timeZone: "Asia/Seoul",
+        })
+        .substring(0, 12)
+    );
   },
   methods: {
+    datetoint(date) {
+      var y = date.substr(0, 4) * 10000;
+      var m = parseInt(date.substr(5, 2)) * 100;
+      var d = date.substr(8, 2) * 1;
+      return y + m + d;
+    },
     async restuarantPlan(i, id, type, typeName) {
       this.$axios
         .get(`trip/store_detail/${id}`)
@@ -110,8 +122,8 @@ export default {
     },
     //일정 정보 가져오면 스케줄 리스트로 만들기
     async makeScheduleList() {
-      this.tripSchedule.name = this.trip.name;
-      this.tripSchedule.date = this.trip.date;
+      this.tripSchedule.name = this.party.title;
+      this.tripSchedule.date = this.party.trip_date;
       this.tripSchedule.content = this.party.content;
 
       //일정 리스트로 만들기
