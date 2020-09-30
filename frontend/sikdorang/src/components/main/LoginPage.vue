@@ -4,7 +4,7 @@
       class="btn btn-primary" 
       @click="clickToMainPage">메인으로</button>
     <div class="login-wrap p-2">
-      <h3 class="my-4">LOGIN</h3>
+      <h3 class="my-4">로그인</h3>
       <div class="row m-0">
         <div class="col-9 p-0 pr-1">
           <input
