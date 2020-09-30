@@ -195,6 +195,12 @@ export default {
       var d = date.substr(9, 2);
       return y + "-" + m + "-" + d;
     },
+    datetoint(date) {
+      var y = date.substr(0, 4) * 10000;
+      var m = parseInt(date.substr(5, 2)) * 100;
+      var d = date.substr(8, 2) * 1;
+      return y + m + d;
+    },
     async checkIsScheduleDate(date) {
       const requestHeaders = {
         headers: {
@@ -265,7 +271,7 @@ export default {
         .then(async (result) => {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
-            let date = result.value[1];
+            let date = this.datetoint(result.value[1]);
 
             //스케줄 DB에 있나 확인하기
             this.checkIsScheduleDate(date);
