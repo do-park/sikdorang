@@ -2,11 +2,12 @@
   <div>
     <h1>동행 상세보기</h1>
     <div v-if="tripSchedule">
-      <h4>{{ tripSchedule.name }}</h4>
+      <h4>제목: {{ tripSchedule.name }}</h4>
       날짜: {{ tripSchedule.date }} <br />
       <button
         v-if="stringtodate(tripSchedule.date) > today"
         class="btn btn-primary"
+        @click="onClick()"
       >
         동행 신청하기
       </button>
@@ -28,6 +29,7 @@
 
 <script>
 // import MapMain from "@/views/MapMain.vue";
+import Swal from "sweetalert2";
 
 export default {
   name: "PartyListItemDetail",
@@ -43,8 +45,6 @@ export default {
     };
   },
   mounted() {
-    console.log("party", this.party);
-    console.log("trip", this.trip);
     this.makeScheduleList();
     this.today = new Date();
   },
@@ -64,7 +64,7 @@ export default {
           return result;
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           return [];
         });
     },
@@ -110,7 +110,7 @@ export default {
     },
     //일정 정보 가져오면 스케줄 리스트로 만들기
     async makeScheduleList() {
-      this.tripSchedule.name = this.party.name;
+      this.tripSchedule.name = this.trip.name;
       this.tripSchedule.date = this.trip.date;
       this.tripSchedule.content = this.party.content;
 
@@ -139,6 +139,34 @@ export default {
       const m = str.substr(5, 2);
       const d = str.substr(8, 2);
       return new Date(y, m - 1, d);
+    },
+    onClick() {
+      Swal.fire({
+        title: "동행 신청하기",
+        input: "textarea",
+        inputPlaceholder:
+          "휴대폰 번호, 카카오톡 아이디 등 연락처를 포함한 한마디를 전하세요.",
+        showCancelButton: true,
+      }).then((result) => {
+        console.log(result.value);
+        const requestHeaders = {
+          headers: {
+            Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+          },
+        };
+        this.$axios
+          .post(
+            `party/create_message/${this.party.id}`,
+            result.value,
+            requestHeaders
+          )
+          .then((res) => {
+            console.log(res);
+            // 등록이 완료되면 상세페이지로 이동
+            // this.$router.push(`주소`);
+          })
+          .catch((err) => console.error(err));
+      });
     },
   },
 };

@@ -36,6 +36,8 @@ export default {
         });
     },
     onClick() {
+      console.log("partyItem", this.partyItem);
+      console.log("trip`x3", this.trip);
       this.$cookies.set("party", this.partyItem);
       this.$cookies.set("trip", this.trip);
       this.$router.push({ name: "PartyListItemDetail" });

@@ -66,7 +66,8 @@
                 </button>
               </div>
               <div class="modal-body">
-                <PartyRequests :partyPk="1" />
+                {{ schedule.id }}
+                <PartyRequests :partyPk="schedule.id" />
               </div>
             </div>
           </div>
@@ -129,7 +130,6 @@ export default {
     },
     goScheduleDetail(schedule) {
       this.resetScheduleList();
-      console.log(schedule.name);
       // this.makeScheduleList(schedule)
       this.makeScheduleList(schedule);
     },

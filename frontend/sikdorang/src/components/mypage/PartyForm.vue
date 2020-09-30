@@ -25,6 +25,7 @@
 import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/vue-editor";
+import Swal from "sweetalert2";
 
 export default {
   name: "PartyForm",
@@ -60,10 +61,13 @@ export default {
           this.partyData,
           requestHeaders
         )
-        .then((res) => {
-          console.log(res);
-          // 등록이 완료되면 상세페이지로 이동
-          // this.$router.push(`주소`);
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "일정을 등록했습니다.",
+          }).then(() => {
+            this.$router.push({ name: "PartyList" });
+          });
         })
         .catch((err) => console.error(err));
     },

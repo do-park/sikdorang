@@ -32,7 +32,7 @@ export default {
         },
       };
       this.$axios
-        .get("/party/list_party", requestHeaders)
+        .get(`/party/list_party/${this.partyPk}`, requestHeaders)
         .then((res) => {
           console.log(res.data);
           this.partyList = res.data;
