@@ -261,9 +261,11 @@ export default {
             focusConfirm: false,
             preConfirm: () => {
               if (document.getElementById("datepicker").value) {
-                return document.getElementById("datepicker").value;
+                return this.datetoint(
+                  document.getElementById("datepicker").value
+                );
               } else {
-                return inputValue;
+                return this.datetoint(inputValue);
               }
             },
           },
@@ -271,7 +273,7 @@ export default {
         .then(async (result) => {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
-            let date = this.datetoint(result.value[1]);
+            let date = result.value[1];
 
             //스케줄 DB에 있나 확인하기
             this.checkIsScheduleDate(date);
@@ -360,7 +362,9 @@ export default {
             focusConfirm: false,
             preConfirm: () => {
               if (document.getElementById("datepicker").value) {
-                return document.getElementById("datepicker").value;
+                return this.datetoint(
+                  document.getElementById("datepicker").value
+                );
               } else {
                 return inputDate;
               }
