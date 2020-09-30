@@ -44,7 +44,7 @@
 <script>
 import draggable from "vuedraggable";
 import Swal from "sweetalert2";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Schedule",
@@ -52,9 +52,14 @@ export default {
   components: {
     draggable,
   },
+  computed: {
+    ...mapGetters("sikRec", ["getIsSik"]),
+    ...mapGetters("schedule", ["getScheduleDate"]),
+  },
   data() {
     return {
       userId: null,
+      scheduleDate: "",
       // for test
       saved: [],
       clonedItems: [],
@@ -93,10 +98,11 @@ export default {
       },
     };
   },
-  created() {
-    // todo: userId에 현재 로그인한 유저의 id 넣어주기
-    // this.userId = 1;
-    // this.getTripdata();
+
+  watch: {},
+
+  mounted() {
+    this.resetScheduleStoreInfo();
   },
   methods: {
     ...mapActions("schedule", [
@@ -104,8 +110,10 @@ export default {
       "actionScheduleIdx",
       "actionScheduleName",
       "actionScheduleDate",
+      "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
+
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -114,6 +122,15 @@ export default {
     },
     deleteItem(index) {
       this.clonedItems.splice(index, 1);
+    },
+
+    //일정 관련 이름,날짜,내용 초기화
+    resetScheduleStoreInfo() {
+      this.actionScheduleName("");
+      this.actionScheduleDate("");
+      this.actionSchedule([]);
+      this.actionScheduleIdx(0);
+      console.log("스케줄 관련 다 초기화 합니다.");
     },
     // function about trips
     getTripdata() {
@@ -144,17 +161,29 @@ export default {
       }
       let plan = "";
       const schedule = [];
-
+      // console.log("일정을 추가했습니다.", this.clonedItems);
+      if (this.getIsSik) {
+        this.availableItems[0].idx = 0;
+        schedule.push(this.availableItems[0]);
+        plan = plan + schedule[0].id + 1234 + "-";
+      }
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
-        item["idx"] = i;
+        if (this.getIsSik) {
+          item["idx"] = i + 1;
+        } else {
+          item["idx"] = i;
+        }
+        // console.log(item);
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
+      console.log("확인", plan, schedule);
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
       this.actionMapEventClear("clear");
+      this.actionClearBeforeCat();
       return plan;
     },
     datetostring(date) {
@@ -166,7 +195,26 @@ export default {
       var d = date.substr(9, 2);
       return y + "-" + m + "-" + d;
     },
-    createTrip() {
+    async checkIsScheduleDate(date) {
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+        },
+      };
+      const data = {
+        date: date,
+      };
+      console.log(data);
+      this.$axios
+        .post("trip/date_chk", data, requestHeaders)
+        .then((res) => {
+          console.log("값 왔냐?", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async createTrip() {
       let plan = this.createPlan();
       if (!plan) {
         return;
@@ -214,23 +262,23 @@ export default {
             },
           },
         ])
-        .then((result) => {
+        .then(async (result) => {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
-            this.actionScheduleDate(result.value[1]);
-            // this.$axios
-            //   .post(`/trip/`, {
-            //     user: this.userId,
-            //     name: result.value,
-            //     plan: plan.slice(0, -1),
-            //   })
-            // .then((response) => {
-            //   if (parseInt(response.status / 100) == 2) {
+            let date = result.value[1];
+
+            //스케줄 DB에 있나 확인하기
+            this.checkIsScheduleDate(date);
+
             Swal.fire({
               icon: "success",
               title: "일정을 등록했습니다.",
             });
-            this.$router.push({ name: "MapMain" });
+            if (this.getIsSik) {
+              this.$router.push({ name: "SikdorangRecommendView" });
+            } else {
+              this.$router.push({ name: "MapMain" });
+            }
             //   }
             // })
             // .catch((error) => {

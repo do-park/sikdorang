@@ -9,6 +9,7 @@ from .serializers import *
 from .models import *
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework import status
+import datetime
 
 
 # Create your views here.
@@ -23,10 +24,12 @@ def apply_guide(request):
     return HttpResponse('휴대폰 인증 필요')
 
 @api_view(['POST'])
-@authentication_classes((JSONWebTokenAuthentication,))
 def create_tour(request):
-    user = request.user
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    print('!!!!!!!!!!!!', request.data)
     serializer = GuideItemSerializer(data=request.data)
+    print('@@@@@@@@', serializer)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
@@ -35,9 +38,12 @@ def create_tour(request):
 
 @api_view(['GET'])
 def list_tour(request):
-    tours = TripItemModel.objects.all()
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    tours = TripItemModel.objects.filter(tirp_date__gte=int(nowDate)).order_by('-trip_date')
     serializer = TourSerializer(tours, many=True)
     return Response(serializer.data)
+
 # class GuideViewSet(viewsets.ModelViewSet):
 #     queryset = TripItemModel.objects.all()
 #     serializer_class = GuideItemSerializer
@@ -61,12 +67,15 @@ def list_guide(request, username):
 
 @api_view(['POST'])
 def paid(request, trip_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
     trip = get_object_or_404(TripItemModel, pk=trip_pk)
-    tour, flag = GuideTour.objects.get_or_create(user=request.user.pk, trip_item=trip)
-    if flag:
-        return HttpResponse('결제되었습니다.')
-    else:
+    tour = GuideTour.objects.filter(user=user)
+    if tour.exists():
         return HttpResponse('이미 결제된 여행입니다.')
+    else:
+        GuideTour.objects.create(user=user, trip_item=trip, user_name=request.data['user_name'], phone_number=request.data['phone_number'])
+        return HttpResponse('결제 되었습니다.')
 
 @api_view(['GET'])
 def paidtour(request):

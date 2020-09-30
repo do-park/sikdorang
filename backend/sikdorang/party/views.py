@@ -9,6 +9,7 @@ from .serializers import *
 from .models import *
 from trip.models import Trip
 from rest_framework import status
+import datetime
 
 # Create your views here.
 
@@ -16,16 +17,21 @@ from rest_framework import status
 def create_party(request, trip_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
+    trip = get_object_or_404(Trip, pk=trip_pk)
     serializer = PartySerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=user, id=trip_pk)
+        trip.party_chk = 1
+        trip.save()
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(data=serializer.errors)
 
 @api_view(['GET'])
 def list_party(request):
-    parties = Party.objects.all().order_by('-updated_at')
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    parties = Party.objects.filter(tirp_date__gte=int(nowDate)).order_by('-trip_date')
     serializer = PartyListSerializer(parties, many=True)
     return Response(serializer.data)
 
@@ -52,9 +58,12 @@ def update_party(request, party_pk):
 def delete_party(request, party_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
+    trip = get_object_or_404(Trip, pk=party_pk)
     party = get_object_or_404(Party, id=party_pk)
     if party.user == user:
         party.delete()
+        trip.party_chk = 0
+        trip.save()
         return HttpResponse('잘 지워짐')
     return HttpResponse('니 글 아님 ㅅㄱ')
 
@@ -72,6 +81,6 @@ def create_message(request, party_pk):
 
 @api_view(['GET'])
 def list_message(request, party_pk):
-    messages = PartyMessage.objects.filter(pk=party_pk)
+    messages = PartyMessage.objects.filter(pk=party_pk).order_by('-created_at')
     serializer = PartyMessageListSerializer(messages, many=True)
     return Response(serializer.data)
