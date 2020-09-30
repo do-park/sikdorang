@@ -162,7 +162,7 @@ export default {
         this.$axios
           .post(
             `party/create_message/${this.party.id}`,
-            result.value,
+            { content: result.value },
             requestHeaders
           )
           .then((res) => {

@@ -77,7 +77,6 @@
                 </button>
               </div>
               <div class="modal-body">
-                {{ schedule.id }}
                 <PartyRequests :partyPk="schedule.id" />
               </div>
             </div>
