@@ -80,7 +80,8 @@ def trip_today(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
+    nowDate = int(now.strftime('%Y%m%d'))
+    print(Trip, user, nowDate)
     trip = get_object_or_404(Trip, user=user, date=nowDate)
     serializer = TripListSerializer(trip)
     tplan = trip.plan

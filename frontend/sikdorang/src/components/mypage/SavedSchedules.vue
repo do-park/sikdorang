@@ -30,8 +30,19 @@
       >
         {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} |
         <b-button v-b-modal.modal-scrollable>상세보기</b-button> |
-        <button class="btn btn-success" @click="popupPartyForm(schedule.id)">
-          동행구하기
+        <button
+          v-if="schedule.party_chk"
+          class="btn btn-success"
+          @click="popupPartyForm(schedule.id)"
+        >
+          내가 작성한 글 보기
+        </button>
+        <button
+          v-else
+          class="btn btn-success"
+          @click="popupPartyForm(schedule.id, schedule.date)"
+        >
+          동행 구하기 글 작성
         </button>
         <button
           class="btn btn-primary"
@@ -113,7 +124,7 @@ export default {
     this.today = new Date();
   },
   methods: {
-    popupPartyForm(targetId) {
+    popupPartyForm(targetId, targetDate) {
       if (document.getElementById(targetId).classList.contains("d-none")) {
         var forms = document.getElementsByClassName("party-form");
         // console.log("this", forms);
@@ -124,6 +135,8 @@ export default {
         }
         document.getElementById(targetId).classList.remove("d-none");
         window.$cookies.set("party-trip-id", targetId);
+        window.$cookies.set("party-trip-date", targetDate);
+        console.log(targetDate);
       } else {
         document.getElementById(targetId).classList.add("d-none");
       }
@@ -149,6 +162,7 @@ export default {
         .get("/trip/list", requestHeaders)
         .then((res) => {
           this.allSchedule = res.data;
+          console.log("@@@@", res.data);
         })
         .catch((err) => {
           console.log(err);

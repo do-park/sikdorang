@@ -7,6 +7,7 @@
         type="text"
         id="title"
         v-model="partyData.title"
+        placeholder="[지역]을 써 주세요"
       />
     </div>
     <editor
@@ -38,6 +39,7 @@ export default {
       partyData: {
         title: null,
         content: null,
+        trip_date: null,
         // 기본 데이터 추가
       },
       editorText: "일정에 대한 소개를 해주세요.",
@@ -49,6 +51,7 @@ export default {
   methods: {
     onClick() {
       this.tripPk = window.$cookies.get("party-trip-id");
+      this.partyData.trip_date = window.$cookies.get("party-trip-date");
       this.getHtml();
       const requestHeaders = {
         headers: {
@@ -64,7 +67,7 @@ export default {
         .then(() => {
           Swal.fire({
             icon: "success",
-            title: "일정을 등록했습니다.",
+            title: "동행 구하기 글을 등록했습니다.",
           }).then(() => {
             this.$router.push({ name: "PartyList" });
           });

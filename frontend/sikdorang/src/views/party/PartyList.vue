@@ -32,9 +32,10 @@ export default {
         },
       };
       this.$axios
-        .get(`/party/list_party/${this.partyPk}`, requestHeaders)
+        .get(`/party/list_party`, requestHeaders)
         .then((res) => {
           console.log(res.data);
+          console.log("partylist", res.data);
           this.partyList = res.data;
         })
         .catch((err) => {
