@@ -39,7 +39,7 @@
 <script>
 import ThemePage from "@/components/main/ThemePage.vue";
 import Recommend from "@/views/Recommend.vue";
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
   name: "MainPage",
@@ -51,7 +51,7 @@ export default {
     };
   },
   mounted() {
-      this.actionIsSik(false)
+    this.actionIsSik(false);
     if (this.$store.state.isLogin) {
       const requestHeaders = {
         headers: {
@@ -62,6 +62,7 @@ export default {
         .get(`/rest-auth/user`, requestHeaders)
         .then((res) => {
           this.username = res.data.username;
+          this.$cookies.set("username", this.username);
         })
         .catch((err) => {
           console.error(err);
@@ -74,13 +75,13 @@ export default {
     Recommend,
   },
   methods: {
-    ...mapActions('sikRec', ['actionIsSik']),
+    ...mapActions("sikRec", ["actionIsSik"]),
     clickMyChoice() {
       this.$router.push({ name: "Schedule" });
     },
     clickRecommend() {
-      this.actionIsSik(true)
-      this.$router.push({name: "Schedule"});
+      this.actionIsSik(true);
+      this.$router.push({ name: "Schedule" });
     },
     clickToLoginPageOrMyPage() {
       this.$emit("toLoginPageOrMyPage");

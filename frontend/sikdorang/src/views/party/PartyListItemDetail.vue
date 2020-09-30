@@ -1,28 +1,31 @@
 <template>
-  <div>
+  <div v-if="tripSchedule">
     <h1>동행 상세보기</h1>
-    <div v-if="tripSchedule">
-      <h4>제목: {{ tripSchedule.name }}</h4>
-      날짜: {{ tripSchedule.date }} <br />
-      <button
-        v-if="tripSchedule.date > today"
-        class="btn btn-primary"
-        @click="onClick()"
-      >
-        동행 신청하기
-      </button>
-      <button v-else class="btn btn-secondary disabled">
-        이미 지나간 일정입니다.
-      </button>
-      <h4>map something</h4>
-      <!-- <MapMain /> -->
-      <h3>일정</h3>
-      <div v-for="(schedule, index) in tripSchedule.schedules" :key="index">
-        [{{ schedule.type }}] {{ schedule.store_name }}{{ schedule.name }} |
-        {{ schedule.address }}
-      </div>
-      <h3>설명</h3>
-      {{ tripSchedule.content }}
+    <h4>제목: {{ tripSchedule.name }}</h4>
+    날짜: {{ tripSchedule.date }} <br />
+    작성자: {{ party.user.username }} <br />
+    <button
+      v-if="party.user.username !== username"
+      class="btn btn-primary"
+      @click="createMessage()"
+    >
+      동행 신청하기
+    </button>
+    <button v-else class="btn btn-secondary disabled">
+      내가 작성한 글입니다.
+    </button>
+    <h4>map something</h4>
+    <!-- <MapMain /> -->
+    <h3>일정</h3>
+    <div v-for="(schedule, index) in tripSchedule.schedules" :key="index">
+      [{{ schedule.type }}] {{ schedule.store_name }}{{ schedule.name }} |
+      {{ schedule.address }}
+    </div>
+    <h3>설명</h3>
+    {{ tripSchedule.content }}
+    <div v-if="party.user.username === username">
+      <button class="btn btn-primary">글 수정하기</button>
+      <button class="btn btn-danger" @click="deleteParty()">글 삭제하기</button>
     </div>
   </div>
 </template>
@@ -38,29 +41,16 @@ export default {
   },
   data() {
     return {
+      username: this.$cookies.get("username"),
       party: this.$cookies.get("party"),
       trip: this.$cookies.get("trip"),
       tripSchedule: { name: "", date: "", schedules: [], content: "" },
-      today: "",
     };
   },
   mounted() {
     this.makeScheduleList();
-    this.today = this.datetoint(
-      new Date()
-        .toLocaleString({
-          timeZone: "Asia/Seoul",
-        })
-        .substring(0, 12)
-    );
   },
   methods: {
-    datetoint(date) {
-      var y = date.substr(0, 4) * 10000;
-      var m = parseInt(date.substr(5, 2)) * 100;
-      var d = date.substr(8, 2) * 1;
-      return y + m + d;
-    },
     async restuarantPlan(i, id, type, typeName) {
       this.$axios
         .get(`trip/store_detail/${id}`)
@@ -152,7 +142,7 @@ export default {
       const d = str.substr(8, 2);
       return new Date(y, m - 1, d);
     },
-    onClick() {
+    createMessage() {
       Swal.fire({
         title: "동행 신청하기",
         input: "textarea",
@@ -174,10 +164,42 @@ export default {
           )
           .then((res) => {
             console.log(res);
-            // 등록이 완료되면 상세페이지로 이동
-            // this.$router.push(`주소`);
+            Swal.fire({
+              icon: "success",
+              title: "메시지를 전송하였습니다.",
+            });
           })
           .catch((err) => console.error(err));
+      });
+    },
+    deleteParty() {
+      Swal.fire({
+        icon: "warning",
+        title: "동행 구하기 삭제",
+        text: "동행 구하기 글을 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: "삭제합니다.",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const requestHeaders = {
+            headers: {
+              Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+            },
+          };
+
+          this.$axios
+            .delete(`party/delete/${this.party.id}`, requestHeaders)
+            .then((res) => {
+              console.log(res);
+              Swal.fire({
+                icon: "success",
+                title: "동행 구하기를 삭제했습니다.",
+              }).then(() => {
+                this.$router.push({ name: "PartyList" });
+              });
+            })
+            .catch((err) => console.error(err));
+        }
       });
     },
   },
