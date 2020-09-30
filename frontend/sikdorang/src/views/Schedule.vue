@@ -188,11 +188,14 @@ export default {
     },
     datetostring(date) {
       var y = date.substr(0, 4);
-      var m = parseInt(date.substr(5, 2));
+      var m = parseInt(date.substr(6, 2));
       if (m < 10) {
         m = "0" + m;
       }
-      var d = date.substr(9, 2);
+      var d = parseInt(date.substr(9, 2));
+      if (d < 10) {
+        d = "0" + d;
+      }
       return y + "-" + m + "-" + d;
     },
     datetoint(date) {
@@ -231,7 +234,9 @@ export default {
           timeZone: "Asia/Seoul",
         })
         .substring(0, 12);
+      console.log(inputValue);
       inputValue = this.datetostring(inputValue);
+      console.log(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",

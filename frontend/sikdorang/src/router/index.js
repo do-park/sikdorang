@@ -19,6 +19,7 @@ import ReviewForm from "../views/review/ReviewForm.vue"
 import SikdorangRecommendView from "../views/recommend/SikdorangRecommendView.vue"
 import PartyList from "../views/party/PartyList.vue"
 import PartyListItemDetail from "../views/party/PartyListItemDetail.vue"
+import PartyForm from "../views/party/PartyForm.vue"
 import MessageForm from "../components/message/MessageForm.vue"
 
 Vue.use(VueRouter)
@@ -118,6 +119,11 @@ const routes = [
     path: "/party/detail",
     name: "PartyListItemDetail",
     component: PartyListItemDetail,
+  },
+  {
+    path: "/party/form",
+    name: "PartyForm",
+    component: PartyForm,
   },
   {
     path: "/message/test",

@@ -33,14 +33,14 @@
         <button
           v-if="schedule.party_chk"
           class="btn btn-success"
-          @click="popupPartyForm(schedule.id)"
+          @click="readParty(schedule.id)"
         >
           내가 작성한 글 보기
         </button>
         <button
           v-else
           class="btn btn-success"
-          @click="popupPartyForm(schedule.id, schedule.date)"
+          @click="createParty(schedule.id, schedule.date)"
         >
           동행 구하기 글 작성
         </button>
@@ -124,6 +124,37 @@ export default {
     this.today = new Date();
   },
   methods: {
+    getTripdata(tripId) {
+      this.$axios
+        .get(`/trip/${tripId}`)
+        .then((res) => {
+          this.$cookies.set("trip", res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    getPartydata(partyId) {
+      this.$axios
+        .get(`/party/detail_party/${partyId}`)
+        .then((res) => {
+          this.$cookies.set("party", res.data[0]);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    readParty(scheduleId) {
+      this.getPartydata(scheduleId);
+      this.getTripdata(scheduleId);
+      this.$router.push({ name: "PartyListItemDetail" });
+    },
+    createParty(scheduleId, scheduleDate) {
+      this.$cookies.set("party-trip-id", scheduleId);
+      this.$cookies.set("party-trip-date", scheduleDate);
+      this.$cookies.set("party-type", 0);
+      this.$router.push({ name: "PartyForm" });
+    },
     popupPartyForm(targetId, targetDate) {
       if (document.getElementById(targetId).classList.contains("d-none")) {
         var forms = document.getElementsByClassName("party-form");

@@ -24,7 +24,9 @@
     <h3>설명</h3>
     {{ tripSchedule.content }}
     <div v-if="party.user.username === username">
-      <button class="btn btn-primary">글 수정하기</button>
+      <button class="btn btn-primary" @click="updateParty()">
+        글 수정하기
+      </button>
       <button class="btn btn-danger" @click="deleteParty()">글 삭제하기</button>
     </div>
   </div>
@@ -49,6 +51,7 @@ export default {
   },
   mounted() {
     this.makeScheduleList();
+    console.log(this.username, this.party, this.trip, this.tripSchedule);
   },
   methods: {
     async restuarantPlan(i, id, type, typeName) {
@@ -171,6 +174,13 @@ export default {
           })
           .catch((err) => console.error(err));
       });
+    },
+    updateParty() {
+      this.$cookies.set("party-trip-id", this.party.id);
+      this.$cookies.set("party", this.party);
+      this.$cookies.set("party-trip-date", this.party.trip_date);
+      this.$cookies.set("party-type", 1);
+      this.$router.push({ name: "PartyForm" });
     },
     deleteParty() {
       Swal.fire({
