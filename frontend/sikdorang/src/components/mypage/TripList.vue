@@ -14,7 +14,7 @@
         동행 신청자 보기
       </button>
       <PartyForm id="partyForm" class="d-none" />
-      <div>여기 지도가 들어갑니다.</div>
+      <MyPageMap :todaySchedule="todaySchedule.schedules"/>
       <hr />
       <div
         v-for="(schedule, index) in todaySchedule.schedules"
@@ -72,6 +72,7 @@
 import { mapGetters, mapActions } from "vuex";
 import PartyForm from "../mypage/PartyForm.vue";
 import PartyRequests from "../mypage/PartyRequests.vue";
+import MyPageMap from "../mypage/MyPageMap.vue"
 
 const mypage = "mypage";
 
@@ -83,6 +84,7 @@ export default {
   components: {
     PartyForm,
     PartyRequests,
+    MyPageMap,
   },
   computed: {
     ...mapGetters("schedule", [
@@ -163,7 +165,6 @@ export default {
         name: this.getScheduleName,
         date: this.getScheduleDate,
       };
-      console.log('저장하는 중', data);
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
