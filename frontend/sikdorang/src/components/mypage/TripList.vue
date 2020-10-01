@@ -98,12 +98,15 @@ export default {
       todayReviewList: [],
     };
   },
-  mounted() {
+  async created() {
     if (this.getSchedules.length === 0) {
       this.initiateSchedule();
     } else {
-      this.saveSchedule();
+      await this.saveSchedule();
     }
+  },
+  mounted() {
+
     console.log(this.getScheduleName);
     console.log(this.getScheduleDate);
     this.getTodaySchedules();
