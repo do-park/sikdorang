@@ -52,16 +52,14 @@ export default {
   components: {
     draggable,
   },
-  computed:{
-    ...mapGetters('sikRec', ['getIsSik']),
-    ...mapGetters("schedule",[
-      "getScheduleDate",
-    ])
+  computed: {
+    ...mapGetters("sikRec", ["getIsSik"]),
+    ...mapGetters("schedule", ["getScheduleDate"]),
   },
   data() {
     return {
       userId: null,
-      scheduleDate : '',
+      scheduleDate: "",
       // for test
       saved: [],
       clonedItems: [],
@@ -101,12 +99,10 @@ export default {
     };
   },
 
-  watch : {
+  watch: {},
 
-  },
- 
   mounted() {
-    this.resetScheduleStoreInfo()
+    this.resetScheduleStoreInfo();
   },
   methods: {
     ...mapActions("schedule", [
@@ -117,7 +113,7 @@ export default {
       "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
-    
+
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -130,11 +126,11 @@ export default {
 
     //일정 관련 이름,날짜,내용 초기화
     resetScheduleStoreInfo() {
-      this.actionScheduleName('')
-      this.actionScheduleDate('')
-      this.actionSchedule([])
-      this.actionScheduleIdx(0)
-      console.log("스케줄 관련 다 초기화 합니다.")
+      this.actionScheduleName("");
+      this.actionScheduleDate("");
+      this.actionSchedule([]);
+      this.actionScheduleIdx(0);
+      console.log("스케줄 관련 다 초기화 합니다.");
     },
     // function about trips
     getTripdata() {
@@ -167,14 +163,14 @@ export default {
       const schedule = [];
       // console.log("일정을 추가했습니다.", this.clonedItems);
       if (this.getIsSik) {
-        this.availableItems[0].idx = 0
-        schedule.push(this.availableItems[0])
-        plan = plan + schedule[0].id + 1234 + "-"
+        this.availableItems[0].idx = 0;
+        schedule.push(this.availableItems[0]);
+        plan = plan + schedule[0].id + 1234 + "-";
       }
       for (let i = 0; i < this.clonedItems.length; i++) {
         const item = this.clonedItems[i];
         if (this.getIsSik) {
-          item["idx"] = i + 1
+          item["idx"] = i + 1;
         } else {
           item["idx"] = i;
         }
@@ -182,7 +178,7 @@ export default {
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
-      console.log('확인', plan, schedule)
+      console.log("확인", plan, schedule);
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
@@ -192,28 +188,40 @@ export default {
     },
     datetostring(date) {
       var y = date.substr(0, 4);
-      var m = parseInt(date.substr(5, 2));
+      var m = parseInt(date.substr(6, 2));
       if (m < 10) {
         m = "0" + m;
       }
-      var d = date.substr(9, 2);
+      var d = parseInt(date.substr(9, 2));
+      if (d < 10) {
+        d = "0" + d;
+      }
       return y + "-" + m + "-" + d;
+    },
+    datetoint(date) {
+      var y = date.substr(0, 4) * 10000;
+      var m = parseInt(date.substr(5, 2)) * 100;
+      var d = date.substr(8, 2) * 1;
+      return y + m + d;
     },
     async checkIsScheduleDate(date) {
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-                },
-        };
+        },
+      };
       const data = {
-        date : date
-      }
-      console.log(data)
-      this.$axios.post('trip/date_chk', data, requestHeaders)
-      .then(res=>{
-        console.log("값 왔냐?",res)
-      })
-      .catch(err=>{console.log(err)})
+        date: date,
+      };
+      console.log(data);
+      this.$axios
+        .post("trip/date_chk", data, requestHeaders)
+        .then((res) => {
+          console.log("값 왔냐?", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async createTrip() {
       let plan = this.createPlan();
@@ -226,7 +234,9 @@ export default {
           timeZone: "Asia/Seoul",
         })
         .substring(0, 12);
+      console.log(inputValue);
       inputValue = this.datetostring(inputValue);
+      console.log(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
@@ -256,27 +266,29 @@ export default {
             focusConfirm: false,
             preConfirm: () => {
               if (document.getElementById("datepicker").value) {
-                return document.getElementById("datepicker").value;
+                return this.datetoint(
+                  document.getElementById("datepicker").value
+                );
               } else {
-                return inputValue;
+                return this.datetoint(inputValue);
               }
             },
           },
         ])
-        .then(async(result) => {
+        .then(async (result) => {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
-            let date = result.value[1]
+            let date = result.value[1];
 
             //스케줄 DB에 있나 확인하기
-            this.checkIsScheduleDate(date)
+            this.checkIsScheduleDate(date);
 
             Swal.fire({
               icon: "success",
               title: "일정을 등록했습니다.",
             });
-            if (this.getIsSik){
-              this.$router.push({ name: "SikdorangRecommendView"})
+            if (this.getIsSik) {
+              this.$router.push({ name: "SikdorangRecommendView" });
             } else {
               this.$router.push({ name: "MapMain" });
             }
@@ -355,7 +367,9 @@ export default {
             focusConfirm: false,
             preConfirm: () => {
               if (document.getElementById("datepicker").value) {
-                return document.getElementById("datepicker").value;
+                return this.datetoint(
+                  document.getElementById("datepicker").value
+                );
               } else {
                 return inputDate;
               }
