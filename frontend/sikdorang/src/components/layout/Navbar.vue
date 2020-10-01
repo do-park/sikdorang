@@ -22,6 +22,7 @@
           <router-link to="/trip/list">여행 리스트</router-link>
           <router-link to="/trip/createchedule">여행 생성(가이드)</router-link>
           <router-link to="/rectest">태그추천</router-link>
+          <router-link to="/party/list">동행 구하기</router-link>
           <span v-if="$store.state.isLogin"
             ><a @click="tryLogout">로그아웃</a></span
           >
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
   name: "Navbar",
@@ -40,15 +41,15 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions('mypage', ['actionUserInfo']),
+    ...mapActions("mypage", ["actionUserInfo"]),
     tryLogout() {
       window.$cookies.remove("auth-token");
       this.$store.state.isLogin = false;
       const userInfo = {
-          "userName": null,
-          "userBirth": null,
-          "userPhone": null,
-      }
+        userName: null,
+        userBirth: null,
+        userPhone: null,
+      };
       console.log(this.$cookies.get("auth-token"));
 
       const requestHeaders = {
@@ -62,7 +63,7 @@ export default {
         .post(`/rest-auth/logout/`, requestHeaders)
         .then((response) => {
           console.log(response);
-          this.actionUserInfo(userInfo)
+          this.actionUserInfo(userInfo);
 
           // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
           this.$router.push({ name: "Home" });

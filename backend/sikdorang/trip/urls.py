@@ -11,5 +11,5 @@ urlpatterns = [
     path('store_detail/<int:store_pk>', views.store_detail),
     path('today', views.trip_today),
     path('delete/<int:trip_pk>', views.delete_trip),
-    path('today_chk', views.today_chk),
+    path('date_chk', views.date_chk),
 ]

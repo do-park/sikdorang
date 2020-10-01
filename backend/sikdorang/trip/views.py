@@ -17,8 +17,11 @@ from rest_framework import viewsets
 def trip_list(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    trips = user.trip_set.all()
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    trips = Trip.objects.filter(user=user, tirp_date__gte=int(nowDate)).order_by('-trip_date')
     serializer = TripListSerializer(trips, many=True)
+
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -80,8 +83,8 @@ def trip_today(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
-    trip = get_object_or_404(Trip, user=user, date=nowDate)
+    nowDate = now.strftime('%Y%m%d')
+    trip = get_object_or_404(Trip, user=user, date=int(nowDate))
     serializer = TripListSerializer(trip)
     tplan = trip.plan
     plan_id = []
@@ -125,13 +128,11 @@ def delete_trip(request, trip_pk):
         return HttpResponse('잘 지워짐')
     return HttpResponse('니 글 아님 ㅅㄱ')
 
-@api_view(['GET'])
-def today_chk(request):
+@api_view(['POST'])
+def date_chk(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
-    trip = get_object_or_404(Trip, user=user, date=nowDate)
+    trip = Trip.objects.filter(user=user, date=request.data['date'])
     if trip.exists():
         return HttpResponse('1')
     else:
