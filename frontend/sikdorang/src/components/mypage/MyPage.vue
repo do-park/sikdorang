@@ -41,7 +41,6 @@ import TripList from './TripList.vue'
 import SavedSchedules from './SavedSchedules.vue'
 import GuideTourList from './GuideTourList.vue'
 import UserProfile from './UserProfile.vue'
-import MyPageMap from './MyPageMap.vue'
 import ReviewList from '../../views/review/ReviewList'
 
 export default {
@@ -51,7 +50,6 @@ export default {
 		SavedSchedules,
 		GuideTourList,
 		UserProfile,
-		MyPageMap,
 		ReviewList,
 	},
 	data() {
