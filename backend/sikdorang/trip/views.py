@@ -143,7 +143,7 @@ def delete_date_chk(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     trip = Trip.objects.filter(user=user, date=request.data['date'])
-    if trip.user == user:
-        trip.delete()
+    if trip[0].user == user:
+        trip[0].delete()
         return HttpResponse('잘 지워짐')
     return HttpResponse('error')
