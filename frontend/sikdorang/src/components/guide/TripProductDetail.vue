@@ -1,11 +1,12 @@
 <template>
     <div>
         <div>
-            <img :src="detail.img" alt="">
+            <img :src="imgSrc" alt="">
         </div>
         <div>
             <h3>[{{ detail.area }}]{{ detail.title }}</h3>
-            <span>{{ startDate }} ~ {{ endDate }} 1인 ￦{{ detail.price }}</span>
+            <div>{{ startDate }} ~ {{ endDate }}</div>
+            <div>{{ detail.price }}원</div>
         </div>
         <div>
             {{ detail.now_person }} / {{ detail.limit_person }}
@@ -35,17 +36,21 @@ export default {
     components: {
         viewer: Viewer,
     },
+    computed: {
+        imgSrc() {
+            return this.$store.state.IMG_SERVER_URL + this.detail.title_img
+        }
+    },
     mounted() {
-        // this.$axios.get(`/guide/detail_tour/${this.$route.params.item_pk}`)
-        // .then(res => {
-        //     console.log(res)
-        //     this.detail = res.data[0]
+        this.$axios.get(`/guide/detail_tour/${this.$route.params.item_pk}`)
+        .then(res => {
+            console.log(res)
+            this.detail = res.data[0]
             
-        
-        // })
-        // .catch(err => console.error(err))
-
-        // this.changeDate // 어디에 넣지
+            console.log('디테일', this.detail)
+            this.changeDate()
+        })
+        .catch(err => console.error(err))
     },
     data() {
         return {
@@ -77,9 +82,9 @@ export default {
         ]),
         changeDate() {
             console.log(this.detail)
-            this.start_date = `${this.detail.start_date.split('-')[0]}년 ${this.item.start_date.split('-')[1]}월 ${this.item.start_date.split('-')[2]}일`
-            this.end_date = `${this.detail.end_date.split('-')[0]}년 ${this.item.end_date.split('-')[1]}월 ${this.item.end_date.split('-')[2]}일`,
-            this.finish = (this.item.limit_person === this.item.now_person)
+            this.startDate = `${this.detail.start_date.split('-')[0]}년 ${this.detail.start_date.split('-')[1]}월 ${this.detail.start_date.split('-')[2]}일`
+            this.endDate = `${this.detail.end_date.split('-')[0]}년 ${this.detail.end_date.split('-')[1]}월 ${this.detail.end_date.split('-')[2]}일`,
+            this.finish = (this.detail.limit_person === this.detail.now_person)
         },
         onClick() {
             this.actionOrderTrip(this.detail)
