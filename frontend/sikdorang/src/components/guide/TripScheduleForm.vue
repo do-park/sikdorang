@@ -136,7 +136,7 @@ export default {
         .then((res) => {
           console.log(res);
           // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
-          // this.$router.push(`/trip/detail/${res.data.id}`);
+          this.$router.push(`/trip/detail/${res.data.id}`);
         })
         .catch((err) => console.error(err));
     },
