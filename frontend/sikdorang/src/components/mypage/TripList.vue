@@ -14,7 +14,7 @@
         동행 신청자 보기
       </button>
       <PartyForm id="partyForm" class="d-none" />
-      <div>여기 지도가 들어갑니다.</div>
+      <MyPageMap :todaySchedule="todaySchedule.schedules"/>
       <hr />
       <div
         v-for="(schedule, index) in todaySchedule.schedules"
@@ -72,6 +72,7 @@
 import { mapGetters, mapActions } from "vuex";
 import PartyForm from "../mypage/PartyForm.vue";
 import PartyRequests from "../mypage/PartyRequests.vue";
+import MyPageMap from "../mypage/MyPageMap.vue"
 
 const mypage = "mypage";
 
@@ -83,6 +84,7 @@ export default {
   components: {
     PartyForm,
     PartyRequests,
+    MyPageMap,
   },
   computed: {
     ...mapGetters("schedule", [
@@ -98,12 +100,15 @@ export default {
       todayReviewList: [],
     };
   },
-  mounted() {
+  async created() {
     if (this.getSchedules.length === 0) {
       this.initiateSchedule();
     } else {
-      this.saveSchedule();
+      await this.saveSchedule();
     }
+  },
+  mounted() {
+
     console.log(this.getScheduleName);
     console.log(this.getScheduleDate);
     this.getTodaySchedules();
@@ -148,7 +153,6 @@ export default {
     },
     saveSchedule() {
       const scheduleData = [];
-      //   console.log(this.getSchedules);
       if (this.getSchedules.length > 0) {
         this.getSchedules.forEach((schedule) => {
           scheduleData.push(schedule.id + String(schedule.userChoice.id));
@@ -167,7 +171,7 @@ export default {
         },
       };
       this.$axios
-        .post("/trip/", data, requestHeaders)
+        .post("trip/", data, requestHeaders)
         .then(() => {
           this.initiateSchedule();
         })
@@ -183,7 +187,7 @@ export default {
         },
       };
       this.$axios
-        .get("/trip/today", requestHeaders)
+        .get("trip/today", requestHeaders)
         .then((res) => {
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
