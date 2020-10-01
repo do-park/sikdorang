@@ -34,8 +34,10 @@ export default {
             if (userCode === 0) {
                 this.isLogin = true
             } else if (userCode === 1) {
+                this.isLogin = true
                 this.isGuide = true
             } else if (userCode === 2) {
+                this.isLogin = true
                 this.isAdmin = true
             }
             // this.actionTripList(tripItems)
