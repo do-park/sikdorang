@@ -1,15 +1,18 @@
 <template>
-    <div>
-        <img :src="item.img" alt="">
-        <h3>[{{ item.area }}]{{ item.title }}</h3>
-        <div>{{ startDate }} ~ {{ endDate }}</div>
-        <div>1인 : {{ item.price }} 원</div>
-        <div v-if="finish">인원 마감!</div>
-        <div v-else>
-            <div>{{ item.now_person }} / {{ item.limit_person }}</div>
-            <div v-if="ready">즉시 출발!</div>
-            <div v-else>최소인원({{ item.departure_person }}) 달성 시 출발</div>
+    <div class="row m-0">
+        <img :src="imgSrc" alt="" class="col-4 p-0 main-img">
+        <div class="col-8 p-0">
+            <h5 class="m-0">[{{ item.area }}]{{ item.title }}</h5>
+            <div><small>{{ startDate }} ~ {{ endDate }}</small></div>
+            <div>{{ item.price }} 원</div>
+            <div v-if="finish"><small>인원 마감!</small></div>
+            <div v-else class="row">
+                <div class="col-3">{{ item.now_person }} / {{ item.limit_person }}</div>
+                <div v-if="ready" class="col-9"><small>즉시 출발!</small></div>
+                <div v-else class="col-9"><small>최소인원({{ item.departure_person }}) 달성 시 출발</small></div>
+            </div>
         </div>
+        
     </div>
 </template>
 
@@ -27,9 +30,18 @@ export default {
             ready: this.item.now_person >= this.item.departure_person,
         }
     },
+    computed: {
+        imgSrc() {
+            return this.$store.state.IMG_SERVER_URL + this.item.title_img
+        }
+    }
 }
 </script>
 
 <style>
+
+.main-img {
+    object-fit: contain;
+}
 
 </style>
