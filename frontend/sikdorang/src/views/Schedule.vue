@@ -197,6 +197,8 @@ export default {
                       this.$axios.post("trip/delete/date_chk", data, requestHeaders)
                       .then(res => {
                         console.log(res, '삭제 완료')
+                        this.actionScheduleName(result.value[0]);
+                        this.actionScheduleDate(result.value[1]);
                       })
                     }
                   })
@@ -209,11 +211,14 @@ export default {
                     icon: "success",
                     title: "일정 등록을 시작합니다",
                   })
+                  this.actionScheduleName(result.value[0]);
+                  this.actionScheduleDate(result.value[1]);
                 }
               })
               .catch((err) => {
                 console.log(err);
               });
+
             // if (this.getIsSik) {
             //   this.$router.push({ name: "SikdorangRecommendView" });
             // } else {

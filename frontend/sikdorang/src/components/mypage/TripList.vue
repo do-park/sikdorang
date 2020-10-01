@@ -148,7 +148,6 @@ export default {
     },
     saveSchedule() {
       const scheduleData = [];
-      //   console.log(this.getSchedules);
       if (this.getSchedules.length > 0) {
         this.getSchedules.forEach((schedule) => {
           scheduleData.push(schedule.id + String(schedule.userChoice.id));
@@ -161,13 +160,14 @@ export default {
         name: this.getScheduleName,
         date: this.getScheduleDate,
       };
+      console.log('저장하는 중', data);
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
       this.$axios
-        .post("/trip/", data, requestHeaders)
+        .post("trip/", data, requestHeaders)
         .then(() => {
           this.initiateSchedule();
         })
@@ -183,7 +183,7 @@ export default {
         },
       };
       this.$axios
-        .get("/trip/today", requestHeaders)
+        .get("trip/today", requestHeaders)
         .then((res) => {
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
