@@ -137,3 +137,13 @@ def date_chk(request):
         return HttpResponse('1')
     else:
         return HttpResponse('0')
+    
+@api_view(['POST'])
+def delete_date_chk(request):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    trip = Trip.objects.filter(user=user, date=request.data['date'])
+    if trip.user == user:
+        trip.delete()
+        return HttpResponse('잘 지워짐')
+    return HttpResponse('error')

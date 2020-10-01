@@ -12,4 +12,5 @@ urlpatterns = [
     path('today', views.trip_today),
     path('delete/<int:trip_pk>', views.delete_trip),
     path('date_chk', views.date_chk),
+    path('delete/date_chk', views.delete_date_chk),
 ]
