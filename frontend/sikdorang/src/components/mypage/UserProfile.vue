@@ -6,7 +6,7 @@
     </div>
     <i @click="callImgChangeBtn()" class="camera fas fa-camera fa-1x"></i>
     <div class="input-wrap">
-      <input @change="fileChange" type="file" ref="userImage" class="img-change-btn" id="user-image" accept=".jpg, .jpeg">
+      <input @change="fileChange" type="file" ref="userImage" class="img-change-btn" id="user-image" accept=".jpg, .jpeg, .gif">
     </div>
     <div class="username">{{ getUserInfo.username }}</div>
     <AchievementBadge/>
