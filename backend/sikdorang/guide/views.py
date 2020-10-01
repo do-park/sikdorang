@@ -40,7 +40,7 @@ def create_tour(request):
 def list_tour(request):
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y%m%d')
-    tours = TripItemModel.objects.filter(tirp_date__gte=int(nowDate)).order_by('-trip_date')
+    tours = TripItemModel.objects.filter(trip_date__gte=int(nowDate)).order_by('-trip_date')
     serializer = TourSerializer(tours, many=True)
     return Response(serializer.data)
 
