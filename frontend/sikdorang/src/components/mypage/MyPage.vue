@@ -1,25 +1,34 @@
 <template>
 	<div>
 		<div v-if="!isGuide" class="be-guide-wrap">
-      <router-link to="#" class="be-guide">가이드 신청</router-link>
+			<router-link to="#" class="be-guide">가이드 신청</router-link>
 		</div>
 		<UserProfile/>
-		<hr>
-		<MyPageMap/>
 
-		<div class="">
-      <div class="btn-wrap">
-        <button class="todayBtn mpBtn selected" @click="onTripList">오늘의 일정</button>
-        <button class="savedSchedulesBtn mpBtn" @click="onSavedSchedules">모든 일정</button>
-        <button class="guideTourBtn mpBtn" @click="onGuideTourList">가이드 투어</button>
-        <button class="reviewBtn mpBtn" @click="onReviewList">작성한 리뷰</button>
+		<div class="mt-5">
+      <div class="row m-0">
+        <button class="col-3 todayBtn mpBtn selected" @click="onTripList">
+          <i class="fas fa-bullseye fa-2x"></i>
+          <div class="menu-font">오늘의 일정</div>
+        </button>
+        <button class="col-3 savedSchedulesBtn mpBtn" @click="onSavedSchedules">
+          <i class="far fa-calendar-alt fa-2x"></i>
+          <div class="menu-font">모든 일정</div>
+        </button>
+        <button class="col-3 guideTourBtn mpBtn" @click="onGuideTourList">
+          <i class="fas fa-suitcase-rolling fa-2x"></i>
+          <div class="menu-font">마이 투어</div>
+        </button>
+        <button class="col-3 reviewBtn mpBtn" @click="onReviewList">
+          <i class="fas fa-keyboard fa-2x"></i>
+          <div class="menu-font">작성 리뷰</div>
+        </button>
       </div>
-      <div id="schedule" class="schedule ptBorder">
+      <div id="schedule" class="schedule">
 				<SavedSchedules :savedSchedules="savedSchedules" />
 				<TripList :tripList="tripList" />
 				<GuideTourList :guideTourList="guideTourList" />
         <ReviewList :reviewList="reviewList" />
-
       </div>
     </div>
 	</div>
@@ -30,7 +39,6 @@ import TripList from './TripList.vue'
 import SavedSchedules from './SavedSchedules.vue'
 import GuideTourList from './GuideTourList.vue'
 import UserProfile from './UserProfile.vue'
-import MyPageMap from './MyPageMap.vue'
 import ReviewList from '../../views/review/ReviewList'
 
 export default {
@@ -40,8 +48,10 @@ export default {
 		SavedSchedules,
 		GuideTourList,
 		UserProfile,
-		MyPageMap,
 		ReviewList,
+	},
+	props: {
+		isGuide: Boolean,
 	},
 	data() {
 		return {
@@ -108,29 +118,25 @@ export default {
   font-size: 14px;
 }
 .schedule {
-
-    /* min-height: 500px; */
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 0px 30px 30px 30px;
+  margin-top: 1.5rem;
+  min-height: 200px;
 }
 
 .mpBtn {
-	background-color: gray;
-    color: white;
-    border: none;
-    outline: none !important;
-    width: 100px;
-    height: 50px;
+  border: none;
+  outline: none !important;
+  height: 100%;
+  padding: 0px 0px 5px;
+}
+.menu-icon {
+  font-size: 15px;
+}
+.menu-font {
+  font-size: 12px;
 }
 .selected {
-	background-color: rgba(143, 160, 242, 1);
-}
-.mpBtn:hover {
-    background-color: rgba(143, 160, 242, 0.8);
+  border-bottom: 3px solid crimson;
 }
 
-.btn-wrap {
-    text-align: left;
-}
 
 </style>
