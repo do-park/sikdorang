@@ -17,7 +17,7 @@ export default {
 	name : "MapField",
 	data() {
 		return {
-			destination : '',
+			destination : '5',
 			map: null,
 			startLat : null,
 			startLong : null,
