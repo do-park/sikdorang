@@ -239,9 +239,8 @@ export default {
 
 <style scoped>
 #map {
-	width: 400px;
-	height: 500px;
-	margin-left: auto;
-	margin-right: auto;
+	width: 100%;
+	height: 200px;
+	margin: 0.5rem auto;
 }
 </style>
