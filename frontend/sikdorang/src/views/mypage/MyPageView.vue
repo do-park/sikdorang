@@ -1,24 +1,22 @@
 <template>
     <div>
-        <MyPage v-if="isLogin"/>
-        <GuideMyPage v-if="isGuide"/>
-        <AdminMyPage v-if="isAdmin"/>
+        <MyPage v-if="isLogin" :isGuide="isGuide"/>
     </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import MyPage from '@/components/mypage/MyPage.vue'
-import GuideMyPage from '@/components/mypage/GuideMyPage.vue'
-import AdminMyPage from '@/components/mypage/AdminMyPage.vue'
+// import GuideMyPage from '@/components/mypage/GuideMyPage.vue'
+// import AdminMyPage from '@/components/mypage/AdminMyPage.vue'
 
 
 export default {
     name: "MyPageView",
     components: {
         MyPage,
-        GuideMyPage,
-        AdminMyPage,
+        // GuideMyPage,
+        // AdminMyPage,
     },
     mounted() {
         const requestHeaders = {
