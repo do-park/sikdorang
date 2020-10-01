@@ -1,6 +1,5 @@
 <template>
   <div v-if="savedSchedules">
-    <hr />
     <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
       <h1>썸띵 지도 들어갈 곳</h1>
       <div

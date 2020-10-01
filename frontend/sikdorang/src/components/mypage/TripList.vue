@@ -1,43 +1,64 @@
 <template>
   <div v-if="tripList">
     <div v-if="todaySchedule.name">
-      <h3>{{ todaySchedule.name }}</h3>
-      <p>{{ todaySchedule.date }}</p>
-      <button class="btn btn-success" @click="popupPartyForm">
-        동행구하기
+      <div class="row name-date">
+        <div class="col-8 p-0 schedule-name">{{ todaySchedule.name }}</div>
+        <div class="col-4 p-0 text-right schedule-date">{{ todaySchedule.date }}</div>
+      </div>
+      <!-- <button
+        class="btn btn-success"
+        @click="popupPartyForm"
+      >
+      동행구하기
       </button>
       <button
         class="btn btn-primary"
         data-toggle="modal"
         data-target="#todayMessage"
       >
-        동행 신청자 보기
+      동행 신청자 보기
       </button>
-      <PartyForm id="partyForm" class="d-none" />
+      <PartyForm id="partyForm" class="d-none" /> -->
       <MyPageMap :todaySchedule="todaySchedule.schedules"/>
-      <hr />
-      <div
-        v-for="(schedule, index) in todaySchedule.schedules"
-        :key="schedule.id"
-      >
-        <div v-if="(schedule.type === '식당') | (schedule.type === '카페')">
-          [{{ schedule.type }}] {{ schedule.store_name }} |
-          <button
-            v-if="todayReviewList[index] === 0"
-            class="btn btn-primary"
-            @click="goReviewForm(schedule.id)"
-          >
-            리뷰작성
-          </button>
-          <span v-else>이미 리뷰 작성했음</span>
+      <div class="schedule-wrap">
+        <div
+          v-for="(schedule, index) in todaySchedule.schedules"
+          :key="schedule.id"
+          class="row schedule-detail"
+        >
+          <div class="col-10 p-0 row m-0">
+            <div class="col-1 p-0">
+              <i v-if="(schedule.type === '식당')" class="fas fa-utensils"></i>
+              <i v-else-if="(schedule.type === '카페')" class="fas fa-coffee"></i>
+              <i v-else-if="(schedule.type === '관광지')" class="fas fa-place-of-worship"></i>
+              <i v-else class="fas fa-bed"></i>
+            </div>
+            <div class="col-6 p-0 font-weight-bold">
+              <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
+              <div v-else class="text-truncate">{{ schedule.name }}</div>
+            </div>
+            <div class="col-5 p-0 detail-tel text-center">{{schedule.tel}}</div>
+            <div class="col-12 p-0 detail-address">{{schedule.address}}</div>
+          </div>
+          <div class="col-2 p-0 text-center" v-if="(schedule.type === '식당') | (schedule.type === '카페')">
+            <button
+              v-if="todayReviewList[index] === 0"
+              class="review-btn"
+              @click="goReviewForm(schedule.id)"
+            >
+              <i class="fas fa-keyboard fa-2x"></i>
+              <div>리뷰작성</div>
+            </button>
+            <div class="review-finish" v-else>
+              <i class="fas fa-keyboard fa-2x"></i>
+              <div>작성완료</div>
+            </div>
+          </div>
         </div>
-        <div v-else>[{{ schedule.type }}] {{ schedule.name }}</div>
       </div>
-
-      <hr />
     </div>
     <div v-else>오늘 일정이 없습니다.</div>
-    <hr />
+
     <!-- Modal -->
     <div
       class="modal fade"
@@ -70,7 +91,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import PartyForm from "../mypage/PartyForm.vue";
+// import PartyForm from "../mypage/PartyForm.vue";
 import PartyRequests from "../mypage/PartyRequests.vue";
 import MyPageMap from "../mypage/MyPageMap.vue"
 
@@ -82,7 +103,7 @@ export default {
     tripList: Boolean,
   },
   components: {
-    PartyForm,
+    // PartyForm,
     PartyRequests,
     MyPageMap,
   },
@@ -258,7 +279,8 @@ export default {
     //일정 정보 가져오면 스케줄 리스트로 만들기
     async makeScheduleList(data) {
       this.todaySchedule.name = data.name;
-      this.todaySchedule.date = data.date;
+      const stringDate = data.date.toString()
+      this.todaySchedule.date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
 
       //일정 리스트로 만들기
       const plans = data.plan.split("-");
@@ -284,5 +306,40 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.name-date {
+  margin: 0px 5px;
+}
+.schedule-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+.schedule-date {
+  font-size: 16px;
+  height: 18px;
+  margin: auto;
+}
+.schedule-wrap {
+  margin: 5px;
+}
+.schedule-detail {
+  margin: 1rem 0px;
+}
+.detail-tel {
+  font-size: 14px;
+}
+.detail-address {
+  font-size: 12px;
+}
+.review-btn {
+  font-size: 11px;
+  background-color: crimson;
+  color: white;
+  padding: 2px;
+  border-radius: 20%;
+}
+.review-finish {
+  font-size: 11px;
+  background-color: gray;
+}
 </style>

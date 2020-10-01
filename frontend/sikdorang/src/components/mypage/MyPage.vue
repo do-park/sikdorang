@@ -29,10 +29,8 @@
 				<TripList :tripList="tripList" />
 				<GuideTourList :guideTourList="guideTourList" />
         <ReviewList :reviewList="reviewList" />
-
       </div>
     </div>
-    <MyPageMap/>
 	</div>
 </template>
 
@@ -120,8 +118,8 @@ export default {
   font-size: 14px;
 }
 .schedule {
-
-    min-height: 200px;
+  margin-top: 1.5rem;
+  min-height: 200px;
 }
 
 .mpBtn {
