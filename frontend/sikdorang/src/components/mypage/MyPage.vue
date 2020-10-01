@@ -1,28 +1,27 @@
 <template>
 	<div>
-		<h1>마이페이지</h1>
-		<hr>
+		<div v-if="!isGuide" class="be-guide-wrap">
+      <router-link to="#" class="be-guide">가이드 신청</router-link>
+		</div>
 		<UserProfile/>
 		<hr>
 		<MyPageMap/>
 
 		<div class="">
-            <div class="btn-wrap">
-                <button class="todayBtn mpBtn selected" @click="onTripList">오늘의 일정</button>
-                <button class="savedSchedulesBtn mpBtn" @click="onSavedSchedules">모든 일정</button>
-				<button class="guideTourBtn mpBtn" @click="onGuideTourList">가이드 투어</button>
-				<button class="reviewBtn mpBtn" @click="onReviewList">작성한 리뷰</button>
-
-            </div>
-            <div id="schedule" class="schedule ptBorder">
+      <div class="btn-wrap">
+        <button class="todayBtn mpBtn selected" @click="onTripList">오늘의 일정</button>
+        <button class="savedSchedulesBtn mpBtn" @click="onSavedSchedules">모든 일정</button>
+        <button class="guideTourBtn mpBtn" @click="onGuideTourList">가이드 투어</button>
+        <button class="reviewBtn mpBtn" @click="onReviewList">작성한 리뷰</button>
+      </div>
+      <div id="schedule" class="schedule ptBorder">
 				<SavedSchedules :savedSchedules="savedSchedules" />
 				<TripList :tripList="tripList" />
 				<GuideTourList :guideTourList="guideTourList" />
-                <ReviewList :reviewList="reviewList" />
+        <ReviewList :reviewList="reviewList" />
 
-            </div>
-        </div>
-
+      </div>
+    </div>
 	</div>
 </template>
 
@@ -99,6 +98,15 @@ export default {
 </script>
 
 <style scoped>
+.be-guide-wrap {
+  text-align: right;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+.be-guide {
+  color: gray;
+  font-size: 14px;
+}
 .schedule {
 
     /* min-height: 500px; */
