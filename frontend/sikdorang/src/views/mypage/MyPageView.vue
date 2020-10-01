@@ -28,8 +28,16 @@ export default {
         }
         this.$axios.get("rest-auth/user/", requestHeaders)
         .then(res => {
-            console.log(res)
+            console.log('인증 확인', res)
             this.actionUserInfo(res.data)
+            const userCode = res.data.user_code
+            if (userCode === 0) {
+                this.isLogin = true
+            } else if (userCode === 1) {
+                this.isGuide = true
+            } else if (userCode === 2) {
+                this.isAdmin = true
+            }
             // this.actionTripList(tripItems)
         })
         .catch(err => console.error(err))
@@ -42,7 +50,7 @@ export default {
     },
     data() {
         return {
-            isLogin: this.$store.state.isLogin,
+            isLogin: false,
             isGuide: false,
             isAdmin: false,
         }
