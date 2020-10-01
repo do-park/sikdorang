@@ -20,7 +20,9 @@ export default new Vuex.Store({
   state: {
     positions : [],
     isLogin: !!window.$cookies.get('auth-token'),
-    SERVER_URL: 'http://j3d202.p.ssafy.io:8080/',
+    // SERVER_URL: 'http://j3d202.p.ssafy.io:8080/',
+    SERVER_URL: 'http://localhost:8080/',
+    IMG_SERVER_URL: 'http://localhost:8080',
     LOCAL_URL: 'http://j3d202.p.ssafy.io:8181/project/sikdorang',
   },
   mutations: {
