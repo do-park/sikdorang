@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     createParty() {
+      console.log("crate");
       // this.tripPk = window.$cookies.get("party-trip-id");
       // this.partyData.trip_date = window.$cookies.get("party-trip-date");
       this.getHtml();
@@ -91,6 +92,7 @@ export default {
         .catch((err) => console.error(err));
     },
     updateParty() {
+      console.log("update");
       this.getHtml();
       const requestHeaders = {
         headers: {
