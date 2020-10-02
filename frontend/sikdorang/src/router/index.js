@@ -42,12 +42,12 @@ const requireNotAuth = () => (from, to, next) => {
 }
 
 const requireTags = () => (from, to, next) => {
-  if (store.state.isLogin && store.state.userInfo.done_cup) return next()
+  if (store.state.isLogin && store.state.mypage.userInfo.done_cup) return next()
   next('/idealcup')
 }
 
 const requireGuide = () => (from, to, next) => {
-  if (store.state.userInfo.user_code === 1) return next()
+  if (store.state.mypage.userInfo.user_code === 1) return next()
   next('/mypage')
 }
 
