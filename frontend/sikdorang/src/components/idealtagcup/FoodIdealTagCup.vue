@@ -105,7 +105,7 @@ export default {
       };
       console.log(this.tags);
       this.$axios
-        .post("trip/idealtag", { tags: this.tags }, requestHeaders)
+        .post("trip/idealcategory", { tags: this.tags }, requestHeaders)
         .then((res) => {
           console.log(res);
         })
