@@ -22,6 +22,7 @@ import PartyList from "../views/party/PartyList.vue"
 import PartyListItemDetail from "../views/party/PartyListItemDetail.vue"
 import PartyForm from "../views/party/PartyForm.vue"
 import MessageForm from "../components/message/MessageForm.vue"
+import Error404View from "../views/Error404View.vue"
 
 Vue.use(VueRouter)
 
@@ -170,6 +171,12 @@ const routes = [
     name: "MessageForm",
     component: MessageForm,
     // 삭제요청
+  },
+  //이 라우터는 항상 최하단에 위치해야 합니다.
+  {
+    path: "*",
+    name: "Error404View",
+    component:Error404View,
   },
 ]
 
