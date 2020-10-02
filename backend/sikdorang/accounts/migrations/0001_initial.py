@@ -38,6 +38,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('user_code', models.IntegerField(default=0)),
+                ('profile_image', models.ImageField(default='/media/profile/default.jpg', upload_to='profile/', verbose_name='프로필사진')),
                 ('phone_number', models.CharField(blank=True, max_length=20, verbose_name='휴대폰번호')),
                 ('age', models.CharField(blank=True, max_length=20, verbose_name='나이')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),

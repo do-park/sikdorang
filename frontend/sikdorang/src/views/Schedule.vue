@@ -103,6 +103,7 @@ export default {
 
   mounted() {
     this.resetScheduleStoreInfo();
+    this.createTripStarter()
   },
   methods: {
     ...mapActions("schedule", [
@@ -113,7 +114,124 @@ export default {
       "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
+    createTripStarter(){
+      // const self = this
+      // const inputValue = new Date().toISOString().substring(0, 10);
+      let inputValue = new Date()
+        .toLocaleString({
+          timeZone: "Asia/Seoul",
+        })
+        .substring(0, 12);
+      console.log(inputValue);
+      inputValue = this.datetostring(inputValue);
+      console.log(inputValue);
 
+      Swal.mixin({
+        confirmButtonText: "Next &rarr;",
+        showCancelButton: true,
+        progressSteps: ["1", "2"],
+      })
+        .queue([
+          {
+            icon: "info",
+            title: "일정의 이름을 입력하세요.",
+            input: "text",
+            allowOutsideClick: false,
+            inputValue: inputValue,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value.length === 0) {
+                  resolve("일정의 이름을 입력하세요.");
+                } else {
+                  resolve();
+                }
+              });
+            },
+          },
+          {
+            icon: "info",
+            title: "일정의 날짜를 입력하세요.",
+            html: `<input id="datepicker" type="date" value="inputValue">`,
+            focusConfirm: false,
+            allowOutsideClick: false,
+            preConfirm: () => {
+              if (document.getElementById("datepicker").value) {
+                return this.datetoint(
+                  document.getElementById("datepicker").value
+                );
+              } else {
+                return this.datetoint(inputValue);
+              }
+            },
+          },
+        ])
+        .then(async (result) => {
+          if (result.value) {
+            this.actionScheduleName(result.value[0]);
+            this.actionScheduleDate(result.value[1]);
+            console.log('이름 날짜 확인', result.value[0], result.value[1])
+
+            let date = result.value[1];
+
+            //스케줄 DB에 있나 확인하기
+            const requestHeaders = {
+              headers: {
+                Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+              },
+            };
+            const data = {
+              date: date,
+            };
+            this.$axios
+              .post("trip/date_chk", data, requestHeaders)
+              .then((res) => {
+                console.log("값 왔냐?", res);
+                if (res.data){
+                  Swal.fire({
+                    icon: "warning",
+                    title: "이미 등록한 일정이 있습니다. 덮어쓰시겠습니까?",
+                    allowOutsideClick: false,
+                    showCancelButton: true,
+                  })
+                  .then(result => {
+                    if (result.isDismissed){
+                      this.$router.push({name: 'MyPageView'})
+                    } else {
+                      this.$axios.post("trip/delete/date_chk", data, requestHeaders)
+                      .then(res => {
+                        console.log(res, '삭제 완료')
+                      })
+                    }
+                  })
+                  .catch(err => {
+                    console.error(err)
+                    this.$router.push({name: 'MyPageView'})
+                  })
+                } else {
+                  Swal.fire({
+                    icon: "success",
+                    title: "일정 등록을 시작합니다",
+                  })
+                  console.log('이름 날짜 확인', result.value[0], result.value[1])
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+
+            // if (this.getIsSik) {
+            //   this.$router.push({ name: "SikdorangRecommendView" });
+            // } else {
+            //   this.$router.push({ name: "MapMain" });
+            // }
+            //   }
+            // })
+            // .catch((error) => {
+            //   console.error(error);
+            // });
+          }
+        });
+    },
     // function about drag and drop
     handleClone(item) {
       let cloneMe = JSON.parse(JSON.stringify(item));
@@ -218,6 +336,7 @@ export default {
         .post("trip/date_chk", data, requestHeaders)
         .then((res) => {
           console.log("값 왔냐?", res);
+          return res.data
         })
         .catch((err) => {
           console.log(err);
@@ -228,77 +347,11 @@ export default {
       if (!plan) {
         return;
       }
-      // const inputValue = new Date().toISOString().substring(0, 10);
-      let inputValue = new Date()
-        .toLocaleString({
-          timeZone: "Asia/Seoul",
-        })
-        .substring(0, 12);
-      console.log(inputValue);
-      inputValue = this.datetostring(inputValue);
-      console.log(inputValue);
-
-      Swal.mixin({
-        confirmButtonText: "Next &rarr;",
-        showCancelButton: true,
-        progressSteps: ["1", "2"],
-      })
-        .queue([
-          {
-            icon: "info",
-            title: "일정의 이름을 입력하세요.",
-            input: "text",
-            inputValue: inputValue,
-            inputValidator: (value) => {
-              return new Promise((resolve) => {
-                if (value.length === 0) {
-                  resolve("일정의 이름을 입력하세요.");
-                } else {
-                  resolve();
-                }
-              });
-            },
-          },
-          {
-            icon: "info",
-            title: "일정의 날짜를 입력하세요.",
-            html: `<input id="datepicker" type="date" value="inputValue">`,
-            focusConfirm: false,
-            preConfirm: () => {
-              if (document.getElementById("datepicker").value) {
-                return this.datetoint(
-                  document.getElementById("datepicker").value
-                );
-              } else {
-                return this.datetoint(inputValue);
-              }
-            },
-          },
-        ])
-        .then(async (result) => {
-          if (result.value) {
-            this.actionScheduleName(result.value[0]);
-            let date = result.value[1];
-
-            //스케줄 DB에 있나 확인하기
-            this.checkIsScheduleDate(date);
-
-            Swal.fire({
-              icon: "success",
-              title: "일정을 등록했습니다.",
-            });
-            if (this.getIsSik) {
-              this.$router.push({ name: "SikdorangRecommendView" });
-            } else {
-              this.$router.push({ name: "MapMain" });
-            }
-            //   }
-            // })
-            // .catch((error) => {
-            //   console.error(error);
-            // });
-          }
-        });
+      if (this.getIsSik) {
+        this.$router.push({ name: "SikdorangRecommendView" });
+      } else {
+        this.$router.push({ name: "MapMain" });
+      }
     },
     readTrip(item) {
       let trip = item.plan.split("-");
