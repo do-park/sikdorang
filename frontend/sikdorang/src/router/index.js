@@ -25,6 +25,12 @@ import MessageForm from "../components/message/MessageForm.vue"
 
 Vue.use(VueRouter)
 
+// const getCookie = function(name) {
+//   var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+//   return value? value[2] : null;
+// }
+
+
 const requireAuth = () => (from, to, next) => {
   if (store.state.isLogin) return next()
   next('/')
