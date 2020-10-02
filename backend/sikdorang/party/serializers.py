@@ -13,6 +13,13 @@ class PartySerializer(serializers.ModelSerializer):
     class Meta: 
         model = Party
         fields = ['title', 'trip_date', 'content']
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title')
+        instance.trip_date = validated_data.get('trip_date')
+        instance.content = validated_data.get('content')
+        instance.save()
+
+        return instance
 
 class PartyMessageListSerializer(serializers.ModelSerializer):
     class Meta:
