@@ -51,11 +51,15 @@ export default {
     clickLogin() {
       this.$axios.post(`/rest-auth/login/`, this.loginData)
       .then (response => {
-        console.log(response)
+        // console.log(response)
         window.$cookies.set('auth-token',response.data.token)
         this.$store.state.isLogin = true
         this.actionUserInfo(response.data.user)
-        this.$emit('toMainPage');
+        if (response.data.user.done_cup) {
+          this.$emit('toMainPage');
+        } else {
+          this.$router.push('idealtagcup')
+        }
       })
       .catch(err => {
         console.log(err)

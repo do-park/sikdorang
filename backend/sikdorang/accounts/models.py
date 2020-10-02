@@ -11,6 +11,7 @@ class User(AbstractUser):
     profile_image = models.ImageField('프로필사진', default='/media/profile/default.jpg', upload_to="profile/")
     phone_number = models.CharField('휴대폰번호', blank=True, max_length=20)
     age = models.CharField('나이', blank=True, max_length=20)
+    done_cup = models.BooleanField(default=False)
     
 
 class UserPhoneCheck(models.Model):
