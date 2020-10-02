@@ -232,7 +232,7 @@ export default {
           } else {
             this.$router.push('/')
           }
-        });
+        })
     },
     // function about drag and drop
     handleClone(item) {
