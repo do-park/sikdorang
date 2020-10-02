@@ -229,6 +229,8 @@ export default {
             // .catch((error) => {
             //   console.error(error);
             // });
+          } else {
+            this.$router.push('/')
           }
         });
     },
