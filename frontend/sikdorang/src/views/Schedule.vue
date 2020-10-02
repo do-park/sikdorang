@@ -229,8 +229,10 @@ export default {
             // .catch((error) => {
             //   console.error(error);
             // });
+          } else {
+            this.$router.push('/')
           }
-        });
+        })
     },
     // function about drag and drop
     handleClone(item) {

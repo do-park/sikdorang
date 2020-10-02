@@ -66,6 +66,8 @@ export default {
         })
         .catch((err) => {
           console.error(err);
+          this.$store.state.isLogin = false
+          window.reload()
         });
       this.loginOrMypage = "마이페이지";
     }
