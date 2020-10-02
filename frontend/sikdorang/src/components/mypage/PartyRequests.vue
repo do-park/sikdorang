@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(request, index) in requestData" :key="index">
+    <!-- <div v-for="(request, index) in requestData" :key="index">
       <div>보낸사람:</div>
       <div>수신날짜: {{ request.created_at }}</div>
       <div>
@@ -8,6 +8,47 @@
         <viewer v-if="request.content" :initialValue="request.content" />
       </div>
       <hr />
+    </div> -->
+    <button
+      class="btn btn-primary"
+      data-toggle="modal"
+      :data-target="getPartyId_td"
+    >
+      동행 신청자 보기
+    </button>
+    <hr />
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      :id="getPartyId_id"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">동행 신청 현황</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div>보낸사람:</div>
+            <div>수신날짜: {{ request.created_at }}</div>
+            <div>
+              내용:
+              <viewer v-if="request.content" :initialValue="request.content" />
+            </div>
+            <hr />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -23,6 +64,14 @@ export default {
   },
   props: {
     partyPk: Number,
+  },
+  computed: {
+    getPartyId_td() {
+      return `#m${this.partyPk}`;
+    },
+    getPartyId_id() {
+      return `m${this.partyPk}`;
+    },
   },
   data() {
     return {

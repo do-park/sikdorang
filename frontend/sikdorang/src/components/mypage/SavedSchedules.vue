@@ -43,17 +43,19 @@
         >
           동행 구하기 글 작성
         </button>
-        <button
+        <PartyRequests :partyPk="schedule.id" />
+        <!-- start modal -->
+        <!-- <button
           class="btn btn-primary"
           data-toggle="modal"
           data-target="#targetMessage"
         >
           동행 신청자 보기
-        </button>
+        </button> -->
         <!-- <PartyForm :id="schedule.id" class="party-form d-none" /> -->
-        <hr />
+        <!-- <hr /> -->
         <!-- Modal -->
-        <div
+        <!-- <div
           class="modal fade"
           id="targetMessage"
           tabindex="-1"
@@ -80,7 +82,8 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+        <!-- end modal -->
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
