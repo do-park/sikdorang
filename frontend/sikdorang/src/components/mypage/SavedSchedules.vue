@@ -44,46 +44,6 @@
           동행 구하기 글 작성
         </button>
         <PartyRequests :partyPk="schedule.id" />
-        <!-- start modal -->
-        <!-- <button
-          class="btn btn-primary"
-          data-toggle="modal"
-          data-target="#targetMessage"
-        >
-          동행 신청자 보기
-        </button> -->
-        <!-- <PartyForm :id="schedule.id" class="party-form d-none" /> -->
-        <!-- <hr /> -->
-        <!-- Modal -->
-        <!-- <div
-          class="modal fade"
-          id="targetMessage"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                  동행 신청 현황
-                </h5>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <PartyRequests :partyPk="schedule.id" />
-              </div>
-            </div>
-          </div>
-        </div> -->
-        <!-- end modal -->
       </div>
     </div>
     <div v-else>등록된 일정이 없습니다.</div>
@@ -92,8 +52,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-
-// import PartyForm from "../mypage/PartyForm.vue";
 import PartyRequests from "../mypage/PartyRequests.vue";
 
 export default {

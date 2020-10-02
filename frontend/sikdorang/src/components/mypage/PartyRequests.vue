@@ -1,14 +1,5 @@
 <template>
   <div>
-    <!-- <div v-for="(request, index) in requestData" :key="index">
-      <div>보낸사람:</div>
-      <div>수신날짜: {{ request.created_at }}</div>
-      <div>
-        내용:
-        <viewer v-if="request.content" :initialValue="request.content" />
-      </div>
-      <hr />
-    </div> -->
     <button
       class="btn btn-primary"
       data-toggle="modal"
@@ -75,13 +66,9 @@ export default {
   },
   computed: {
     getPartyId_td() {
-      console.log(this.partyPk);
-      console.log(`#m${this.partyPk}`);
       return `#m${this.partyPk}`;
     },
     getPartyId_id() {
-      console.log(this.partyPk);
-      console.log(`m${this.partyPk}`);
       return `m${this.partyPk}`;
     },
   },
@@ -95,13 +82,10 @@ export default {
   },
   methods: {
     getPartyRequestData() {
-      console.log(this.partyPk);
       this.$axios
         .get(`/party/list_message/${this.partyPk}`)
         .then((res) => {
-          console.log(res);
           this.requestData = res.data;
-          console.log(this.requestData);
         })
         .catch((err) => {
           console.log(err);
