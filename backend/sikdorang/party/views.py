@@ -49,8 +49,8 @@ def update_party(request, party_pk):
     if party.user == user:
         serializer = PartySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=user)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            serializer.update(party, request.data)
+            return Response(serializer.data)
         
     return HttpResponse('Something Wrong')
 
