@@ -39,6 +39,8 @@ def idealtag(request):
     user = get_object_or_404(User, pk=request.user.pk)
     tags = request.data['tags']
     print('tag')
+    user.done_cup = True
+    user.save()
     for i in tags:
         tag = TagModel.objects.create(name=i, user=user, count=1)
     return HttpResponse('잘됨')

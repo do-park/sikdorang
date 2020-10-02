@@ -103,11 +103,11 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      console.log(this.tags);
+      // console.log(this.tags);
       this.$axios
         .post("trip/idealcategory", { tags: this.tags }, requestHeaders)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          //empty
         })
         .catch((err) => console.error(err));
     },

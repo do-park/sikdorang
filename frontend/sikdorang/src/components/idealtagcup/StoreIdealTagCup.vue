@@ -73,8 +73,8 @@ export default {
 			this.userChoice = []
 			this.round += 1
 			this.clickCount = -1
-			console.log('round:', this.round)
-			console.log('tags:', this.tags)
+			// console.log('round:', this.round)
+			// console.log('tags:', this.tags)
 			if (this.tags.length === 1) {
 				console.log('종료 로직을 실행합니다.')
 				this.isDone = true
@@ -87,8 +87,8 @@ export default {
 				}
 			}
 			this.$axios.post('trip/idealtag', {tags: this.tags}, requestHeaders)
-			.then(res => {
-				console.log(res)
+			.then(() => {
+				//empty
 			})
 			.catch(err => console.erro(err))
 		},
