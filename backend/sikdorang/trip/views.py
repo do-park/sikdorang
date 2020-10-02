@@ -19,7 +19,7 @@ def trip_list(request):
     user = get_object_or_404(User, pk=request.user.pk)
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y%m%d')
-    trips = Trip.objects.filter(user=user, tirp_date__gte=int(nowDate)).order_by('-trip_date')
+    trips = Trip.objects.filter(user=user, date__gte=int(nowDate)).order_by('-date')
     serializer = TripListSerializer(trips, many=True)
 
     return Response(serializer.data)

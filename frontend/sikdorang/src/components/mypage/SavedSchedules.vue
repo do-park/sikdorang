@@ -51,7 +51,7 @@
         >
           동행 신청자 보기
         </button>
-        <PartyForm :id="schedule.id" class="party-form d-none" />
+        <!-- <PartyForm :id="schedule.id" class="party-form d-none" /> -->
         <hr />
         <!-- Modal -->
         <div
@@ -91,7 +91,7 @@
 <script>
 import { mapGetters } from "vuex";
 
-import PartyForm from "../mypage/PartyForm.vue";
+// import PartyForm from "../mypage/PartyForm.vue";
 import PartyRequests from "../mypage/PartyRequests.vue";
 
 export default {
@@ -100,7 +100,7 @@ export default {
     savedSchedules: Boolean,
   },
   components: {
-    PartyForm,
+    // PartyForm,
     PartyRequests,
   },
   computed: {

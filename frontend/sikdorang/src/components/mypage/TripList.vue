@@ -185,6 +185,7 @@ export default {
       this.$axios
         .get("/trip/today", requestHeaders)
         .then((res) => {
+          console.log("@@@trip", res.data);
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
         })
