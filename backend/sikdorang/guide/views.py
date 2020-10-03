@@ -40,7 +40,7 @@ def create_tour(request):
 def list_tour(request):
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y%m%d')
-    tours = TripItemModel.objects.filter(trip_date__gte=int(nowDate)).order_by('-trip_date')
+    tours = TripItemModel.objects.filter(start_date__gte=int(nowDate)).order_by('-start_date')
     serializer = TourSerializer(tours, many=True)
     return Response(serializer.data)
 
@@ -67,6 +67,7 @@ def list_guide(request, username):
 
 @api_view(['POST'])
 def paid(request, trip_pk):
+    print(request.data)
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     trip = get_object_or_404(TripItemModel, pk=trip_pk)

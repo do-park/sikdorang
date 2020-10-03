@@ -1,9 +1,12 @@
 <template>
-    <div class="tour" @click="onClick">
-        <div>{{ tour.title_img }}</div>
-        <div>[{{ tour.area}}]{{ tour.title }}</div>
-        <div>{{ tour.start_date }}~{{ tour.end_date }}</div>
-        <div>{{ tour.price }}원</div>
+    <div class="row tour" @click="onClick">
+        <div class="col-3 p-0">
+            <img class="tour-title-img" :src="tour.title_img" alt="">
+        </div>
+        <div class="col-9 p-0 my-auto">
+            <div class="tour-title text-truncate">[{{ tour.area}}]{{ tour.title }}</div>
+            <div class="tour-date">{{ tour.start_date }}~{{ tour.end_date }}</div>
+        </div>
     </div>
 </template>
 
@@ -25,6 +28,23 @@ export default {
 <style scoped>
 .tour {
     cursor: pointer;
-    border: 1px black solid;
+    margin: 1rem 5px;
+}
+.tour-title-img {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+} 
+.tour-title {
+    font-size: 15px;
+    font-weight: bolder;
+}
+.tour-date {
+    font-size: 13px;
 }
 </style>

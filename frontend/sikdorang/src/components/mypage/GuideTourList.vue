@@ -19,24 +19,7 @@ export default {
   },
   data() {
     return {
-      tourList: [
-        {id: 1,
-        title_img: '이미지',
-        title: '가을 여행',
-        area: '구미',
-        start_date: '2020-9-22',
-        end_date: '2020-9-23',
-        price: 100,
-        },
-        {id: 2,
-        title_img: '이미지',
-        title: '가을 여행2',
-        area: '구미',
-        start_date: '2020-9-22',
-        end_date: '2020-9-23',
-        price: 100,
-        },
-      ],
+      tourList: [],
     }
   },
   mounted() {
@@ -53,7 +36,15 @@ export default {
       this.$axios
       .get("/guide/paidtour", requestHeaders)
       .then((res) => {
-        console.log(res)
+        res.data.forEach((target, index) => {
+          const stringDate = target.start_date.toString()
+          res.data[index].start_date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
+          const stringDate2 = target.end_date.toString()
+          res.data[index].end_date = `${stringDate2.substr(0,4)}-${stringDate2.substr(4,2)}-${stringDate2.substr(6,2)}`
+          console.log('디스',this.$store.state.IMG_SERVER_URL + res.data[index].title_img)
+          res.data[index].title_img = this.$store.state.IMG_SERVER_URL + res.data[index].title_img
+        })
+        this.tourList = res.data
       })
       .catch((err) => {
         console.log(err)

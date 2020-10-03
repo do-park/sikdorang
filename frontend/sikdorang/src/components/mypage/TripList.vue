@@ -35,10 +35,10 @@
               <i class="fas fa-keyboard fa-2x"></i>
               <div>리뷰작성</div>
             </button>
-            <div class="review-finish" v-else>
+            <button class="review-finish" v-else>
               <i class="fas fa-keyboard fa-2x"></i>
               <div>작성완료</div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
