@@ -100,7 +100,7 @@ export default {
               "aria-label": "Upload your profile picture",
             },
           }).then((result) => {
-            console.log(result);
+            console.log("!!!!!!!!!!!!!!",result);
             if (result.value) {
               const reader = new FileReader();
               reader.onload = (e) => {
@@ -109,7 +109,7 @@ export default {
                   imageUrl: e.target.result,
                   imageAlt: "영수증을 업로드합니다.",
                 }).then((response) => {
-                  console.log(response);
+                  console.log("???????????????",response);
                   const requestHeaders = {
                     headers: {
                       Authorization: `JWT ${this.$cookies.get("auth-token")}`,
@@ -117,16 +117,13 @@ export default {
                    },
                   };
                   //이미지 form
-                  let fd = new FormData()
+                  let data = new FormData()
+                
+                  //이미지와 음식점 이름 넣기
+                  data.append('visit_image',e.target.result)
+                  data.append('rest_name',rest.store_name)
 
-                  fd['visit_img'] = e.target.result)
-                  fd['username'] = e.target.result)
-                  const data = {
-                    // rest_name : rest.store_name,
-                    // rest_id : rest.id,
-                    visit_image : fd,
-
-                  }
+                  console.log("data!!!!",data)
                   this.$axios
                     .post(
                       `achievement/visit_create/${rest.id}`,

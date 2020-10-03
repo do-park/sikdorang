@@ -6,6 +6,13 @@ from django.http import HttpResponse
 from .serializers import *
 from .models import *
 from api.models import Store
+from PIL import Image
+import pytesseract
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 
 # Create your views here.
 @api_view(['GET'])
@@ -55,12 +62,43 @@ def visit_create(request, theme_pk):
     # visit_image = request.data['visit_image']
     # print(f'rest_name : {rest_name}')
     # print(f'visit_image : {visit_image}')
-
+ 
+    
     if flag:
-        '''
-        1. 이미지 분석 -> 글자 추출 분석 & 위치 비교
-        2. 이미지 분석 결과가 맞으면  -> 이미지 저장 + 방문 처리
-        '''
+        #이미지 경로
+        # image_path = request.data['visit_image']
+        image_path = r'C:\Users\multicampus\Desktop\s03p23d202\textdetection\phone_bill.jpg'
+        
+        #검증할 음식점 이름
+        rest_name = request.data['rest_name']
+        found = False
+        # 결과 찾는 로직
+
+        # 1. pytesseract만 이용했을 시
+        # image = Image.open(r'C:\Users\multicampus\Desktop\s03p23d202\textdetection\screenshot.jpg')
+        image = Image.open(image_path)
+        # print(image)
+        text = pytesseract.image_to_string(image,lang='kor')
+
+        # 결과 단어들 리스트
+        results = text.replace("\n",",").replace(" ","").split(',')
+        print(results)
+
+        for result in results :
+            for i in range(len(result)-len(rest_name)):
+                if result[i:i+len(rest_name)] == rest_name :
+                    found = result[i:i+len(rest_name)]
+                    print(f'idx:{i}, found: {found}')
+                    break
+        return HttpResponse('방문 클리어 등록.')
+
+        # if not found :
+        #     img_ori = cv2.imread(image_path)
+
+        #     height, width, channel = img_ori.shape
+        #     #Convert Image to Grayscale
+        #     gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
+
         return HttpResponse('방문 클리어 등록.')
     else:
         return HttpResponse('이미 방문한 곳 입니다.')
