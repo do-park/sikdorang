@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>오늘의 일정</h1>
-    <p>일정을 삭제하려면 클릭하세요.</p>
+    일정 이름: {{ scheduleName }} <br />날짜: {{ scheduleDate }}
     <draggable
       v-model="clonedItems"
       :options="clonedItemOptions"
@@ -32,12 +31,12 @@
 
     <v-btn @click="createTrip()">CREATE</v-btn>
     <br />
-    <span v-for="(item, index) in saved" :key="index">
+    <!-- <span v-for="(item, index) in saved" :key="index">
       <v-btn @click="readTrip(item)">READ {{ index }}</v-btn>
       <v-btn @click="updateTrip(item)">UPDATE {{ index }}</v-btn>
       <v-btn @click="deleteTrip(item)">DELETE {{ index }}</v-btn>
       <br />
-    </span>
+    </span> -->
   </div>
 </template>
 
@@ -59,7 +58,8 @@ export default {
   data() {
     return {
       userId: null,
-      scheduleDate: "",
+      scheduleName: null,
+      scheduleDate: null,
       // for test
       saved: [],
       clonedItems: [],
@@ -103,7 +103,7 @@ export default {
 
   mounted() {
     this.resetScheduleStoreInfo();
-    this.createTripStarter()
+    this.createTripStarter();
   },
   methods: {
     ...mapActions("schedule", [
@@ -114,7 +114,7 @@ export default {
       "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
-    createTripStarter(){
+    createTripStarter() {
       // const self = this
       // const inputValue = new Date().toISOString().substring(0, 10);
       let inputValue = new Date()
@@ -169,7 +169,8 @@ export default {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
             this.actionScheduleDate(result.value[1]);
-            console.log('이름 날짜 확인', result.value[0], result.value[1])
+            this.scheduleName = result.value[0];
+            this.scheduleDate = result.value[1];
 
             let date = result.value[1];
 
@@ -186,33 +187,38 @@ export default {
               .post("trip/date_chk", data, requestHeaders)
               .then((res) => {
                 console.log("값 왔냐?", res);
-                if (res.data){
+                if (res.data) {
                   Swal.fire({
                     icon: "warning",
                     title: "이미 등록한 일정이 있습니다. 덮어쓰시겠습니까?",
                     allowOutsideClick: false,
                     showCancelButton: true,
                   })
-                  .then(result => {
-                    if (result.isDismissed){
-                      this.$router.push({name: 'MyPageView'})
-                    } else {
-                      this.$axios.post("trip/delete/date_chk", data, requestHeaders)
-                      .then(res => {
-                        console.log(res, '삭제 완료')
-                      })
-                    }
-                  })
-                  .catch(err => {
-                    console.error(err)
-                    this.$router.push({name: 'MyPageView'})
-                  })
+                    .then((result) => {
+                      if (result.isDismissed) {
+                        this.$router.push({ name: "MyPageView" });
+                      } else {
+                        this.$axios
+                          .post("trip/delete/date_chk", data, requestHeaders)
+                          .then((res) => {
+                            console.log(res, "삭제 완료");
+                          });
+                      }
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                      this.$router.push({ name: "MyPageView" });
+                    });
                 } else {
                   Swal.fire({
                     icon: "success",
                     title: "일정 등록을 시작합니다",
-                  })
-                  console.log('이름 날짜 확인', result.value[0], result.value[1])
+                  });
+                  console.log(
+                    "이름 날짜 확인",
+                    result.value[0],
+                    result.value[1]
+                  );
                 }
               })
               .catch((err) => {
@@ -230,9 +236,9 @@ export default {
             //   console.error(error);
             // });
           } else {
-            this.$router.push('/')
+            this.$router.push("/");
           }
-        })
+        });
     },
     // function about drag and drop
     handleClone(item) {
@@ -338,7 +344,7 @@ export default {
         .post("trip/date_chk", data, requestHeaders)
         .then((res) => {
           console.log("값 왔냐?", res);
-          return res.data
+          return res.data;
         })
         .catch((err) => {
           console.log(err);
