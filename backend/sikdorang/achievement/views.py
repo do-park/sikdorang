@@ -53,8 +53,6 @@ def visit_create(request, theme_pk):
     user = get_object_or_404(User, pk=request.user.pk)
     CVisit, flag = AchieveUser.objects.get_or_create(count=theme_pk, user=user, receipt=request.data['receipt'])
 
-    # print(f'CVisit: {CVisit}, flag : {flag}')
-    # print(CVisit)
     # 가게 위치와 내 위치 -> 현재 theme store data에 위치 정보를 등록하지 않았다....
     
     print(CVisit.receipt)
@@ -72,7 +70,7 @@ def visit_create(request, theme_pk):
         # 1. pytesseract만 이용했을 시
         # image = Image.open(r'C:\Users\multicampus\Desktop\s03p23d202\textdetection\screenshot.jpg')
         image = Image.open(image_path)
-        # print(image)
+       
         text = pytesseract.image_to_string(image,lang='kor')
 
         # 결과 단어들 리스트
@@ -93,23 +91,10 @@ def visit_create(request, theme_pk):
             return HttpResponse(1)
         else :
             # 실패일 때
+
+            # 2. opencv + pytesseract 로직
+            
             return HttpResponse(-1)
         
-        # for result in results :
-        #     print(result)
-        #     for i in range(len(result)-len(rest_name)):
-        #         if result[i:i+len(rest_name)] == rest_name :
-        #             found = result[i:i+len(rest_name)]
-        #             print(f'idx:{i}, found: {found}')
-        #             break
-        
-
-        # if not found :
-        #     img_ori = cv2.imread(image_path)
-
-        #     height, width, channel = img_ori.shape
-        #     #Convert Image to Grayscale
-        #     gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
-
-        # return HttpResponse('방문 클리어 등록.')
+    
  
