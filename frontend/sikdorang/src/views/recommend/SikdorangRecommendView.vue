@@ -1,11 +1,14 @@
 <template>
     <div>
         <div>식도랑 추천 코스 생성중</div>
+        <div>
+            <b-spinner class="m-5" label="Busy"></b-spinner>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
 const CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
@@ -25,6 +28,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions('mapEvent', ['actionPlanList']),
         divideRecommendation(cf, index) {
 			if (cf === "식당" | cf === "카페"){
 				this.getSCRecommendation(cf, index)
@@ -63,7 +67,7 @@ export default {
                     "address": items[0].addr1 + items[0].addr2,
                     "latitude": items[0].mapy,
                     "longitude": items[0].mapx,
-                    "category": "관광지",
+                    "category": cf,
                     "tags": "",
                     "img": items[0].firstimage,
                 }
@@ -96,10 +100,11 @@ export default {
                 await this.divideRecommendation(this.schedules[i].name, i)
             }
         }
-        console.log('추천 결과 확인', this.schedules)
-        this.schedules.forEach(e => {
-            console.log(e.userChoice)
-        })
+        console.log('스케줄 저장 확인', this.schedules)
+        this.actionPlanList(this.schedules)
+        setTimeout(() => {
+            this.$router.replace('/mypage')
+        }, 3000)
         // 생성 완료
     }
 }
