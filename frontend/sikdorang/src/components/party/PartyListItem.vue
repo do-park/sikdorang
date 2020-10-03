@@ -3,7 +3,7 @@
     <div @click="onClick()">
       <h5 class="mx-3">{{ partyItem.title }}</h5>
       <p class="mx-3">날짜: {{ partyItem.trip_date }}</p>
-      <p class="text-right mx-3">작성자: {{ partyItem.user.username }}</p>
+      <p class="text-right mx-3">{{ partyItem.user.username }}</p>
       <hr style="width: 100%" />
     </div>
   </div>

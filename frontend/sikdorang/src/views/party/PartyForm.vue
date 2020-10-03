@@ -1,27 +1,37 @@
 <template>
   <div>
+    <div style="height: 5vh"></div>
+
     <div>
-      <label for="title">제목</label>
       <input
-        class="form-control"
+        class="form-control mx-3"
         type="text"
         id="title"
         v-model="partyData.title"
-        placeholder="[지역]을 입력해 주세요"
+        placeholder="제목, [지역]을 입력해 주세요"
       />
     </div>
     <editor
+      class="mx-3 my-1"
       ref="toastuiEditor"
       :initialValue="editorText"
       :options="editorOptions"
-      height="500px"
+      height="450px"
       initialEditType="wysiwyg"
       previewStyle="vertical"
     />
-    <button v-if="type == 1" class="btn btn-primary" @click="updateParty()">
-      수정
-    </button>
-    <button v-else class="btn btn-primary" @click="createParty()">생성</button>
+    <div class="text-right">
+      <button
+        v-if="type == 1"
+        class="btn btn-primary my-3 mx-3"
+        @click="updateParty()"
+      >
+        수정
+      </button>
+      <button v-else class="btn btn-primary my-2 mx-3" @click="createParty()">
+        생성
+      </button>
+    </div>
   </div>
 </template>
 
