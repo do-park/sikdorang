@@ -1,29 +1,54 @@
 <template>
-  <div v-if="tripSchedule">
-    <h1>동행 상세보기</h1>
-    <h4>제목: {{ tripSchedule.name }}</h4>
-    날짜: {{ tripSchedule.date }} <br />
-    작성자: {{ party.user.username }} <br />
-    <button
-      v-if="party.user.username !== username"
-      class="btn btn-primary"
-      @click="createMessage()"
-    >
-      동행 신청하기
-    </button>
-    <button v-else class="btn btn-secondary disabled">
-      내가 작성한 글입니다.
-    </button>
-    <h4>map something</h4>
-    <!-- <MapMain /> -->
-    <h3>일정</h3>
-    <div v-for="(schedule, index) in tripSchedule.schedules" :key="index">
-      [{{ schedule.type }}] {{ schedule.store_name }}{{ schedule.name }} |
-      {{ schedule.address }}
+  <div v-if="tripSchedule" class="my-0 mx-0">
+    <div style="height: 5vh"></div>
+    <h3 class="text-center">{{ tripSchedule.name }}</h3>
+    <div>
+      <div class="row mx-3">
+        <div class="col-6 text-left">날짜: {{ tripSchedule.date }}<br /></div>
+        <div class="col-6 text-right">{{ party.user.username }}<br /></div>
+      </div>
+      <div class="text-center my-2">
+        <button
+          v-if="party.user.username !== username"
+          class="btn btn-primary mb-0"
+          @click="createMessage()"
+        >
+          동행 신청하기
+        </button>
+        <button v-else class="btn btn-secondary disabled mb-0">
+          내가 작성한 글입니다.
+        </button>
+      </div>
     </div>
-    <h3>설명</h3>
-    {{ tripSchedule.content }}
-    <div v-if="party.user.username === username">
+    <div style="height: 5vh"></div>
+    <div class="mx-3">
+      <h4>map something</h4>
+      <!-- <MapMain /> -->
+    </div>
+    <div style="height: 5vh"></div>
+    <div class="mx-3">
+      <h4>일정</h4>
+      <div v-for="(schedule, index) in tripSchedule.schedules" :key="index">
+        <i v-if="schedule.type === '식당'" class="fas fa-utensils"></i>
+        <i v-else-if="schedule.type === '카페'" class="fas fa-coffee"></i>
+        <i
+          v-else-if="schedule.type === '관광지'"
+          class="fas fa-place-of-worship"
+        ></i>
+        <i v-else class="fas fa-bed"></i>
+        {{ schedule.store_name }}{{ schedule.name }} |
+        {{ schedule.address }}
+      </div>
+      <div style="height: 5vh"></div>
+      <h4>설명</h4>
+      <viewer
+        height="500px"
+        v-if="tripSchedule.content"
+        :initialValue="tripSchedule.content"
+      />
+    </div>
+    <div style="height: 5vh"></div>
+    <div v-if="party.user.username === username" class="text-right mx-3 my-3">
       <button class="btn btn-primary" @click="updateParty()">
         글 수정하기
       </button>
@@ -35,10 +60,13 @@
 <script>
 // import MapMain from "@/views/MapMain.vue";
 import Swal from "sweetalert2";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import { Viewer } from "@toast-ui/vue-editor";
 
 export default {
   name: "PartyListItemDetail",
   components: {
+    viewer: Viewer,
     // MapMain,
   },
   data() {
