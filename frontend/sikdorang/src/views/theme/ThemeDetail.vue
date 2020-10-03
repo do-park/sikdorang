@@ -158,7 +158,8 @@ export default {
                               this.$set(this.storeClear, rest.id, 1);
                               this.actionStoreClear(this.storeClear);
                               //방문 변경 새로고침하는 함수
-                              // this.updateClear(rest.id);
+                              this.updateClear(rest.id);
+                              
                               Swal.fire("Yummy!", "방문 완료!", "success");
 
                             }
