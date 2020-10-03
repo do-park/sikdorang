@@ -1,7 +1,12 @@
 <template>
   <div v-if="guideTourList">
-    <div v-for="tour in tourList" :key="tour.id">
-      <GuideTourListItem :tour="tour" />
+    <div v-if="tourList.length > 0">
+      <div v-for="tour in tourList" :key="tour.id">
+        <GuideTourListItem :tour="tour" />
+      </div>
+    </div>
+    <div v-else>
+      <div class="margin-custom">예정된 투어가 없습니다.</div>
     </div>
   </div>
 </template>
@@ -55,6 +60,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.margin-custom {
+  margin: 0px 5px;
+}
 </style>

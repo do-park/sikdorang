@@ -1,7 +1,12 @@
 <template>
   <div v-if="reviewList">
-    <div v-for="review in reviews" :key="review.id">
-      <ReviewItem :review="review"/>
+    <div v-if="reviews.length > 0">
+      <div v-for="review in reviews" :key="review.id">
+        <ReviewItem :review="review"/>
+      </div>
+    </div>
+    <div v-else>
+      <div class="margin-custom">작성한 리뷰가 없습니다.</div>
     </div>
   </div>
 </template>
@@ -45,5 +50,7 @@ export default {
 </script>
 
 <style scoped>
-
+.margin-custom {
+  margin: 0px 5px;
+}
 </style>
