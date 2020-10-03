@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="text-center my-3">명예의 전당 [ {{ theme_name }} ]편</h3>
+    <h3 class="text-center my-3">명예의 전당 [ {{ theme_name }} ] 편</h3>
     <div class="container">
       <div class="row text-center">
         <div
