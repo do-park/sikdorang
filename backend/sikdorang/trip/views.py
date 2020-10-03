@@ -29,7 +29,7 @@ def checkID(request, name):
     User = get_user_model()
     user = User.objects.filter(username=name)
     minFlag = maxFlag = numFlag = False
-    if len(name) <= 5:
+    if len(name) < 5:
         minFlag = True
     if len(name) >= 16:
         maxFlag = True

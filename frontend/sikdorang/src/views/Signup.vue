@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: "Signup",
   data() {
@@ -79,6 +81,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions('mypage', ['actionUserInfo']),
     turnUsernameOkToFalse() {
       this.usernameOk = false;
       this.clickedCheckUsername = false;
@@ -97,6 +100,7 @@ export default {
           })
           .catch((err) => {
             console.log(err);
+            this.errorMsg = '아이디를 다시 확인해주세요.'
           });
       }
     },
@@ -117,8 +121,6 @@ export default {
       }
 
       if (pass) {
-        console.log(this.signupData);
-
         this.$axios
           .post(`/rest-auth/registration/`, this.signupData)
           .then((response) => {
@@ -144,7 +146,8 @@ export default {
         .put(`/rest-auth/user/`, this.signupData, requestHeaders)
         .then((response) => {
           console.log(response);
-          this.$router.push({ name: "IdealTagCup" });
+          this.actionUserInfo(response.data)
+          this.$router.push('/idealtagcup');
         })
         .catch((err) => {
           console.log(err);
