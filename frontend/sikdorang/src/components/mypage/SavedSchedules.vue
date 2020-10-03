@@ -2,28 +2,32 @@
   <div v-if="savedSchedules">
     <b-modal id="modal-scrollable" scrollable :title="scheduleName" hide-footer>
       <h1>썸띵 지도 들어갈 곳</h1>
-      <div
-        class="my-4"
-        v-for="ListItem in scheduleList"
-        :key="ListItem.id"
-      >
+      <div class="my-4" v-for="ListItem in scheduleList" :key="ListItem.id">
         <div class="row m-0">
           <div class="col-1 p-0">
-            <i v-if="(ListItem.type === '식당')" class="fas fa-utensils"></i>
-            <i v-else-if="(ListItem.type === '카페')" class="fas fa-coffee"></i>
-            <i v-else-if="(ListItem.type === '관광지')" class="fas fa-place-of-worship"></i>
+            <i v-if="ListItem.type === '식당'" class="fas fa-utensils"></i>
+            <i v-else-if="ListItem.type === '카페'" class="fas fa-coffee"></i>
+            <i
+              v-else-if="ListItem.type === '관광지'"
+              class="fas fa-place-of-worship"
+            ></i>
             <i v-else class="fas fa-bed"></i>
           </div>
           <div class="col-6 p-0 font-weight-bold">
-            <div v-if="(ListItem.type === '식당') | (ListItem.type === '카페')" class="text-truncate">{{ ListItem.store_name }}</div>
+            <div
+              v-if="(ListItem.type === '식당') | (ListItem.type === '카페')"
+              class="text-truncate"
+            >
+              {{ ListItem.store_name }}
+            </div>
             <div v-else class="text-truncate">{{ ListItem.name }}</div>
           </div>
-          <div class="col-5 p-0 detail-tel text-center">{{ListItem.tel}}</div>
-          <div class="col-12 p-0 detail-address">{{ListItem.address}}</div>
+          <div class="col-5 p-0 detail-tel text-center">{{ ListItem.tel }}</div>
+          <div class="col-12 p-0 detail-address">{{ ListItem.address }}</div>
         </div>
       </div>
     </b-modal>
-    <div v-if="(allSchedule.length > 0)" class="small-margin">
+    <div v-if="allSchedule.length > 0" class="small-margin">
       <div
         @click="goScheduleDetail(schedule)"
         v-for="schedule in allSchedule"
@@ -31,12 +35,13 @@
         class="row m-0 mb-2"
       >
         <div class="col-8 p-0">
-          <div v-b-modal.modal-scrollable class="schedule-name text-truncate">{{ schedule.name }}</div>
+          <div v-b-modal.modal-scrollable class="schedule-name text-truncate">
+            {{ schedule.name }}
+          </div>
           <div>{{ schedule.date }}</div>
         </div>
         <div class="col-4 p-0 row m-0">
           <div class="col-6 p-0 text-center">
-
             <!-- 동행 상세페이지로 이동 -->
             <button
               v-if="schedule.party_chk"
@@ -45,7 +50,7 @@
             >
               <i class="fas fa-users fa-2x icon-active"></i>
             </button>
-            
+
             <!-- 동행 구하는 글 쓰기 -->
             <button
               v-else
@@ -56,7 +61,6 @@
             </button>
           </div>
           <div class="col-6 p-0 text-center">
-
             <!-- 동행 활성화일 때 -->
             <button
               v-if="schedule.party_chk"
@@ -66,12 +70,9 @@
             >
               <i class="fas fa-comment fa-2x icon-active"></i>
             </button>
-            
+
             <!-- 동행 비활성화일 때 -->
-            <button
-              v-else
-              class=""
-            >
+            <button v-else class="">
               <i class="fas fa-comment fa-2x icon-no-active"></i>
             </button>
           </div>
@@ -172,7 +173,7 @@ export default {
     },
     createParty(scheduleId, scheduleDate) {
       this.$cookies.set("party-trip-id", scheduleId);
-      var intDate = scheduleDate.split('-').join('')*1;
+      var intDate = scheduleDate.split("-").join("") * 1;
       this.$cookies.set("party-trip-date", intDate);
       this.$cookies.set("party-type", 0);
       this.$router.push({ name: "PartyForm" });
@@ -212,10 +213,13 @@ export default {
       this.$axios
         .get("/trip/list", requestHeaders)
         .then((res) => {
-          res.data.forEach(function(target, index) {
-            const stringDate = target.date.toString()
-            res.data[index].date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
-          })
+          res.data.forEach(function (target, index) {
+            const stringDate = target.date.toString();
+            res.data[index].date = `${stringDate.substr(
+              0,
+              4
+            )}-${stringDate.substr(4, 2)}-${stringDate.substr(6, 2)}`;
+          });
           this.allSchedule = res.data;
         })
         .catch((err) => {
