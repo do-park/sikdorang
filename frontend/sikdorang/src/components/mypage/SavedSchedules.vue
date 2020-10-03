@@ -1,7 +1,7 @@
 <template>
   <div v-if="savedSchedules">
     <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
-      <h1>썸띵 지도 들어갈 곳</h1>
+      <MyPageMap :todaySchedule="scheduleList"/>
       <div
         class="my-4"
         v-for="(ListItem, index) in scheduleList"
@@ -102,6 +102,7 @@
 <script>
 import { mapGetters } from "vuex";
 import PartyRequests from "../mypage/PartyRequests.vue";
+import MyPageMap from "./MyPageMap.vue"
 
 export default {
   name: "SavedSchedules",
@@ -109,7 +110,7 @@ export default {
     savedSchedules: Boolean,
   },
   components: {
-    // PartyForm,
+    MyPageMap,
     PartyRequests,
   },
   computed: {
