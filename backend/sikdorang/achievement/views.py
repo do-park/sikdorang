@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from .serializers import *
 from .models import *
+from api.models import Store
 
 # Create your views here.
 @api_view(['GET'])
@@ -44,7 +45,20 @@ def visit_create(request, theme_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     CVisite, flag = AchieveUser.objects.get_or_create(count=theme_pk, user=user)
+
+    print(f'CVisit: {CVisite}, flag : {flag}')
+    # store = get_object_or_404(Store, pk=store_pk)
+    # 가게 위치와 내 위치 -> 현재 theme store data에 위치 정보를 등록하지 않았다....
+    # restLocation = 
+    # userLocation = 
+
+    print(f'request : {request}')
+    
     if flag:
+        '''
+        1. 이미지 분석 -> 글자 추출 분석 & 위치 비교
+        2. 이미지 분석 결과가 맞으면  -> 이미지 저장 + 방문 처리
+        '''
         return HttpResponse('방문 클리어 등록.')
     else:
         return HttpResponse('이미 방문한 곳 입니다.')

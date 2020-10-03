@@ -115,6 +115,11 @@ export default {
                       Authorization: `JWT ${this.$cookies.get("auth-token")}`,
                     },
                   };
+                  const data = {
+                    rest_name : rest.store_name,
+                    visit_image : '',
+                    
+                  }
                   this.$axios
                     .post(
                       `achievement/visit_create/${rest.id}`,
