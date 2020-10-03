@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     getData() {
-      // auth-token 헤더로 보내서 post로 결제한 가이드 투어 리스트 가져오기
+      // auth-token 헤더로 보내서 결제한 가이드 투어 리스트 가져오기
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
