@@ -35,7 +35,12 @@ export default {
 			} else {
 				this.getSHRecommendation(cf, index)
 			}
-		},
+        },
+        getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+        },
 		async getSCRecommendation(cf, index) {
 			const requestHeaders = {
 				headers: {
@@ -59,17 +64,18 @@ export default {
             await axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
             .then(res => {
                 const items = res.data.response.body.items.item
+                let idx = this.getRandomInt(0, items.length)
                 this.schedules[index].userChoice = {
-                    "id": items[0].contentid,
-                    "name": items[0].title,
+                    "id": items[idx].contentid,
+                    "store_name": items[idx].title,
                     "branch": "",
-                    "tel": items[0].tel,
-                    "address": items[0].addr1 + items[0].addr2,
-                    "latitude": items[0].mapy,
-                    "longitude": items[0].mapx,
+                    "tel": items[idx].tel,
+                    "address": items[idx].addr1 + items[idx].addr2,
+                    "latitude": items[idx].mapy,
+                    "longitude": items[idx].mapx,
                     "category": cf,
                     "tags": "",
-                    "img": items[0].firstimage,
+                    "img": items[idx].firstimage,
                 }
                 this.beforeLat = this.schedules[index].userChoice.latitude
                 this.beforeLng = this.schedules[index].userChoice.longitude
@@ -87,7 +93,7 @@ export default {
                 const forUser = this.getForUser
                 this.schedules[i].userChoice = {
                     "id": forUser.id,
-                    "name": forUser.store_name,
+                    "store_name": forUser.store_name,
                     "branch": forUser.branch,
                     "tel": forUser.tel,
                     "address": forUser.address,

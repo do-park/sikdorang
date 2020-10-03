@@ -193,7 +193,7 @@ export default {
 				var marker = new kakao.maps.Marker({
 					map: map,
 					position: plan.latlng,
-					title : plan.title,
+					title : plan.store_name,
 					image : markerImage
 				});
 				var infowindow = new kakao.maps.InfoWindow({
