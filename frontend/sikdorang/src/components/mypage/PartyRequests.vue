@@ -1,13 +1,8 @@
 <template>
   <div>
-    <button
-      class="btn btn-primary"
-      data-toggle="modal"
-      :data-target="getPartyId_td"
-    >
-      동행 신청자 보기
+    <button class="" data-toggle="modal" :data-target="getPartyId_td">
+      <i class="fas fa-comment fa-2x icon-active"></i>
     </button>
-    <hr />
     <!-- Modal -->
     <div
       class="modal fade"
@@ -31,11 +26,14 @@
           </div>
           <div class="modal-body">
             <span v-if="requestData">
-              <div v-for="(request, index) in requestData" :key="index">
-                <div>보낸사람: {{ request.user.username }}</div>
-                <div>수신날짜: {{ request.created_at }}</div>
-                <div>
-                  내용:
+              <div
+                v-for="(request, index) in requestData"
+                :key="index"
+                class="text-left"
+              >
+                <b>{{ request.user.username }}</b>
+                ({{ request.created_at.split("T")[0] }})
+                <div class="mx-3">
                   <viewer
                     v-if="request.content"
                     :initialValue="request.content"
@@ -44,7 +42,6 @@
                 <hr />
               </div>
             </span>
-            <hr />
           </div>
         </div>
       </div>
@@ -78,6 +75,7 @@ export default {
     };
   },
   mounted() {
+    console.log("partyPK:", this.partyPk);
     this.getPartyRequestData();
   },
   methods: {
@@ -86,6 +84,8 @@ export default {
         .get(`/party/list_message/${this.partyPk}`)
         .then((res) => {
           this.requestData = res.data;
+          console.log("res", res.data);
+          console.log("reqdata", this.requestData);
         })
         .catch((err) => {
           console.log(err);
@@ -96,4 +96,7 @@ export default {
 </script>
 
 <style>
+.icon-active {
+  color: blue;
+}
 </style>

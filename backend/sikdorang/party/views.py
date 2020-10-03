@@ -74,7 +74,7 @@ def create_message(request, party_pk):
     party = get_object_or_404(Party, pk=party_pk)
     serializer = PartyMessageSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=user, party_id = party)
+        serializer.save(user=user, party_id=party)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(data=serializer.errors)

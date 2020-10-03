@@ -62,49 +62,12 @@
           </div>
           <div class="col-6 p-0 text-center">
             <!-- 동행 활성화일 때 -->
-            <button
-              v-if="schedule.party_chk"
-              class=""
-              data-toggle="modal"
-              data-target="#targetMessage"
-            >
-              <i class="fas fa-comment fa-2x icon-active"></i>
-            </button>
+            <PartyRequests v-if="schedule.party_chk" :partyPk="schedule.id" />
 
             <!-- 동행 비활성화일 때 -->
             <button v-else class="">
               <i class="fas fa-comment fa-2x icon-no-active"></i>
             </button>
-          </div>
-        </div>
-
-        <!-- Modal -->
-        <div
-          class="modal fade"
-          id="targetMessage"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                  동행 신청 현황
-                </h5>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <PartyRequests :partyPk="schedule.id" />
-              </div>
-            </div>
           </div>
         </div>
       </div>
