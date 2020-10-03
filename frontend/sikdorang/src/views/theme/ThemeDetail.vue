@@ -119,6 +119,7 @@ export default {
                     .post(
                       `achievement/visit_create/${rest.id}`,
                       null,
+                      //null대신에 이미지 담아서 전송 -> 백에서 받아서 저장 + 알고리즘 돌리고 결과값 다시 여기로 보냄 
                       requestHeaders
                     )
                     .then(() => {
