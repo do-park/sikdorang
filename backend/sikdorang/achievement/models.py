@@ -25,5 +25,4 @@ class ThemeUser(models.Model):
 class AchieveUser(models.Model):
     count = models.IntegerField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # 사용자가 인증한 이미지 저장
-    image = models.ImageField() 
+    receipt = models.ImageField('영수증사진', upload_to="receipt/%Y/%m/%d")

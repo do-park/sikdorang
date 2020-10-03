@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1>명예의 전당 [ {{ theme_name }} ]편</h1>
+    <h3 class="text-center my-3">명예의 전당 [ {{ theme_name }} ]편</h3>
     <div class="container">
       <div class="row text-center">
         <div
           @click="goDetail(restuarant)"
           v-for="restuarant in restaurants"
           :key="restuarant.id"
-          class="box col-sm-4 m-0"
+          class="box col-4 m-0 p-0"
         >
           <span v-if="storeClear[restuarant.id] === 1" class="effect">
             <div
@@ -204,21 +204,25 @@ export default {
 
 <style scoped>
 .box {
-  height: 100px;
-  width: 100px;
+  width: 100%;
+  /* height: 30vh; */
+  padding-bottom: 100%;
   background: blanchedalmond;
 }
 .img-card {
-  height: 100px;
-  width: 100px;
+  width: 100%;
+  /* height: 30vh; */
+  padding-bottom: 100%;
   background-size: cover;
 }
 .store_name {
-  text-align: right;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-shadow: -1px 0 blanchedalmond, 0 1px blanchedalmond, 1px 0 blanchedalmond,
     0 -1px blanchedalmond;
-  font-size: 14px;
-  /* background-color: rgba(240, 240, 240, 0.3); */
+  font-size: 1rem;
 }
 .effect {
   position: relative;

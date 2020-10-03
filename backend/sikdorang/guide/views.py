@@ -81,6 +81,6 @@ def paid(request, trip_pk):
 def paidtour(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    tours = user.TripItemModel_set.all()
+    tours = TripItemModel.objects.filter(user=user)
     serializer = TourSerializer(tours, many=True)
     return Response(serializer.data)

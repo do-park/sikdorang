@@ -62,7 +62,7 @@ def visit_create(request, theme_pk):
     # visit_image = request.data['visit_image']
     # print(f'rest_name : {rest_name}')
     # print(f'visit_image : {visit_image}')
- 
+    print(CVisite.receipt)
     
     if flag:
         #이미지 경로
@@ -99,6 +99,6 @@ def visit_create(request, theme_pk):
         #     #Convert Image to Grayscale
         #     gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
 
-        return HttpResponse('방문 클리어 등록.')
+        # return HttpResponse('방문 클리어 등록.')
     else:
         return HttpResponse('이미 방문한 곳 입니다.')

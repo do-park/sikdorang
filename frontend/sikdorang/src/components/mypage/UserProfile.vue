@@ -2,7 +2,6 @@
   <div>
     <div class="img-wrap">
       <img v-if="getUserInfo.profile_image" class="user-profile-img" :src="imgSrc" alt="user profile image">
-      <img v-else class="user-profile-img" src="../../assets/userDefault.png" alt="user profile image">
     </div>
     <i @click="callImgChangeBtn()" class="camera fas fa-camera fa-1x"></i>
     <div class="input-wrap">
@@ -33,6 +32,7 @@ export default {
       'getUserInfo'
     ]),
     imgSrc() {
+        console.log(this.getUserInfo.profile_image)
         return this.getUserInfo.profile_image
     }
   },
