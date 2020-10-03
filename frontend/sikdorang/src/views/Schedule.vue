@@ -183,7 +183,7 @@ export default {
           {
             icon: "info",
             title: "일정의 날짜를 입력하세요.",
-            html: `<input id="datepicker" type="date" value="inputValue">`,
+            html: `<input style="width:100%;" id="datepicker" type="date" value="${inputValue}">`,
             focusConfirm: false,
             allowOutsideClick: false,
             preConfirm: () => {
@@ -218,7 +218,6 @@ export default {
             this.$axios
               .post("trip/date_chk", data, requestHeaders)
               .then((res) => {
-                console.log("값 왔냐?", res);
                 if (res.data) {
                   Swal.fire({
                     icon: "warning",
