@@ -8,7 +8,6 @@ import IdealTagCupView from "../views/idealtagcup/IdealTagCupView.vue"
 import MyPageView from "../views/mypage/MyPageView.vue"
 import Schedule from "../views/Schedule.vue"
 import Recommend from "../views/Recommend.vue"
-import ApplicationGuideView from "../views/travelguide/ApplicationGuideView.vue"
 import Payment from "../views/pay/Payment.vue"
 import Result from "../views/pay/Result.vue"
 import ThemeDetail from "../views/theme/ThemeDetail.vue"
@@ -22,6 +21,7 @@ import PartyList from "../views/party/PartyList.vue"
 import PartyListItemDetail from "../views/party/PartyListItemDetail.vue"
 import PartyForm from "../views/party/PartyForm.vue"
 import MessageForm from "../components/message/MessageForm.vue"
+import PhoneNumberAuthentication from "../components/authentication/PhoneNumberAuthentication.vue"
 import Error404View from "../views/Error404View.vue"
 
 Vue.use(VueRouter)
@@ -93,12 +93,6 @@ const routes = [
     beforeEnter: requireTags(),
   },
   {
-    path: "/guide/application",
-    name: "ApplicationGuideView",
-    component: ApplicationGuideView,
-    beforeEnter: requireAuth(),
-  },
-  {
     path: "/payment",
     name: "Payment",
     component: Payment,
@@ -165,6 +159,12 @@ const routes = [
     name: "PartyForm",
     component: PartyForm,
     beforeEnter: requireAuth()
+  },
+  {
+    path: "/beguide",
+    name: "PhoneNumberAuthentication",
+    component: PhoneNumberAuthentication,
+    beforeEnter: requireAuth(),
   },
   {
     path: "/message/test",
