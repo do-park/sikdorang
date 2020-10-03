@@ -21,32 +21,81 @@
         </div>
       </div>
     </b-modal>
-    <div v-if="allSchedule">
+    <div v-if="(allSchedule.length > 0)" class="small-margin">
       <div
         @click="goScheduleDetail(schedule)"
-        v-for="(schedule, index) in allSchedule"
+        v-for="schedule in allSchedule"
         :key="schedule.idx"
+        class="row m-0 mb-2"
       >
-        {{ index + 1 }} | {{ schedule.name }} | {{ schedule.date }} |
-        <b-button v-b-modal.modal-scrollable>상세보기</b-button> |
-        <button
-          v-if="schedule.party_chk"
-          class="btn btn-success"
-          @click="readParty(schedule.id)"
+        <div class="col-8 p-0">
+          <div v-b-modal.modal-scrollable class="schedule-name text-truncate">{{ schedule.name }}</div>
+          <div>{{ schedule.date }}</div>
+        </div>
+        <div class="col-4 p-0 row m-0">
+          <div class="col-6 p-0 text-center">
+
+            <!-- 동행 상세페이지로 이동 -->
+            <button
+              v-if="schedule.party_chk"
+              class=""
+              @click="readParty(schedule.id)"
+            >
+              <i class="fas fa-users fa-2x icon-active"></i>
+            </button>
+            
+            <!-- 동행 구하는 글 쓰기 -->
+            <button
+              v-else
+              class=""
+              @click="createParty(schedule.id, schedule.date)"
+            >
+              <i class="fas fa-users fa-2x icon-no-active"></i>
+            </button>
+          </div>
+          <div class="col-6 p-0 text-center">
+            <button
+              class=""
+              data-toggle="modal"
+              data-target="#targetMessage"
+            >
+              <i class="fas fa-comment fa-2x icon-active"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="targetMessage"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
         >
-          내가 작성한 글 보기
-        </button>
-        <button
-          v-else
-          class="btn btn-success"
-          @click="createParty(schedule.id, schedule.date)"
-        >
-          동행 구하기 글 작성
-        </button>
-        <PartyRequests :partyPk="schedule.id" />
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  동행 신청 현황
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <PartyRequests :partyPk="schedule.id" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div v-else>등록된 일정이 없습니다.</div>
+    <div v-else class="small-margin">등록된 일정이 없습니다.</div>
   </div>
 </template>
 
@@ -151,6 +200,10 @@ export default {
       this.$axios
         .get("/trip/list", requestHeaders)
         .then((res) => {
+          res.data.forEach(function(target, index) {
+            const stringDate = target.date.toString()
+            res.data[index].date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
+          })
           this.allSchedule = res.data;
           console.log("@@@@", res.data);
         })
@@ -254,5 +307,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.schedule-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+.small-margin {
+  margin: 0px 5px;
+}
+.icon-active {
+  color: blue;
+}
+.icon-no-active {
+  color: gray;
+}
 </style>

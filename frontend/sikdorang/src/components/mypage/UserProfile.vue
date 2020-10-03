@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="img-wrap">
-      <img v-if="getUserInfo.profile_img" class="user-profile-img" :src="imgSrc" alt="user profile image">
+      <img v-if="getUserInfo.profile_image" class="user-profile-img" :src="imgSrc" alt="user profile image">
       <img v-else class="user-profile-img" src="../../assets/userDefault.png" alt="user profile image">
     </div>
     <i @click="callImgChangeBtn()" class="camera fas fa-camera fa-1x"></i>
@@ -33,7 +33,7 @@ export default {
       'getUserInfo'
     ]),
     imgSrc() {
-        return this.$store.state.IMG_SERVER_URL + this.getUserInfo.profile_img
+        return this.getUserInfo.profile_image
     }
   },
   methods: {
@@ -49,14 +49,15 @@ export default {
         console.log(e)
         const requestHeaders = {
             headers: {
-                Authorization: this.$cookies.get('auth-token'),
+                Authorization: `JWT ${this.$cookies.get("auth-token")}`,
                 'Content-Type' : 'multipart/form-data',
             }
         }
         let fd = new FormData()
-        fd.append('profile_img', this.userImage)
+        fd.append('profile_image', this.userImage)
+        fd.append('username', this.getUserInfo.username)
         this.$axios
-        .post('/profileUpload', fd, requestHeaders)
+        .put('/rest-auth/user/', fd, requestHeaders)
         .then(res => {
             console.log(res)
             alert('변경이 완료되었습니다.')
