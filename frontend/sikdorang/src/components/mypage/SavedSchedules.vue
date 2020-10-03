@@ -54,12 +54,23 @@
             </button>
           </div>
           <div class="col-6 p-0 text-center">
+
+            <!-- 동행 활성화일 때 -->
             <button
+              v-if="schedule.party_chk"
               class=""
               data-toggle="modal"
               data-target="#targetMessage"
             >
               <i class="fas fa-comment fa-2x icon-active"></i>
+            </button>
+            
+            <!-- 동행 비활성화일 때 -->
+            <button
+              v-else
+              class=""
+            >
+              <i class="fas fa-comment fa-2x icon-no-active"></i>
             </button>
           </div>
         </div>
