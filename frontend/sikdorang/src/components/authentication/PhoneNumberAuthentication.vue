@@ -1,11 +1,16 @@
 <template>
-    <div>
-        <label for="phone_number">휴대폰 번호</label>
-        <input type="text" id="phone_number" v-model="number" placeholder="휴대폰 번호 입력(- 제외)">
-        <button v-if="!isClicked" @click="onClickAuth()">인증</button>
-        <br>
-        <input v-if="isClicked" type="text" id="auth_number" v-model="authNumber" placeholder="인증번호 입력">
-        <button v-if="isClicked" @click="onClickCheck()">인증</button>
+    <div class="text-center wrap">   
+        <div class="wrap-head">
+            <h5>휴대폰 번호 인증이 필요합니다.</h5>
+        </div>
+        <div class="wrap-2 row">
+            <input class="col-9 p-0 input-custom" type="number" id="phone_number" v-model="number" placeholder="휴대폰 번호를 입력하세요.">
+            <button class="col-3 p-0 btn-custom" v-if="!isClicked" @click="onClickAuth()">확인</button>
+        </div>
+        <div class="wrap-2 row">
+            <input class="col-9 p-0 input-custom" v-if="isClicked" type="number" id="auth_number" v-model="authNumber" placeholder="인증 번호를 입력하세요.">
+            <button class="col-3 p-0 btn-custom" v-if="isClicked" @click="onClickCheck()">인증</button>
+        </div>
     </div>
 </template>
 
@@ -47,8 +52,12 @@ export default {
                 console.log(requestHeaders)
                 this.$axios.post(`account/phonetoken/`, authData, requestHeaders)
                 .then(res => {
-                    console.log(res)
-                    this.$emit("authenticated")
+                    if (res.data.message === 'success') {
+                        alert('인증 성공!')
+                        this.$router.push({ name: "MypageView" });
+                    } else {
+                        alert('인증번호가 일치하지 않습니다.')
+                    }
                 })
                 .catch(err => console.err(err))
             }
@@ -57,6 +66,25 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.wrap {
+    height: 500px;
+    margin: 4rem 0px;
+}
+.wrap-head {
+    margin-bottom: 5rem;
+}
+.wrap-2 {
+    margin: 1rem;
+}
+.input-custom {
+    height: 2rem;
+    border-bottom: 1px black solid;
+    text-align: center;
+}
+.btn-custom {
+    font-size: 14px;
+    background-color: salmon;
+    border-radius: 3rem;
+}
 </style>
