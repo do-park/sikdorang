@@ -45,6 +45,7 @@ def visit_create(request, theme_pk):
     user = get_object_or_404(User, pk=request.user.pk)
     CVisite, flag = AchieveUser.objects.get_or_create(count=theme_pk, user=user)
     if flag:
+        print(CVisite.receipt)
         return HttpResponse('방문 클리어 등록.')
     else:
         return HttpResponse('이미 방문한 곳 입니다.')
