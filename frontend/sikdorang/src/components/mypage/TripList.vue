@@ -296,5 +296,8 @@ export default {
 .review-finish {
   font-size: 11px;
   background-color: gray;
+  color: white;
+  padding: 2px;
+  border-radius: 20%;
 }
 </style>

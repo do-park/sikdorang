@@ -19,24 +19,7 @@ export default {
   },
   data() {
     return {
-      reviews: [{
-        id: 1,
-        content: 'fdfdd',
-        score: 3,
-        store: 1,
-        created_at: '2020-09-20',
-        updated_at: '2020-09-21',
-        user: 1
-      },
-      {
-        id: 2,
-        content: '두번째리뷰~~~',
-        score: 4,
-        store: 2,
-        created_at: '2020-09-24',
-        updated_at: '2020-09-25',
-        user: 1
-      },],
+      reviews: [],
     }
   },
   mounted() {
