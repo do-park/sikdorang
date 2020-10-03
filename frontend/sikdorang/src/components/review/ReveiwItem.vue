@@ -1,12 +1,14 @@
 <template>
     <div>
-      <h3>{{ storeName }}</h3>
-      <div class="rating">
-        <ul class="list">
-          <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= review.score }" :key="star.stars" class="star">
-            <i :class="star <= review.score ? 'fas fa-star' : 'far fa-star'"></i> 
-          </li>
-        </ul>
+      <div class="row m-0">
+        <div class="">{{ storeName }}</div>
+        <div class="rating">
+          <ul class="list">
+            <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= review.score }" :key="star.stars" class="star">
+              <i :class="star <= review.score ? 'fas fa-star' : 'far fa-star'"></i> 
+            </li>
+          </ul>
+        </div>
       </div>
       <viewer v-if="review.content" :initialValue="review.content"/>
       <div class="text-right">

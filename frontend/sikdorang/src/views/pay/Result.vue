@@ -7,7 +7,7 @@
     <div v-if="success">
       <h3>주문정보</h3>
       <div>주문번호: {{ merchantUid }}</div>
-      <div>주문자: {{ buyerName }}</div>
+      <div>주문자: {{ userData.user_name }}</div>
       <div>결제금액: {{ amount }}원</div>
     </div>
     <button class="btn btn-primary" @click="toMypage">마이페이지로 이동</button>
@@ -26,8 +26,11 @@ export default {
       impUid: query.imp_uid,
       merchantUid: query.merchant_uid,
       errorMessage: `${query.error_msg}`,
-      buyerName: `${query.buyer_name}`,
       amount: `${query.paid_amount}`,
+      userData: {
+        user_name: this.$cookies.get('user-name'),
+        phone_number: this.$cookies.get('phone-number'),
+      }
     };
   },
   methods: {
@@ -39,14 +42,20 @@ export default {
           }
       }
       // 아까 받은 유저이름과 폰번호 같이주기
-      this.$axios.post(`guide/paid/${tripId}`, requestHeaders)
+      var userData = {
+        user_name: this.$cookies.get('user-name'),
+        phone_number: this.$cookies.get('phone-number'),
+        
+      }
+      this.$axios.post(`guide/paid/${tripId}`, userData, requestHeaders)
 			.then(res => {
-                console.log(res)
+        console.log(res)
 			})
 			.catch(err => console.error(err))
     },
     getSuccess(query) {
       const { success } = query;
+      console.log(query)
       if (success === 'true') {
         this.postData()
       }

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3 class="text-center">{{ storeName }}</h3>
+  <div class="mt-5">
+    <h5 class="text-center">{{ storeName }}</h5>
     <div class="rating">
       <ul class="list">
         <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= reviewData.score }" :key="star.stars" class="star">
@@ -17,11 +17,14 @@
       ref="toastuiEditor"
       :initialValue="editorText"
       :options="editorOptions"
-      height="500px"
+      height="200px"
       initialEditType="wysiwyg"
       previewStyle="vertical"
     />
-    <button class="btn btn-primary" @click="onClick()">생성</button>
+    <div class="text-center my-4">
+      <button class="btn btn-secondary" @click="onClick()">작성완료</button>
+    </div>
+    
   </div>
 </template>
 
@@ -97,12 +100,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px;
+    padding: 2rem;
     color: #b7b7b7;
     border-radius: 8px;
     .list {
         padding: 0;
-        margin: 0 20px 0 0;
+        margin: 0;
         &:hover {
             .star {
                 color: #ffe100;
@@ -110,7 +113,7 @@ export default {
         }
         .star {
             display: inline-block;
-            font-size: 42px;
+            font-size: 24px;
             transition: all .2s ease-in-out; 
             cursor: pointer;
             &:hover {
@@ -127,16 +130,15 @@ export default {
         }
     }
     .info {
-        margin-top: 15px;
-        font-size: 40px;
+        font-size: 20px;
         text-align: center;
         display: table;
         .divider {
             margin: 0 5px;
-            font-size: 30px;
+            font-size: 20px;
         }
         .score-max {
-            font-size: 30px;
+            font-size: 20px;
             vertical-align: sub;
         }
     }
