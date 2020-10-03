@@ -28,8 +28,25 @@ def trip_list(request):
 def checkID(request, name):
     User = get_user_model()
     user = User.objects.filter(username=name)
+    minFlag = maxFlag = numFlag = False
+    if len(name) <= 5:
+        minFlag = True
+    if len(name) >= 16:
+        maxFlag = True
+    try:
+        int(name)
+        numFlag = True
+    except:
+        pass
+    
     if user:
         return HttpResponse('이미 있는 아이디입니다.')
+    elif minFlag:
+        return HttpResponse('아이디가 너무 짧습니다.')
+    elif maxFlag:
+        return HttpResponse('아이디가 너무 깁니다.')
+    elif numFlag:
+        return HttpResponse('아이디는 숫자로만 이루어질 수 없습니다.')
     else:
         return HttpResponse('사용 할 수 있는 아이디입니다.')
 

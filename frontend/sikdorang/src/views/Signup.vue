@@ -11,7 +11,7 @@
       />
       <button class="btn btn-secondary col-3" @click="checkUsername">중복확인</button>
       <div v-if="clickedCheckUsername" class="col-12 p-0">
-        <div v-if="!usernameOk"><small class="pl-1">이미 있는 아이디입니다.</small></div>
+        <div v-if="!usernameOk"><small class="pl-1">{{ errorMsg }}</small></div>
         <div v-else><small class="pl-1">사용 할 수 있는 아이디입니다.</small></div>
       </div>
       <div v-else>
@@ -75,6 +75,7 @@ export default {
       password2Ok: false,
       token: "",
       nowYear: new Date().getFullYear(),
+      errorMsg: null,
     };
   },
   methods: {
@@ -88,7 +89,8 @@ export default {
         this.$axios
           .get(`/trip/chk/${this.signupData.username}`)
           .then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
+            this.errorMsg = response.data
             if (response.data === "사용 할 수 있는 아이디입니다.") {
               this.usernameOk = true;
             }
