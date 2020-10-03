@@ -61,6 +61,7 @@ export default {
         .then(res => {
             console.log(res)
             alert('변경이 완료되었습니다.')
+            location.reload()
         })
         .catch(err => console.error(err))
     }
