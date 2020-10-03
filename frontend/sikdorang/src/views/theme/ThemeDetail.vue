@@ -114,8 +114,7 @@ export default {
             title: "영수증 업로드",
             text: "방문 인증을 위한 영수증을 업로드하세요.",
             input: "file",
-            inputAttributes: {
-              ref: "visitImage",
+            inputAttributes: {,
               accept: "image/*",
               "aria-label": "Upload your profile picture",
             },
@@ -145,6 +144,7 @@ export default {
                         //이미지와 음식점 이름 넣기
                         data.append('receipt',receipt_image)
                         data.append('rest_name',rest.store_name)
+                        
                         this.$axios
                           .post(
                             `achievement/visit_create/${rest.id}`,
