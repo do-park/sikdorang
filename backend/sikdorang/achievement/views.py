@@ -57,15 +57,15 @@ def visit_create(request, theme_pk):
     # print(CVisit)
     # 가게 위치와 내 위치 -> 현재 theme store data에 위치 정보를 등록하지 않았다....
     
-    print(CVisite.receipt)
+    print(CVisit.receipt)
     
     if flag:
         #이미지 경로
-        # image_path = CVisit.receipt
-        image_path = r'C:\Users\multicampus\Desktop\s03p23d202\textdetection\phone_bill.jpg'
+        image_path = CVisit.receipt
         
         #검증할 음식점 이름
-        rest_name = request.data['rest_name']
+        # rest_name = request.data['rest_name']
+        rest_name = '리안중화요리'
         found = False
         # 결과 찾는 로직
 
@@ -78,14 +78,31 @@ def visit_create(request, theme_pk):
         # 결과 단어들 리스트
         results = text.replace("\n",",").replace(" ","").split(',')
         print(results)
-
-        for result in results :
-            for i in range(len(result)-len(rest_name)):
+        idx = 0
+        while (not found and idx < len(results)) :
+            result = results[idx]
+            for i in range(len(result)-len(rest_name)+1):
                 if result[i:i+len(rest_name)] == rest_name :
                     found = result[i:i+len(rest_name)]
-                    print(f'idx:{i}, found: {found}')
+                    print(f'방문인증 성공!!!!!!!!!! --> idx:{i}, found: {found}')
                     break
-        return HttpResponse('방문 클리어 등록.')
+            idx += 1
+
+        if found :
+            # 성공일 때
+            return HttpResponse(1)
+        else :
+            # 실패일 때
+            return HttpResponse(-1)
+        
+        # for result in results :
+        #     print(result)
+        #     for i in range(len(result)-len(rest_name)):
+        #         if result[i:i+len(rest_name)] == rest_name :
+        #             found = result[i:i+len(rest_name)]
+        #             print(f'idx:{i}, found: {found}')
+        #             break
+        
 
         # if not found :
         #     img_ori = cv2.imread(image_path)
@@ -95,5 +112,4 @@ def visit_create(request, theme_pk):
         #     gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
 
         # return HttpResponse('방문 클리어 등록.')
-    else:
-        return HttpResponse('이미 방문한 곳 입니다.')
+ 
