@@ -22,9 +22,13 @@
       :options="availableItemOptions"
       :clone="handleClone"
     >
-      <v-btn v-for="(item, index) in availableItems" :key="index">{{
-        item.name
-      }}</v-btn>
+      <v-btn v-for="(item, index) in availableItems" :key="index">
+        <!-- {{ item.name }} -->
+        <i v-if="index == 0" class="fas fa-utensils"></i>
+        <i v-if="index == 1" class="fas fa-coffee"></i>
+        <i v-if="index == 2" class="fas fa-place-of-worship"></i>
+        <i v-if="index == 3" class="fas fa-bed"></i>
+      </v-btn>
     </draggable>
 
     <div style="height: 50px"></div>
