@@ -101,7 +101,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-
 import PartyRequests from "../mypage/PartyRequests.vue";
 
 export default {
@@ -110,6 +109,7 @@ export default {
     savedSchedules: Boolean,
   },
   components: {
+    // PartyForm,
     PartyRequests,
   },
   computed: {

@@ -91,22 +91,50 @@ export default {
         cancelButtonText: "OK",
       }).then((result) => {
         if (result.isConfirmed) {
-          const requestHeaders = {
-            headers: {
-              Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+          Swal.fire({
+            title: "영수증 업로드",
+            text: "방문 인증을 위한 영수증을 업로드하세요.",
+            input: "file",
+            inputAttributes: {
+              accept: "image/*",
+              "aria-label": "Upload your profile picture",
             },
-          };
-          this.$axios
-            .post(`achievement/visit_create/${rest.id}`, null, requestHeaders)
-            .then(() => {
-              this.$set(this.storeClear, rest.id, 1);
-              this.actionStoreClear(this.storeClear);
-              this.updateClear(rest.id);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          Swal.fire("Yummy!", "테스트를 위한 방문 완료!", "success");
+          }).then((result) => {
+            console.log(result);
+            if (result.value) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                Swal.fire({
+                  title: "영수증을 업로드합니다.",
+                  imageUrl: e.target.result,
+                  imageAlt: "영수증을 업로드합니다.",
+                }).then((response) => {
+                  console.log(response);
+                  const requestHeaders = {
+                    headers: {
+                      Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+                    },
+                  };
+                  this.$axios
+                    .post(
+                      `achievement/visit_create/${rest.id}`,
+                      null,
+                      requestHeaders
+                    )
+                    .then(() => {
+                      this.$set(this.storeClear, rest.id, 1);
+                      this.actionStoreClear(this.storeClear);
+                      this.updateClear(rest.id);
+                      Swal.fire("Yummy!", "방문 완료!", "success");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                });
+              };
+              reader.readAsDataURL(result.value);
+            }
+          });
         }
       });
     },
