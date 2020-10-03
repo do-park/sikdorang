@@ -51,9 +51,11 @@ def visit_create(request, theme_pk):
     # 가게 위치와 내 위치 -> 현재 theme store data에 위치 정보를 등록하지 않았다....
     # restLocation = 
     # userLocation = 
+    # rest_name = request.data['rest_name']
+    # visit_image = request.data['visit_image']
+    # print(f'rest_name : {rest_name}')
+    # print(f'visit_image : {visit_image}')
 
-    print(f'request : {request}')
-    
     if flag:
         '''
         1. 이미지 분석 -> 글자 추출 분석 & 위치 비교

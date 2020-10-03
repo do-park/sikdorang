@@ -113,24 +113,32 @@ export default {
                   const requestHeaders = {
                     headers: {
                       Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-                    },
+                      'Content-Type' : 'multipart/form-data',
+                   },
                   };
+                  //이미지 form
+                  let fd = new FormData()
+
+                  fd['visit_img'] = e.target.result)
+                  fd['username'] = e.target.result)
                   const data = {
-                    rest_name : rest.store_name,
-                    visit_image : '',
-                    
+                    // rest_name : rest.store_name,
+                    // rest_id : rest.id,
+                    visit_image : fd,
+
                   }
                   this.$axios
                     .post(
                       `achievement/visit_create/${rest.id}`,
-                      null,
+                      data,
                       //null대신에 이미지 담아서 전송 -> 백에서 받아서 저장 + 알고리즘 돌리고 결과값 다시 여기로 보냄 
                       requestHeaders
                     )
                     .then(() => {
                       this.$set(this.storeClear, rest.id, 1);
                       this.actionStoreClear(this.storeClear);
-                      this.updateClear(rest.id);
+                      //방문 변경 새로고침하는 함수
+                      // this.updateClear(rest.id);
                       Swal.fire("Yummy!", "방문 완료!", "success");
                     })
                     .catch((err) => {
