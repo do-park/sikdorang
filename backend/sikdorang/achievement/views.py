@@ -51,22 +51,17 @@ def theme_create(request, theme_pk):
 def visit_create(request, theme_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    CVisite, flag = AchieveUser.objects.get_or_create(count=theme_pk, user=user)
+    CVisit, flag = AchieveUser.objects.get_or_create(count=theme_pk, user=user, receipt=request.data['receipt'])
 
-    print(f'CVisit: {CVisite}, flag : {flag}')
-    # store = get_object_or_404(Store, pk=store_pk)
+    # print(f'CVisit: {CVisit}, flag : {flag}')
+    # print(CVisit)
     # 가게 위치와 내 위치 -> 현재 theme store data에 위치 정보를 등록하지 않았다....
-    # restLocation = 
-    # userLocation = 
-    # rest_name = request.data['rest_name']
-    # visit_image = request.data['visit_image']
-    # print(f'rest_name : {rest_name}')
-    # print(f'visit_image : {visit_image}')
+    
     print(CVisite.receipt)
     
     if flag:
         #이미지 경로
-        # image_path = request.data['visit_image']
+        # image_path = CVisit.receipt
         image_path = r'C:\Users\multicampus\Desktop\s03p23d202\textdetection\phone_bill.jpg'
         
         #검증할 음식점 이름
