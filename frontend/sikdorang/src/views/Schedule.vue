@@ -1,39 +1,67 @@
 <template>
   <div>
-    일정 이름: {{ scheduleName }} <br />날짜: {{ scheduleDate }}
-    <draggable
-      v-model="clonedItems"
-      :options="clonedItemOptions"
-      style="border: 1px solid blue"
-    >
+    <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
+    <p class="text-right">날짜: {{ scheduleDate }}</p>
+    <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
         :key="index"
         @click="deleteItem(index)"
-        class="clickable"
-        >{{ item.name }}</v-btn
+        class="clickable my-2 mx-1 d-block"
+        style="width: 98%"
       >
+        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: red">
+          {{ item.name }}</i
+        >
+        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: brown">
+          {{ item.name }}</i
+        >
+        <i
+          v-if="item.id == 'S'"
+          class="fas fa-place-of-worship"
+          style="color: blue"
+        >
+          {{ item.name }}</i
+        >
+        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: green">
+          {{ item.name }}</i
+        >
+      </v-btn>
     </draggable>
 
-    <div style="height: 50px"></div>
+    <div style="height: 5vh"></div>
 
     <draggable
       v-model="availableItems"
       :options="availableItemOptions"
       :clone="handleClone"
+      class="d-flex justify-content-around"
+      style="width: 100%"
     >
-      <v-btn v-for="(item, index) in availableItems" :key="index">
-        <!-- {{ item.name }} -->
-        <i v-if="index == 0" class="fas fa-utensils"></i>
-        <i v-if="index == 1" class="fas fa-coffee"></i>
-        <i v-if="index == 2" class="fas fa-place-of-worship"></i>
-        <i v-if="index == 3" class="fas fa-bed"></i>
-      </v-btn>
+      <button
+        v-for="(item, index) in availableItems"
+        :key="index"
+        class="availableItem"
+      >
+        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: red"></i>
+
+        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: brown"></i>
+
+        <i
+          v-if="item.id == 'S'"
+          class="fas fa-place-of-worship"
+          style="color: blue"
+        ></i>
+
+        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: green"></i>
+      </button>
     </draggable>
 
-    <div style="height: 50px"></div>
+    <div style="height: 5vh"></div>
 
-    <v-btn @click="createTrip()">CREATE</v-btn>
+    <div class="d-flex justify-content-center">
+      <v-btn @click="createTrip()">CREATE</v-btn>
+    </div>
     <br />
     <!-- <span v-for="(item, index) in saved" :key="index">
       <v-btn @click="readTrip(item)">READ {{ index }}</v-btn>
@@ -495,4 +523,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.board {
+  width: 100%;
+  height: 50vh;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: lightsalmon;
+}
+board::-webkit-scrollbar {
+  display: none;
+}
+.availableItem {
+  width: 50px;
+  height: 50px;
+  margin: 0px 10px;
+}
+</style>
