@@ -1,9 +1,10 @@
 <template>
-  <div class="d-flex">
+  <div class="d-block">
     <div @click="onClick()">
-      <h5>{{ partyItem.title }}</h5>
-      날짜: {{ partyItem.trip_date }} 작성자: {{ partyItem.user.username }}
-      <hr />
+      <h5 class="mx-3">{{ partyItem.title }}</h5>
+      <p class="mx-3">날짜: {{ partyItem.trip_date }}</p>
+      <p class="text-right mx-3">작성자: {{ partyItem.user.username }}</p>
+      <hr style="width: 100%" />
     </div>
   </div>
 </template>

@@ -53,18 +53,21 @@ export default {
     };
   },
   mounted() {
-    console.log(this.type);
     if (this.type == 1) {
       const party = this.$cookies.get("party");
-      console.log("party", party);
       this.partyData.title = party.title;
       this.partyData.content = party.content;
       this.editorText = this.partyData.content;
-      console.log(this.partyData.title, this.partyData.content);
     }
-    console.log(this.type, this.tripPk, this.partyData.trip_date);
+    console.log("here", this.type, this.tripPk, this.partyData.trip_date);
   },
   methods: {
+    datetoint(date) {
+      var y = date.substr(0, 4) * 10000;
+      var m = parseInt(date.substr(5, 2)) * 100;
+      var d = date.substr(8, 2) * 1;
+      return y + m + d;
+    },
     createParty() {
       console.log("crate");
       // this.tripPk = window.$cookies.get("party-trip-id");

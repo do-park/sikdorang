@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>파티구함</h1>
+    <h3 class="text-center my-3">동행과 함께 여행 어때요?</h3>
+    <hr style="width: 100%" />
     <div v-if="partyList">
       <div v-for="(partyItem, index) in partyList" :key="index">
         <PartyListItem :partyItem="partyItem" :index="index" />
@@ -34,7 +35,6 @@ export default {
       this.$axios
         .get(`/party/list_party`, requestHeaders)
         .then((res) => {
-          console.log(res.data);
           console.log("partylist", res.data);
           this.partyList = res.data;
         })
