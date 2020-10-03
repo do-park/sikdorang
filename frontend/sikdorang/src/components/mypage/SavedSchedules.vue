@@ -172,7 +172,8 @@ export default {
     },
     createParty(scheduleId, scheduleDate) {
       this.$cookies.set("party-trip-id", scheduleId);
-      this.$cookies.set("party-trip-date", scheduleDate);
+      var intDate = scheduleDate.split('-').join('')*1;
+      this.$cookies.set("party-trip-date", intDate);
       this.$cookies.set("party-type", 0);
       this.$router.push({ name: "PartyForm" });
     },
