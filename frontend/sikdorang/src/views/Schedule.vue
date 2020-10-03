@@ -223,10 +223,12 @@ export default {
                     icon: "warning",
                     title: "이미 등록한 일정이 있습니다. 덮어쓰시겠습니까?",
                     allowOutsideClick: false,
-                    showCancelButton: true,
+                    showDenyButton: true,
+                    denyButtonText: `Don't save`,
                   })
                     .then((result) => {
-                      if (result.isDismissed) {
+                      console.log(result)
+                      if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {
                         this.$axios
