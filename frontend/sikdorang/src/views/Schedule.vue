@@ -1,43 +1,74 @@
 <template>
   <div>
-    <h1>오늘의 일정</h1>
-    <p>일정을 삭제하려면 클릭하세요.</p>
-    <draggable
-      v-model="clonedItems"
-      :options="clonedItemOptions"
-      style="border: 1px solid blue"
-    >
+    <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
+    <p class="text-right">날짜: {{ scheduleDate }}</p>
+    <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
         :key="index"
         @click="deleteItem(index)"
-        class="clickable"
-        >{{ item.name }}</v-btn
+        class="clickable my-2 mx-1 d-block"
+        style="width: 98%"
       >
+        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: red">
+          {{ item.name }}</i
+        >
+        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: brown">
+          {{ item.name }}</i
+        >
+        <i
+          v-if="item.id == 'S'"
+          class="fas fa-place-of-worship"
+          style="color: blue"
+        >
+          {{ item.name }}</i
+        >
+        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: green">
+          {{ item.name }}</i
+        >
+      </v-btn>
     </draggable>
 
-    <div style="height: 50px"></div>
+    <div style="height: 5vh"></div>
 
     <draggable
       v-model="availableItems"
       :options="availableItemOptions"
       :clone="handleClone"
+      class="d-flex justify-content-around"
+      style="width: 100%"
     >
-      <v-btn v-for="(item, index) in availableItems" :key="index">{{
-        item.name
-      }}</v-btn>
+      <button
+        v-for="(item, index) in availableItems"
+        :key="index"
+        class="availableItem"
+      >
+        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: red"></i>
+
+        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: brown"></i>
+
+        <i
+          v-if="item.id == 'S'"
+          class="fas fa-place-of-worship"
+          style="color: blue"
+        ></i>
+
+        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: green"></i>
+      </button>
     </draggable>
 
-    <div style="height: 50px"></div>
+    <div style="height: 5vh"></div>
 
-    <v-btn @click="createTrip()">CREATE</v-btn>
+    <div class="d-flex justify-content-center">
+      <v-btn @click="createTrip()">CREATE</v-btn>
+    </div>
     <br />
-    <span v-for="(item, index) in saved" :key="index">
+    <!-- <span v-for="(item, index) in saved" :key="index">
       <v-btn @click="readTrip(item)">READ {{ index }}</v-btn>
       <v-btn @click="updateTrip(item)">UPDATE {{ index }}</v-btn>
       <v-btn @click="deleteTrip(item)">DELETE {{ index }}</v-btn>
       <br />
-    </span>
+    </span> -->
   </div>
 </template>
 
@@ -59,7 +90,8 @@ export default {
   data() {
     return {
       userId: null,
-      scheduleDate: "",
+      scheduleName: null,
+      scheduleDate: null,
       // for test
       saved: [],
       clonedItems: [],
@@ -103,7 +135,7 @@ export default {
 
   mounted() {
     this.resetScheduleStoreInfo();
-    this.createTripStarter()
+    this.createTripStarter();
   },
   methods: {
     ...mapActions("schedule", [
@@ -114,7 +146,7 @@ export default {
       "actionClearBeforeCat",
     ]),
     ...mapActions("mapEvent", ["actionFlip", "actionMapEventClear"]),
-    createTripStarter(){
+    createTripStarter() {
       // const self = this
       // const inputValue = new Date().toISOString().substring(0, 10);
       let inputValue = new Date()
@@ -169,7 +201,8 @@ export default {
           if (result.value) {
             this.actionScheduleName(result.value[0]);
             this.actionScheduleDate(result.value[1]);
-            console.log('이름 날짜 확인', result.value[0], result.value[1])
+            this.scheduleName = result.value[0];
+            this.scheduleDate = result.value[1];
 
             let date = result.value[1];
 
@@ -186,33 +219,38 @@ export default {
               .post("trip/date_chk", data, requestHeaders)
               .then((res) => {
                 console.log("값 왔냐?", res);
-                if (res.data){
+                if (res.data) {
                   Swal.fire({
                     icon: "warning",
                     title: "이미 등록한 일정이 있습니다. 덮어쓰시겠습니까?",
                     allowOutsideClick: false,
                     showCancelButton: true,
                   })
-                  .then(result => {
-                    if (result.isDismissed){
-                      this.$router.push({name: 'MyPageView'})
-                    } else {
-                      this.$axios.post("trip/delete/date_chk", data, requestHeaders)
-                      .then(res => {
-                        console.log(res, '삭제 완료')
-                      })
-                    }
-                  })
-                  .catch(err => {
-                    console.error(err)
-                    this.$router.push({name: 'MyPageView'})
-                  })
+                    .then((result) => {
+                      if (result.isDismissed) {
+                        this.$router.push({ name: "MyPageView" });
+                      } else {
+                        this.$axios
+                          .post("trip/delete/date_chk", data, requestHeaders)
+                          .then((res) => {
+                            console.log(res, "삭제 완료");
+                          });
+                      }
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                      this.$router.push({ name: "MyPageView" });
+                    });
                 } else {
                   Swal.fire({
                     icon: "success",
                     title: "일정 등록을 시작합니다",
-                  })
-                  console.log('이름 날짜 확인', result.value[0], result.value[1])
+                  });
+                  console.log(
+                    "이름 날짜 확인",
+                    result.value[0],
+                    result.value[1]
+                  );
                 }
               })
               .catch((err) => {
@@ -230,9 +268,9 @@ export default {
             //   console.error(error);
             // });
           } else {
-            this.$router.push('/')
+            this.$router.push("/");
           }
-        })
+        });
     },
     // function about drag and drop
     handleClone(item) {
@@ -338,7 +376,7 @@ export default {
         .post("trip/date_chk", data, requestHeaders)
         .then((res) => {
           console.log("값 왔냐?", res);
-          return res.data
+          return res.data;
         })
         .catch((err) => {
           console.log(err);
@@ -485,4 +523,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.board {
+  width: 100%;
+  height: 50vh;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: lightsalmon;
+}
+board::-webkit-scrollbar {
+  display: none;
+}
+.availableItem {
+  width: 50px;
+  height: 50px;
+  margin: 0px 10px;
+}
+</style>

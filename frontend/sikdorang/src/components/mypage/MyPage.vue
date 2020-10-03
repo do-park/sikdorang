@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div v-if="!isGuide" class="be-guide-wrap">
-			<router-link to="#" class="be-guide">가이드 신청</router-link>
+			<router-link to="/beguide" class="be-guide">가이드 신청</router-link>
 		</div>
 		<UserProfile/>
 
@@ -48,7 +48,7 @@ export default {
 		SavedSchedules,
 		GuideTourList,
 		UserProfile,
-		ReviewList,
+    ReviewList,
 	},
 	props: {
 		isGuide: Boolean,

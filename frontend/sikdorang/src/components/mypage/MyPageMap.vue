@@ -23,17 +23,14 @@ export default {
 	props: {
 		todaySchedule: Array,
 	},
-	created() {
-		this.plans = this.todaySchedule
-		console.log('일정 저장 확인', this.plans)
-	},
 	mounted() {
 		this.addScript()
 		// this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 	},
-	computed : {
-	},
 	watch : {
+		todaySchedule() {
+			this.plans = this.todaySchedule
+		}
 	},
 	methods : {
 		moveSmoothly(cd) {

@@ -1,23 +1,25 @@
 <template>
   <div v-if="savedSchedules">
-    <b-modal id="modal-scrollable" scrollable title="Scrollable Content">
+    <b-modal id="modal-scrollable" scrollable :title="scheduleName" hide-footer>
       <MyPageMap :todaySchedule="scheduleList"/>
       <div
         class="my-4"
-        v-for="(ListItem, index) in scheduleList"
+        v-for="ListItem in scheduleList"
         :key="ListItem.id"
       >
-        <div v-if="(ListItem.type === '식당') | (ListItem.type === '카페')">
-          <p>
-            {{ index + 1 }} | [{{ ListItem.type }}] {{ ListItem.store_name }} |
-            {{ ListItem.address }}
-          </p>
-        </div>
-        <div v-else>
-          <p>
-            {{ index + 1 }} | [ {{ ListItem.type }} ] {{ ListItem.name }} |
-            {{ ListItem.address }}
-          </p>
+        <div class="row m-0">
+          <div class="col-1 p-0">
+            <i v-if="(ListItem.type === '식당')" class="fas fa-utensils"></i>
+            <i v-else-if="(ListItem.type === '카페')" class="fas fa-coffee"></i>
+            <i v-else-if="(ListItem.type === '관광지')" class="fas fa-place-of-worship"></i>
+            <i v-else class="fas fa-bed"></i>
+          </div>
+          <div class="col-6 p-0 font-weight-bold">
+            <div v-if="(ListItem.type === '식당') | (ListItem.type === '카페')" class="text-truncate">{{ ListItem.store_name }}</div>
+            <div v-else class="text-truncate">{{ ListItem.name }}</div>
+          </div>
+          <div class="col-5 p-0 detail-tel text-center">{{ListItem.tel}}</div>
+          <div class="col-12 p-0 detail-address">{{ListItem.address}}</div>
         </div>
       </div>
     </b-modal>
@@ -54,12 +56,23 @@
             </button>
           </div>
           <div class="col-6 p-0 text-center">
+
+            <!-- 동행 활성화일 때 -->
             <button
+              v-if="schedule.party_chk"
               class=""
               data-toggle="modal"
               data-target="#targetMessage"
             >
               <i class="fas fa-comment fa-2x icon-active"></i>
+            </button>
+            
+            <!-- 동행 비활성화일 때 -->
+            <button
+              v-else
+              class=""
+            >
+              <i class="fas fa-comment fa-2x icon-no-active"></i>
             </button>
           </div>
         </div>
@@ -128,7 +141,7 @@ export default {
       scheduleDate: "",
     };
   },
-  async mounted() {
+  async created() {
     await this.getAllSchedules();
     this.today = new Date();
   },
@@ -160,14 +173,14 @@ export default {
     },
     createParty(scheduleId, scheduleDate) {
       this.$cookies.set("party-trip-id", scheduleId);
-      this.$cookies.set("party-trip-date", scheduleDate);
+      var intDate = scheduleDate.split('-').join('')*1;
+      this.$cookies.set("party-trip-date", intDate);
       this.$cookies.set("party-type", 0);
       this.$router.push({ name: "PartyForm" });
     },
     popupPartyForm(targetId, targetDate) {
       if (document.getElementById(targetId).classList.contains("d-none")) {
         var forms = document.getElementsByClassName("party-form");
-        // console.log("this", forms);
         for (let form of forms) {
           if (!form.classList.contains("d-none")) {
             form.classList.add("d-none");
@@ -176,15 +189,14 @@ export default {
         document.getElementById(targetId).classList.remove("d-none");
         window.$cookies.set("party-trip-id", targetId);
         window.$cookies.set("party-trip-date", targetDate);
-        console.log(targetDate);
       } else {
         document.getElementById(targetId).classList.add("d-none");
       }
     },
-    goScheduleDetail(schedule) {
+    async goScheduleDetail(schedule) {
       this.resetScheduleList();
       // this.makeScheduleList(schedule)
-      this.makeScheduleList(schedule);
+      await this.makeScheduleList(schedule);
     },
     resetScheduleList() {
       (this.scheduleList = []),
@@ -206,7 +218,6 @@ export default {
             res.data[index].date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
           })
           this.allSchedule = res.data;
-          console.log("@@@@", res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -309,6 +320,12 @@ export default {
 </script>
 
 <style scoped>
+.detail-tel {
+  font-size: 14px;
+}
+.detail-address {
+  font-size: 12px;
+}
 .schedule-name {
   font-size: 20px;
   font-weight: bold;
