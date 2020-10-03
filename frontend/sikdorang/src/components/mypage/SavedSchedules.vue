@@ -128,8 +128,8 @@ export default {
       scheduleDate: "",
     };
   },
-  mounted() {
-    this.getAllSchedules();
+  async mounted() {
+    await this.getAllSchedules();
     this.today = new Date();
   },
   methods: {
