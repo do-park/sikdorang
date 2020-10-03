@@ -340,6 +340,9 @@ export default {
 			}
 			else {
 				this.actionThreeRes(this.recommends.slice(3))
+				if (this.getThreeRes.length === 0) {
+					this.actionThreeRes(this.recommends.slice(0,3))
+				} 
 			}
 		},
 		//카드 누르면 마커 이미지 변경
