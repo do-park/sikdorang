@@ -91,9 +91,9 @@ export default {
 		getMouseOver() {
 			if (this.getMouseOver !== null) {
 				if (this.getTagStores) {
-					this.moveTagSmoothly('click')
+					this.moveTagSmoothly('over')
 				} else {
-					this.moveSmoothly('click')
+					this.moveSmoothly('over')
 				}
 			}
 		},
@@ -197,7 +197,7 @@ export default {
                         "img": items[i].firstimage,
                     })
 				}
-				this.showCandidates(this.recommends)
+				this.showCandidates(this.recommends, '관광/숙박')
             })
             .catch(err => console.error(err))
 		},
@@ -219,6 +219,7 @@ export default {
 		var lat = null,
 			long = null;
 			if (cd === 'over' && this.getMouseOver !== null) {
+				console.log(123)
 				lat = this.getThreeRes[this.getMouseOver].latitude
 				long = this.getThreeRes[this.getMouseOver].longitude
 			} else if (cd === 'click' && this.getClicked !== null) {
@@ -468,18 +469,42 @@ export default {
 			map.setBounds(bounds);
 			this.showMarkers(this.recommendMarkers);
 		},
-		showCandidates(locs) {
+		getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+        },
+		showCandidates(locs, cf=null) {
 			const self = this
 			var map = this.map;
 			this.actionClicked(null)
-
-			if (this.getFlip) {
-				this.actionThreeRes(locs.slice(0,3))
+			let ranIdx = []
+			let positions = []
+			if (cf !== null) {
+				while(ranIdx.length < 6 && ranIdx.length <= locs.length) {
+					let idx = this.getRandomInt(0, locs.length)
+					if (ranIdx.indexOf(idx) === -1) {
+						ranIdx.push(idx)
+					}
+				}
+				positions = locs.filter((el, index) => {
+					return ranIdx.indexOf(index) !== -1
+				})
+				if (this.getFlip) {
+					this.actionThreeRes(positions.slice(0,3))
+				}
+				else {
+					this.actionThreeRes(positions.slice(3,6))
+				}
+			} else {
+				if (this.getFlip) {
+					this.actionThreeRes(locs.slice(0,3))
+				}
+				else {
+					this.actionThreeRes(locs.slice(3,6))
+				}
+				positions = this.getThreeRes;
 			}
-			else {
-				this.actionThreeRes(locs.slice(3,6))
-			}
-			var positions = this.getThreeRes;
 			if (positions.length === 0) {
 				return
 			}
@@ -643,7 +668,6 @@ export default {
 		showPaths() {
 			var plans = this.getPlanList;
 			var map = this.map;
-			console.log('플랜스 확인', plans)
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			plans.forEach(plan => {
 				var position = new kakao.maps.LatLng(plan.latitude, plan.longitude)
