@@ -25,11 +25,13 @@ export default {
 	},
 	mounted() {
 		this.addScript()
-		// this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 	},
 	watch : {
 		todaySchedule() {
-			this.plans = this.todaySchedule
+			if (this.todaySchedule.indexOf(0) === -1) {
+				this.plans = this.todaySchedule
+				this.showPaths()
+			}
 		}
 	},
 	methods : {
@@ -63,7 +65,7 @@ export default {
 				level: 3
 			}; 
 			var map = new kakao.maps.Map(container, options); 
-            this.map = map;
+			this.map = map;
 			this.showPaths()
 			
 		},
@@ -135,11 +137,10 @@ export default {
 		},
 
 		showPaths() {
-			var plans = this.plans;
+			var plans = this.todaySchedule;
 			var map = this.map;
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			var bounds = new kakao.maps.LatLngBounds();
-			
 			plans.forEach(plan => {
 				var position = new kakao.maps.LatLng(plan.latitude, plan.longitude)
 				plan.latlng = position
