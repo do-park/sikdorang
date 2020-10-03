@@ -114,7 +114,7 @@ export default {
             title: "영수증 업로드",
             text: "방문 인증을 위한 영수증을 업로드하세요.",
             input: "file",
-            inputAttributes: {,
+            inputAttributes: {
               accept: "image/*",
               "aria-label": "Upload your profile picture",
             },
@@ -159,7 +159,7 @@ export default {
                               this.actionStoreClear(this.storeClear);
                               //방문 변경 새로고침하는 함수
                               this.updateClear(rest.id);
-                              
+
                               Swal.fire("Yummy!", "방문 완료!", "success");
 
                             }
