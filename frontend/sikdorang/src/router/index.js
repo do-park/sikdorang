@@ -44,7 +44,7 @@ const requireNotAuth = () => (from, to, next) => {
 
 const requireTags = () => (from, to, next) => {
   if (store.state.isLogin && store.state.mypage.userInfo.done_cup) return next()
-  next('/idealcup')
+  next('/idealtagcup')
 }
 
 const requireGuide = () => (from, to, next) => {

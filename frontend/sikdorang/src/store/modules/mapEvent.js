@@ -9,7 +9,7 @@ const mapEvent = {
         selectedRest : null,
         planList : [],
         tags: [],
-        tagStores: false,
+        tagStores: [],
         selectTag: null,
     },
     getters : {

@@ -185,7 +185,7 @@ export default {
 				distanceOverlay.setMap(map)
 			}
 			plans.forEach(plan=>{
-				// 마커 이미지의 이미지 크기 입니다
+					// 마커 이미지의 이미지 크기 입니다
 				var imageSize = new kakao.maps.Size(24, 35); 
 				// 마커 이미지를 생성합니다    
 				var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 

@@ -68,6 +68,7 @@ def phone_auth(request):
     if result:
         message = 'success'
         user.phone_number = request.data["phone_num"]
+        user.user_code = 1
         user.save()
         result.delete()
     context = {
