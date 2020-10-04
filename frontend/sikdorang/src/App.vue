@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <div v-if="isMobile" style="width: 100%">
-      <router-view />
+      <router-view class="router-view" />
       <Navbar />
     </div>
     <div id="forPcDiv" v-else style="width: 600px;" class="mx-auto">
-      <router-view />
+      <router-view class="router-view" />
       <Navbar />
     </div>
 
@@ -42,3 +42,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.router-view {
+  margin-bottom: 50px;
+}
+</style>

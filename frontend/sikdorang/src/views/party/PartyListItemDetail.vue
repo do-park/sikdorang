@@ -23,6 +23,7 @@
     <div style="height: 5vh"></div>
     <div class="mx-3">
       <h4>map something</h4>
+      <MyPageMap :todaySchedule="tripSchedule.schedules"/>
       <!-- <MapMain /> -->
     </div>
     <div style="height: 5vh"></div>
@@ -59,6 +60,7 @@
 <script>
 // import MapMain from "@/views/MapMain.vue";
 import Swal from "sweetalert2";
+import MyPageMap from "@/components/mypage/MyPageMap.vue"
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/vue-editor";
 import { mapGetters } from "vuex";
@@ -68,6 +70,7 @@ export default {
   name: "PartyListItemDetail",
   components: {
     viewer: Viewer,
+    MyPageMap,
     // MapMain,
   },
   data() {
@@ -134,7 +137,7 @@ export default {
             tel: items.tel,
             address: items.addr1 + items.addr2,
             latitude: items.mapy,
-            longtitude: items.mapx,
+            longitude: items.mapx,
             //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
             type: `${typeName}`,
             category: `${typeName}`,

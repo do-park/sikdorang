@@ -67,6 +67,8 @@ def paid(request, trip_pk):
         return HttpResponse('이미 결제된 여행입니다.')
     else:
         GuideTour.objects.create(user=user, trip_item=trip, user_name=request.data['user_name'], phone_number=request.data['phone_number'])
+        trip.now_person += 1
+        trip.save()
         return HttpResponse('결제 되었습니다.')
 
 @api_view(['GET'])

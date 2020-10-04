@@ -17,6 +17,7 @@ class TripItemModel(models.Model):
     content = models.TextField()
     limit_person = models.IntegerField()
     departure_person = models.IntegerField()
+    now_person = models.IntegerField(default=0)
 
 class GuideTour(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
