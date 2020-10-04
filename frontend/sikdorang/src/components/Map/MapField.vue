@@ -484,7 +484,7 @@ export default {
 			let ranIdx = []
 			let positions = []
 			if (cf !== null) {
-				while(ranIdx.length < 6 && ranIdx.length <= locs.length) {
+				while(ranIdx.length < 6 && ranIdx.length < locs.length) {
 					let idx = this.getRandomInt(0, locs.length)
 					if (ranIdx.indexOf(idx) === -1) {
 						ranIdx.push(idx)
