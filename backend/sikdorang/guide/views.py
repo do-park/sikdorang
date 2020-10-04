@@ -51,7 +51,7 @@ def detail_tour(request, tour_pk):
     for paider in paiders:
         if paider.user == user:
             flag = True
-    serializer = TourSerializer(tours)
+    serializer = TourDetailSerializer(tours)
     return JsonResponse({"result": serializer.data, "flag": flag})
  
 
