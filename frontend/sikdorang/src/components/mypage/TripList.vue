@@ -83,9 +83,6 @@ export default {
     }
   },
   mounted() {
-
-    console.log(this.getScheduleName);
-    console.log(this.getScheduleDate);
     this.getTodaySchedules();
   },
   methods: {
@@ -108,7 +105,6 @@ export default {
       this.actionScheduleDate("");
     },
     goReviewForm(store_id) {
-      console.log(store_id);
       this.$cookies.set("review-store-id", store_id);
       this.$router.push({ name: "ReviewForm" });
     },
@@ -164,7 +160,6 @@ export default {
       this.$axios
         .get("trip/today", requestHeaders)
         .then((res) => {
-          console.log("@@@trip", res.data);
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
         })
