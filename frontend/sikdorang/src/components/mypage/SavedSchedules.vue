@@ -226,14 +226,14 @@ export default {
         contentTypeId = 12;
         typeName = "관광지";
       }
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
+      const TOUR_API_KEY = this.$store.state.TOUR_API_KEY
       const contentId = id;
       this.$axios
         .get(
           `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
         )
         .then((res) => {
+          console.log('스케듈 확인', res)
           const items = res.data.response.body.items.item;
 
           // this.scheduleList["schedules"][String(i)] = {

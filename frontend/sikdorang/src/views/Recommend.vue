@@ -28,6 +28,7 @@ export default {
         .then((response) => {
           this.result = response.data;
           this.actionForUser(this.result)
+          console.log('1번', this.result)
           const temp = this.result.address.split(" ");
           this.address = temp[0] + " " + temp[1];
         })

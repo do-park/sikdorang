@@ -171,7 +171,7 @@ export default {
 			.catch(err => console.error("알고리즘 추천 실패",err))
 		},
 		getSHRecommendation(cf) {
-			const TOUR_API_KEY = "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D"
+			const TOUR_API_KEY = this.$store.state.TOUR_API_KEY
             let contentTypeId = 32
             if (cf ==="관광지") { contentTypeId = 12 }
             axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)

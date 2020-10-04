@@ -122,7 +122,7 @@ export default {
         })
         .catch((err) => console.error(err));
     },
-    saveSchedule() {
+    async saveSchedule() {
       const scheduleData = [];
       if (this.getSchedules.length > 0) {
         this.getSchedules.forEach((schedule) => {
@@ -141,23 +141,24 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      this.$axios
+      await this.$axios
         .post("trip/", data, requestHeaders)
         .then(() => {
           this.initiateSchedule();
+          console.log('저장 완료')
         })
         .catch((err) => {
           console.error(err);
         });
     },
     //오늘 일정 가져오기
-    getTodaySchedules() {
+    async getTodaySchedules() {
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      this.$axios
+      await this.$axios
         .get("trip/today", requestHeaders)
         .then((res) => {
           this.makeScheduleList(res.data[0]);
@@ -193,8 +194,7 @@ export default {
         contentTypeId = 12;
         typeName = "관광지";
       }
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
+      const TOUR_API_KEY = this.$store.state.TOUR_API_KEY
       const contentId = id;
       this.$axios
         .get(
@@ -202,7 +202,7 @@ export default {
         )
         .then((res) => {
           const items = res.data.response.body.items.item;
-
+          console.log('리저트 확인', res)
           // this.scheduleList["schedules"][String(i)] = {
           let address = null
 					if (typeof(items.addr2) !== "undefined") {
@@ -224,6 +224,7 @@ export default {
             tags: "",
             img: items.firstimage,
           };
+          console.log('리저트 확인', result)
           this.$set(this.todaySchedule.schedules, i, result);
           return result;
         })
@@ -254,6 +255,7 @@ export default {
         }
         // 관광지/숙박이면
         else {
+          console.log('투어 확인')
           await this.TourAPIPlan(i, id, type);
         }
       }
