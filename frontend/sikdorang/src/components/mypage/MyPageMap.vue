@@ -92,9 +92,9 @@ export default {
 
 			// 계산한 도보 시간이 60분 보다 크면 시간으로 표시
 			if (walkkTime > 60) {
-				walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
+				walkHour = '<span class="number small">' + Math.floor(walkkTime / 60) + '</span>시간 '
 			}
-			walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
+			walkMin = '<span class="number small">' + walkkTime % 60 + '</span>분'
 
 			// 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min
 			var bycicleTime = distance / 227 | 0;
@@ -102,9 +102,9 @@ export default {
 
 			// 계산한 자전거 시간이 60분 보다 크면 시간으로 표출
 			if (bycicleTime > 60) {
-				bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + '</span>시간 '
+				bycicleHour = '<span class="number small font-weight-bold">' + Math.floor(bycicleTime / 60) + '</span>시간 '
 			}
-			bycicleMin = '<span class="number">' + bycicleTime % 60 + '</span>분'
+			bycicleMin = '<span class="number small font-weight-bold">' + bycicleTime % 60 + '</span>분'
 
 			// KOSIS 통계청 국도 평일 평균 기준
 			// 차 평균 시속 54km/h로 두고 분속 900m/min.
@@ -114,23 +114,23 @@ export default {
 			var carHour = '', carMin = '';
 			
 			if (carTime > 60) {
-				carHour = '<span class="number">' + Math.floor(carTime / 60) + '</span>시간 '
+				carHour = '<span class="number small font-weight-bold">' + Math.floor(carTime / 60) + '</span>시간 '
 			}
-			carMin = '<span class="number">' + carTime % 60 + '</span>분'
+			carMin = '<span class="number small font-weight-bold">' + carTime % 60 + '</span>분'
 
 			// 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴
-			var content = '<ul style="list-style:none; color:black; font-weight: bold;" class="dotOverlay distanceInfo">';
+			var content = '<ul style="list-style:none; color:black; font-weight: bold; background-color: #FFAE0099;border-radius: 10px;" class="dotOverlay distanceInfo small">';
 			content += '    <li>';
-			content += '        <span class="label">거리</span><span class="number">' + distance + '</span>m';
+			content += '        <span class="label small font-weight-bold">거리</span><span class="number small font-weight-bold">' + distance + '</span>m';
 			content += '    </li>';
 			content += '    <li>';
-			content += '        <span class="label">도보</span>' + walkHour + walkMin;
+			content += '        <span class="label small font-weight-bold">도보</span>' + walkHour + walkMin;
 			content += '    </li>';
 			content += '    <li>';
-			content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+			content += '        <span class="label small font-weight-bold">자전거</span>' + bycicleHour + bycicleMin;
 			content += '    </li>';
 			content += '    <li>';
-			content += '        <span class="label">차</span>' + carHour + carMin;
+			content += '        <span class="label small font-weight-bold">차</span>' + carHour + carMin;
 			content += '    </li>';
 			content += '</ul>'
 
