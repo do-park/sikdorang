@@ -1,39 +1,34 @@
 <template>
   <div class="row m-0">
-    {{ item }}
-    <div class="box">
-      <img :src="imgSrc" alt="" class="col-2 p-0 main-img" />
-    </div>
-    <div class="col-10 p-0">
+    <img :src="imgSrc" alt="" class="col-3 p-0 img-circle" />
+    <div class="col-9 p-0">
       <div class="mx-3">
-        <h5 class="m-0">[{{ item.area }}] {{ item.title }}</h5>
+        <b class="m-0">[{{ item.area }}] {{ item.title.substr(0, 10) }}</b>
         <div>
           <small
-            >{{ item.start_date.toString().substr(0, 4) }}년
-            {{ item.start_date.toString().substr(4, 2) }}월
-            {{ item.start_date.toString().substr(6, 2) }}일 ~
-            {{ item.end_date.toString().substr(0, 4) }}년
-            {{ item.end_date.toString().substr(4, 2) }}월
-            {{ item.end_date.toString().substr(6, 2) }}일</small
+            >{{ item.start_date.toString().substr(0, 4) }}-{{
+              item.start_date.toString().substr(4, 2)
+            }}-{{ item.start_date.toString().substr(6, 2) }} ~
+            {{ item.end_date.toString().substr(0, 4) }}-{{
+              item.end_date.toString().substr(4, 2)
+            }}-{{ item.end_date.toString().substr(6, 2) }}</small
           >
         </div>
         <!-- item.user 어떻게 들어오는지 보고 닉네임 넣어주기 -->
-        <div class="row">
-          <!-- <div class="col-6">가이드: {{ item.user }}</div> -->
-          <div class="col-6 text-right">{{ item.price }} 원</div>
-        </div>
+        <div class="">{{ item.user.username }}</div>
+        <div class="text-right">{{ item.price }} 원</div>
         <div v-if="finish"><small>인원 마감!</small></div>
-        <div v-else class="row">
-          <div class="col-3">
+        <!-- <div v-else class="row">
+          <div class="col-4">
             {{ item.now_person }} / {{ item.limit_person }}
           </div>
-          <div v-if="ready" class="col-9 text-right">
+          <div v-if="ready" class="col-8 text-right">
             <small>즉시 출발!</small>
           </div>
-          <div v-else class="col-9 text-right">
+          <div v-else class="col-8 text-right">
             <small>최소인원({{ item.departure_person }}) 달성 시 출발</small>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <hr style="width: 100%" />
@@ -61,13 +56,14 @@ export default {
 </script>
 
 <style>
-.box {
-  width: 100px;
-  height: 100px;
-  border-radius: 70%;
+.img-circle {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
   overflow: hidden;
-}
-.main-img {
-  object-fit: contain;
 }
 </style>

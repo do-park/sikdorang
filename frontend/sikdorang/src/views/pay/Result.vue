@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <h1>{{ type === 'payment' ? '결제' : '본인인증' }} {{ success ? '성공' : '실패'}}</h1>
+  <div class="mt-5 pt-5 text-center">
+    <h3>{{ type === 'payment' ? '결제' : '본인인증' }} {{ success ? '성공' : '실패'}}</h3>
     <div v-if="!success">
       <div>{{ errorMessage }}</div>
     </div>
-    <div v-if="success">
-      <h3>주문정보</h3>
-      <div>주문번호: {{ merchantUid }}</div>
-      <div>주문자: {{ userData.user_name }}</div>
-      <div>결제금액: {{ amount }}원</div>
+    <div v-if="success" class="mt-5">
+      <h5>주문정보</h5>
+      <div class="wrap">
+        <div>주문번호: {{ merchantUid }}</div>
+        <div>주문자: {{ userData.user_name }}</div>
+        <div>결제금액: {{ amount }}원</div>
+      </div>
     </div>
-    <button class="btn btn-primary" @click="toMypage">마이페이지로 이동</button>
   </div>
 </template>
 
@@ -77,4 +78,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.wrap {
+  display: inline-block;
+  background-color: crimson;
+  color: white;
+  padding: 1rem;
+  border-radius: 20px;
+}
+</style>
 

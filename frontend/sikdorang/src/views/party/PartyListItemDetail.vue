@@ -1,16 +1,17 @@
 <template>
-  <div v-if="tripSchedule" class="my-0 mx-0">
+  <div v-if="tripSchedule" class="">
     <div style="height: 5vh"></div>
     <h3 class="text-center">{{ tripSchedule.name }}</h3>
     <div>
-      <div class="row mx-3">
-        <div class="col-6 text-left">
-          날짜: {{ tripSchedule.date.toString().substr(0, 4) }}년
-          {{ tripSchedule.date.toString().substr(4, 2) }}월
-          {{ tripSchedule.date.toString().substr(6, 2) }}일<br />
-        </div>
-        <div class="col-6 text-right">{{ party.user.username }}<br /></div>
+      <div class="row mx-3 justify-content-center">
+        {{ tripSchedule.date.toString().substr(0, 4) }}년
+        {{ tripSchedule.date.toString().substr(4, 2) }}월
+        {{ tripSchedule.date.toString().substr(6, 2) }}일<br />
       </div>
+      <div class="row mx-3 justify-content-end">
+        작성자: {{ party.user.username }}<br />
+      </div>
+
       <div class="text-center my-2">
         <button
           v-if="party.user.username !== username"
@@ -19,14 +20,13 @@
         >
           동행 신청하기
         </button>
-        <button v-else class="btn btn-secondary disabled mb-0">
+        <!-- <button v-else class="btn btn-secondary disabled mb-0">
           내가 작성한 글입니다.
-        </button>
+        </button> -->
       </div>
     </div>
     <div style="height: 5vh"></div>
     <div class="mx-3">
-      <h4>map something</h4>
       <MyPageMap :todaySchedule="tripSchedule.schedules" />
       <!-- <MapMain /> -->
     </div>

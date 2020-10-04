@@ -64,6 +64,7 @@ export default {
     // },
 
     goTripProductDetailPage(item_pk) {
+      console.log(item_pk);
       this.$router.push(`/trip/detail/${item_pk}`);
     },
     // getThatGuideList() {
