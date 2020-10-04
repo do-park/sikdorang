@@ -169,6 +169,7 @@ export default {
 }
 .check-btn {
   font-size: 14px;
+  padding: 0px;
 }
 .age {
   margin-top: 3rem;

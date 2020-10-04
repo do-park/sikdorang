@@ -55,8 +55,8 @@
       initialEditType="wysiwyg"
       previewStyle="vertical"
     />
-    <div class="text-right">
-      <button class="btn btn-primary" @click="onClick()">생성</button>
+    <div class="text-center">
+      <button class="create-btn" @click="onClick()">작성완료</button>
     </div>
     
   </div>

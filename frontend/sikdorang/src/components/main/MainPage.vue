@@ -1,7 +1,9 @@
 <template>
-  <div class="mt-5">
-    <div v-if="!isLogin">여행을 시작할까요?</div>
-    <div v-else class="text-left p-5">
+  <div>
+    <div v-if="!isLogin" class="main-ment p-5">
+      <h5 class="d-inline-block my-auto">여행을 시작할까요?</h5>
+    </div>
+    <div v-else class="main-ment text-left p-5">
       <h5>{{ username }}님,</h5>
       <div class="d-flex justify-content-center">
         <h4 class="text-center"><Recommend /></h4>
@@ -22,7 +24,9 @@
         </button>
       </div>
     </div>
-    <ThemePage />
+    <div class="theme-wrap">
+      <ThemePage />
+    </div>
   </div>
 </template>
 
@@ -99,5 +103,9 @@ export default {
 .main-btn {
   width: 100px;
   height: 100px;
+}
+.main-ment {
+  height: 40vh;
+  margin: auto;
 }
 </style>
