@@ -32,8 +32,8 @@
       </v-btn>
     </draggable>
 
+    <p class="text-right mt-0 small">*아이콘을 상자에 끌어 넣어 일정을 구성해보세요. 클릭하면 삭제됩니다.</p>
     <div style="height: 5vh"></div>
-
     <draggable
       v-model="availableItems"
       :options="availableItemOptions"
