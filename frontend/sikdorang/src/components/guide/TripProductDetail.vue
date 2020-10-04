@@ -1,7 +1,6 @@
 <template>
   <div>
     <div style="height: 5vh"></div>
-
     <div>
       <h3 class="text-center">[{{ detail.area }}]{{ detail.title }}</h3>
       <div class="text-center">
@@ -47,7 +46,18 @@
     <div class="mx-3">
       <img :src="imgSrc" alt="" class="img-main" />
     </div>
-    <viewer v-if="detail.content" :initialValue="detail.content" class="mx-3" />
+    <viewer 
+    v-if="detail.content" 
+    :initialValue="detail.content" 
+    class="mx-3" 
+    />
+    <div 
+    v-if="detail.user.username === username" 
+    class="text-right mr-3"
+    >
+      <!-- <button class="btn btn-primary" @click="updateTrip">수정</button> -->
+      <button class="btn btn-danger" @click="deleteTrip">삭제</button>
+    </div>
   </div>
 </template>
 
@@ -55,7 +65,7 @@
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/vue-editor";
 import { mapActions } from "vuex";
-
+import Swal from 'sweetalert2'
 export default {
   name: "TripProductDetail",
   components: {
@@ -75,7 +85,7 @@ export default {
         this.detail = res.data[0];
 
         console.log("디테일", this.detail);
-        this.changeDate();
+        // this.changeDate();
       })
       .catch((err) => console.error(err));
   },
@@ -105,6 +115,38 @@ export default {
       this.actionOrderTrip(this.detail);
       this.$router.push("/trip/order");
     },
+   
+    deleteTrip(){
+      Swal.fire({
+        icon: "warning",
+        title: "여행 상품 삭제",
+        text: "여행 상품 글을 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: "삭제합니다.",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const requestHeaders = {
+            headers: {
+              Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+            },
+          };
+
+          this.$axios
+            .delete(`guide/delete/${this.detail.id}`, requestHeaders)
+            .then((res) => {
+              console.log("삭제 전송 성공",res);
+              Swal.fire({
+                icon: "success",
+                title: "성공적으로 삭제했습니다.",
+              }).then(() => {
+                this.$router.push({ name: "TripProductsView" });
+              });
+            })
+            .catch((err) => console.error(err));
+        }
+      });
+    },
+    
     login() {
       this.$router.push("/login");
     },
