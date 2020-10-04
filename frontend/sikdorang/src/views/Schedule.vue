@@ -1,7 +1,11 @@
 <template>
   <div>
     <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
-    <p class="text-right">날짜: {{ scheduleDate }}</p>
+    <p class="text-right">
+      날짜: {{ scheduleDate.toString().substr(0, 4) }}-{{
+        scheduleDate.toString().substr(4, 2)
+      }}-{{ scheduleDate.toString().substr(6, 2) }}
+    </p>
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
@@ -227,7 +231,7 @@ export default {
                     denyButtonText: `Don't save`,
                   })
                     .then((result) => {
-                      console.log(result)
+                      console.log(result);
                       if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {
