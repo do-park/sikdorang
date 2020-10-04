@@ -62,7 +62,7 @@ export default {
 }
 .badge-text {
     background-color: white;
-    padding: 5px 60px;
+    padding: 5px 60px 0px;
     font-size: 14px;
     font-weight: bolder;
     position: absolute;
