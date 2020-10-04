@@ -1,61 +1,117 @@
 <template>
-  <div>
-    <div>
-      <label for="title">제목</label>
-      <input class="form-control" type="text" id="title" v-model="tripSchedule.title" />
-    </div>
-    <div>
-      <label for="t-i">대표이미지</label>
-      <br />
-      <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif" />
-    </div>
-    <div>
-      <label for="area">여행지역</label>
-      <input class="form-control" type="text" id="area" v-model="tripSchedule.area" />
-      <!-- Area 도 - 시/군/구 선택 -->
-    </div>
-    <div>
-      <label for="start_date">시작일</label>
-      <input type="date" name="start_date" id="start_date" v-model="tripSchedule.start_date" />
-    </div>
-    <div>
-      <label for="end_date">종료일</label>
-      <input type="date" name="end_date" id="end_date" v-model="tripSchedule.end_date" />
-    </div>
-    <div>
-      <label for="price">가격</label>
+  <div class="wraper">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">투어이름</span>
+      </div>
       <input
-        class="form-control d-inline-block"
-        type="number"
-        id="price"
-        v-model="tripSchedule.price"
-      />원
+        type="text"
+        class="form-control"
+        placeholder="이걸 뭐라고 부르죠?"
+        v-model="tripSchedule.title">
     </div>
     <div>
-      <label for="limit_person">제한인원</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroupFileAddon01">대표사진</span>
+        </div>
+        <div class="custom-file">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="inputGroupFile01" 
+            aria-describedby="inputGroupFileAddon01"
+            @change="fileChange"
+            ref="tI">
+          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+        </div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">여행지역</span>
+      </div>
       <input
-        class="form-control d-inline-block"
-        type="number"
-        id="limit_person"
-        v-model="tripSchedule.limit_person"
-      />명
+        type="text"
+        class="form-control"
+        placeholder="어디로 가시나요?"
+        v-model="tripSchedule.area">
     </div>
-    <div>
-      <label for="departure_person">최소 출발인원</label>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">투어가격</span>
+      </div>
       <input
-        class="form-control d-inline-block"
-        type="number"
-        id="departure_person"
-        v-model="tripSchedule.departure_person"
-      />명
+        type="text"
+        class="form-control"
+        placeholder="얼마에요?"
+        v-model="tripSchedule.price">
+      <div class="input-group-append">
+        <span class="input-group-text">원</span>
+      </div>
     </div>
-    <div>
-      <label for="time">출발시간</label>
-      <input type="time" name="time" id="time" v-model="tripSchedule.start_time" />
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">최대인원</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="몇명까지 갈 수 있죠?"
+        v-model="tripSchedule.limit_person">
+      <div class="input-group-append">
+        <span class="input-group-text">명</span>
+      </div>
     </div>
-    <div>
-      <label for="start_point">출발장소</label>
-      <input class="form-control" type="text" id="start_point" v-model="tripSchedule.start_point" />
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">최소인원</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="몇명부터 가세요?"
+        v-model="tripSchedule.departure_person">
+      <div class="input-group-append">
+        <span class="input-group-text">명</span>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">출발날짜</span>
+      </div>
+      <input
+        type="date"
+        class="form-control"
+        v-model="tripSchedule.start_date">
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">도착날짜</span>
+      </div>
+      <input
+        type="date"
+        class="form-control"
+        v-model="tripSchedule.end_date">
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">출발시간</span>
+      </div>
+      <input
+        type="time"
+        class="form-control"
+        v-model="tripSchedule.start_time">
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">출발장소</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="어디서 만날까요?"
+        v-model="tripSchedule.start_point">
     </div>
     <editor
       ref="toastuiEditor"
@@ -65,7 +121,7 @@
       initialEditType="wysiwyg"
       previewStyle="vertical"
     />
-    <button class="btn btn-primary" @click="onClick()">생성</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block mt-2" @click="onClick()">등록</button>
   </div>
 </template>
 
@@ -103,6 +159,9 @@ export default {
         hideModeSwitch: true,
       },
     };
+  },
+  mounted() {
+    window.scrollTo(0, 0)
   },
   methods: {
     datetoint(date) {
@@ -158,5 +217,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.wraper {
+  margin: 15px;
+}
+.input-group-text {
+  background-color: white !important;
+}
 </style>

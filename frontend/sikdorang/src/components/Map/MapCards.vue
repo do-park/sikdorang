@@ -133,9 +133,20 @@ export default {
         this.actionSelectedRest(this.getThreeRes[idx]);
       }
       var Rest = this.getSelectedRest;
+      console.log(Rest)
+      let htmlContent = ``
+      if (Rest.tel !== undefined) {
+        htmlContent += `<p>${Rest.tel}</p>`
+      }
+      if (Rest.address !== undefined) {
+        htmlContent += `<p class="m-0">${Rest.address}</p>`
+      }
+      if (Rest.img !== undefined) {
+        htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
+      }
       Swal.fire({
         title: Rest.name,
-        text: Rest.tel,
+        html: htmlContent,
         showCancelButton: true,
         confirmButtonText: "일정 추가",
         cancelButtonText: "취소",
