@@ -2,24 +2,30 @@
   <div v-if="threeRes">
     <div class="d-flex flex-column align-items-center">
       <div>
-        <button class="btn btn-secondary" @click="checkFilp">{{ buttonStr }}</button>
+        <button class="btn btn-secondary" @click="checkFilp">
+          {{ buttonStr }}
+        </button>
       </div>
-    
+
       <div class="d-flex justify-content-center">
-        <transition v-for="(res, idx) in threeRes" :key="res.id"  enter-active-class="animated flipInY">
+        <transition
+          v-for="(res, idx) in threeRes"
+          :key="res.id"
+          enter-active-class="animated flipInY"
+        >
           <div
-            :class="{ 'active': isActive(idx) }"
+            :class="{ active: isActive(idx) }"
             v-if="animatechk"
             class="box"
             @click="selectRest(idx)"
             @mouseover="actionMouseOver(idx)"
             @mouseleave="actionMouseOver(null)"
           >
-            {{index[idx]}}.{{res.name}}
+            {{ index[idx] }}.{{ res.name }}
             <p>@ 맛집 정보 @</p>
           </div>
         </transition>
-        <br/>
+        <br />
       </div>
     </div>
   </div>
@@ -40,7 +46,7 @@ export default {
       isActive1: false,
       isActive2: false,
       animatechk: true,
-      index: ['A', 'B', 'C'],
+      index: ["A", "B", "C"],
       buttonStr: null,
     };
   },
@@ -57,40 +63,41 @@ export default {
       "getPlanList",
       "getTagStores",
     ]),
-    ...mapGetters("schedule",[
-      "getSchedules",
-      "getScheduleIdx",
-    ])
+    ...mapGetters("schedule", ["getSchedules", "getScheduleIdx"]),
   },
   watch: {
     getmouseOverToCard() {
       this.changeOverBox(this.getmouseOverToCard);
     },
     getClicked() {
-      if ( this.getClicked !== null ) {
+      if (this.getClicked !== null) {
         this.actionSelectedRest(this.getThreeRes[this.getClicked]);
         this.selectRest(this.getClicked);
       }
     },
     getThreeRes() {
       if (this.getThreeRes.length !== 0) {
-        this.threeRes = this.getThreeRes
+        this.threeRes = this.getThreeRes;
       }
     },
     getTagStores() {
-			if (this.getTagStores) {
-        this.buttonStr = '추천해주세요!'
-			} else {
-        this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
-			}
+      if (this.getTagStores) {
+        this.buttonStr = "추천해주세요!";
+      } else {
+        this.buttonStr = `다른 ${
+          this.getSchedules[this.getScheduleIdx].name
+        } 볼래요!`;
+      }
     },
     getScheduleIdx() {
       if (this.getScheduleIdx && this.getTagStores) {
-          this.buttonStr = '추천해주세요!'
+        this.buttonStr = "추천해주세요!";
       } else {
-          this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
+        this.buttonStr = `다른 ${
+          this.getSchedules[this.getScheduleIdx].name
+        } 볼래요!`;
       }
-    }
+    },
   },
   mounted() {
     // this.checkFilp();
@@ -98,9 +105,11 @@ export default {
       this.actionSelectedRest(this.getThreeRes[0]);
     }
     if (this.getTagStores) {
-      this.buttonStr = '추천해주세요!'
+      this.buttonStr = "추천해주세요!";
     } else {
-      this.buttonStr = `다른 ${this.getSchedules[this.getScheduleIdx].name} 볼래요!`
+      this.buttonStr = `다른 ${
+        this.getSchedules[this.getScheduleIdx].name
+      } 볼래요!`;
     }
   },
   methods: {
@@ -113,59 +122,56 @@ export default {
       "actionTagStores",
       "actionSelectTag",
     ]),
-    ...mapActions("schedule",[
-      "actionStore",
-      "actionScheduleIdx"
-    ]),
+    ...mapActions("schedule", ["actionStore", "actionScheduleIdx"]),
 
     selectRest(idx) {
       this.actionClicked(idx);
       var plans = this.getPlanList;
-      if (this.getTagStores){
+      if (this.getTagStores) {
         this.actionSelectedRest(this.getTagStores[idx]);
-        } else {
+      } else {
         this.actionSelectedRest(this.getThreeRes[idx]);
       }
-        var Rest = this.getSelectedRest;
-        swal({
-          title: Rest.name,
-          text: Rest.tel,
-          buttons: ["닫기", "추가"],
-        }).then((res) => {
-          if (res) {
-            swal(`${Rest.name}을 일정에 추가할까요?`, {
-              buttons: ["아니오", "네"],
-            }).then((res) => {
-              if (res) {
-                swal(`${Rest.name}을 일정에 추가했습니다`, {
-                  icon: "success",
-                });
-                plans.push(this.getSelectedRest);
-                this.actionTagStores(false)
-                this.actionPlanList(plans);
-                this.actionStore(Rest)
-                this.actionSelectTag(null)
-                this.actionScheduleIdx(this.getScheduleIdx+1)
-              } else {
-                // console.log('취소 확인')
-                this.actionClicked(null);
-              }
-            });
-          } else {
-            // console.log('취소 확인')
-            this.actionClicked(null);
-          }
-        });
+      var Rest = this.getSelectedRest;
+      swal({
+        title: Rest.name,
+        text: Rest.tel,
+        buttons: ["닫기", "추가"],
+      }).then((res) => {
+        if (res) {
+          swal(`${Rest.name}을 일정에 추가할까요?`, {
+            buttons: ["아니오", "네"],
+          }).then((res) => {
+            if (res) {
+              swal(`${Rest.name}을 일정에 추가했습니다`, {
+                icon: "success",
+              });
+              plans.push(this.getSelectedRest);
+              this.actionTagStores(false);
+              this.actionPlanList(plans);
+              this.actionStore(Rest);
+              this.actionSelectTag(null);
+              this.actionScheduleIdx(this.getScheduleIdx + 1);
+            } else {
+              // console.log('취소 확인')
+              this.actionClicked(null);
+            }
+          });
+        } else {
+          // console.log('취소 확인')
+          this.actionClicked(null);
+        }
+      });
     },
     isActive(idx) {
       if (this.isActive0 && idx === 0) {
-        return true
+        return true;
       } else if (this.isActive1 && idx === 1) {
-        return true
+        return true;
       } else if (this.isActive2 && idx === 2) {
-        return true
+        return true;
       } else {
-        return false
+        return false;
       }
     },
     changeOverBox(overidx) {
@@ -187,8 +193,8 @@ export default {
     },
     checkFilp() {
       this.actionFlip(!this.getFlip);
-      this.actionTagStores(false)
-      this.actionSelectTag(null)
+      this.actionTagStores(false);
+      this.actionSelectTag(null);
       // this.actionClicked(null);
       this.animatechk = false;
       setTimeout(() => {
@@ -205,7 +211,6 @@ export default {
   margin: 2px;
   text-align: center;
   background-color: lightgray;
-  width: 130px;
 }
 .box:hover {
   cursor: pointer;
