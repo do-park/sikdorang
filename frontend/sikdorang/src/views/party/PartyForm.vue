@@ -2,9 +2,9 @@
   <div>
     <div style="height: 5vh"></div>
 
-    <div>
+    <div class="mx-3">
       <input
-        class="form-control mx-3"
+        class="form-control mx-0"
         type="text"
         id="title"
         v-model="partyData.title"

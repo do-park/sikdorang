@@ -2,9 +2,14 @@
   <div>
     <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
     <!-- <div class="d-flex flex-row justify-content-between"> -->
-      <p class="text-right">날짜: {{ scheduleDate }}</p>
-      <p class="text-right" v-if="getIsSik">{{ getForUser.store_name }}에서 일정을 시작합니다.</p>
     <!-- </div> -->
+    <p class="text-right">
+      날짜: {{ scheduleDate.toString().substr(0, 4) }}-{{
+        scheduleDate.toString().substr(4, 2)
+      }}-{{ scheduleDate.toString().substr(6, 2) }}
+    </p>
+    <p class="text-right" v-if="getIsSik">{{ getForUser.store_name }}에서 일정을 시작합니다.</p>
+
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
@@ -232,7 +237,7 @@ export default {
                     denyButtonText: `Don't save`,
                   })
                     .then((result) => {
-                      console.log(result)
+                      console.log(result);
                       if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {

@@ -82,11 +82,8 @@ export default {
       await this.saveSchedule();
     }
   },
-  async mounted() {
-
-    console.log(this.getScheduleName);
-    console.log(this.getScheduleDate);
-    await this.getTodaySchedules();
+  mounted() {
+    this.getTodaySchedules();
   },
   methods: {
     ...mapActions("schedule", [
@@ -108,7 +105,6 @@ export default {
       this.actionScheduleDate("");
     },
     goReviewForm(store_id) {
-      console.log(store_id);
       this.$cookies.set("review-store-id", store_id);
       this.$router.push({ name: "ReviewForm" });
     },
@@ -164,7 +160,6 @@ export default {
       this.$axios
         .get("trip/today", requestHeaders)
         .then((res) => {
-          console.log("@@@trip", res.data);
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
         })
