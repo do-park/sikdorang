@@ -19,16 +19,16 @@
       </div>
 
       <div class="col-12 row p-0 m-0 my-3">
-        <label class="col-12 p-0" for="birthYear">출생년도</label>
-        <input
-          type="range"
-          class="form-control-range col-10 btn-secondary"
-          id="birthYear"
-          :min="1900"
-          :max="nowYear"
-          v-model="signupData.age"
-        />
-        <div class="col-2">{{ signupData.age }}</div>
+        <label class="col-12 p-0" for="birthYear">나이</label>
+        <select id="birthYear" class="custom-select" v-model="signupData.age">
+          <option value="2006">10대</option>
+          <option value="1996" selected>20대</option>
+          <option value="1986">30대</option>
+          <option value="1976">40대</option>
+          <option value="1966">50대</option>
+          <option value="1956">60대</option>
+          <option value="1946">70대</option>
+        </select>
       </div>
       <div class="col-12 mx-auto p-0 mb-2">
         <input
@@ -68,7 +68,7 @@ export default {
     return {
       signupData: {
         username: "",
-        age: 1990,
+        age: 1996,
         password1: "",
         password2: "",
       },
