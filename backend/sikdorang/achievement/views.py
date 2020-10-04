@@ -8,7 +8,7 @@ from .models import *
 from api.models import Store
 from PIL import Image
 import pytesseract
-import cv2
+# import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
