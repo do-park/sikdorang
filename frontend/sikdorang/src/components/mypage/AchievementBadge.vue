@@ -10,7 +10,7 @@
             <img
             @click="goToThemeDetail(theme)"
             class="img-circle-sm"
-            :src="require(`../../../public/icons/${theme.id}.png`)"
+            :src="require(`../../../public/icons/${theme.db_id}.png`)"
             />
         </div>
       </div>
@@ -34,6 +34,7 @@ export default {
         return {
             themes : [],
             themesClear : [],
+            // theme_image_index : [0,5,6,1,3,7,2,8,10,11,4,9],
         }
     },
     created() {

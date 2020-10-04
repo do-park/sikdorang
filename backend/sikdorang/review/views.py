@@ -16,6 +16,7 @@ def create_review(request, store_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     store = get_object_or_404(Store, pk=store_pk)
+    
     serializer = ReviewSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=user, store_id=store)
@@ -45,6 +46,7 @@ def create_review(request, store_pk):
                         utag2.save()
                     else:
                         TagModel.objects.create(user=user, name=str(i), count=1)
+ 
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(data=serializer.errors)
