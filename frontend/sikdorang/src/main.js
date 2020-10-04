@@ -14,28 +14,6 @@ Vue.prototype.$axios = axios;
 // axios.defaults.baseURL = "http://j3d202.p.ssafy.io:8080/"
 axios.defaults.baseURL = "http://127.0.0.1:8080/";
 
-import { VueHammer } from "vue2-hammer";
-Vue.use(VueHammer);
-
-Vue.directive("pan", {
-  bind: function(el, binding) {
-    if (typeof binding.value === "function") {
-      const mc = new Hammer(el);
-      mc.get("pan").set({ direction: Hammer.DIRECTION_ALL });
-      mc.on("pan", binding.value);
-    }
-  },
-});
-
-Vue.directive("tap", {
-  bind: function(el, binding) {
-    if (typeof binding.value === "function") {
-      const mc = new Hammer(el);
-      mc.on("tap", binding.value);
-    }
-  },
-});
-
 Vue.config.productionTip = false;
 Vue.use(VueCookies);
 Vue.use(BootstrapVue);

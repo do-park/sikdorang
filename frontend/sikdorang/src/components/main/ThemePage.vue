@@ -1,50 +1,52 @@
 <template>
-  <section class="slider">
-    <ul class="slider__list" ref="list">
-      <li
-        v-for="theme in themes"
-        :key="theme.id"
-        class="slider__item"
-        v-tap="(e) => onTap(e, theme)"
-      >
-        <span v-if="userAchieve[theme.db_id] === 1" class="effect">
-          <img
-            @click="goDetail(theme)"
-            class="img-circle"
-            :src="require(`../../../public/icons/${theme.id}.png`)"
-          />
-        </span>
-        <span v-else>
-          <img
-            @click="goDetail(theme)"
-            class="img-circle"
-            :src="require(`../../../public/icons/${theme.id}.png`)"
-          />
-        </span>
+  <swiper class="swiper" :options="swiperOption">
+    <swiper-slide v-for="theme in themes" :key="theme.id" class="m-0">
+      <span v-if="userAchieve[theme.db_id] === 1" class="effect">
+        <img
+          @click="goDetail(theme)"
+          class="img-circle"
+          :src="require(`../../../public/icons/${theme.id}.png`)"
+        />
+      </span>
+      <span v-else>
+        <img
+          @click="goDetail(theme)"
+          class="img-circle"
+          :src="require(`../../../public/icons/${theme.id}.png`)"
+        />
+      </span>
 
-        <div>{{ theme.theme_name }}</div>
-      </li>
-    </ul>
-  </section>
+      <div>{{ theme.theme_name }}</div>
+    </swiper-slide>
+    <div class="swiper-pagination" slot="pagination"></div>
+  </swiper>
 </template>
 
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"
-  integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g=="
-  crossorigin="anonymous"
-></script>
 <script>
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/swiper-bundle.css";
 import { mapGetters, mapActions } from "vuex";
 const themes = "themes";
 
 export default {
   name: "ThemePage",
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   data() {
     return {
       isLogin: this.$store.state.isLogin,
       themes: [],
       userAchieve: [],
-      currentOffset: 0,
+      swiperOption: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      },
     };
   },
   computed: {
@@ -54,14 +56,6 @@ export default {
   mounted() {
     this.themes = this.getThemes;
     this.getAchievedata();
-  },
-  computed: {
-    overflowRatio() {
-      return this.$refs.list.scrollWidth / this.$refs.list.offsetWidth;
-    },
-    itemWidth() {
-      return this.$refs.list.scrollWidth / this.themes.length;
-    },
   },
   methods: {
     ...mapActions(themes, ["actionThemesClear", "actionStoreClear"]),
@@ -91,82 +85,9 @@ export default {
         this.userAchieve = [0, 0, 0, 0, 0, 0, 0, 0, 0];
       }
     },
-    onPan(e) {
-      const dragOffset =
-        (((100 / this.itemWidth) * e.deltaX) / this.count) * this.overflowRatio;
-
-      const transform = this.currentOffset + dragOffset;
-
-      this.$refs.list.style.setProperty("--x", transform);
-
-      if (e.isFinal) {
-        this.currentOffset = transform;
-        const maxScroll = 100 - this.overflowRatio * 100;
-        let finalOffset = this.currentOffset;
-
-        // scrolled to last item
-        if (this.currentOffset <= maxScroll) {
-          finalOffset = maxScroll;
-        } else if (this.currentOffset >= 0) {
-          // scroll to first item
-          finalOffset = 0;
-        } else {
-          // animate to next item according to pan direction
-          const index =
-            (this.currentOffset / this.overflowRatio / 100) * this.count;
-          const nextIndex =
-            e.deltaX <= 0 ? Math.floor(index) : Math.ceil(index);
-          finalOffset = ((100 * this.overflowRatio) / this.count) * nextIndex;
-        }
-
-        // bounce back animation
-      }
-    },
   },
 };
 </script>
-
-<style scoped lang="scss">
-.slider {
-  width: 100%;
-  height: 120px;
-  overflow: visible;
-  position: relative;
-  white-space: nowrap;
-
-  &__list {
-    display: flex;
-    width: 100%;
-    height: 100%;
-
-    font-size: 2rem;
-    backface-visibility: hidden;
-    transform: translateX(calc(var(--x, 0) * 1%));
-  }
-
-  &__item {
-    position: relative;
-    flex: 0 0 140px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-right: 12px;
-    padding: 6px;
-    box-sizing: border-box;
-
-    border-radius: 8px;
-    text-align: center;
-    transition: opacity 0.15s ease;
-    color: #fff;
-
-    &:focus {
-      opacity: 0.8;
-    }
-  }
-}
-</style>
 
 <style scoped>
 .box {
@@ -209,5 +130,14 @@ export default {
   transform: rotate(-25deg);
   left: 3px;
   top: 20px;
+}
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.swiper-container {
+  height: 150px;
+  width: 100%;
 }
 </style>
