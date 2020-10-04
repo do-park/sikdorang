@@ -1,5 +1,5 @@
 <template>
-  <div v-if="threeRes">
+  <div v-if="threeRes" class="map-top">
     <div class="d-flex flex-column align-items-center">
       <div>
         <button class="btn btn-secondary" @click="checkFilp">
@@ -223,5 +223,13 @@ export default {
 .active {
   cursor: pointer;
   background-color: lightblue;
+}
+.map-top {
+  position: absolute;
+  top: 70%;
+  left: 0;
+  right: 0;
+  margin: 0, auto;
+  z-index: 10;
 }
 </style>

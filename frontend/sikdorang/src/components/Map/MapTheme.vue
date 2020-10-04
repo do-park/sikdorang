@@ -1,11 +1,11 @@
 <template>
   <div class="map-top">
     <swiper class="swiper" :options="swiperOption">
-      <swiper-slide v-for="(tag, idx) in tags" :key="idx" class="mr-1 pr-3">
+      <swiper-slide v-for="(tag, idx) in tags" :key="idx">
         <button
           @click="onClick(tag)"
           style="background:crimson;"
-          class="text-white rounded"
+          class="text-white rounded txt"
         >
           #{{ tag }}
         </button>
@@ -57,10 +57,15 @@ export default {
 </script>
 
 <style scoped>
+.txt {
+  height: 50px;
+  width: 20vw;
+  margin-right: 10vw;
+}
 .map-top {
   position: absolute;
   z-index: 10;
-  width: 500px;
+  width: 100%;
 }
 
 #search-box {

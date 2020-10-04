@@ -1,23 +1,21 @@
 <template>
   <div>
-    <hr />
     <div v-if="!isLogin">여행을 시작할까요?</div>
     <div v-else class="text-left">
-      <h3>{{ username }}님,</h3>
+      <h5>{{ username }}님,</h5>
       <div class="d-flex justify-content-center">
-        <h3 class="text-center"><Recommend /></h3>
+        <h4 class="text-center"><Recommend /></h4>
       </div>
-      <h3 class="text-right">어떠세요?</h3>
+      <h5 class="text-right">어떠세요?</h5>
     </div>
-    <hr />
-    <div class="btn-wrap row m-0 justify-content-around">
-      <div class="w-100 col-4">
+    <div class="btn-wrap row m-0 p-0 justify-content-around">
+      <div class="w-100 col-4 m-0 p-0">
         <button class="btn btn-danger main-btn" @click="clickMyChoice">
           <div>내가</div>
           <div>고르기</div>
         </button>
       </div>
-      <div class="w-100 col-4">
+      <div class="w-100 col-4 m-0 p-0">
         <button
           class="btn btn-danger main-btn d-inline-block"
           @click="clickRecommend"
@@ -27,12 +25,10 @@
         </button>
       </div>
     </div>
-    <hr />
     <ThemePage />
-    <hr />
-    <button class="btn btn-primary" @click="clickToLoginPageOrMyPage">
+    <!-- <button class="btn btn-primary" @click="clickToLoginPageOrMyPage">
       {{ loginOrMypage }}
-    </button>
+    </button> -->
   </div>
 </template>
 
