@@ -227,7 +227,7 @@ export default {
                     denyButtonText: `Don't save`,
                   })
                     .then((result) => {
-                      console.log(result)
+                      console.log(result);
                       if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {

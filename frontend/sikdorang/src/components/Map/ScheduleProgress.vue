@@ -39,7 +39,7 @@ export default {
 <style scoped>
 .map-top {
   position: absolute;
+  top: 40vh;
   z-index: 10;
-  height: -500px;
 }
 </style>

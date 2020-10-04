@@ -40,8 +40,8 @@ export default {
       themes: [],
       userAchieve: [],
       swiperOption: {
-        slidesPerView: 4,
-        spaceBetween: 10,
+        slidesPerView: 3,
+        spaceBetween: 20,
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
