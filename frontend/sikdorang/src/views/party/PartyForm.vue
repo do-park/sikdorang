@@ -2,13 +2,13 @@
   <div>
     <div style="height: 5vh"></div>
 
-    <div>
+    <div class="mx-3">
       <input
-        class="form-control mx-3"
+        class="form-control mx-0"
         type="text"
         id="title"
         v-model="partyData.title"
-        placeholder="제목, [지역]을 입력해 주세요"
+        placeholder="[지역] 누구와 가고 싶은지 말해주세요"
       />
     </div>
     <editor
@@ -63,8 +63,10 @@ export default {
     };
   },
   mounted() {
+    console.log(this.type);
     if (this.type == 1) {
       const party = this.$cookies.get("party");
+      console.log(party);
       this.partyData.title = party.title;
       this.partyData.content = party.content;
       this.editorText = this.partyData.content;
@@ -83,6 +85,7 @@ export default {
       // this.tripPk = window.$cookies.get("party-trip-id");
       // this.partyData.trip_date = window.$cookies.get("party-trip-date");
       this.getHtml();
+      console.log(this.partyData);
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,

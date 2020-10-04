@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3 class="text-center">{{ gameCount}} | {{ roundCount }}</h3>
     <div v-if="!isDone">
       <img
         class="img"
@@ -20,7 +21,6 @@
       />
     </div>
     <div v-if="isDone" @click="done">
-      <h2>1위</h2>
       <img :src="imgs[tags[0]]" />
     </div>
   </div>
@@ -59,6 +59,26 @@ export default {
       isSaved: false,
     };
   },
+  computed: {
+    roundCount() {
+      if (this.tags.length === 2) {
+        return '결승'
+      } else if (this.tags.length === 1) {
+        return '우승'
+      } else {
+        return `${this.tags.length} 강`
+      }
+    },
+    gameCount() {
+      if (this.clickCount === -1) {
+        return `1 / ${Math.round(this.tags.length / 2)}`
+      } else if (this.clickCount === 1) {
+        return `2 / ${Math.round(this.tags.length / 2)}`
+      } else {
+        return `${Math.round(this.clickCount / 2)+1} / ${Math.round(this.tags.length / 2)}`
+      }
+    }
+  },
   mounted() {
     Swal.fire({
       title: '<strong>음식 종류 이상형 월드컵</strong>',
@@ -70,6 +90,7 @@ export default {
   },
   methods: {
     onClick(direction) {
+      console.log(this.clickCount)
       this.clickCount += 2;
       // 선택한 이미지를 userChoice에 추가합니다.
       if (direction === "left") {

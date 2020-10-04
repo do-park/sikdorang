@@ -1,7 +1,15 @@
 <template>
   <div>
     <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
-    <p class="text-right">날짜: {{ scheduleDate }}</p>
+    <!-- <div class="d-flex flex-row justify-content-between"> -->
+    <!-- </div> -->
+    <p class="text-right">
+      날짜: {{ scheduleDate.toString().substr(0, 4) }}-{{
+        scheduleDate.toString().substr(4, 2)
+      }}-{{ scheduleDate.toString().substr(6, 2) }}
+    </p>
+    <p class="text-right" v-if="getIsSik">{{ getForUser.store_name }}에서 일정을 시작합니다.</p>
+
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
@@ -29,8 +37,8 @@
       </v-btn>
     </draggable>
 
+    <p class="text-right mt-0 small">*아이콘을 상자에 끌어 넣어 일정을 구성해보세요. 클릭하면 삭제됩니다.</p>
     <div style="height: 5vh"></div>
-
     <draggable
       v-model="availableItems"
       :options="availableItemOptions"
@@ -84,12 +92,14 @@ export default {
     draggable,
   },
   computed: {
-    ...mapGetters("sikRec", ["getIsSik"]),
+    ...mapGetters("sikRec", ["getIsSik", "getForUser"]),
     ...mapGetters("schedule", ["getScheduleDate"]),
   },
   data() {
     return {
       userId: null,
+      forUser: null,
+      isSik: null,
       scheduleName: null,
       scheduleDate: null,
       // for test
@@ -130,12 +140,12 @@ export default {
       },
     };
   },
-
-  watch: {},
-
+  created() {
+  },
   mounted() {
     this.resetScheduleStoreInfo();
     this.createTripStarter();
+    console.log('게터 확인', this.getIsSik, this.getForUser)
   },
   methods: {
     ...mapActions("schedule", [
@@ -227,7 +237,7 @@ export default {
                     denyButtonText: `Don't save`,
                   })
                     .then((result) => {
-                      console.log(result)
+                      console.log(result);
                       if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {

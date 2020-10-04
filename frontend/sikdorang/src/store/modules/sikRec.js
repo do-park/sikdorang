@@ -1,4 +1,4 @@
-const sikRes = {
+const sikRec = {
     namespaced: true,
     state: {
         forUser: null,
@@ -30,4 +30,4 @@ const sikRes = {
     }
 }
 
-export default sikRes
+export default sikRec
