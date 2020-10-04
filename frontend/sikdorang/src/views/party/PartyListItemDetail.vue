@@ -47,7 +47,6 @@
       <div style="height: 5vh"></div>
       <h4>설명</h4>
       <viewer
-        height="500px"
         v-if="tripSchedule.content"
         :initialValue="tripSchedule.content"
       />
@@ -68,6 +67,8 @@ import Swal from "sweetalert2";
 import MyPageMap from "@/components/mypage/MyPageMap.vue";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/vue-editor";
+import { mapGetters } from "vuex";
+const party = "party";
 
 export default {
   name: "PartyListItemDetail",
@@ -79,14 +80,18 @@ export default {
   data() {
     return {
       username: this.$cookies.get("username"),
-      party: this.$cookies.get("party"),
-      trip: this.$cookies.get("trip"),
+      party: null,
+      trip: null,
       tripSchedule: { name: "", date: "", schedules: [], content: "" },
     };
   },
-  mounted() {
+  computed: {
+    ...mapGetters(party, ["getParty", "getTrip"]),
+  },
+  created() {
+    this.party = this.getParty;
+    this.trip = this.getTrip;
     this.makeScheduleList();
-    console.log(this.username, this.party, this.trip, this.tripSchedule);
   },
   methods: {
     async restuarantPlan(i, id, type, typeName) {

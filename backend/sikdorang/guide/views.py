@@ -51,8 +51,8 @@ def detail_tour(request, tour_pk):
 @api_view(['GET'])
 def list_guide(request, username):
     User = get_user_model()
-    user = User.objects.filter(id=username)
-    trips = user.TripItemModel_set.all()
+    user = User.objects.get(username=username)
+    trips = TripItemModel.objects.filter(user=user)
     serializer = GuideSerializer(trips, many=True)
     return Response(serializer.data)
 

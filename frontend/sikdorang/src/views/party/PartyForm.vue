@@ -63,8 +63,10 @@ export default {
     };
   },
   mounted() {
+    console.log(this.type);
     if (this.type == 1) {
       const party = this.$cookies.get("party");
+      console.log(party);
       this.partyData.title = party.title;
       this.partyData.content = party.content;
       this.editorText = this.partyData.content;
@@ -83,6 +85,7 @@ export default {
       // this.tripPk = window.$cookies.get("party-trip-id");
       // this.partyData.trip_date = window.$cookies.get("party-trip-date");
       this.getHtml();
+      console.log(this.partyData);
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
