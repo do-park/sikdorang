@@ -1,6 +1,11 @@
 <template>
   <div>
-    <button class="" data-toggle="modal" :data-target="getPartyId_td">
+    <button
+      class=""
+      data-toggle="modal"
+      :data-target="getPartyId_td"
+      @click="getPartyRequestData()"
+    >
       <i class="fas fa-comment fa-2x icon-active"></i>
     </button>
     <!-- Modal -->
@@ -25,6 +30,8 @@
             </button>
           </div>
           <div class="modal-body">
+            {{ partyPk }}
+            {{ requestData }}
             <span v-if="requestData">
               <div
                 v-for="(request, index) in requestData"
@@ -74,16 +81,14 @@ export default {
       requestData: [],
     };
   },
-  mounted() {
-    console.log("partyPK:", this.partyPk);
-    this.getPartyRequestData();
-  },
   methods: {
     getPartyRequestData() {
       this.$axios
         .get(`/party/list_message/${this.partyPk}`)
         .then((res) => {
           this.requestData = res.data;
+          console.log("here @@@@@@@@@@");
+          console.log("pk", this.partyPk);
           console.log("res", res.data);
           console.log("reqdata", this.requestData);
         })

@@ -4,7 +4,11 @@
     <h3 class="text-center">{{ tripSchedule.name }}</h3>
     <div>
       <div class="row mx-3">
-        <div class="col-6 text-left">날짜: {{ tripSchedule.date }}<br /></div>
+        <div class="col-6 text-left">
+          날짜: {{ tripSchedule.date.toString().substr(0, 4) }}-{{
+            tripSchedule.date.toString().substr(4, 2)
+          }}-{{ tripSchedule.date.toString().substr(6, 2) }}<br />
+        </div>
         <div class="col-6 text-right">{{ party.user.username }}<br /></div>
       </div>
       <div class="text-center my-2">
@@ -23,7 +27,7 @@
     <div style="height: 5vh"></div>
     <div class="mx-3">
       <h4>map something</h4>
-      <MyPageMap :todaySchedule="tripSchedule.schedules"/>
+      <MyPageMap :todaySchedule="tripSchedule.schedules" />
       <!-- <MapMain /> -->
     </div>
     <div style="height: 5vh"></div>
@@ -61,7 +65,7 @@
 <script>
 // import MapMain from "@/views/MapMain.vue";
 import Swal from "sweetalert2";
-import MyPageMap from "@/components/mypage/MyPageMap.vue"
+import MyPageMap from "@/components/mypage/MyPageMap.vue";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/vue-editor";
 
@@ -183,27 +187,29 @@ export default {
         inputPlaceholder:
           "휴대폰 번호, 카카오톡 아이디 등 연락처를 포함한 한마디를 전하세요.",
         showCancelButton: true,
-      }).then((result) => {
-        console.log(result.value);
-        const requestHeaders = {
-          headers: {
-            Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-          },
-        };
-        this.$axios
-          .post(
-            `party/create_message/${this.party.id}`,
-            { content: result.value },
-            requestHeaders
-          )
-          .then((res) => {
-            console.log(res);
-            Swal.fire({
-              icon: "success",
-              title: "메시지를 전송하였습니다.",
-            });
-          })
-          .catch((err) => console.error(err));
+      }).then((res) => {
+        if (res.isConfirmed) {
+          console.log(res.value);
+          const requestHeaders = {
+            headers: {
+              Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+            },
+          };
+          this.$axios
+            .post(
+              `party/create_message/${this.party.id}`,
+              { content: res.value },
+              requestHeaders
+            )
+            .then((res) => {
+              console.log(res);
+              Swal.fire({
+                icon: "success",
+                title: "메시지를 전송하였습니다.",
+              });
+            })
+            .catch((err) => console.error(err));
+        }
       });
     },
     updateParty() {
