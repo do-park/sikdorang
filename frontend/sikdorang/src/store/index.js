@@ -24,6 +24,7 @@ export default new Vuex.Store({
     SERVER_URL: 'http://localhost:8080/',
     IMG_SERVER_URL: 'http://localhost:8080',
     LOCAL_URL: 'http://j3d202.p.ssafy.io:8181/project/sikdorang',
+    TOUR_API_KEY: '21NDO0eAm7r3QMYoumdCGUi3vrd70iMhUUEPOOQsX9EoyA1Zb%2BQvSO69ggBD3DYM0BIZZUzElY66VxUeS5VUig%3D%3D',
   },
   mutations: {
 

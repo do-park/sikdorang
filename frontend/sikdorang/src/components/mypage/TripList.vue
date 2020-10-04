@@ -82,11 +82,11 @@ export default {
       await this.saveSchedule();
     }
   },
-  mounted() {
+  async mounted() {
 
     console.log(this.getScheduleName);
     console.log(this.getScheduleDate);
-    this.getTodaySchedules();
+    await this.getTodaySchedules();
   },
   methods: {
     ...mapActions("schedule", [
@@ -198,8 +198,7 @@ export default {
         contentTypeId = 12;
         typeName = "관광지";
       }
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
+      const TOUR_API_KEY = this.$store.state.TOUR_API_KEY
       const contentId = id;
       this.$axios
         .get(
@@ -207,7 +206,7 @@ export default {
         )
         .then((res) => {
           const items = res.data.response.body.items.item;
-
+          console.log('리저트 확인', res)
           // this.scheduleList["schedules"][String(i)] = {
           let address = null
 					if (typeof(items.addr2) !== "undefined") {
@@ -229,6 +228,7 @@ export default {
             tags: "",
             img: items.firstimage,
           };
+          console.log('리저트 확인', result)
           this.$set(this.todaySchedule.schedules, i, result);
           return result;
         })
@@ -259,6 +259,7 @@ export default {
         }
         // 관광지/숙박이면
         else {
+          console.log('투어 확인')
           await this.TourAPIPlan(i, id, type);
         }
       }
