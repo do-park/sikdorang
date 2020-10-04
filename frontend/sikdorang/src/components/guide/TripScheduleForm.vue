@@ -65,7 +65,10 @@
       initialEditType="wysiwyg"
       previewStyle="vertical"
     />
-    <button class="btn btn-primary" @click="onClick()">생성</button>
+    <div class="text-right">
+      <button class="btn btn-primary" @click="onClick()">생성</button>
+    </div>
+    
   </div>
 </template>
 
