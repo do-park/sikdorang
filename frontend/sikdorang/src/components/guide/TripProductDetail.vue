@@ -19,7 +19,7 @@
       <div class="row mx-3">
         <div class="col-6 my-auto p-0">{{ detail.price }}원</div>
         <div
-          v-if="detail.user.username !== username"
+          v-if="detail.user.username !== username && !isPaied"
           class="col-6 p-0 text-right"
         >
           <div v-if="!finish">
@@ -30,6 +30,7 @@
           </div>
           <div v-else>마감되었습니다.</div>
         </div>
+        <div v-if="isPaied" class="col-6 p-0 text-right">이미 참가중입니다.</div>
       </div>
     </div>
     <div class="row mx-3">
@@ -65,14 +66,16 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route.params.item_pk);
+    const requestHeaders = {
+      headers: {
+        Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+      },
+    };
     this.$axios
-      .get(`/guide/detail_tour/${this.$route.params.item_pk}`)
+      .get(`/guide/detail_tour/${this.$route.params.item_pk}`, requestHeaders)
       .then((res) => {
-        console.log(res);
-        this.detail = res.data[0];
-
-        console.log("디테일", this.detail);
+        this.detail = res.data.result;
+        this.isPaied = res.data.flag;
         this.changeDate();
       })
       .catch((err) => console.error(err));
@@ -85,6 +88,7 @@ export default {
       endDate: "2020-01-02",
       finish: false,
       detail: {},
+      isPaied: false,
     };
   },
   methods: {

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, authentication_classes
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 # from rest_framework import viewsets
 from .serializers import *
@@ -43,9 +43,17 @@ def list_tour(request):
 
 @api_view(['GET'])
 def detail_tour(request, tour_pk):
-    tour = TripItemModel.objects.filter(pk=tour_pk)[0]
-    print('@@@@@@@@@@@@@@@@@@@', tour)
-    return 
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tours = TripItemModel.objects.filter(pk=tour_pk)[0]
+    paiders = GuideTour.objects.filter(trip_item=tour_pk)
+    flag = False
+    for paider in paiders:
+        if paider.user == user:
+            flag = True
+    serializer = TourSerializer(tours)
+    return JsonResponse({"result": serializer.data, "flag": flag})
+ 
 
 @api_view(['GET'])
 def list_guide(request):
