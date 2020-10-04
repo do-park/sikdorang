@@ -1,7 +1,10 @@
 <template>
   <div>
     <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
-    <p class="text-right">날짜: {{ scheduleDate }}</p>
+    <!-- <div class="d-flex flex-row justify-content-between"> -->
+      <p class="text-right">날짜: {{ scheduleDate }}</p>
+      <p class="text-right" v-if="getIsSik">{{ getForUser.store_name }}에서 일정을 시작합니다.</p>
+    <!-- </div> -->
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
@@ -84,12 +87,14 @@ export default {
     draggable,
   },
   computed: {
-    ...mapGetters("sikRec", ["getIsSik"]),
+    ...mapGetters("sikRec", ["getIsSik", "getForUser"]),
     ...mapGetters("schedule", ["getScheduleDate"]),
   },
   data() {
     return {
       userId: null,
+      forUser: null,
+      isSik: null,
       scheduleName: null,
       scheduleDate: null,
       // for test
@@ -130,12 +135,12 @@ export default {
       },
     };
   },
-
-  watch: {},
-
+  created() {
+  },
   mounted() {
     this.resetScheduleStoreInfo();
     this.createTripStarter();
+    console.log('게터 확인', this.getIsSik, this.getForUser)
   },
   methods: {
     ...mapActions("schedule", [
