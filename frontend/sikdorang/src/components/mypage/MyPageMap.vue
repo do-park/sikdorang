@@ -30,8 +30,9 @@ export default {
 		todaySchedule() {
 			if (this.todaySchedule.indexOf(0) === -1) {
 				this.plans = this.todaySchedule
-				console.log('플랜스 확인', this.plans)
-				this.showPaths()
+				if (this.map) {
+					this.showPaths()
+				}
 			}
 		}
 	},
@@ -66,9 +67,11 @@ export default {
 				level: 3
 			}; 
 			var map = new kakao.maps.Map(container, options); 
+
 			this.map = map;
-			this.showPaths()
-			
+			if (this.todaySchedule.indexOf(0) === -1) {
+				this.showPaths()
+			}
 		},
 		//cdn 추가
 		addScript() { 
