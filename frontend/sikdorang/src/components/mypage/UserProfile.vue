@@ -7,7 +7,10 @@
     <div class="input-wrap">
       <input @change="fileChange" type="file" ref="userImage" class="img-change-btn" id="user-image" accept=".jpg, .jpeg, .gif">
     </div>
-    <div class="username">{{ getUserInfo.username }}</div>
+    <div class="username">
+      {{ getUserInfo.username }}
+      <i class="fas fa-sign-out-alt logout" @click="tryLogout"></i>
+    </div>
     <AchievementBadge/>
   </div>
 </template>
@@ -37,6 +40,28 @@ export default {
     }
   },
   methods: {
+    tryLogout() {
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+        },
+      };
+      //get으로 로그아웃 보내기 (헤더에 토큰)
+      this.$axios
+        .post(`/rest-auth/logout/`, requestHeaders)
+        .then((response) => {
+          console.log(response);
+          window.$cookies.remove("auth-token");
+          this.$store.state.isLogin = false;
+
+          // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
+          this.$router.push({ name: "Home" });
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     callImgChangeBtn() {
       var myinput = document.getElementById('user-image')
       myinput.click()
@@ -100,11 +125,12 @@ export default {
   display: none;
 }
 
-
 .username {
   font-size: 22px;
   text-align: center;
   margin-top: -1.5rem;
 }
-
+.logout {
+  font-size: 15px;
+}
 </style>

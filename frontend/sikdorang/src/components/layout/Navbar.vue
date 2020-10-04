@@ -1,39 +1,14 @@
 <template>
-  <nav class="navbar navbar-expand-* navbar-light bg-light sticky-top">
-    <div class="container">
-      <router-link to="/" class="navbar-brand">Navbar</router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <router-link to="/">Home</router-link>
-          <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>
-          <router-link to="/schedule">schedule</router-link>
-          <router-link to="/recommend">recommend</router-link>
-          <router-link to="/trip/list">여행 리스트</router-link>
-          <router-link to="/trip/createchedule">여행 생성(가이드)</router-link>
-          <router-link to="/rectest">태그추천</router-link>
-          <router-link to="/party/list">동행 구하기</router-link>
-          <span v-if="$store.state.isLogin"
-            ><a @click="tryLogout">로그아웃</a></span
-          >
-        </div>
-      </div>
+  <nav class="text-center">
+    <div class="fixed-bottom wrap row">
+      <div to="/trip/list" class="col-5 p-0 my-auto" @click="toTour"><i class="fas fa-flag fa-2x"></i></div>
+      <div to="/" class="col-2 p-0 row m-0 sikdorang" @click="toMain"><i class="fas fa-home fa-2x m-auto"></i></div>
+      <div to="/party/list" class="col-5 p-0 my-auto" @click="toParty"><i class="fas fa-users fa-2x"></i></div>
     </div>
   </nav>
 </template>
 
 <script>
-import { mapActions } from "vuex";
 
 export default {
   name: "Navbar",
@@ -41,40 +16,31 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions("mypage", ["actionUserInfo"]),
-    tryLogout() {
-      window.$cookies.remove("auth-token");
-      this.$store.state.isLogin = false;
-      const userInfo = {
-        userName: null,
-        userBirth: null,
-        userPhone: null,
-      };
-      console.log(this.$cookies.get("auth-token"));
-
-      const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-        },
-      };
-
-      //get으로 로그아웃 보내기 (헤더에 토큰)
-      this.$axios
-        .post(`/rest-auth/logout/`, requestHeaders)
-        .then((response) => {
-          console.log(response);
-          this.actionUserInfo(userInfo);
-
-          // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
-          this.$router.push({ name: "Home" });
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    toTour() {
+      this.$router.push('/trip/list')
     },
+    toMain() {
+      this.$router.push('/')
+    },
+    toParty() {
+      this.$router.push('/party/list')
+    }
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+
+.wrap {
+  height: 50px;
+  max-width: 600px;
+  margin: 0px auto;
+  background-color: crimson;
+  color: white !important;
+}
+.sikdorang {
+  height: 50px;
+  border-radius: 50%;
+  background: black;
+}
+</style>
