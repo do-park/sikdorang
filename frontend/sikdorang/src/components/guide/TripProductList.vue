@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-2">
     <!-- 가이드를 검색하는 Input이 필요할 확률이 높음 -->
     <div
       class="item-wrap"
@@ -79,8 +79,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .item-wrap {
   cursor: pointer;
 }
+
 </style>

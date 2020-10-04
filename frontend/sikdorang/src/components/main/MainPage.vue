@@ -1,21 +1,21 @@
 <template>
-  <div>
+  <div class="mt-5">
     <div v-if="!isLogin">여행을 시작할까요?</div>
-    <div v-else class="text-left">
+    <div v-else class="text-left p-5">
       <h5>{{ username }}님,</h5>
       <div class="d-flex justify-content-center">
         <h4 class="text-center"><Recommend /></h4>
       </div>
       <h5 class="text-right">어떠세요?</h5>
     </div>
-    <div class="btn-wrap row m-0 p-0 justify-content-around">
-      <div class="w-100 col-4 m-0 p-0">
+    <div class="btn-wrap row mb-5 p-0 justify-content-around">
+      <div class="m-0 p-0">
         <button class="btn btn-danger main-btn" @click="clickMyChoice">
           <div>내가</div>
           <div>고르기</div>
         </button>
       </div>
-      <div class="w-100 col-4 m-0 p-0">
+      <div class="m-0 p-0">
         <button
           class="btn btn-danger main-btn d-inline-block"
           @click="clickRecommend"
@@ -26,9 +26,6 @@
       </div>
     </div>
     <ThemePage />
-    <!-- <button class="btn btn-primary" @click="clickToLoginPageOrMyPage">
-      {{ loginOrMypage }}
-    </button> -->
   </div>
 </template>
 
@@ -83,7 +80,7 @@ export default {
     },
     clickRecommend() {
       this.actionIsSik(true);
-      console.log('2번', true)
+      console.log("2번", true);
       this.$router.push({ name: "Schedule" });
     },
     clickToLoginPageOrMyPage() {
