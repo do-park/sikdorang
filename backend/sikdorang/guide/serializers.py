@@ -26,4 +26,4 @@ class TourSerializer(serializers.ModelSerializer):
     class Meta: 
         model = TripItemModel
         depth = 1
-        fields = ['id', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'limit_person', 'departure_person', 'now_person']
+        fields = ['user', 'title_img', 'title', 'area', 'start_date', 'end_date', 'price', 'limit_person', 'departure_person', 'now_person']
