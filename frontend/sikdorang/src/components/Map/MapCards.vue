@@ -7,7 +7,7 @@
         </button>
       </div>
 
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center align-items-center">
         <transition
           v-for="(res, idx) in threeRes"
           :key="res.id"
@@ -21,8 +21,7 @@
             @mouseover="actionMouseOver(idx)"
             @mouseleave="actionMouseOver(null)"
           >
-            {{ index[idx] }}.{{ res.name }}
-            <p>@ 맛집 정보 @</p>
+            <span class="align-middle">{{ index[idx] }}.{{ res.name }}</span>
           </div>
         </transition>
         <br />
@@ -34,7 +33,9 @@
 <script>
 import Swal from "sweetalert2";
 import { mapGetters, mapActions } from "vuex";
+
 const mapEvent = "mapEvent";
+const CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
 
 export default {
   name: "MapCards",
@@ -133,11 +134,25 @@ export default {
         this.actionSelectedRest(this.getThreeRes[idx]);
       }
       var Rest = this.getSelectedRest;
+      let htmlContent = ``
+      if (Rest.tel !== undefined) {
+        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.tel}</p>`
+      }
+      if (Rest.address !== undefined) {
+        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.address}</p>`
+        htmlContent += '<hr>'
+      }
+      if (Rest.img !== undefined) {
+        htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
+      } else if (CATEGORY_NAME.indexOf(Rest.category) !== -1) {
+        htmlContent += `<img src="${this.$store.state.SERVER_URL}media/category/${CATEGORY_NAME.indexOf(Rest.category)}.jpg" style="max-width: 100%;"/>`
+        htmlContent += `<p class="m-0 small text-right">*예시 이미지입니다</p>`
+      }
       Swal.fire({
         title: Rest.name,
-        text: Rest.tel,
+        html: htmlContent,
         showCancelButton: true,
-        confirmButtonText: "일정 추가",
+        confirmButtonText: "추가",
         cancelButtonText: "취소",
       }).then((res) => {
         if (res.isConfirmed) {
@@ -202,6 +217,8 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/animate.css@3.5.1";
 .box {
   margin: 2px;
+  height: 3rem;
+  line-height : 3rem;
   text-align: center;
   background-color: lightgray;
 }

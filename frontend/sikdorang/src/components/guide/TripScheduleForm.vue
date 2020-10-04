@@ -97,6 +97,9 @@ export default {
       },
     };
   },
+  mounted() {
+    window.scrollTo(0, 0)
+  },
   methods: {
     clickStartTime(e) {
       e.target.nextSibling.click()

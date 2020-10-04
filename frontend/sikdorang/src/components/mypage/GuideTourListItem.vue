@@ -1,11 +1,11 @@
 <template>
     <div class="row tour" @click="onClick">
         <div class="col-3 p-0">
-            <img class="tour-title-img" :src="tour.title_img" alt="">
+            <img class="tour-title-img" :src="tour.trip_item.title_img" alt="">
         </div>
         <div class="col-9 p-0 my-auto">
-            <div class="tour-title text-truncate">[{{ tour.area}}]{{ tour.title }}</div>
-            <div class="tour-date">{{ tour.start_date }}~{{ tour.end_date }}</div>
+            <div class="tour-title text-truncate">[{{ tour.trip_item.area}}]{{ tour.trip_item.title }}</div>
+            <div class="tour-date">{{ tour.trip_item.start_date }}~{{ tour.trip_item.end_date }}</div>
         </div>
     </div>
 </template>
@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         onClick() {
-            this.$router.push(`/trip/detail/${this.tour.id}`)
+            this.$router.push(`/trip/detail/${this.tour.trip_item.id}`)
         }
     }
 }

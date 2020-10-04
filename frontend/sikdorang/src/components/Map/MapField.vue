@@ -41,7 +41,7 @@ export default {
   },
   mounted() {
     this.addScript();
-    this.actionMapEventClear();
+    // this.actionMapEventClear();
     // this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
   },
   computed: {
@@ -238,7 +238,6 @@ export default {
       var lat = null,
         long = null;
       if (cd === "over" && this.getMouseOver !== null) {
-        console.log(123);
         lat = this.getThreeRes[this.getMouseOver].latitude;
         long = this.getThreeRes[this.getMouseOver].longitude;
       } else if (cd === "click" && this.getClicked !== null) {
@@ -510,7 +509,6 @@ export default {
           this.selectedMarker = selectedMarker;
           infowindow.close();
           window.$cookies.set("selectedMarker", selectedMarker.idx);
-          console.log(selectedMarker.idx);
           self.actionClicked(selectedMarker.idx);
           // self.selectRest(selectedMarker.idx)
         };
@@ -745,6 +743,7 @@ export default {
 
     showPaths() {
       var plans = this.getPlanList;
+      console.log('패스 보여주기', console.log(plans))
       var map = this.map;
       var imageSrc =
         "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";

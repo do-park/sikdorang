@@ -36,7 +36,6 @@ export default {
 	},
 	watch: {
 		item() {
-			console.log('fdsfsdfsdfsd')
 			this.getPeople()
 		}
 	},
@@ -58,7 +57,6 @@ export default {
       this.$axios
       .get(`/guide/paider/${this.item.id}`)
       .then((res) => {
-				console.log(res)
 				this.people = res.data
       })
       .catch((err) => {

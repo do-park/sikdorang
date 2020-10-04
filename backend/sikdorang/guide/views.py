@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, authentication_classes
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 # from rest_framework import viewsets
 from .serializers import *
@@ -43,16 +43,25 @@ def list_tour(request):
 
 @api_view(['GET'])
 def detail_tour(request, tour_pk):
-    tour = TripItemModel.objects.filter(pk=tour_pk)
-    serializer = TourDetailSerializer(tour, many=True)
-    return Response(serializer.data)
-
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tours = TripItemModel.objects.filter(pk=tour_pk)[0]
+    paiders = GuideTour.objects.filter(trip_item=tour_pk)
+    flag = False
+    for paider in paiders:
+        if paider.user == user:
+            flag = True
+    serializer = TourSerializer(tours)
+    return JsonResponse({"result": serializer.data, "flag": flag})
+ 
 
 @api_view(['GET'])
 def list_guide(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    trips = TripItemModel.objects.filter(user=user)
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    trips = TripItemModel.objects.filter(start_date__gte=int(nowDate), user=user).order_by('start_date')
     serializer = GuideSerializer(trips, many=True)
     return Response(serializer.data)
 
@@ -74,8 +83,8 @@ def paid(request, trip_pk):
 def paidtour(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    tours = TripItemModel.objects.filter(user=user)
-    serializer = TourSerializer(tours, many=True)
+    tours = GuideTour.objects.filter(user=user)
+    serializer = PaidSerializer(tours, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
