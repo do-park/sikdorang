@@ -1,63 +1,53 @@
 <template>
   <div>
-    <div>
-      <label for="title">제목</label>
-      <input class="form-control" type="text" id="title" v-model="tripSchedule.title" />
-    </div>
-    <div>
-      <label for="t-i">대표이미지</label>
-      <br />
-      <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif" />
-    </div>
-    <div>
-      <label for="area">여행지역</label>
-      <input class="form-control" type="text" id="area" v-model="tripSchedule.area" />
-      <!-- Area 도 - 시/군/구 선택 -->
-    </div>
-    <div>
-      <label for="start_date">시작일</label>
-      <input type="date" name="start_date" id="start_date" v-model="tripSchedule.start_date" />
-    </div>
-    <div>
-      <label for="end_date">종료일</label>
-      <input type="date" name="end_date" id="end_date" v-model="tripSchedule.end_date" />
-    </div>
-    <div>
-      <label for="price">가격</label>
-      <input
-        class="form-control d-inline-block"
-        type="number"
-        id="price"
-        v-model="tripSchedule.price"
-      />원
-    </div>
-    <div>
-      <label for="limit_person">제한인원</label>
-      <input
-        class="form-control d-inline-block"
-        type="number"
-        id="limit_person"
-        v-model="tripSchedule.limit_person"
-      />명
-    </div>
-    <div>
-      <label for="departure_person">최소 출발인원</label>
-      <input
-        class="form-control d-inline-block"
-        type="number"
-        id="departure_person"
-        v-model="tripSchedule.departure_person"
-      />명
-    </div>
-    <div>
-      <label for="time">출발시간</label>
-      <input type="time" name="time" id="time" v-model="tripSchedule.start_time" />
-    </div>
-    <div>
-      <label for="start_point">출발장소</label>
-      <input class="form-control" type="text" id="start_point" v-model="tripSchedule.start_point" />
+    <h3 class="title">여행 상품 생성</h3>
+    <div class="wrap row m-0">
+      <input class="form-input col-10 p-0 px-1" placeholder="상품명" type="text" id="title" v-model="tripSchedule.title" />
+      <div class="form-input col-10 p-0 row m-0 mx-auto filebox">
+        <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif" />
+        <div class="col-8 p-0" v-if="tripSchedule.title_img">{{tripSchedule.title_img.name}}</div>
+        <div class="col-8 p-0" v-else></div>
+        <label class="col-4 p-0 m-0" for="t-i">대표이미지</label>
+      </div>
+      <div class="col-10 mx-auto p-0 mt-3 row justify-content-between">
+        <input class="form-input col-6 m-0 px-1" placeholder="여행지역" type="text" id="area" v-model="tripSchedule.area" />
+        <input
+          placeholder="가격"
+          class="form-input col-6 m-0 px-1"
+          type="number"
+          id="price"
+          v-model="tripSchedule.price"
+        />
+      </div>
+      <div class="col-10 mx-auto p-0 row">
+        <input class="form-input col-5 date-input" type="date" name="start_date" id="start_date" v-model="tripSchedule.start_date" />
+        <div class="col-2 p-0 m-0 my-auto text-center">~</div>
+        <input class="form-input col-5 date-input" type="date" name="end_date" id="end_date" v-model="tripSchedule.end_date" />
+      </div>
+      <div class="col-10 mx-auto p-0 row justify-content-between">
+        <input
+          placeholder="제한인원"
+          class="form-input col-6 m-0 px-1"
+          type="number"
+          id="limit_person"
+          v-model="tripSchedule.limit_person"
+        />
+        <input
+          placeholder="최소 출발인원"
+          class="form-input col-6 m-0 px-1"
+          type="number"
+          id="departure_person"
+          v-model="tripSchedule.departure_person"
+        />
+      </div>
+      <div class="col-10 p-0 mx-auto mb-0 row justify-content-between form-input">
+        <label for="time" class="pl-1 date-time-title" @click="clickStartTime">출발시간</label>
+        <input type="time" name="time" id="time" v-model="tripSchedule.start_time" />
+      </div>
+      <input placeholder="출발장소" class="col-10 pl-1 form-input" type="text" id="start_point" v-model="tripSchedule.start_point" />
     </div>
     <editor
+      class="mt-4"
       ref="toastuiEditor"
       :initialValue="editorText"
       :options="editorOptions"
@@ -65,7 +55,9 @@
       initialEditType="wysiwyg"
       previewStyle="vertical"
     />
-    <button class="btn btn-primary" @click="onClick()">생성</button>
+    <div class="text-center">
+      <button class="create-btn" @click="onClick()">작성완료</button>
+    </div>
   </div>
 </template>
 
@@ -105,6 +97,9 @@ export default {
     };
   },
   methods: {
+    clickStartTime(e) {
+      e.target.nextSibling.click()
+    },
     datetoint(date) {
       var y = date.substr(0, 4) * 10000;
       var m = parseInt(date.substr(5, 2)) * 100;
@@ -158,5 +153,50 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.title {
+  margin: 3rem 0px;
+  text-align: center;
+}
+.wrap {
+  margin: 0px 5px 1rem;
+}
+.form-input {
+  border-bottom: 2px solid gray;
+  margin: 1rem auto ;
+}
+.filebox label {
+  color: gray;
+  cursor: pointer;
+  padding: 0.05rem !important;
+  border: 1px solid #ebebeb;
+  text-align: center;
+}
+.filebox input[type="file"] { 
+  /* 파일필드 숨기기 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+}
+.date-input {
+  font-size: 13px;
+  padding: 0px;
+}
+.date-time-title {
+  color: gray;
+}
+
+.create-btn {
+  color: white;
+  background-color: crimson;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+
 </style>
