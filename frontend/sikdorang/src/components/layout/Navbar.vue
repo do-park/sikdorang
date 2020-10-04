@@ -1,9 +1,9 @@
 <template>
   <nav class="text-center">
     <div class="fixed-bottom wrap row">
-      <div to="/trip/list" class="col-5 p-0 my-auto" @click="toTour">투어아이콘</div>
+      <div to="/trip/list" class="col-5 p-0 my-auto" @click="toTour"><i class="fas fa-flag fa-2x"></i></div>
       <div to="/" class="col-2 p-0 row m-0 sikdorang" @click="toMain"><i class="fas fa-home fa-2x m-auto"></i></div>
-      <div to="/party/list" class="col-5 p-0 my-auto" @click="toParty">동행아이콘</div>
+      <div to="/party/list" class="col-5 p-0 my-auto" @click="toParty"><i class="fas fa-users fa-2x"></i></div>
     </div>
   </nav>
 </template>

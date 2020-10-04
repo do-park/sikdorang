@@ -7,7 +7,10 @@
     <div class="input-wrap">
       <input @change="fileChange" type="file" ref="userImage" class="img-change-btn" id="user-image" accept=".jpg, .jpeg, .gif">
     </div>
-    <div class="username">{{ getUserInfo.username }} <i class="fas fa-sign-out-alt logout" @click="tryLogout"></i></div>
+    <div class="username">
+      {{ getUserInfo.username }}
+      <i class="fas fa-sign-out-alt logout" @click="tryLogout"></i>
+    </div>
     <AchievementBadge/>
   </div>
 </template>
