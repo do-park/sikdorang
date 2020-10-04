@@ -74,8 +74,8 @@ def paid(request, trip_pk):
 def paidtour(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    tours = TripItemModel.objects.filter(user=user)
-    serializer = TourSerializer(tours, many=True)
+    tours = GuideTour.objects.filter(user=user)
+    serializer = PaidSerializer(tours, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])

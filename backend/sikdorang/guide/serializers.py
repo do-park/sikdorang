@@ -30,4 +30,5 @@ class TourSerializer(serializers.ModelSerializer):
 class PaidSerializer(serializers.ModelSerializer):
     class Meta:
         model = GuideTour
-        fields = ['user_name', 'phone_number']
+        depth = 2
+        fields = '__all__'
