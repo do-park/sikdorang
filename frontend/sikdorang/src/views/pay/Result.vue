@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-5 pt-5 text-center">
     <h1>{{ type === 'payment' ? '결제' : '본인인증' }} {{ success ? '성공' : '실패'}}</h1>
     <div v-if="!success">
       <div>{{ errorMessage }}</div>

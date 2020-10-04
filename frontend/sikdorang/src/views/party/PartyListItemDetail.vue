@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tripSchedule" class="my-0 mx-0">
+  <div v-if="tripSchedule" class="">
     <div style="height: 5vh"></div>
     <h3 class="text-center">{{ tripSchedule.name }}</h3>
     <div>
