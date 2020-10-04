@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+
 export default {
   name: "FoodIdealTagCup",
   data() {
@@ -56,6 +58,15 @@ export default {
       isDone: false,
       isSaved: false,
     };
+  },
+  mounted() {
+    Swal.fire({
+      title: '<strong>음식 종류 이상형 월드컵</strong>',
+      icon: 'info',
+      html:
+        '<p>어떤 음식을 가장 좋아하시나요?</p>' +
+        '<strong>이상형 월드컵으로 알아보세요!</strong>'
+    })
   },
   methods: {
     onClick(direction) {
@@ -112,6 +123,13 @@ export default {
         .catch((err) => console.error(err));
     },
     done() {
+      Swal.fire({
+        title: '<strong>음식점 장점 이상형 월드컵</strong>',
+        icon: 'info',
+        html:
+          '<p>어떤 음식점을 가장 좋아하시나요?</p>' +
+          '<strong>이상형 월드컵으로 알아보세요!</strong>'
+      })
       this.$emit("done");
     },
   },

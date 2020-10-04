@@ -197,10 +197,10 @@ def get_tag_recommendation(request):
     lat = float(data["lat"])
     lng = float(data["lng"])
     beforeCategories = data["bc"]
-    g_lat = lat + 0.02
-    l_lat = lat - 0.02
-    g_lng = lng + 0.02
-    l_lng = lng - 0.02
+    g_lat = lat + 0.01
+    l_lat = lat - 0.01
+    g_lng = lng + 0.01
+    l_lng = lng - 0.01
     stores = Store.objects.filter(
         Q(latitude__lte=g_lat) & Q(latitude__gte=l_lat) & Q(longitude__lte=g_lng) & Q(longitude__gte=l_lng)
     )

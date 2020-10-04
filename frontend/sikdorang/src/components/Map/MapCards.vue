@@ -119,10 +119,13 @@ export default {
     ]),
 
     selectRest(idx) {
+      this.actionClicked(idx);
       var plans = this.getPlanList;
-      if (idx < 3 && idx >= 0) {
-        this.actionClicked(idx);
+      if (this.getTagStores){
+        this.actionSelectedRest(this.getTagStores[idx]);
+        } else {
         this.actionSelectedRest(this.getThreeRes[idx]);
+      }
         var Rest = this.getSelectedRest;
         swal({
           title: Rest.name,
@@ -138,8 +141,10 @@ export default {
                   icon: "success",
                 });
                 plans.push(this.getSelectedRest);
+                this.actionTagStores(false)
                 this.actionPlanList(plans);
                 this.actionStore(Rest)
+                this.actionSelectTag(null)
                 this.actionScheduleIdx(this.getScheduleIdx+1)
               } else {
                 // console.log('취소 확인')
@@ -151,7 +156,6 @@ export default {
             this.actionClicked(null);
           }
         });
-      }
     },
     isActive(idx) {
       if (this.isActive0 && idx === 0) {

@@ -1,11 +1,14 @@
 <template>
     <div>
         <div>식도랑 추천 코스 생성중</div>
+        <div>
+            <b-spinner class="m-5" label="Busy"></b-spinner>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
 const CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
@@ -25,13 +28,19 @@ export default {
         }
     },
     methods: {
+        ...mapActions('mapEvent', ['actionPlanList']),
         divideRecommendation(cf, index) {
 			if (cf === "식당" | cf === "카페"){
 				this.getSCRecommendation(cf, index)
 			} else {
 				this.getSHRecommendation(cf, index)
 			}
-		},
+        },
+        getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+        },
 		async getSCRecommendation(cf, index) {
 			const requestHeaders = {
 				headers: {
@@ -55,17 +64,18 @@ export default {
             await axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
             .then(res => {
                 const items = res.data.response.body.items.item
+                let idx = this.getRandomInt(0, items.length)
                 this.schedules[index].userChoice = {
-                    "id": items[0].contentid,
-                    "name": items[0].title,
+                    "id": items[idx].contentid,
+                    "store_name": items[idx].title,
                     "branch": "",
-                    "tel": items[0].tel,
-                    "address": items[0].addr1 + items[0].addr2,
-                    "latitude": items[0].mapy,
-                    "longitude": items[0].mapx,
-                    "category": "관광지",
+                    "tel": items[idx].tel,
+                    "address": items[idx].addr1 + items[idx].addr2,
+                    "latitude": items[idx].mapy,
+                    "longitude": items[idx].mapx,
+                    "category": cf,
                     "tags": "",
-                    "img": items[0].firstimage,
+                    "img": items[idx].firstimage,
                 }
                 this.beforeLat = this.schedules[index].userChoice.latitude
                 this.beforeLng = this.schedules[index].userChoice.longitude
@@ -83,7 +93,7 @@ export default {
                 const forUser = this.getForUser
                 this.schedules[i].userChoice = {
                     "id": forUser.id,
-                    "name": forUser.store_name,
+                    "store_name": forUser.store_name,
                     "branch": forUser.branch,
                     "tel": forUser.tel,
                     "address": forUser.address,
@@ -96,10 +106,11 @@ export default {
                 await this.divideRecommendation(this.schedules[i].name, i)
             }
         }
-        console.log('추천 결과 확인', this.schedules)
-        this.schedules.forEach(e => {
-            console.log(e.userChoice)
-        })
+        console.log('스케줄 저장 확인', this.schedules)
+        this.actionPlanList(this.schedules)
+        setTimeout(() => {
+            this.$router.replace('/mypage')
+        }, 3000)
         // 생성 완료
     }
 }
