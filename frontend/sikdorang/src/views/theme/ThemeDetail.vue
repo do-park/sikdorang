@@ -48,7 +48,7 @@ export default {
       theme_id: this.$cookies.get("theme_id"),
       restaurants: [],
       IMG_URL: "http://j3d202.p.ssafy.io:8080",
-      file : null,
+      file: null,
     };
   },
   created() {
@@ -78,7 +78,6 @@ export default {
     goDetail(rest) {
       console.log(rest);
       if (this.storeClear[rest.id] === 1) {
-        
         Swal.fire({
           title: rest.store_name,
           html:
@@ -89,10 +88,8 @@ export default {
             rest.description,
           confirmButtonColor: "#d33",
           confirmButtonText: "닫기",
-        
-        })
-      }
-      else {
+        });
+      } else {
         Swal.fire({
           title: rest.store_name,
           html:
@@ -107,78 +104,75 @@ export default {
           confirmButtonText: "방문하기",
           cancelButtonText: "닫기",
         })
-      
-      .then((result) => {
-        if (result.isConfirmed) {
-         Swal.fire({
-            title: "영수증 업로드",
-            text: "방문 인증을 위한 영수증을 업로드하세요.",
-            input: "file",
-            inputAttributes: {
-              accept: "image/*",
-              "aria-label": "Upload your profile picture",
-            },
-          }).then((file) => {
- 
-            this.file = file.value;
-            // 파일 업로드 부터         
-            if (file.value) {
-              const receipt_image = file.value
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                Swal.fire({
-                  title: "영수증을 업로드합니다.",
-                  imageUrl: e.target.result,
-                  imageAlt: "영수증을 업로드합니다.",
+        .then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "영수증 업로드",
+              text: "방문 인증을 위한 영수증을 업로드하세요.",
+              input: "file",
+              inputAttributes: {
+                accept: "image/*",
+                "aria-label": "Upload your profile picture",
+              },
+            }).then((file) => {
+              this.file = file.value;
+              // 파일 업로드 부터
+              if (file.value) {
+                const receipt_image = file.value;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  Swal.fire({
+                    title: "영수증을 업로드합니다.",
+                    imageUrl: e.target.result,
+                    imageAlt: "영수증을 업로드합니다.",
                   }).then((result) => {
-                      if (result) {
-                        const requestHeaders = {
-                          headers: {
-                            Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-                            'Content-Type' : 'multipart/form-data',
-                          },
-                        };
-                        //이미지 form
-                        let data = new FormData()
+                    if (result) {
+                      const requestHeaders = {
+                        headers: {
+                          Authorization: `JWT ${this.$cookies.get(
+                            "auth-token"
+                          )}`,
+                          "Content-Type": "multipart/form-data",
+                        },
+                      };
+                      //이미지 form
+                      let data = new FormData();
 
-                        //이미지와 음식점 이름 넣기
-                        data.append('receipt',receipt_image)
-                        data.append('rest_name',rest.store_name)
-                        
-                        this.$axios
-                          .post(
-                            `achievement/visit_create/${rest.id}`,
-                            data,
-                            //null대신에 이미지 담아서 전송 -> 백에서 받아서 저장 + 알고리즘 돌리고 결과값 다시 여기로 보냄 
-                            requestHeaders
-                          )
-                          .then((res) => {
-                            console.log(res)
-                            if (res.data === 1) {
-                              this.$set(this.storeClear, rest.id, 1);
-                              this.actionStoreClear(this.storeClear);
-                              //방문 변경 새로고침하는 함수
-                              this.updateClear(rest.id);
+                      //이미지와 음식점 이름 넣기
+                      data.append("receipt", receipt_image);
+                      data.append("rest_name", rest.store_name);
 
-                              Swal.fire("Yummy!", "방문 완료!", "success");
+                      this.$axios
+                        .post(
+                          `achievement/visit_create/${rest.id}`,
+                          data,
+                          //null대신에 이미지 담아서 전송 -> 백에서 받아서 저장 + 알고리즘 돌리고 결과값 다시 여기로 보냄
+                          requestHeaders
+                        )
+                        .then((res) => {
+                          console.log(res);
+                          if (res.data === 1) {
+                            this.$set(this.storeClear, rest.id, 1);
+                            this.actionStoreClear(this.storeClear);
+                            //방문 변경 새로고침하는 함수
+                            this.updateClear(rest.id);
 
-                            }
-                            else if(res.data === -1) {
-                              Swal.fire("Fail", "방문 인증 실패!", "warning");
-                            }
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
-                      }
-                  })
+                            Swal.fire("Yummy!", "방문 완료!", "success");
+                          } else if (res.data === -1) {
+                            Swal.fire("Fail", "방문 인증 실패!", "warning");
+                          }
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }
+                  });
+                };
+                reader.readAsDataURL(file.value);
               }
-              reader.readAsDataURL(file.value);
-            }
-          })
-        }
-        
-      })
+            });
+          }
+        });
       }
     },
     updateClear(restId) {
@@ -279,5 +273,9 @@ export default {
   left: 3px;
   top: 20px;
   /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); */
+}
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
 }
 </style>

@@ -238,4 +238,8 @@ export default {
   margin: 0, auto;
   z-index: 10;
 }
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
+}
 </style>
