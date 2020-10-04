@@ -81,6 +81,6 @@ def create_message(request, party_pk):
 
 @api_view(['GET'])
 def list_message(request, party_pk):
-    messages = PartyMessage.objects.filter(id=party_pk).order_by('-created_at')
+    messages = PartyMessage.objects.filter(party_id=party_pk).order_by('-created_at')
     serializer = PartyMessageListSerializer(messages, many=True)
     return Response(serializer.data)
