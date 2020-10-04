@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="text-center">{{ gameCount}} | {{ roundCount }}</h3>
+    <h3 class="text-center">{{ gameCount }} | {{ roundCount }}</h3>
     <div v-if="!isDone">
       <img
         class="img"
@@ -62,35 +62,37 @@ export default {
   computed: {
     roundCount() {
       if (this.tags.length === 2) {
-        return '결승'
+        return "결승";
       } else if (this.tags.length === 1) {
-        return '우승'
+        return "우승";
       } else {
-        return `${this.tags.length} 강`
+        return `${this.tags.length} 강`;
       }
     },
     gameCount() {
       if (this.clickCount === -1) {
-        return `1 / ${Math.round(this.tags.length / 2)}`
+        return `1 / ${Math.round(this.tags.length / 2)}`;
       } else if (this.clickCount === 1) {
-        return `2 / ${Math.round(this.tags.length / 2)}`
+        return `2 / ${Math.round(this.tags.length / 2)}`;
       } else {
-        return `${Math.round(this.clickCount / 2)+1} / ${Math.round(this.tags.length / 2)}`
+        return `${Math.round(this.clickCount / 2) + 1} / ${Math.round(
+          this.tags.length / 2
+        )}`;
       }
-    }
+    },
   },
   mounted() {
     Swal.fire({
-      title: '<strong>음식 종류 이상형 월드컵</strong>',
-      icon: 'info',
+      title: "<strong>음식 종류 이상형 월드컵</strong>",
+      icon: "info",
       html:
-        '<p>어떤 음식을 가장 좋아하시나요?</p>' +
-        '<strong>이상형 월드컵으로 알아보세요!</strong>'
-    })
+        "<p>어떤 음식을 가장 좋아하시나요?</p>" +
+        "<strong>이상형 월드컵으로 알아보세요!</strong>",
+    });
   },
   methods: {
     onClick(direction) {
-      console.log(this.clickCount)
+      console.log(this.clickCount);
       this.clickCount += 2;
       // 선택한 이미지를 userChoice에 추가합니다.
       if (direction === "left") {
@@ -145,12 +147,12 @@ export default {
     },
     done() {
       Swal.fire({
-        title: '<strong>음식점 장점 이상형 월드컵</strong>',
-        icon: 'info',
+        title: "<strong>음식점 장점 이상형 월드컵</strong>",
+        icon: "info",
         html:
-          '<p>어떤 음식점을 가장 좋아하시나요?</p>' +
-          '<strong>이상형 월드컵으로 알아보세요!</strong>'
-      })
+          "<p>어떤 음식점을 가장 좋아하시나요?</p>" +
+          "<strong>이상형 월드컵으로 알아보세요!</strong>",
+      });
       this.$emit("done");
     },
   },
@@ -172,5 +174,9 @@ export default {
   transform: translateX(-50%);
   bottom: -40px;
   position: absolute;
+}
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
 }
 </style>

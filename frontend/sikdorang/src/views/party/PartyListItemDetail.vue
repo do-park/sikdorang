@@ -259,4 +259,8 @@ export default {
 </script>
 
 <style>
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
+}
 </style>
