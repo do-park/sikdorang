@@ -55,10 +55,10 @@ export default {
         window.$cookies.set('auth-token',response.data.token)
         this.$store.state.isLogin = true
         this.actionUserInfo(response.data.user)
-        if (response.data.user.done_cup) {
+        if (response.data.user.done_cup === 1) {
           this.$emit('toMainPage');
         } else {
-          this.$router.push('idealtagcup')
+          this.$router.push('/idealtagcup')
         }
       })
       .catch(err => {

@@ -17,7 +17,7 @@ export default {
 	name : "MapField",
 	data() {
 		return {
-			destination : '5',
+			destination : '',
 			map: null,
 			startLat : null,
 			startLong : null,
@@ -54,6 +54,7 @@ export default {
 			'getSelectedRest',
 			'getPlanList',
 			'getSelectTag',
+			'getTagStores',
 		]),
 		...mapGetters("schedule", [
 			"getSchedules",
@@ -79,20 +80,30 @@ export default {
 				this.beforeLat = this.getSchedules[Number(this.getScheduleIdx)-1].userChoice.latitude
 				this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
 			} else {
-				this.$router.push('/mypage')
+				this.$router.replace('/mypage')
 			}
 		},
 		getPlanList() {
-			this.showPaths()
+			if (this.getPlanList.length !== 0) {
+				this.showPaths()
+			}
 		},
 		getMouseOver() {
 			if (this.getMouseOver !== null) {
-				this.moveSmoothly('over')
+				if (this.getTagStores) {
+					this.moveTagSmoothly('over')
+				} else {
+					this.moveSmoothly('over')
+				}
 			}
 		},
 		getClicked() {
 			if (this.getClicked !== null) {
-				this.moveSmoothly('click')
+				if (this.getTagStores) {
+					this.moveTagSmoothly('click')
+				} else {
+					this.moveSmoothly('click')
+				}
 			}
 		},
 		getScheduleProgressIdx() {
@@ -132,7 +143,7 @@ export default {
 			this.$axios.post('recommend/tag-store/', data)
 			.then(res => {
 				this.showTagStores(res.data.result)
-				this.actionTagStores(true)
+				this.actionTagStores(res.data.result)
 			})
 			.catch(err => console.error(err))
 		},
@@ -165,30 +176,50 @@ export default {
             if (cf ==="관광지") { contentTypeId = 12 }
             axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
             .then(res => {
-                const items = res.data.response.body.items.item
+				const items = res.data.response.body.items.item
                 for (let i=0;i<items.length;i++) {
+					let address = null
+					if (typeof(items[i].addr2) !== "undefined") {
+						address = items[i].addr1 + items[i].addr2
+					} else {
+						address = items[i].addr1
+					}
                     this.recommends.push({
                         "id": items[i].contentid,
                         "name": items[i].title,
                         "branch": "",
                         "tel": items[i].tel,
-                        "address": items[i].addr1 + items[i].addr2,
+                        "address": address,
                         "latitude": items[i].mapy,
                         "longitude": items[i].mapx,
-                        "category": "관광지",
+                        "category": cf,
                         "tags": "",
                         "img": items[i].firstimage,
                     })
 				}
-				this.showCandidates(this.recommends)
+				this.showCandidates(this.recommends, '관광/숙박')
             })
             .catch(err => console.error(err))
+		},
+		moveTagSmoothly(cd) {
+		var lat = null,
+			long = null;
+			if (cd === 'over' && this.getMouseOver !== null) {
+				lat = this.getTagStores[this.getMouseOver].latitude
+				long = this.getTagStores[this.getMouseOver].longitude
+			} else if (cd === 'click' && this.getClicked !== null) {
+				lat = this.getTagStores[this.getClicked].latitude
+				long = this.getTagStores[this.getClicked].longitude
+			}
+			let moveLatLon = new kakao.maps.LatLng(lat,long)
+			this.map.panTo(moveLatLon);
 		},
 		moveSmoothly(cd) {
 			// 이동할 위도 경도 위치를 생성합니다 
 		var lat = null,
 			long = null;
 			if (cd === 'over' && this.getMouseOver !== null) {
+				console.log(123)
 				lat = this.getThreeRes[this.getMouseOver].latitude
 				long = this.getThreeRes[this.getMouseOver].longitude
 			} else if (cd === 'click' && this.getClicked !== null) {
@@ -309,6 +340,9 @@ export default {
 			}
 			else {
 				this.actionThreeRes(this.recommends.slice(3))
+				if (this.getThreeRes.length === 0) {
+					this.actionThreeRes(this.recommends.slice(0,3))
+				} 
 			}
 		},
 		//카드 누르면 마커 이미지 변경
@@ -324,6 +358,8 @@ export default {
 		},
 		showTagStores(stores){
 			const map = this.map
+			const self = this
+			this.actionClicked(null)
 			this.hideMarkers(this.recommendMarkers)
 			this.recommendMarkers = [];
 			var bounds = new kakao.maps.LatLngBounds();
@@ -376,7 +412,7 @@ export default {
 
 				// 마커에 표시할 인포윈도우를 생성합니다 
 				var infowindow = new kakao.maps.InfoWindow({
-					content: `<h5>${stores[i].name}</h5>` // 인포윈도우에 표시할 내용
+					content: `<div style="width:150px;text-align:center;padding:6px 0;">${stores[i].name}</div>` // 인포윈도우에 표시할 내용
 				});
 
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
@@ -427,7 +463,8 @@ export default {
 					this.selectedMarker = selectedMarker;
 					infowindow.close();
 					window.$cookies.set('selectedMarker', selectedMarker.idx)
-					// self.actionClicked(selectedMarker.idx)
+					console.log(selectedMarker.idx)
+					self.actionClicked(selectedMarker.idx)
 					// self.selectRest(selectedMarker.idx)
 				};
 			}
@@ -435,18 +472,42 @@ export default {
 			map.setBounds(bounds);
 			this.showMarkers(this.recommendMarkers);
 		},
-		showCandidates(locs) {
+		getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+        },
+		showCandidates(locs, cf=null) {
 			const self = this
 			var map = this.map;
 			this.actionClicked(null)
-
-			if (this.getFlip) {
-				this.actionThreeRes(locs.slice(0,3))
+			let ranIdx = []
+			let positions = []
+			if (cf !== null) {
+				while(ranIdx.length < 6 && ranIdx.length <= locs.length) {
+					let idx = this.getRandomInt(0, locs.length)
+					if (ranIdx.indexOf(idx) === -1) {
+						ranIdx.push(idx)
+					}
+				}
+				positions = locs.filter((el, index) => {
+					return ranIdx.indexOf(index) !== -1
+				})
+				if (this.getFlip) {
+					this.actionThreeRes(positions.slice(0,3))
+				}
+				else {
+					this.actionThreeRes(positions.slice(3,6))
+				}
+			} else {
+				if (this.getFlip) {
+					this.actionThreeRes(locs.slice(0,3))
+				}
+				else {
+					this.actionThreeRes(locs.slice(3,6))
+				}
+				positions = this.getThreeRes;
 			}
-			else {
-				this.actionThreeRes(locs.slice(3,6))
-			}
-			var positions = this.getThreeRes;
 			if (positions.length === 0) {
 				return
 			}
@@ -507,7 +568,7 @@ export default {
 
 				// 마커에 표시할 인포윈도우를 생성합니다 
 				var infowindow = new kakao.maps.InfoWindow({
-					content: `<h5>${positions[i].name}</h5>` // 인포윈도우에 표시할 내용
+					content: `<div style="width:150px;text-align:center;padding:6px 0;">${positions[i].name}</div>` // 인포윈도우에 표시할 내용
 				});
 
 				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage));
@@ -606,59 +667,6 @@ export default {
 			
 			return markerImage;
 		},
-		
-		getTimeHTML(distance) {
-
-			// 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
-			var walkkTime = distance / 67 | 0;
-			var walkHour = "", walkMin = "";
-
-			// 계산한 도보 시간이 60분 보다 크면 시간으로 표시
-			if (walkkTime > 60) {
-				walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
-			}
-			walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
-
-			// 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min
-			var bycicleTime = distance / 227 | 0;
-			var bycicleHour = '', bycicleMin = '';
-
-			// 계산한 자전거 시간이 60분 보다 크면 시간으로 표출
-			if (bycicleTime > 60) {
-				bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + '</span>시간 '
-			}
-			bycicleMin = '<span class="number">' + bycicleTime % 60 + '</span>분'
-
-			// KOSIS 통계청 국도 평일 평균 기준
-			// 차 평균 시속 54km/h로 두고 분속 900m/min.
-			// 300m마다 평균 2분씩 신호등 기다리기(정석) -> 신호를 지나치기 등등 고려(500미터당 1분) 
-			// 이거는 나중에 변수값 조절해서 바꾸면 된다.
-			var carTime = (distance / 900 | 0 ) + (distance / 500 | 0);
-			var carHour = '', carMin = '';
-			
-			if (carTime > 60) {
-				carHour = '<span class="number">' + Math.floor(carTime / 60) + '</span>시간 '
-			}
-			carMin = '<span class="number">' + carTime % 60 + '</span>분'
-
-			// 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴
-			var content = '<ul style="list-style:none; color:black; font-weight: bold;" class="dotOverlay distanceInfo">';
-			content += '    <li>';
-			content += '        <span class="label">거리</span><span class="number">' + distance + '</span>m';
-			content += '    </li>';
-			content += '    <li>';
-			content += '        <span class="label">도보</span>' + walkHour + walkMin;
-			content += '    </li>';
-			content += '    <li>';
-			content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
-			content += '    </li>';
-			content += '    <li>';
-			content += '        <span class="label">차</span>' + carHour + carMin;
-			content += '    </li>';
-			content += '</ul>'
-
-			return content;
-		},
 
 		showPaths() {
 			var plans = this.getPlanList;
@@ -691,20 +699,6 @@ export default {
 				// 지도에 선을 표시합니다 
 				this.curPath.push(polyline)
 				polyline.setMap(map); 
-				var distance = Math.round(polyline.getLength());
-				var content = this.getTimeHTML(distance);
-
-				// 커스텀 오버레이를 생성하고 지도에 표시합니다
-				var distanceOverlay = new kakao.maps.CustomOverlay({
-					map: map, // 커스텀오버레이를 표시할 지도입니다
-					content: content,  // 커스텀오버레이에 표시할 내용입니다
-					position: plans[i].latlng, // 커스텀오버레이를 표시할 위치입니다.
-					xAnchor: 0,
-					yAnchor: 0,
-					zIndex: 3  
-				}); 
-				this.curPath.push(distanceOverlay)
-				distanceOverlay.setMap(map)
 			}
 			plans.forEach(plan=>{
 				// 마커 이미지의 이미지 크기 입니다

@@ -13,15 +13,6 @@ import datetime
 
 
 # Create your views here.
-@api_view(['POST'])
-def apply_guide(request):
-    User = get_user_model()
-    user = get_object_or_404(User, pk=request.user.pk)
-    if user.phone_number:
-        user.user_code = 1
-        user.save()
-        return HttpResponse('가이드 획득')
-    return HttpResponse('휴대폰 인증 필요')
 
 @api_view(['POST'])
 def create_tour(request):

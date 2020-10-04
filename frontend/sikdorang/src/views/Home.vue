@@ -55,7 +55,6 @@ export default {
     },
 
     changeToMainPage() {
-      console.log('isLogin',this.$store.state.isLogin)
       this.view = MainPage
       this.nowMain = true
     }

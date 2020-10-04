@@ -183,7 +183,7 @@ export default {
           {
             icon: "info",
             title: "일정의 날짜를 입력하세요.",
-            html: `<input id="datepicker" type="date" value="inputValue">`,
+            html: `<input style="width:100%;" id="datepicker" type="date" value="${inputValue}">`,
             focusConfirm: false,
             allowOutsideClick: false,
             preConfirm: () => {
@@ -218,16 +218,17 @@ export default {
             this.$axios
               .post("trip/date_chk", data, requestHeaders)
               .then((res) => {
-                console.log("값 왔냐?", res);
                 if (res.data) {
                   Swal.fire({
                     icon: "warning",
                     title: "이미 등록한 일정이 있습니다. 덮어쓰시겠습니까?",
                     allowOutsideClick: false,
-                    showCancelButton: true,
+                    showDenyButton: true,
+                    denyButtonText: `Don't save`,
                   })
                     .then((result) => {
-                      if (result.isDismissed) {
+                      console.log(result)
+                      if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {
                         this.$axios

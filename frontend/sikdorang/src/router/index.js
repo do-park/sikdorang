@@ -44,7 +44,12 @@ const requireNotAuth = () => (from, to, next) => {
 
 const requireTags = () => (from, to, next) => {
   if (store.state.isLogin && store.state.mypage.userInfo.done_cup) return next()
-  next('/idealcup')
+  next('/idealtagcup')
+}
+
+const requireNoTags = () => (from, to, next) => {
+  if (store.state.isLogin && store.state.mypage.userInfo.done_cup === 0) return next()
+  next('/')
 }
 
 const requireGuide = () => (from, to, next) => {
@@ -73,6 +78,7 @@ const routes = [
     path: "/idealtagcup",
     name: "IdealTagCup",
     component: IdealTagCupView,
+    beforeEnter: requireNoTags(),
   },
   {
     path: "/mypage",

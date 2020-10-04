@@ -25,10 +25,10 @@
         </button>
       </div>
       <div id="schedule" class="schedule">
-				<SavedSchedules :savedSchedules="savedSchedules" />
-				<TripList :tripList="tripList" />
-				<GuideTourList :guideTourList="guideTourList" />
-        <ReviewList :reviewList="reviewList" />
+			<SavedSchedules :savedSchedules="savedSchedules" />
+			<TripList :tripList="tripList" />
+			<GuideTourList :guideTourList="guideTourList" />
+			<ReviewList :reviewList="reviewList" />
       </div>
     </div>
 	</div>

@@ -24,13 +24,15 @@ export default {
 		todaySchedule: Array,
 	},
 	mounted() {
-		this.plans = this.todaySchedule
 		this.addScript()
-		// this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
-	},
-	computed : {
 	},
 	watch : {
+		todaySchedule() {
+			if (this.todaySchedule.indexOf(0) === -1) {
+				this.plans = this.todaySchedule
+				this.showPaths()
+			}
+		}
 	},
 	methods : {
 		moveSmoothly(cd) {
@@ -63,7 +65,7 @@ export default {
 				level: 3
 			}; 
 			var map = new kakao.maps.Map(container, options); 
-            this.map = map;
+			this.map = map;
 			this.showPaths()
 			
 		},
@@ -135,11 +137,10 @@ export default {
 		},
 
 		showPaths() {
-			var plans = this.plans;
+			var plans = this.todaySchedule;
 			var map = this.map;
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 			var bounds = new kakao.maps.LatLngBounds();
-			
 			plans.forEach(plan => {
 				var position = new kakao.maps.LatLng(plan.latitude, plan.longitude)
 				plan.latlng = position
@@ -185,7 +186,7 @@ export default {
 				distanceOverlay.setMap(map)
 			}
 			plans.forEach(plan=>{
-				// 마커 이미지의 이미지 크기 입니다
+					// 마커 이미지의 이미지 크기 입니다
 				var imageSize = new kakao.maps.Size(24, 35); 
 				// 마커 이미지를 생성합니다    
 				var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
@@ -193,11 +194,11 @@ export default {
 				var marker = new kakao.maps.Marker({
 					map: map,
 					position: plan.latlng,
-					title : plan.title,
+					title : plan.store_name,
 					image : markerImage
 				});
 				var infowindow = new kakao.maps.InfoWindow({
-					content: `<h5>${plan.store_name}</h5>` // 인포윈도우에 표시할 내용
+					content: `<div style="width:150px;text-align:center;padding:6px 0;">${plan.store_name}</div>` // 인포윈도우에 표시할 내용
 				});
 			var OVER_MARKER_WIDTH = 27, // 오버 마커의 너비
 				OVER_MARKER_HEIGHT = 42 // 오버 마커의 높이
