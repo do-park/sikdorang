@@ -37,7 +37,15 @@ export default {
     }
   
   },
-
+  watch: {
+    getUserInfo() {
+      if (this.getUserInfo !== {}) {
+        this.isLogin = true
+      } else {
+        this.isLogin = false
+      }
+    },
+  },
   methods: {
     toTour() {
       this.$router.push('/trip/list')

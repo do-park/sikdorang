@@ -49,16 +49,15 @@ def detail_tour(request, tour_pk):
 
 
 @api_view(['GET'])
-def list_guide(request, username):
+def list_guide(request):
     User = get_user_model()
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, pk=request.user.pk)
     trips = TripItemModel.objects.filter(user=user)
     serializer = GuideSerializer(trips, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
 def paid(request, trip_pk):
-    print(request.data)
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     trip = get_object_or_404(TripItemModel, pk=trip_pk)
@@ -77,4 +76,12 @@ def paidtour(request):
     user = get_object_or_404(User, pk=request.user.pk)
     tours = TripItemModel.objects.filter(user=user)
     serializer = TourSerializer(tours, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def paider(request, trip_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    paider = GuideTour.objects.filter(trip_item=trip_pk)
+    serializer = PaiderSerializer(paider, many=True)
     return Response(serializer.data)

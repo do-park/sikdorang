@@ -10,5 +10,6 @@ urlpatterns = [
     path('list/<str:username>', views.list_guide),
     path('paid/<int:trip_pk>', views.paid),
     path('paidtour', views.paidtour),
+    path('paider', views.paider),
     # path('guidetour/<int:tour_pk>', views.guidetour),
 ]
