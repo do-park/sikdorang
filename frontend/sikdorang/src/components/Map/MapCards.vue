@@ -138,15 +138,17 @@ export default {
       console.log(Rest)
       let htmlContent = ``
       if (Rest.tel !== undefined) {
-        htmlContent += `<p>${Rest.tel}</p>`
+        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.tel}</p>`
       }
       if (Rest.address !== undefined) {
-        htmlContent += `<p class="m-0">${Rest.address}</p>`
+        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.address}</p>`
+        htmlContent += '<hr>'
       }
       if (Rest.img !== undefined) {
         htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
       } else if (CATEGORY_NAME.indexOf(Rest.category) !== -1) {
-        htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
+        htmlContent += `<img src="${this.$store.state.SERVER_URL}media/category/${CATEGORY_NAME.indexOf(Rest.category)}.jpg" style="max-width: 100%;"/>`
+        htmlContent += `<p class="m-0 small text-right">*예시 이미지입니다</p>`
       }
       Swal.fire({
         title: Rest.name,
