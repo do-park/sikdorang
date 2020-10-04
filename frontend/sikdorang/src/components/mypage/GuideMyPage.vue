@@ -5,7 +5,7 @@
       <button class="create-btn" @click="createItem">상품 등록하기</button>
     </div>
     <div v-if="(guideItems.length > 0)" class="margin-x">
-      <div v-for="item in guideItems" :key="item.id">
+      <div class="my-2" v-for="item in guideItems" :key="item.id">
         <GuideMyPageItem :item="item" />
       </div>
     </div>
