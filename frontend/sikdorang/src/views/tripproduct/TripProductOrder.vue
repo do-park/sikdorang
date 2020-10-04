@@ -1,34 +1,37 @@
 <template>
     <div>
         <!-- <img :src="getOrderTrip.img" alt=""> -->
-        <h3>{{ getOrderTrip.title }}</h3>
-        <span>{{ startDate }} ~ {{ endDate }}</span>
-        <span> 가이드: {{ getOrderTrip.guide_user }}</span>
-        <hr>
-        <div>
-            <h5>가격: {{ getOrderTrip.price }}원</h5>
+        <div class="m-4">
+
+            <h3>{{ getOrderTrip.title }}</h3>
+            <span>{{ startDate }} ~ {{ endDate }}</span>
+            <span> {{ getOrderTrip.guide_user }} 가이드</span>
+            <hr>
+            <div>
+                <h5>가격: {{ getOrderTrip.price }}원</h5>
+            </div>
+            <p>{{ getOrderTrip.start_point }}에서 {{ getOrderTrip.start_time }}분 출발 여정</p>
+            <hr>
+            <div>
+                <h4 class="mb-3">예약자 정보</h4>
+                <input @click="onClick()" type="checkbox" id="isSame">
+                <label for="isSame"> 주문자와 같음</label>
+            </div>
+            <label for="orderName">이름 : </label>
+            <input class="form-control" type="text" id="orderName" v-model="userName">
+            <br>
+            <label for="orderPhone">연락처 : </label>
+            <input class="form-control" type="text" id="orderPhone" v-model="userPhone">
+            <hr>
+            <!-- <Payment :orderTrip="getOrderTrip" :userName.sync="userName" :userPhone="userPhone" /> -->
+            <div class="pay text-right">
+                <button
+                class="btn btn-danger"
+                @click="handleSubmit">
+                결제하기</button>
+            <!-- <button class="btn btn-secondary">취소</button> -->
+            </div>
         </div>
-        <h5>집결지 / 시간 : {{ getOrderTrip.start_point }} / {{ getOrderTrip.start_time }}</h5>
-        <hr>
-        <div>
-            <h3>예약자 정보</h3>
-            <input @click="onClick()" type="checkbox" id="isSame">
-            <label for="isSame">주문자와 같음</label>
-        </div>
-        <label for="orderName">이름 : </label>
-        <input class="form-control" type="text" id="orderName" v-model="userName">
-        <br>
-        <label for="orderPhone">연락처 : </label>
-        <input class="form-control" type="text" id="orderPhone" v-model="userPhone">
-        <hr>
-        <!-- <Payment :orderTrip="getOrderTrip" :userName.sync="userName" :userPhone="userPhone" /> -->
-        <div class="pay">
-            <button
-            class="btn btn-primary"
-            @click="handleSubmit">
-            결제하기</button>
-        </div>
-        <button class="btn btn-secondary">취소</button>
     </div>
 </template>
 
