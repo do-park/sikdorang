@@ -8,7 +8,7 @@
         type="text"
         id="title"
         v-model="partyData.title"
-        placeholder="제목, [지역]을 입력해 주세요"
+        placeholder="[지역] 누구와 가고 싶은지 말해주세요"
       />
     </div>
     <editor
