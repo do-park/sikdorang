@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters, mapActions } from "vuex"
 import AchievementBadge from './AchievementBadge'
 const mypage = "mypage"
 
@@ -40,6 +40,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('mypage', ['actionUserInfo']),
     tryLogout() {
       const requestHeaders = {
         headers: {
@@ -53,7 +54,7 @@ export default {
           console.log(response);
           window.$cookies.remove("auth-token");
           this.$store.state.isLogin = false;
-
+          this.actionUserInfo({})
           // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
           this.$router.push({ name: "Home" });
           window.location.reload();
