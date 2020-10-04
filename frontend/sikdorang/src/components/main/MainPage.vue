@@ -66,8 +66,11 @@ export default {
         })
         .catch((err) => {
           console.error(err);
-          this.$store.state.isLogin = false
-          window.reload()
+          if (this.isLogin) {
+            this.$store.state.isLogin = false
+            this.isLogin = false
+            this.loginOrMypage = "로그인";
+          }
         });
       this.loginOrMypage = "마이페이지";
     }

@@ -13,15 +13,6 @@ import datetime
 
 
 # Create your views here.
-@api_view(['POST'])
-def apply_guide(request):
-    User = get_user_model()
-    user = get_object_or_404(User, pk=request.user.pk)
-    if user.phone_number:
-        user.user_code = 1
-        user.save()
-        return HttpResponse('가이드 획득')
-    return HttpResponse('휴대폰 인증 필요')
 
 @api_view(['POST'])
 def create_tour(request):
@@ -76,6 +67,8 @@ def paid(request, trip_pk):
         return HttpResponse('이미 결제된 여행입니다.')
     else:
         GuideTour.objects.create(user=user, trip_item=trip, user_name=request.data['user_name'], phone_number=request.data['phone_number'])
+        trip.now_person += 1
+        trip.save()
         return HttpResponse('결제 되었습니다.')
 
 @api_view(['GET'])

@@ -1,8 +1,12 @@
 <template>
   <div v-if="savedSchedules">
     <b-modal id="modal-scrollable" scrollable :title="scheduleName" hide-footer>
-      <h1>썸띵 지도 들어갈 곳</h1>
-      <div class="my-4" v-for="ListItem in scheduleList" :key="ListItem.id">
+      <MyPageMap :todaySchedule="scheduleList"/>
+      <div
+        class="my-4"
+        v-for="ListItem in scheduleList"
+        :key="ListItem.id"
+      >
         <div class="row m-0">
           <div class="col-1 p-0">
             <i v-if="ListItem.type === '식당'" class="fas fa-utensils"></i>
@@ -20,7 +24,7 @@
             >
               {{ ListItem.store_name }}
             </div>
-            <div v-else class="text-truncate">{{ ListItem.name }}</div>
+            <div v-else class="text-truncate">{{ ListItem.store_name }}</div>
           </div>
           <div class="col-5 p-0 detail-tel text-center">{{ ListItem.tel }}</div>
           <div class="col-12 p-0 detail-address">{{ ListItem.address }}</div>
@@ -79,6 +83,7 @@
 <script>
 import { mapGetters } from "vuex";
 import PartyRequests from "../mypage/PartyRequests.vue";
+import MyPageMap from "./MyPageMap.vue"
 
 export default {
   name: "SavedSchedules",
@@ -86,7 +91,7 @@ export default {
     savedSchedules: Boolean,
   },
   components: {
-    // PartyForm,
+    MyPageMap,
     PartyRequests,
   },
   computed: {
@@ -104,8 +109,8 @@ export default {
       scheduleDate: "",
     };
   },
-  mounted() {
-    this.getAllSchedules();
+  async created() {
+    await this.getAllSchedules();
     this.today = new Date();
   },
   methods: {
@@ -156,10 +161,10 @@ export default {
         document.getElementById(targetId).classList.add("d-none");
       }
     },
-    goScheduleDetail(schedule) {
+    async goScheduleDetail(schedule) {
       this.resetScheduleList();
       // this.makeScheduleList(schedule)
-      this.makeScheduleList(schedule);
+      await this.makeScheduleList(schedule);
     },
     resetScheduleList() {
       (this.scheduleList = []),
@@ -229,12 +234,12 @@ export default {
           // this.scheduleList["schedules"][String(i)] = {
           let result = {
             id: items.contentid,
-            name: items.title,
+            store_name: items.title,
             branch: "",
             tel: items.tel,
             address: items.addr1 + items.addr2,
             latitude: items.mapy,
-            longtitude: items.mapx,
+            longitude: items.mapx,
             //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
             type: `${typeName}`,
             category: `${typeName}`,

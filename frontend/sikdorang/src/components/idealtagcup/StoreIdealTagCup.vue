@@ -88,7 +88,7 @@ export default {
 			}
 			this.$axios.post('trip/idealtag', {tags: this.tags}, requestHeaders)
 			.then(() => {
-				//empty
+				this.$store.state.mypage.userInfo.done_cup = true
 			})
 			.catch(err => console.erro(err))
 		},

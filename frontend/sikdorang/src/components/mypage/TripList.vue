@@ -9,7 +9,7 @@
       <div class="schedule-wrap">
         <div
           v-for="(schedule, index) in todaySchedule.schedules"
-          :key="schedule.id"
+          :key="index"
           class="row schedule-detail"
         >
           <div class="col-10 p-0 row m-0">
@@ -21,7 +21,7 @@
             </div>
             <div class="col-6 p-0 font-weight-bold">
               <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
-              <div v-else class="text-truncate">{{ schedule.name }}</div>
+              <div v-else class="text-truncate">{{ schedule.store_name }}</div>
             </div>
             <div class="col-5 p-0 detail-tel text-center">{{schedule.tel}}</div>
             <div class="col-12 p-0 detail-address">{{schedule.address}}</div>
@@ -209,14 +209,20 @@ export default {
           const items = res.data.response.body.items.item;
 
           // this.scheduleList["schedules"][String(i)] = {
+          let address = null
+					if (typeof(items.addr2) !== "undefined") {
+						address = items.addr1 + items.addr2
+					} else {
+						address = items.addr1
+					}
           let result = {
             id: items.contentid,
-            name: items.title,
+            store_name: items.title,
             branch: "",
             tel: items.tel,
-            address: items.addr1 + items.addr2,
+            address: address,
             latitude: items.mapy,
-            longtitude: items.mapx,
+            longitude: items.mapx,
             //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
             type: `${typeName}`,
             category: `${typeName}`,
