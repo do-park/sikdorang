@@ -10,7 +10,7 @@
             <img
             @click="goToThemeDetail(theme)"
             class="img-circle-sm"
-            :src="require(`../../../public/icons/${theme.db_id}.png`)"
+            :src="require(`../../../public/icons/${theme.id}.png`)"
             />
         </div>
         <div v-else class="box">

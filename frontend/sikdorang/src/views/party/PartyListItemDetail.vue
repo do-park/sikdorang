@@ -5,9 +5,9 @@
     <div>
       <div class="row mx-3">
         <div class="col-6 text-left">
-          날짜: {{ tripSchedule.date.toString().substr(0, 4) }}-{{
-            tripSchedule.date.toString().substr(4, 2)
-          }}-{{ tripSchedule.date.toString().substr(6, 2) }}<br />
+          날짜: {{ tripSchedule.date.toString().substr(0, 4) }}년
+          {{ tripSchedule.date.toString().substr(4, 2) }}월
+          {{ tripSchedule.date.toString().substr(6, 2) }}일<br />
         </div>
         <div class="col-6 text-right">{{ party.user.username }}<br /></div>
       </div>
