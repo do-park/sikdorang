@@ -24,7 +24,7 @@
             >
               {{ ListItem.store_name }}
             </div>
-            <div v-else class="text-truncate">{{ ListItem.name }}</div>
+            <div v-else class="text-truncate">{{ ListItem.store_name }}</div>
           </div>
           <div class="col-5 p-0 detail-tel text-center">{{ ListItem.tel }}</div>
           <div class="col-12 p-0 detail-address">{{ ListItem.address }}</div>
@@ -234,7 +234,7 @@ export default {
           // this.scheduleList["schedules"][String(i)] = {
           let result = {
             id: items.contentid,
-            name: items.title,
+            store_name: items.title,
             branch: "",
             tel: items.tel,
             address: items.addr1 + items.addr2,

@@ -198,7 +198,7 @@ export default {
 					image : markerImage
 				});
 				var infowindow = new kakao.maps.InfoWindow({
-					content: `<h5>${plan.store_name}</h5>` // 인포윈도우에 표시할 내용
+					content: `<div style="width:150px;text-align:center;padding:6px 0;">${plan.store_name}</div>` // 인포윈도우에 표시할 내용
 				});
 			var OVER_MARKER_WIDTH = 27, // 오버 마커의 너비
 				OVER_MARKER_HEIGHT = 42 // 오버 마커의 높이
