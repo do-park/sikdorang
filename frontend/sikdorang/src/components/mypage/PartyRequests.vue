@@ -30,8 +30,6 @@
             </button>
           </div>
           <div class="modal-body">
-            {{ partyPk }}
-            {{ requestData }}
             <span v-if="requestData">
               <div
                 v-for="(request, index) in requestData"
