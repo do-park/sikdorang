@@ -204,7 +204,6 @@ export default {
   margin: 2px;
   text-align: center;
   background-color: lightgray;
-  width: 130px;
 }
 .box:hover {
   cursor: pointer;
