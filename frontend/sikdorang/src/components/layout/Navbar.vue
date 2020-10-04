@@ -7,7 +7,7 @@
           class="row m-0 sikdorang"
           @click="toLogin"
         >
-          <i class="fas fa-key fa-2x"></i>
+          <i class="fas fa-key fa-2x m-auto"></i>
         </div>
         <div
           v-else-if="isLogin && currentRouteName === 'Home'"

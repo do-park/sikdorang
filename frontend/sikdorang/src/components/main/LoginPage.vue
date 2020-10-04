@@ -9,67 +9,68 @@
             class="form-control"
             v-model="loginData.username"
             placeholder="아이디"
-            hide-details="auto">
+            hide-details="auto"
+          />
           <input
             type="password"
             class="form-control password-input"
             v-model="loginData.password"
-            placeholder="비밀번호">
+            placeholder="비밀번호"
+          />
         </div>
-        <button 
-            class="login-btn col-3" 
-            @click="clickLogin">로그인</button>
+        <button class="btn btn-secondary login-btn col-3" @click="clickLogin">
+          로그인
+        </button>
       </div>
       <div class="mt-3">
-        <router-link to="/signup" class="text-dark">아직 회원이 아니세요?</router-link>
+        <router-link to="/signup" class="text-dark"
+          >아직 회원이 아니세요?</router-link
+        >
       </div>
     </div>
-    
-    
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
-  name:'LoginPage',
+  name: "LoginPage",
   data() {
     return {
       isLogin: this.$store.state.isLogin,
       loginData: {
         username: "",
-        password: ""
+        password: "",
       },
-    }
+    };
   },
-  methods : {
-    ...mapActions('mypage', ['actionUserInfo']),
+  methods: {
+    ...mapActions("mypage", ["actionUserInfo"]),
     clickLogin() {
-      this.$axios.post(`/rest-auth/login/`, this.loginData)
-      .then (response => {
-        // console.log(response)
-        window.$cookies.set('auth-token',response.data.token)
-        this.$store.state.isLogin = true
-        this.actionUserInfo(response.data.user)
-        if (response.data.user.done_cup === 1) {
-          this.$emit('toMainPage');
-        } else {
-          this.$router.push('/idealtagcup')
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        alert('아이디 또는 비밀번호를 다시 확인해주세요.')
-      })
+      this.$axios
+        .post(`/rest-auth/login/`, this.loginData)
+        .then((response) => {
+          // console.log(response)
+          window.$cookies.set("auth-token", response.data.token);
+          this.$store.state.isLogin = true;
+          this.actionUserInfo(response.data.user);
+          if (response.data.user.done_cup === 1) {
+            this.$router.push("/");
+          } else {
+            this.$router.push("/idealtagcup");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("아이디 또는 비밀번호를 다시 확인해주세요.");
+        });
     },
     clickToMainPage() {
-      this.$emit('toMainPage');
+      this.$emit("toMainPage");
     },
-
   },
-
-}
+};
 </script>
 
 <style scoped>
