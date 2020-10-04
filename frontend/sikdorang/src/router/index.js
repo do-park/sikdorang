@@ -48,7 +48,7 @@ const requireTags = () => (from, to, next) => {
 }
 
 const requireNoTags = () => (from, to, next) => {
-  if (store.state.mypage.userInfo.done_cup === false) return next()
+  if (store.state.isLogin && store.state.mypage.userInfo.done_cup === false) return next()
   next('/')
 }
 
