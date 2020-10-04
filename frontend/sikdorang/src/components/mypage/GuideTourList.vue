@@ -46,7 +46,6 @@ export default {
           res.data[index].start_date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
           const stringDate2 = target.end_date.toString()
           res.data[index].end_date = `${stringDate2.substr(0,4)}-${stringDate2.substr(4,2)}-${stringDate2.substr(6,2)}`
-          console.log('디스',this.$store.state.IMG_SERVER_URL + res.data[index].title_img)
           res.data[index].title_img = this.$store.state.IMG_SERVER_URL + res.data[index].title_img
         })
         this.tourList = res.data
