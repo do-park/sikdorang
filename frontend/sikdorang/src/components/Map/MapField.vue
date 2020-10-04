@@ -845,7 +845,7 @@ export default {
 
 #map {
   width: 100%;
-  height: 500px;
+  height: 93vh;
   margin-left: auto;
   margin-right: auto;
 }
