@@ -18,13 +18,18 @@
 
       <div class="row mx-3">
         <div class="col-6 my-auto p-0">{{ detail.price }}원</div>
-        <div v-if="!finish" class="col-6 p-0 text-right">
-          <button v-if="isLogin" class="btn btn-primary" @click="onClick()">
-            신청하기
-          </button>
-          <div v-else>로그인시 신청이 가능합니다.</div>
+        <div
+          v-if="detail.user.username !== username"
+          class="col-6 p-0 text-right"
+        >
+          <div v-if="!finish">
+            <button v-if="isLogin" class="btn btn-primary" @click="onClick()">
+              신청하기
+            </button>
+            <div v-else>로그인하세요.</div>
+          </div>
+          <div v-else>마감되었습니다.</div>
         </div>
-        <div v-else>마감되었습니다.</div>
       </div>
     </div>
     <div class="row mx-3">
@@ -75,6 +80,7 @@ export default {
   data() {
     return {
       isLogin: this.$store.state.isLogin,
+      username: this.$cookies.get("username"),
       startDate: "2020-01-01",
       endDate: "2020-01-02",
       finish: false,
