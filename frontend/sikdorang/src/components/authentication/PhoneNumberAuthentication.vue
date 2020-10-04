@@ -54,7 +54,7 @@ export default {
                 .then(res => {
                     if (res.data.message === 'success') {
                         alert('인증 성공!')
-                        this.$router.push({ name: "MypageView" });
+                        this.$router.push('/mypage');
                     } else {
                         alert('인증번호가 일치하지 않습니다.')
                     }

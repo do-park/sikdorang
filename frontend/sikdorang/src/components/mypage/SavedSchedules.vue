@@ -1,12 +1,8 @@
 <template>
   <div v-if="savedSchedules">
     <b-modal id="modal-scrollable" scrollable :title="scheduleName" hide-footer>
-      <MyPageMap :todaySchedule="scheduleList"/>
-      <div
-        class="my-4"
-        v-for="ListItem in scheduleList"
-        :key="ListItem.id"
-      >
+      <MyPageMap :todaySchedule="scheduleList" />
+      <div class="my-4" v-for="ListItem in scheduleList" :key="ListItem.id">
         <div class="row m-0">
           <div class="col-1 p-0">
             <i v-if="ListItem.type === '식당'" class="fas fa-utensils"></i>
@@ -81,9 +77,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import PartyRequests from "../mypage/PartyRequests.vue";
-import MyPageMap from "./MyPageMap.vue"
+import MyPageMap from "./MyPageMap.vue";
 
 export default {
   name: "SavedSchedules",
@@ -114,29 +110,38 @@ export default {
     this.today = new Date();
   },
   methods: {
-    getTripdata(tripId) {
-      this.$axios
+    ...mapActions("party", ["actionParty", "actionTrip"]),
+
+    async getTripdata(tripId) {
+      await this.$axios
         .get(`/trip/${tripId}`)
         .then((res) => {
-          this.$cookies.set("trip", res.data);
+          // this.$cookies.set("trip", res.data);
+          this.actionTrip(res.data);
+          console.log("getTripdata", res.data);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    getPartydata(partyId) {
-      this.$axios
+    async getPartydata(partyId) {
+      await this.$axios
         .get(`/party/detail_party/${partyId}`)
         .then((res) => {
-          this.$cookies.set("party", res.data[0]);
+          // this.$cookies.set("party", res.data[0]);
+          this.actionParty(res.data[0]);
+          console.log("getPartydata", res.data[0]);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    readParty(scheduleId) {
-      this.getPartydata(scheduleId);
-      this.getTripdata(scheduleId);
+    async readParty(scheduleId) {
+      console.log(scheduleId);
+      await this.getPartydata(scheduleId);
+      console.log("1");
+      await this.getTripdata(scheduleId);
+      console.log("2");
       this.$router.push({ name: "PartyListItemDetail" });
     },
     createParty(scheduleId, scheduleDate) {

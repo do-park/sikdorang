@@ -1,24 +1,54 @@
 <template>
-    <div>
-        <h1>가이드 마이페이지</h1>
-		<UserProfile/>
-		<MyPageMap/>
-		<TripList/>
+  <div>
+    <div>투어 상품 관리</div>
+    <div v-for="item in guideItems" :key="item.id">
+      {{ item }}
     </div>
+
+  </div>
 </template>
 
 <script>
-import TripList from './TripList.vue'
-import UserProfile from './UserProfile.vue'
-import MyPageMap from './MyPageMap.vue'
+import { mapGetters } from "vuex"
+const mypage = "mypage"
 
 export default {
-    name: "GuideMyPage",
-    components: {
-		TripList,
-		UserProfile,
-		MyPageMap,
-	},
+  name: "GuideMyPage",
+  components: {
+  },
+  data() {
+    return {
+      guideItems: [],
+    }
+  },
+  computed: {
+    ...mapGetters(mypage, [
+      'getUserInfo'
+    ]),
+  },
+  mounted() {
+    this.getTourItems()
+  },
+  methods: {
+    getTourItems() {
+      const requestHeaders = {
+        headers: {
+          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
+        },
+      };
+      const target = this.getUserInfo.username
+      this.$axios
+      .get(`/guide/list/${target}`, requestHeaders)
+      .then((response) => {
+        console.log(response);
+        this.guideItems = response.data
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+  },
+  
 }
 </script>
 

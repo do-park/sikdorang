@@ -51,6 +51,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this);
     this.actionIsSik(false);
     if (this.$store.state.isLogin) {
       const requestHeaders = {
@@ -67,8 +68,8 @@ export default {
         .catch((err) => {
           console.error(err);
           if (this.isLogin) {
-            this.$store.state.isLogin = false
-            this.isLogin = false
+            this.$store.state.isLogin = false;
+            this.isLogin = false;
             this.loginOrMypage = "로그인";
           }
         });

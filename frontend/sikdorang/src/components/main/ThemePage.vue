@@ -1,6 +1,6 @@
 <template>
-  <div class="row text-center m-1">
-    <div v-for="theme in themes" :key="theme.id" class="m-0 col-4">
+  <swiper class="swiper" :options="swiperOption">
+    <swiper-slide v-for="theme in themes" :key="theme.id" class="m-0">
       <span v-if="userAchieve[theme.db_id] === 1" class="effect">
         <img
           @click="goDetail(theme)"
@@ -17,22 +17,36 @@
       </span>
 
       <div>{{ theme.theme_name }}</div>
-    </div>
-  </div>
+    </swiper-slide>
+    <div class="swiper-pagination" slot="pagination"></div>
+  </swiper>
 </template>
 
-
 <script>
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/swiper-bundle.css";
 import { mapGetters, mapActions } from "vuex";
 const themes = "themes";
 
 export default {
   name: "ThemePage",
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   data() {
     return {
       isLogin: this.$store.state.isLogin,
       themes: [],
       userAchieve: [],
+      swiperOption: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      },
     };
   },
   computed: {
@@ -116,5 +130,14 @@ export default {
   transform: rotate(-25deg);
   left: 3px;
   top: 20px;
+}
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.swiper-container {
+  height: 150px;
+  width: 100%;
 }
 </style>

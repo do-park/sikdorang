@@ -1,25 +1,26 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import VueCookies from 'vue-cookies'
+import Vue from "vue"
+import Vuex from "vuex"
+import VueCookies from "vue-cookies"
 
 Vue.use(Vuex)
 Vue.use(VueCookies)
 
-import mapEvent from './modules/mapEvent.js'
-import mypage from './modules/mypage.js'
-import schedule from './modules/schedule.js'
-import themes from './modules/themes.js'
-import order from './modules/order.js'
-import sikRec from './modules/sikRec.js'
-import vuexPersistedstate from 'vuex-persistedstate'
+import mapEvent from "./modules/mapEvent.js"
+import mypage from "./modules/mypage.js"
+import schedule from "./modules/schedule.js"
+import themes from "./modules/themes.js"
+import order from "./modules/order.js"
+import sikRec from "./modules/sikRec.js"
+import party from "./modules/party.js"
+import vuexPersistedstate from "vuex-persistedstate"
 import SecureLS from "secure-ls"
 
-var ls = new SecureLS({ isCompression: false });
+var ls = new SecureLS({ isCompression: false })
 
 export default new Vuex.Store({
   state: {
-    positions : [],
-    isLogin: !!window.$cookies.get('auth-token'),
+    positions: [],
+    isLogin: !!window.$cookies.get("auth-token"),
     // SERVER_URL: 'http://j3d202.p.ssafy.io:8080/',
     SERVER_URL: 'http://localhost:8080/',
     IMG_SERVER_URL: 'http://localhost:8080',
@@ -31,6 +32,8 @@ export default new Vuex.Store({
   },
   actions: {
   },
+  mutations: {},
+  actions: {},
   modules: {
     mypage: mypage,
     mapEvent,
@@ -38,6 +41,7 @@ export default new Vuex.Store({
     themes,
     order,
     sikRec,
+    party,
   },
   plugins: [
     vuexPersistedstate({
@@ -46,6 +50,6 @@ export default new Vuex.Store({
         setItem: (key, value) => ls.set(key, value),
         removeItem: (key) => ls.remove(key),
       },
-    })
-  ]
+    }),
+  ],
 })
