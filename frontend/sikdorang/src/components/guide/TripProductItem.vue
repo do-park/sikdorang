@@ -55,11 +55,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .img-circle {
   display: inline-block;
   width: 80px;
-  height: 80px;
+  height: 13vh;
+  padding : 0 ;
   border-radius: 50%;
   background-repeat: no-repeat;
   background-position: center center;
