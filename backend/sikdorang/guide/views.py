@@ -84,19 +84,18 @@ def paider(request, trip_pk):
     serializer = PaidSerializer(paider, many=True)
     return Response(serializer.data)
 
-
-@api_view(['PUT'])
-def update_guide(request, trip_pk):
-    User = get_user_model()
-    user = get_object_or_404(User, pk=request.user.pk)
-    tour = get_object_or_404(TripItemModel, pk=trip_pk)
-    if tour.user == user:
-        serializer = GuideItemSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.update(tour, request.data)
-            return Response(serializer.data)
+# @api_view(['PUT'])
+# def update_guide(request, trip_pk):
+#     User = get_user_model()
+#     user = get_object_or_404(User, pk=request.user.pk)
+#     tour = get_object_or_404(TripItemModel, pk=trip_pk)
+#     if tour.user == user:
+#         serializer = GuideItemSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.update(tour, request.data)
+#             return Response(serializer.data)
         
-    return HttpResponse('Something Wrong')
+#     return HttpResponse('Something Wrong')
 
 @api_view(['DELETE'])
 def delete_guide(request, trip_pk):

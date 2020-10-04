@@ -25,7 +25,9 @@
             <button v-if="isLogin" class="btn btn-primary" @click="onClick()">
               신청하기
             </button>
-            <div v-else>로그인하세요.</div>
+            <button v-else class="btn btn-danger" @click="login()">
+              로그인하세요!
+            </button>
           </div>
           <div v-else>마감되었습니다.</div>
         </div>
@@ -145,6 +147,9 @@ export default {
       });
     },
     
+    login() {
+      this.$router.push("/login");
+    },
   },
 };
 </script>
