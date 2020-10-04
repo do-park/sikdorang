@@ -9,7 +9,7 @@
 			<i class="fas fa-caret-square-up fa-2x mx-auto d-none" @click="hidePeople"></i>
 		</div>
 		<div class="d-none">
-			신청자 보여줌
+			
 		</div>
   </div>
 </template>
@@ -19,7 +19,21 @@
 export default {
   name: "GuideMyPageItem",
   props: {
-    item: Object
+		item: Object,
+	},
+	data() {
+		return {
+			people: null,
+		}
+	},
+	watch: {
+		item() {
+			console.log('fdsfsdfsdfsd')
+			this.getPeople()
+		}
+	},
+	mounted() {
+		this.getPeople()
 	},
   methods: {
 		showPeople(e) {
@@ -31,6 +45,17 @@ export default {
 			e.target.parentNode.nextSibling.classList.add('d-none')
 			e.target.previousSibling.classList.remove('d-none')
 			e.target.classList.add('d-none')
+		},
+		getPeople() {
+      this.$axios
+      .get(`/guide/paider/${this.item.id}`)
+      .then((res) => {
+				console.log(res)
+				this.people = res.data
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 		}
   },
   
