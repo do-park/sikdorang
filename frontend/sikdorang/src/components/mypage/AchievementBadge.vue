@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="be-relative">
     <div class="badge-text">Badge</div>
     <div class="row justify-content-around badge-wrap">
       <div 
@@ -12,6 +12,9 @@
             class="img-circle-sm"
             :src="require(`../../../public/icons/${theme.id}.png`)"
             />
+        </div>
+        <div v-else>
+            <div class="img-cricle-sm"><br></div>
         </div>
       </div>
     </div>
@@ -54,6 +57,9 @@ export default {
 </script>
 
 <style>
+.be-relative {
+  position: relative;
+}
 .badge-text {
     background-color: white;
     padding: 5px 60px;
@@ -62,7 +68,8 @@ export default {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 180px;
+    margin-bottom: -10px;
+    top: -20px;
 
 }
 .badge-wrap {
@@ -70,6 +77,7 @@ export default {
     border-radius: 20px;
     padding: 5px;
     margin: 2rem 5px !important;
+    min-height: 2rem;
 }
 .img-circle-sm {
   display: inline-block;
