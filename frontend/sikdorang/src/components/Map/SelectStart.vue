@@ -2,7 +2,7 @@
   <div>
     <div class="text-center">
       <hr />
-      <div class="top-place">대충 뭐 들어가는곳</div>
+      <div class="top-place"><truck /></div>
       <hr />
       <div>
         <button
@@ -55,9 +55,13 @@
 
 <script>
 import Swal from "sweetalert2";
+import truck from "./truck.vue";
 
 export default {
   name: "SelectStart",
+  components: {
+    truck,
+  },
   data() {
     return {
       Latitude: null,

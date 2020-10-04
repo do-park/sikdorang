@@ -83,3 +83,13 @@ def paider(request, trip_pk):
     paider = GuideTour.objects.filter(trip_item=trip_pk)
     serializer = PaidSerializer(paider, many=True)
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def delete_tour(request, tour_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tour = TripItemModel.objects.filter(user=user, id=tour_pk)
+    if tour.user == user:
+        tour.delete()
+        return HttpResponse('잘 지워짐')
+    return HttpResponse('니 글 아님 ㅅㄱ')

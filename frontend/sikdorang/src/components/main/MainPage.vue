@@ -8,18 +8,15 @@
       </div>
       <h5 class="text-right">어떠세요?</h5>
     </div>
-    <div class="btn-wrap row mb-5 p-0 justify-content-around">
-      <div class="m-0 p-0">
+    <div class="btn-wrap row mb-5 p-0 justify-content-center">
+      <div class="col-5 m-0 p-0">
         <button class="btn btn-danger main-btn" @click="clickMyChoice">
           <div>내가</div>
           <div>고르기</div>
         </button>
       </div>
-      <div class="m-0 p-0">
-        <button
-          class="btn btn-danger main-btn d-inline-block"
-          @click="clickRecommend"
-        >
+      <div class="col-5 m-0 p-0">
+        <button class="btn btn-danger main-btn" @click="clickRecommend">
           <div>식도랑</div>
           <div>추천코스</div>
         </button>
