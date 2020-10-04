@@ -10,6 +10,9 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+const party = "party";
+
 export default {
   name: "PartyListItem",
   props: {
@@ -26,6 +29,7 @@ export default {
     this.getTripdata(this.partyItem.id);
   },
   methods: {
+    ...mapActions(party, ["actionParty", "actionTrip"]),
     getTripdata(tripId) {
       this.$axios
         .get(`/trip/${tripId}`)
@@ -37,8 +41,9 @@ export default {
         });
     },
     onClick() {
-      this.$cookies.set("party", this.partyItem);
-      this.$cookies.set("trip", this.trip);
+      this.actionParty(this.partyItem);
+      this.actionTrip(this.trip);
+
       this.$router.push({ name: "PartyListItemDetail" });
     },
   },
