@@ -1,15 +1,20 @@
 <template>
-  <div class="d-flex">
+  <div>
+    <div class="badge-text">Badge</div>
+    <div class="row justify-content-around badge-wrap">
       <div 
       v-for="theme in themes" 
-      :key="theme.id">
-          <img
-          v-if="getThemesClear[theme.id-1]"
-          @click="goToThemeDetail(theme)"
-          class="img-circle-sm"
-          :src="require(`../../../public/icons/${theme.id}.png`)"
-        />
+      :key="theme.id"
+      class="col-1 p-0">
+        <div v-if="getThemesClear[theme.db_id]">
+            <img
+            @click="goToThemeDetail(theme)"
+            class="img-circle-sm"
+            :src="require(`../../../public/icons/${theme.id}.png`)"
+            />
+        </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +39,8 @@ export default {
     created() {
         this.themes = this.getThemes;
         this.themesClear = this.getThemesClear;
+        console.log(this.themes)
+        console.log(this.getThemesClear)
     },
     methods : {
         goToThemeDetail(theme) {
@@ -47,18 +54,35 @@ export default {
 </script>
 
 <style>
+.badge-text {
+    background-color: white;
+    padding: 5px 60px;
+    font-size: 14px;
+    font-weight: bolder;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 180px;
+
+}
+.badge-wrap {
+    border: 2px dotted crimson;
+    border-radius: 20px;
+    padding: 5px;
+    margin: 2rem 5px !important;
+}
 .img-circle-sm {
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   border-radius: 40%;
-  border: 3px solid black;
+  border: 1px solid black;
   background-color: rgba(0, 0, 0, 0.3);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 .img-circle-sm:hover{
-  cursor: pointer;    
+  cursor: pointer;
 }
 </style>
