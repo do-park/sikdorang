@@ -43,16 +43,17 @@ def list_tour(request):
 
 @api_view(['GET'])
 def detail_tour(request, tour_pk):
-    tour = TripItemModel.objects.filter(pk=tour_pk)
-    serializer = TourDetailSerializer(tour, many=True)
-    return Response(serializer.data)
-
+    tour = TripItemModel.objects.filter(pk=tour_pk)[0]
+    print('@@@@@@@@@@@@@@@@@@@', tour)
+    return 
 
 @api_view(['GET'])
 def list_guide(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    trips = TripItemModel.objects.filter(user=user)
+    now = datetime.datetime.now()
+    nowDate = now.strftime('%Y%m%d')
+    trips = TripItemModel.objects.filter(start_date__gte=int(nowDate), user=user).order_by('start_date')
     serializer = GuideSerializer(trips, many=True)
     return Response(serializer.data)
 
