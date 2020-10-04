@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<h3 class="text-center">{{ gameCount}} | {{ roundCount }}</h3>
+
 		<div>
 			<img class="img" :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
 		</div>
@@ -42,6 +44,26 @@ export default {
 			clickCount: -1,
 			userChoice: [],
 			isDone: false,
+		}
+	},
+	computed: {
+		roundCount() {
+		if (this.tags.length === 2) {
+			return '결승'
+		} else if (this.tags.length === 1) {
+			return '우승'
+		} else {
+			return `${this.tags.length} 강`
+		}
+		},
+		gameCount() {
+		if (this.clickCount === -1) {
+			return `1 / ${Math.round(this.tags.length / 2)}`
+		} else if (this.clickCount === 1) {
+			return `2 / ${Math.round(this.tags.length / 2)}`
+		} else {
+			return `${Math.round(this.clickCount / 2)+1} / ${Math.round(this.tags.length / 2)}`
+		}
 		}
 	},
 	methods: {

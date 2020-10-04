@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import { mapGetters, mapActions } from "vuex";
 const mapEvent = "mapEvent";
 
@@ -133,32 +133,25 @@ export default {
         this.actionSelectedRest(this.getThreeRes[idx]);
       }
       var Rest = this.getSelectedRest;
-      swal({
+      Swal.fire({
         title: Rest.name,
         text: Rest.tel,
-        buttons: ["닫기", "추가"],
+        showCancelButton: true,
+        confirmButtonText: "일정 추가",
+        cancelButtonText: "취소",
       }).then((res) => {
-        if (res) {
-          swal(`${Rest.name}을 일정에 추가할까요?`, {
-            buttons: ["아니오", "네"],
-          }).then((res) => {
-            if (res) {
-              swal(`${Rest.name}을 일정에 추가했습니다`, {
-                icon: "success",
-              });
-              plans.push(this.getSelectedRest);
-              this.actionTagStores(false);
-              this.actionPlanList(plans);
-              this.actionStore(Rest);
-              this.actionSelectTag(null);
-              this.actionScheduleIdx(this.getScheduleIdx + 1);
-            } else {
-              // console.log('취소 확인')
-              this.actionClicked(null);
-            }
+        if (res.isConfirmed) {
+          Swal.fire({
+            icon: "success",
+            title: `${Rest.name}을 일정에 추가했습니다`,
           });
+          plans.push(this.getSelectedRest);
+          this.actionTagStores(false);
+          this.actionPlanList(plans);
+          this.actionStore(Rest);
+          this.actionSelectTag(null);
+          this.actionScheduleIdx(this.getScheduleIdx + 1);
         } else {
-          // console.log('취소 확인')
           this.actionClicked(null);
         }
       });

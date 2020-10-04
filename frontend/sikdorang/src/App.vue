@@ -43,6 +43,6 @@ export default {
 
 <style scoped>
 .router-view {
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 </style>

@@ -83,6 +83,7 @@ export default {
     },
     clickRecommend() {
       this.actionIsSik(true);
+      console.log('2번', true)
       this.$router.push({ name: "Schedule" });
     },
     clickToLoginPageOrMyPage() {

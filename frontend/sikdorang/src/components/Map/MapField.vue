@@ -14,195 +14,294 @@ import axios from "axios";
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 
 export default {
-  name: "MapField",
-  data() {
-    return {
-      destination: "",
-      map: null,
-      startLat: null,
-      startLong: null,
-      startCoords: null,
-      curLat: null,
-      curLong: null,
-      curMarkers: [],
-      curPath: [],
-      recommendMarkers: [],
-      selectedMarker: null,
-      plans: [],
-      schedule: [],
-      recommends: [],
-      flip: false,
-      clickedOverlay: null,
-      // store에 저장하기 위해 올라가는 Index
-      selectingIndex: 0,
-      // 이전에 선택한 지점의 x , y 좌표
-      beforeLng: null,
-      beforeLat: null,
-    };
-  },
-  mounted() {
-    this.addScript();
-    this.actionMapEventClear();
-    // this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
-  },
-  computed: {
-    ...mapGetters("mapEvent", [
-      "getFlip",
-      "getMouseOver",
-      "getClicked",
-      "getThreeRes",
-      "getSelectedRest",
-      "getPlanList",
-      "getSelectTag",
-      "getTagStores",
-    ]),
-    ...mapGetters("schedule", [
-      "getSchedules",
-      "getScheduleIdx",
-      "getScheduleProgressIdx",
-      "getBeforeCat",
-    ]),
-  },
-  watch: {
-    getFlip() {
-      this.changeThreeResByFlip();
-      if (window.kakao) {
-        this.showCandidates(this.recommends);
-      }
-    },
-    selectedMarker() {
-      this.$cookies.set("selectedMarker", this.selectedMarker.idx);
-    },
-    getScheduleIdx() {
-      if (this.getScheduleIdx < this.getSchedules.length) {
-        this.actionFlip(true);
-        this.beforeLng = this.getSchedules[
-          Number(this.getScheduleIdx) - 1
-        ].userChoice.longitude;
-        this.beforeLat = this.getSchedules[
-          Number(this.getScheduleIdx) - 1
-        ].userChoice.latitude;
-        this.divideRecommendation(
-          this.getSchedules[Number(this.getScheduleIdx)].name
-        );
-      } else {
-        this.$router.replace("/mypage");
-      }
-    },
-    getPlanList() {
-      if (this.getPlanList.length !== 0) {
-        this.showPaths();
-      }
-    },
-    getMouseOver() {
-      if (this.getMouseOver !== null) {
-        if (this.getTagStores) {
-          this.moveTagSmoothly("over");
-        } else {
-          this.moveSmoothly("over");
-        }
-      }
-    },
-    getClicked() {
-      if (this.getClicked !== null) {
-        if (this.getTagStores) {
-          this.moveTagSmoothly("click");
-        } else {
-          this.moveSmoothly("click");
-        }
-      }
-    },
-    getScheduleProgressIdx() {
-      if (this.getScheduleProgressIdx !== -1) {
-        this.moveSmoothly("progress");
-      }
-    },
-    getSelectTag() {
-      if (this.getSelectTag !== null) {
-        this.getTagStoreList(this.getSelectTag);
-      }
-    },
-  },
-  methods: {
-    ...mapActions("mapEvent", [
-      "actionFlip",
-      "actionMouseOver",
-      "actionMouseOverToCard",
-      "actionClicked",
-      "actionThreeRes",
-      "actionMapEventClear",
-      "actionSelectedRest",
-      "actionPlanList",
-      "actionTags",
-      "actionTagStores",
-    ]),
-    ...mapActions("schedule", ["actionStore", "actionscheduleProgressIdx"]),
-    getTagStoreList(tag) {
-      const data = {
-        tag: tag,
-        lat: this.beforeLat,
-        lng: this.beforeLng,
-      };
-      this.$axios
-        .post("recommend/tag-store/", data)
-        .then((res) => {
-          this.showTagStores(res.data.result);
-          this.actionTagStores(res.data.result);
-        })
-        .catch((err) => console.error(err));
-    },
-    divideRecommendation(cf) {
-      this.recommends = [];
-      this.actionTags([]);
-      if ((cf === "식당") | (cf === "카페")) {
-        this.getSCRecommendation(cf);
-      } else {
-        this.getSHRecommendation(cf);
-      }
-    },
-    getSCRecommendation(cf) {
-      const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-        },
-      };
-      this.$axios
-        .post(
-          "recommend/tag-recommend/",
-          {
-            category: cf,
-            lat: this.beforeLat,
-            lng: this.beforeLng,
-            bc: this.getBeforeCat,
-          },
-          requestHeaders
-        )
-        .then((res) => {
-          this.actionTags(res.data.tags);
-          this.recommends = res.data.result;
-          this.showCandidates(this.recommends);
-        })
-        .catch((err) => console.error("알고리즘 추천 실패", err));
-    },
-    getSHRecommendation(cf) {
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
-      let contentTypeId = 32;
-      if (cf === "관광지") {
-        contentTypeId = 12;
-      }
-      axios
-        .get(
-          `http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`
-        )
-        .then((res) => {
-          const items = res.data.response.body.items.item;
-          for (let i = 0; i < items.length; i++) {
-            let address = null;
-            if (typeof items[i].addr2 !== "undefined") {
-              address = items[i].addr1 + items[i].addr2;
-            } else {
-              address = items[i].addr1;
+	name : "MapField",
+	data() {
+		return {
+			destination : '',
+			map: null,
+			startLat : null,
+			startLong : null,
+			startCoords : null,
+			curLat: null,
+			curLong: null,
+			curMarkers : [],
+			curPath: [],
+			recommendMarkers : [],
+			selectedMarker : null,
+			plans : [],
+			schedule : [],
+			recommends : [],
+			flip : false,
+			clickedOverlay : null,
+			// store에 저장하기 위해 올라가는 Index
+			selectingIndex: 0,
+			// 이전에 선택한 지점의 x , y 좌표
+			beforeLng: null,
+			beforeLat: null,
+		}
+	},
+	mounted() {
+		this.addScript()
+		this.actionMapEventClear()
+		// this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+	},
+	computed : {
+		...mapGetters("mapEvent", [
+			'getFlip',
+			'getMouseOver',
+			'getClicked',
+			'getThreeRes',
+			'getSelectedRest',
+			'getPlanList',
+			'getSelectTag',
+			'getTagStores',
+		]),
+		...mapGetters("schedule", [
+			"getSchedules",
+			"getScheduleIdx",
+			"getScheduleProgressIdx",
+			"getBeforeCat",
+		]),
+	},
+	watch : {
+		getFlip(){
+			this.changeThreeResByFlip()
+			if (window.kakao) {
+				this.showCandidates(this.recommends)
+			}
+		},
+		selectedMarker(){
+			this.$cookies.set('selectedMarker',this.selectedMarker.idx)
+		},
+		getScheduleIdx() {
+			if (this.getScheduleIdx < this.getSchedules.length){
+				this.actionFlip(true)
+				this.beforeLng = this.getSchedules[Number(this.getScheduleIdx)-1].userChoice.longitude
+				this.beforeLat = this.getSchedules[Number(this.getScheduleIdx)-1].userChoice.latitude
+				this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+			} else {
+				this.$router.replace('/mypage')
+			}
+		},
+		getPlanList() {
+			if (this.getPlanList.length !== 0) {
+				this.showPaths()
+			}
+		},
+		getMouseOver() {
+			if (this.getMouseOver !== null) {
+				if (this.getTagStores) {
+					this.moveTagSmoothly('over')
+				} else {
+					this.moveSmoothly('over')
+				}
+			}
+		},
+		getClicked() {
+			if (this.getClicked !== null) {
+				if (this.getTagStores) {
+					this.moveTagSmoothly('click')
+				} else {
+					this.moveSmoothly('click')
+				}
+			}
+		},
+		getScheduleProgressIdx() {
+			if (this.getScheduleProgressIdx !== -1){
+				this.moveSmoothly('progress')
+			}
+		},
+		getSelectTag() {
+			if (this.getSelectTag !== null){
+				this.getTagStoreList(this.getSelectTag)
+			}
+		},
+	},
+	methods : {
+		...mapActions("mapEvent",[
+			'actionFlip',
+			'actionMouseOver',
+			'actionMouseOverToCard',
+			'actionClicked',
+			'actionThreeRes',
+			'actionMapEventClear',
+			'actionSelectedRest',
+			'actionPlanList',
+			'actionTags',
+			'actionTagStores',
+		]),
+		...mapActions("schedule", [
+			"actionStore",
+			"actionscheduleProgressIdx",
+		]),
+		getTagStoreList(tag){
+			const data = {
+				"tag": tag,
+				"lat": this.beforeLat,
+				"lng": this.beforeLng,
+			}
+			this.$axios.post('recommend/tag-store/', data)
+			.then(res => {
+				this.showTagStores(res.data.result)
+				this.actionTagStores(res.data.result)
+			})
+			.catch(err => console.error(err))
+		},
+		divideRecommendation(cf) {
+			this.recommends = []
+			this.actionTags([])
+			if (cf === "식당" | cf === "카페"){
+				this.getSCRecommendation(cf)
+			} else {
+				this.getSHRecommendation(cf)
+			}
+		},
+		getSCRecommendation(cf) {
+			const requestHeaders = {
+				headers: {
+					Authorization: `JWT ${this.$cookies.get('auth-token')}`
+				}
+			}
+			this.$axios.post('recommend/tag-recommend/', { category: cf, lat: this.beforeLat, lng: this.beforeLng, bc: this.getBeforeCat }, requestHeaders)
+			.then(res => {
+				this.actionTags(res.data.tags)
+				this.recommends = res.data.result
+				this.showCandidates(this.recommends)
+			})
+			.catch(err => console.error("알고리즘 추천 실패",err))
+		},
+		getSHRecommendation(cf) {
+			const TOUR_API_KEY = this.$store.state.TOUR_API_KEY
+            let contentTypeId = 32
+            if (cf ==="관광지") { contentTypeId = 12 }
+            axios.get(`http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=${TOUR_API_KEY}&contentTypeId=${contentTypeId}&mapX=${this.beforeLng}&mapY=${this.beforeLat}&radius=5000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=12&pageNo=1&_type=json`)
+            .then(res => {
+				const items = res.data.response.body.items.item
+                for (let i=0;i<items.length;i++) {
+					let address = null
+					if (typeof(items[i].addr2) !== "undefined") {
+						address = items[i].addr1 + items[i].addr2
+					} else {
+						address = items[i].addr1
+					}
+                    this.recommends.push({
+                        "id": items[i].contentid,
+                        "name": items[i].title,
+                        "branch": "",
+                        "tel": items[i].tel,
+                        "address": address,
+                        "latitude": items[i].mapy,
+                        "longitude": items[i].mapx,
+                        "category": cf,
+                        "tags": "",
+                        "img": items[i].firstimage,
+                    })
+				}
+				this.showCandidates(this.recommends, '관광/숙박')
+            })
+            .catch(err => console.error(err))
+		},
+		moveTagSmoothly(cd) {
+		var lat = null,
+			long = null;
+			if (cd === 'over' && this.getMouseOver !== null) {
+				lat = this.getTagStores[this.getMouseOver].latitude
+				long = this.getTagStores[this.getMouseOver].longitude
+			} else if (cd === 'click' && this.getClicked !== null) {
+				lat = this.getTagStores[this.getClicked].latitude
+				long = this.getTagStores[this.getClicked].longitude
+			}
+			let moveLatLon = new kakao.maps.LatLng(lat,long)
+			this.map.panTo(moveLatLon);
+		},
+		moveSmoothly(cd) {
+			// 이동할 위도 경도 위치를 생성합니다 
+		var lat = null,
+			long = null;
+			if (cd === 'over' && this.getMouseOver !== null) {
+				console.log(123)
+				lat = this.getThreeRes[this.getMouseOver].latitude
+				long = this.getThreeRes[this.getMouseOver].longitude
+			} else if (cd === 'click' && this.getClicked !== null) {
+				lat = this.getThreeRes[this.getClicked].latitude
+				long = this.getThreeRes[this.getClicked].longitude
+			} else if (cd === 'progress' && this.getProgressClicked !== null) {
+				try {
+					lat = this.getSchedules[this.getScheduleProgressIdx].userChoice.latitude
+					long = this.getSchedules[this.getScheduleProgressIdx].userChoice.longitude
+				} catch (err) {
+					lat = this.beforeLat
+					long = this.beforeLng
+				}
+			}
+			let moveLatLon = new kakao.maps.LatLng(lat,long)
+			this.map.panTo(moveLatLon);
+			this.actionscheduleProgressIdx(-1)
+		},
+		initMap() { 
+			var container = document.getElementById('map'); 
+			var options = {
+				center: new kakao.maps.LatLng(36.0970073,128.4254652),
+				level: 3
+			}; 
+			var map = new kakao.maps.Map(container, options); 
+            this.map = map;
+			this.$emit('getKakao', window.kakao)
+			this.setStartCoords();
+
+		},
+		initCurLocation() {
+			this.curLat = this.startLat
+			this.curLong = this.startLong
+			this.beforeLng = this.startLong
+			this.beforeLat = this.startLat
+		},
+		//cdn 추가
+		addScript() { 
+			const script1 = document.createElement('script'); 
+			/* global kakao */ // 지우면 작동안함
+			script1.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoMapKey}`;
+			document.head.appendChild(script1);
+
+			const script2 = document.createElement('script'); 
+			script2.type = "text/javascript";
+			script2.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoMapKey}&libraries=services`;
+			document.head.appendChild(script2); 
+
+			script2.onload = () => kakao.maps.load(this.initMap);
+		},
+	
+		// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
+		showMarkers(markers) {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(this.map);
+			}    
+		},
+
+		// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
+		hideMarkers(markers) {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(null);
+			} 
+		},
+
+        setStartCoords() {
+			var map = this.map
+			this.showPaths()
+            if (this.$cookies.get("searchMethod")==="myLocation"){
+				this.startLat = this.$cookies.get("startLatitude")
+				this.startLong = this.$cookies.get("startLongitude")
+				this.initCurLocation()
+				this.divideRecommendation(this.getSchedules[Number(this.getScheduleIdx)].name)
+				this.startCoords = new kakao.maps.LatLng(this.startLat, this.startLong)
+				map.setCenter(this.startCoords);
+				var marker = new kakao.maps.Marker({ position: map.getCenter() });
+				this.hideMarkers(this.curMarkers)
+				this.curMarkers = [];
+				
+				// 마커를 추가
+				this.curMarkers.push(marker);
+				this.showMarkers(this.curMarkers);
             }
             this.recommends.push({
               id: items[i].contentid,

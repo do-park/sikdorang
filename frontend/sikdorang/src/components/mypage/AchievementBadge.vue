@@ -1,15 +1,27 @@
 <template>
-  <div class="d-flex">
+  <div class="be-relative">
+    <div class="badge-text">Badge</div>
+    <div class="row justify-content-around badge-wrap">
       <div 
       v-for="theme in themes" 
-      :key="theme.id">
+      :key="theme.id"
+      class="col-1 p-0">
+        <div v-if="getThemesClear[theme.db_id]" class="box">
+            <img
+            @click="goToThemeDetail(theme)"
+            class="img-circle-sm"
+            :src="require(`../../../public/icons/${theme.id}.png`)"
+            />
+        </div>
+        <div v-else class="box">
           <img
-          v-if="getThemesClear[theme.id-1]"
-          @click="goToThemeDetail(theme)"
-          class="img-circle-sm"
-          :src="require(`../../../public/icons/${theme.id}.png`)"
-        />
+            class="img-circle-sm"
+            :src="require(`../../../public/icons/questionMark.png`)"
+            />
+            <!-- <div class="img-cricle-sm"><br></div> -->
+        </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -29,11 +41,14 @@ export default {
         return {
             themes : [],
             themesClear : [],
+            // theme_image_index : [0,5,6,1,3,7,2,8,10,11,4,9],
         }
     },
     created() {
         this.themes = this.getThemes;
         this.themesClear = this.getThemesClear;
+        console.log(this.themes)
+        console.log(this.getThemesClear)
     },
     methods : {
         goToThemeDetail(theme) {
@@ -47,18 +62,53 @@ export default {
 </script>
 
 <style>
+.box {
+  width: 100%;
+  /* height: 30vh; */
+  padding-bottom: 100%;
+  padding : 0;
+}
+.img-card {
+  width: 100%;
+  /* height: 30vh; */
+  padding-bottom: 100%;
+  background-size: cover;
+}
+.be-relative {
+  position: relative;
+}
+.badge-text {
+    background-color: white;
+    padding: 5px 60px 0px;
+    font-size: 14px;
+    font-weight: bolder;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: -10px;
+    top: -20px;
+
+}
+.badge-wrap {
+    border: 2px dotted crimson;
+    border-radius: 20px;
+    padding: 5px;
+    margin: 2rem 5px !important;
+    min-height: 2rem;
+}
 .img-circle-sm {
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  /* height: 100%; */
   border-radius: 40%;
-  border: 3px solid black;
-  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid black;
+  /* background-color: rgba(0, 0, 0, 0.3); */
+  /* padding-bottom: 100%; */
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 .img-circle-sm:hover{
-  cursor: pointer;    
+  cursor: pointer;
 }
 </style>
