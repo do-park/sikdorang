@@ -34,7 +34,9 @@
 <script>
 import Swal from "sweetalert2";
 import { mapGetters, mapActions } from "vuex";
+
 const mapEvent = "mapEvent";
+const CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
 
 export default {
   name: "MapCards",
@@ -143,12 +145,14 @@ export default {
       }
       if (Rest.img !== undefined) {
         htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
+      } else if (CATEGORY_NAME.indexOf(Rest.category) !== -1) {
+        htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
       }
       Swal.fire({
         title: Rest.name,
         html: htmlContent,
         showCancelButton: true,
-        confirmButtonText: "일정 추가",
+        confirmButtonText: "추가",
         cancelButtonText: "취소",
       }).then((res) => {
         if (res.isConfirmed) {
