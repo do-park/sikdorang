@@ -72,7 +72,7 @@ export default {
       return impSuccess;
     },
     toMypage() {
-      this.$router.push({ name: 'MyPageView' })
+      this.$router.push('/mypage')
     }
   },
 };
