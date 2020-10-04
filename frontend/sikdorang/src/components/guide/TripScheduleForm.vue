@@ -105,6 +105,12 @@ export default {
     };
   },
   methods: {
+    datetoint(date) {
+      var y = date.substr(0, 4) * 10000;
+      var m = parseInt(date.substr(5, 2)) * 100;
+      var d = date.substr(8, 2) * 1;
+      return y + m + d;
+    },
     onClick() {
       this.getHtml();
       const requestHeaders = {
@@ -123,8 +129,8 @@ export default {
       fd.append('title_img', this.tripSchedule.title_img)
       fd.append('title', this.tripSchedule.title)
       fd.append('area', this.tripSchedule.area)
-      fd.append('start_date', this.tripSchedule.start_date)
-      fd.append('end_date', this.tripSchedule.end_date)
+      fd.append('start_date', this.datetoint(this.tripSchedule.start_date))
+      fd.append('end_date', this.datetoint(this.tripSchedule.end_date))
       fd.append('price', this.tripSchedule.price)
       fd.append('start_point', this.tripSchedule.start_point)
       fd.append('start_time', this.tripSchedule.start_time)
@@ -135,8 +141,7 @@ export default {
         .post("guide/create_tour", fd, requestHeaders)
         .then((res) => {
           console.log(res);
-          // 등록이 완료되면 리턴되는 객체에서 id 값을 이용해 push한다.
-          this.$router.push(`/trip/detail/${res.data.id}`);
+          this.$router.push(`/mypage`);
         })
         .catch((err) => console.error(err));
     },

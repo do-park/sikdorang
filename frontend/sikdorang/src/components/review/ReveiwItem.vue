@@ -1,18 +1,19 @@
 <template>
     <div>
-      <h3>{{ storeName }}</h3>
-      <div class="rating">
-        <ul class="list">
-          <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= review.score }" :key="star.stars" class="star">
-            <i :class="star <= review.score ? 'fas fa-star' : 'far fa-star'"></i> 
-          </li>
-        </ul>
+      <div class="row m-0">
+        <div class="col-8 p-0">
+          <div class="store-name">{{ storeName }}</div>
+          <div class="review-date">{{ review.updated_at.substr(0,10) }}</div>
+        </div>
+        <div class="col-4 p-0 rating row m-0">
+          <div class="my-auto list">
+            <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= review.score }" :key="star.stars" class="star">
+              <i :class="star <= review.score ? 'fas fa-star' : 'far fa-star'"></i> 
+            </li>
+          </div>
+        </div>
       </div>
       <viewer v-if="review.content" :initialValue="review.content"/>
-      <div class="text-right">
-        <small>{{ review.updated_at }}</small>
-      </div>
-      <hr>
     </div>
 </template>
 
@@ -54,8 +55,9 @@ export default {
 .rating {
     color: #b7b7b7;
     .list {
-        padding: 0;
-        margin: 0;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: 5px;
         .star {
             display: inline-block;
             font-size: 15px; 
@@ -67,5 +69,12 @@ export default {
             }
         }
     }
+}
+.store-name {
+    font-size: 15px;
+    font-weight: bolder;
+}
+.review-date {
+    font-size: 13px;
 }
 </style>

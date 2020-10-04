@@ -58,6 +58,7 @@ def list_guide(request, username):
 
 @api_view(['POST'])
 def paid(request, trip_pk):
+    print(request.data)
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
     trip = get_object_or_404(TripItemModel, pk=trip_pk)

@@ -1,7 +1,12 @@
 <template>
   <div v-if="reviewList">
-    <div v-for="review in reviews" :key="review.id">
-      <ReviewItem :review="review"/>
+    <div v-if="reviews.length > 0">
+      <div v-for="review in reviews" :key="review.id">
+        <ReviewItem :review="review"/>
+      </div>
+    </div>
+    <div v-else>
+      <div class="margin-custom">작성한 리뷰가 없습니다.</div>
     </div>
   </div>
 </template>
@@ -19,24 +24,7 @@ export default {
   },
   data() {
     return {
-      reviews: [{
-        id: 1,
-        content: 'fdfdd',
-        score: 3,
-        store: 1,
-        created_at: '2020-09-20',
-        updated_at: '2020-09-21',
-        user: 1
-      },
-      {
-        id: 2,
-        content: '두번째리뷰~~~',
-        score: 4,
-        store: 2,
-        created_at: '2020-09-24',
-        updated_at: '2020-09-25',
-        user: 1
-      },],
+      reviews: [],
     }
   },
   mounted() {
@@ -62,5 +50,7 @@ export default {
 </script>
 
 <style scoped>
-
+.margin-custom {
+  margin: 0px 5px;
+}
 </style>
