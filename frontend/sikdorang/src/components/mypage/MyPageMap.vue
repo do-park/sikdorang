@@ -30,6 +30,7 @@ export default {
 		todaySchedule() {
 			if (this.todaySchedule.indexOf(0) === -1) {
 				this.plans = this.todaySchedule
+				console.log('플랜스 확인', this.plans)
 				this.showPaths()
 			}
 		}
