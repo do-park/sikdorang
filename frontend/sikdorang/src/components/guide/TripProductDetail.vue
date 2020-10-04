@@ -31,7 +31,9 @@
           </div>
           <div v-else>마감되었습니다.</div>
         </div>
-        <div v-if="isPaied" class="col-6 p-0 text-right">이미 참가중입니다.</div>
+        <div v-if="isPaied" class="col-6 p-0 text-right">
+          이미 참가중입니다.
+        </div>
       </div>
     </div>
     <div class="row mx-3">
@@ -47,15 +49,8 @@
     <div class="mx-3">
       <img :src="imgSrc" alt="" class="img-main" />
     </div>
-    <viewer 
-    v-if="detail.content" 
-    :initialValue="detail.content" 
-    class="mx-3" 
-    />
-    <div 
-    v-if="detail.user.username === username" 
-    class="text-right mr-3"
-    >
+    <viewer v-if="detail.content" :initialValue="detail.content" class="mx-3" />
+    <div v-if="detail.user.username === username" class="text-right mr-3">
       <!-- <button class="btn btn-primary" @click="updateTrip">수정</button> -->
       <button class="btn btn-danger" @click="deleteTrip">삭제</button>
     </div>
@@ -66,7 +61,7 @@
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/vue-editor";
 import { mapActions } from "vuex";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 export default {
   name: "TripProductDetail",
   components: {
@@ -119,8 +114,8 @@ export default {
       this.actionOrderTrip(this.detail);
       this.$router.push("/trip/order");
     },
-   
-    deleteTrip(){
+
+    deleteTrip() {
       Swal.fire({
         icon: "warning",
         title: "여행 상품 삭제",
@@ -138,7 +133,7 @@ export default {
           this.$axios
             .delete(`guide/delete/${this.detail.id}`, requestHeaders)
             .then((res) => {
-              console.log("삭제 전송 성공",res);
+              console.log("삭제 전송 성공", res);
               Swal.fire({
                 icon: "success",
                 title: "성공적으로 삭제했습니다.",
@@ -150,7 +145,7 @@ export default {
         }
       });
     },
-    
+
     login() {
       this.$router.push("/login");
     },
