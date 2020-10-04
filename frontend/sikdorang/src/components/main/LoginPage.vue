@@ -1,10 +1,7 @@
 <template>
   <div>
-    <button 
-      class="btn btn-primary" 
-      @click="clickToMainPage">메인으로</button>
     <div class="login-wrap p-2">
-      <h3 class="my-4">로그인</h3>
+      <h3 class="my-3">식도랑 로고</h3>
       <div class="row m-0">
         <div class="col-9 p-0 pr-1">
           <input
@@ -15,12 +12,12 @@
             hide-details="auto">
           <input
             type="password"
-            class="form-control"
+            class="form-control password-input"
             v-model="loginData.password"
             placeholder="비밀번호">
         </div>
         <button 
-            class="btn btn-secondary login-btn col-3" 
+            class="login-btn col-3" 
             @click="clickLogin">로그인</button>
       </div>
       <div class="mt-3">
@@ -77,12 +74,20 @@ export default {
 
 <style scoped>
   .login-wrap {
-    background-color: lightsalmon;
+    border: 5px solid crimson;
     border-radius: 1rem;
+    margin: 10rem 1rem;
+    text-align: center;
   }
   .login-btn {
     float: right;
     height: 76px;
+    background-color: crimson;
+    color: white;
+    border-radius: 0.5rem;
+  }
+  .password-input {
+    font-family: 'Courier New', Courier, monospace;
   }
 
 </style>

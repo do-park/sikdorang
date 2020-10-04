@@ -4,12 +4,12 @@
     <div class="row m-0">
       <input
         type="text"
-        class="form-control col-9"
+        class="signup-input col-9"
         v-model="signupData.username"
         placeholder="아이디"
         @keyup="turnUsernameOkToFalse"
       />
-      <button class="btn btn-secondary col-3" @click="checkUsername">중복확인</button>
+      <button class="btn btn-secondary col-3 check-btn" @click="checkUsername">중복확인</button>
       <div v-if="clickedCheckUsername" class="col-12 p-0">
         <div v-if="!usernameOk"><small class="pl-1">{{ errorMsg }}</small></div>
         <div v-else><small class="pl-1">사용 할 수 있는 아이디입니다.</small></div>
@@ -30,27 +30,27 @@
         />
         <div class="col-2">{{ signupData.age }}</div>
       </div>
-      <div class="col-12 p-0">
+      <div class="col-12 mx-auto p-0 mb-2">
         <input
           type="password"
-          class="form-control"
+          class="password-input signup-input col-12"
           v-model="signupData.password1"
           placeholder="비밀번호"    
         />
         <small class="pl-1">8자 이상</small>
       </div>
       
-      <div class="col-12 p-0">
+      <div class="col-12 mx-auto p-0">
         <input
           type="password"
-          class="form-control"
+          class="password-input signup-input col-12"
           v-model="signupData.password2"
           placeholder="비밀번호 확인"
         />
       </div>
       
-      <div class="col-12 p-0">
-        <button class="btn btn-secondary signup-btn" @click="clickSignup">
+      <div class="col-12 p-0 text-center">
+        <button class="col-6 signup-btn" @click="clickSignup">
           가입하기
         </button>
       </div>
@@ -159,14 +159,28 @@ export default {
 
 <style scoped>
 .signup-wrap {
-  background-color: lightsalmon;
+  border: 5px solid crimson;
   border-radius: 1rem;
+  margin: 5rem 1rem;
+}
+.signup-input {
+  display: block;
+  border-bottom: 2px solid gray;
+}
+.check-btn {
+  font-size: 14px;
 }
 .age {
   margin-top: 3rem;
 }
 .signup-btn {
-  margin-top: 2rem;
-  float: right;
+  margin: 2rem 0px 1rem;
+  padding: 0.5rem;
+  background-color: crimson;
+  color: white;
+  border-radius: 1rem;
+}
+.password-input {
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
