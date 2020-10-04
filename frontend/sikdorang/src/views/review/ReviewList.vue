@@ -2,7 +2,7 @@
   <div v-if="reviewList">
     <div v-if="reviews.length > 0">
       <div v-for="review in reviews" :key="review.id">
-        <ReviewItem :review="review"/>
+        <ReviewItem class="item" :review="review"/>
       </div>
     </div>
     <div v-else>
@@ -52,5 +52,8 @@ export default {
 <style scoped>
 .margin-custom {
   margin: 0px 5px;
+}
+.item {
+  margin: 1rem 5px;
 }
 </style>
