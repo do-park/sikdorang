@@ -7,7 +7,7 @@
         </button>
       </div>
 
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center align-items-center">
         <transition
           v-for="(res, idx) in threeRes"
           :key="res.id"
@@ -21,8 +21,7 @@
             @mouseover="actionMouseOver(idx)"
             @mouseleave="actionMouseOver(null)"
           >
-            {{ index[idx] }}.{{ res.name }}
-            <p>@ 맛집 정보 @</p>
+            <span class="align-middle">{{ index[idx] }}.{{ res.name }}</span>
           </div>
         </transition>
         <br />
@@ -135,7 +134,6 @@ export default {
         this.actionSelectedRest(this.getThreeRes[idx]);
       }
       var Rest = this.getSelectedRest;
-      console.log(Rest)
       let htmlContent = ``
       if (Rest.tel !== undefined) {
         htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.tel}</p>`
@@ -219,6 +217,8 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/animate.css@3.5.1";
 .box {
   margin: 2px;
+  height: 3rem;
+  line-height : 3rem;
   text-align: center;
   background-color: lightgray;
 }

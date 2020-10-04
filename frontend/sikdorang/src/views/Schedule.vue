@@ -350,7 +350,7 @@ export default {
         schedule.push(item);
         plan = plan + this.clonedItems[i].id + this.clonedItems[i].uid + "-";
       }
-      console.log("확인", plan, schedule);
+      // console.log("확인", plan, schedule);
       this.actionSchedule(schedule);
       this.actionScheduleIdx(0);
       this.actionFlip(true);
