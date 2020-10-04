@@ -4,7 +4,9 @@
 			<router-link to="/beguide" class="be-guide">가이드 신청</router-link>
 		</div>
 		<UserProfile/>
-
+		<div v-if="isGuide">
+			<GuideMyPage />
+		</div>
 		<div class="mt-5">
       <div class="row m-0">
         <button class="col-3 todayBtn mpBtn selected" @click="onTripList">
@@ -40,6 +42,7 @@ import SavedSchedules from './SavedSchedules.vue'
 import GuideTourList from './GuideTourList.vue'
 import UserProfile from './UserProfile.vue'
 import ReviewList from '../../views/review/ReviewList'
+import GuideMyPage from './GuideMyPage'
 
 export default {
 	name: "MyPage",
@@ -48,7 +51,8 @@ export default {
 		SavedSchedules,
 		GuideTourList,
 		UserProfile,
-    ReviewList,
+		ReviewList,
+		GuideMyPage,
 	},
 	props: {
 		isGuide: Boolean,
