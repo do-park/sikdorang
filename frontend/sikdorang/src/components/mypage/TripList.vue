@@ -122,7 +122,7 @@ export default {
         })
         .catch((err) => console.error(err));
     },
-    saveSchedule() {
+    async saveSchedule() {
       const scheduleData = [];
       if (this.getSchedules.length > 0) {
         this.getSchedules.forEach((schedule) => {
@@ -141,23 +141,24 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      this.$axios
+      await this.$axios
         .post("trip/", data, requestHeaders)
         .then(() => {
           this.initiateSchedule();
+          console.log('저장 완료')
         })
         .catch((err) => {
           console.error(err);
         });
     },
     //오늘 일정 가져오기
-    getTodaySchedules() {
+    async getTodaySchedules() {
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      this.$axios
+      await this.$axios
         .get("trip/today", requestHeaders)
         .then((res) => {
           this.makeScheduleList(res.data[0]);
