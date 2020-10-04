@@ -6,15 +6,19 @@
       v-for="theme in themes" 
       :key="theme.id"
       class="col-1 p-0">
-        <div v-if="getThemesClear[theme.db_id]">
+        <div v-if="getThemesClear[theme.db_id]" class="box">
             <img
             @click="goToThemeDetail(theme)"
             class="img-circle-sm"
             :src="require(`../../../public/icons/${theme.db_id}.png`)"
             />
         </div>
-        <div v-else>
-            <div class="img-cricle-sm"><br></div>
+        <div v-else class="box">
+          <img
+            class="img-circle-sm"
+            :src="require(`../../../public/icons/questionMark.png`)"
+            />
+            <!-- <div class="img-cricle-sm"><br></div> -->
         </div>
       </div>
     </div>
@@ -58,6 +62,18 @@ export default {
 </script>
 
 <style>
+.box {
+  width: 100%;
+  /* height: 30vh; */
+  padding-bottom: 100%;
+  padding : 0;
+}
+.img-card {
+  width: 100%;
+  /* height: 30vh; */
+  padding-bottom: 100%;
+  background-size: cover;
+}
 .be-relative {
   position: relative;
 }
@@ -83,10 +99,11 @@ export default {
 .img-circle-sm {
   display: inline-block;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   border-radius: 40%;
   border: 1px solid black;
-  background-color: rgba(0, 0, 0, 0.3);
+  /* background-color: rgba(0, 0, 0, 0.3); */
+  /* padding-bottom: 100%; */
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
