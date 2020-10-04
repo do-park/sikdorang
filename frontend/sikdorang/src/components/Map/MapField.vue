@@ -7,7 +7,6 @@
 </template>
 
 <script>
-// import swal from 'sweetalert';
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
 
@@ -473,7 +472,7 @@ export default {
         // selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
       }
       function makeOverListener(map, marker, infowindow, overImage) {
-        return function() {
+        return function () {
           infowindow.open(map, marker);
           if (!selectedMarker || selectedMarker !== marker) {
             marker.setImage(overImage);
@@ -482,7 +481,7 @@ export default {
         };
       }
       function makeOutListener(map, marker, infowindow, normalImage) {
-        return function() {
+        return function () {
           infowindow.close();
           //클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
           // 마커의 이미지를 기본 이미지로 변경합니다
@@ -493,7 +492,7 @@ export default {
         };
       }
       function makeClickListener(map, marker, infowindow, clickImage) {
-        return function() {
+        return function () {
           //클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
           // 마커의 이미지를 클릭 이미지로 변경합니다
           if (!selectedMarker || selectedMarker !== marker) {
@@ -655,7 +654,7 @@ export default {
         // selectedMarker = self.clickCardChangeMarker(marker, normalImage,overImage,clickImage)
       }
       function makeOverListener(map, marker, infowindow, overImage) {
-        return function() {
+        return function () {
           infowindow.open(map, marker);
           if (!selectedMarker || selectedMarker !== marker) {
             marker.setImage(overImage);
@@ -664,7 +663,7 @@ export default {
         };
       }
       function makeOutListener(map, marker, infowindow, normalImage) {
-        return function() {
+        return function () {
           infowindow.close();
           //클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
           // 마커의 이미지를 기본 이미지로 변경합니다
@@ -675,7 +674,7 @@ export default {
         };
       }
       function makeClickListener(map, marker, infowindow, clickImage) {
-        return function() {
+        return function () {
           //클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
           // 마커의 이미지를 클릭 이미지로 변경합니다
           if (!selectedMarker || selectedMarker !== marker) {
@@ -811,7 +810,7 @@ export default {
         let selectedMarker = this.selectedMarker;
         // const self = this
         function makeOverListener(map, marker, infowindow, overImage) {
-          return function() {
+          return function () {
             infowindow.open(map, marker);
             if (!selectedMarker || selectedMarker !== marker) {
               marker.setImage(overImage);
@@ -819,7 +818,7 @@ export default {
           };
         }
         function makeOutListener(map, marker, infowindow, normalImage) {
-          return function() {
+          return function () {
             infowindow.close();
             //클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
             // 마커의 이미지를 기본 이미지로 변경합니다

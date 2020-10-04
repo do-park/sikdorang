@@ -8,7 +8,9 @@
         scheduleDate.toString().substr(4, 2)
       }}-{{ scheduleDate.toString().substr(6, 2) }}
     </p>
-    <p class="text-right" v-if="getIsSik">{{ getForUser.store_name }}에서 일정을 시작합니다.</p>
+    <p class="text-right" v-if="getIsSik">
+      {{ getForUser.store_name }}에서 일정을 시작합니다.
+    </p>
 
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
@@ -37,7 +39,9 @@
       </v-btn>
     </draggable>
 
-    <p class="text-right mt-0 small">*아이콘을 상자에 끌어 넣어 일정을 구성해보세요. 클릭하면 삭제됩니다.</p>
+    <p class="text-right mt-0 small">
+      *아이콘을 상자에 끌어 넣어 일정을 구성해보세요. 클릭하면 삭제됩니다.
+    </p>
     <div style="height: 5vh"></div>
     <draggable
       v-model="availableItems"
@@ -140,12 +144,11 @@ export default {
       },
     };
   },
-  created() {
-  },
+  created() {},
   mounted() {
     this.resetScheduleStoreInfo();
     this.createTripStarter();
-    console.log('게터 확인', this.getIsSik, this.getForUser)
+    console.log("게터 확인", this.getIsSik, this.getForUser);
   },
   methods: {
     ...mapActions("schedule", [
@@ -550,5 +553,9 @@ board::-webkit-scrollbar {
   width: 50px;
   height: 50px;
   margin: 0px 10px;
+}
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
 }
 </style>
