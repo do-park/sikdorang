@@ -1,9 +1,16 @@
 <template>
-  <div>
-    <div>투어 상품 관리</div>
-    <button class="btn btn--primary" @click="createItem">상품 등록하기</button>
-    <div v-for="item in guideItems" :key="item.id">
-      <GuideMyPageItem :item="item" />
+  <div class="guide-tour">
+    <div class="tour-text">상품 관리</div>
+    <div class="btn-wrap">
+      <button class="create-btn" @click="createItem">상품 등록하기</button>
+    </div>
+    <div v-if="(guideItems.length > 0)" class="margin-x">
+      <div v-for="item in guideItems" :key="item.id">
+        <GuideMyPageItem :item="item" />
+      </div>
+    </div>
+    <div v-else class="margin-x">
+      <div>등록한 상품이 없습니다.</div>
     </div>
 
   </div>
@@ -33,6 +40,9 @@ export default {
     this.getTourItems()
   },
   methods: {
+    createItem() {
+      this.$router.push('/trip/createchedule')
+    },
     getTourItems() {
       const requestHeaders = {
         headers: {
@@ -61,6 +71,37 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.guide-tour {
+  position: relative;
+  border: 2px dotted crimson;
+  border-radius: 20px;
+  margin: 0px 5px;
+  min-height: 200px;
+}
+.tour-text {
+  background-color: white;
+  padding: 5px 35px 0px;
+  font-size: 14px;
+  font-weight: bolder;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: -10px;
+  top: -20px;
+}
+.btn-wrap {
+  margin: 1rem;
+  text-align: right;
+}
+.create-btn {
+  background-color: crimson;
+  padding: 8px;
+  font-size: 12px;
+  color: white;
+  border-radius: 10px;
+}
+.margin-x {
+  margin: 1rem 5px;
+}
 </style>
