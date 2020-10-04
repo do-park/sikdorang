@@ -2,20 +2,41 @@
   <nav class="text-center">
     <div class="fixed-bottom wrap row">
       <div class="center-btn">
-        <div v-if="isLogin && (currentRouteName === 'Home')" class="row m-0 sikdorang" @click="toMyPage">
-          <img class="user-profile-img" :src="imgSrc" alt="user profile image">
+        <div
+          v-if="!isLogin && currentRouteName === 'Home'"
+          class="row m-0 sikdorang"
+          @click="toLogin"
+        >
+          <i class="fas fa-key fa-2x m-auto"></i>
         </div>
-        <div v-else class="row m-0 sikdorang" @click="toMain"><i class="fas fa-home fa-2x m-auto"></i></div>
+        <div
+          v-else-if="isLogin && currentRouteName === 'Home'"
+          class="row m-0 sikdorang"
+          @click="toMyPage"
+        >
+          <img
+            class="user-profile-img"
+            :src="imgSrc"
+            alt="user profile image"
+          />
+        </div>
+        <div v-else class="row m-0 sikdorang" @click="toMain">
+          <i class="fas fa-home fa-2x m-auto"></i>
+        </div>
       </div>
-      <div class="col-6 p-0 my-auto" @click="toTour"><i class="fas fa-flag fa-2x"></i></div>
-      <div class="col-6 p-0 my-auto" @click="toParty"><i class="fas fa-users fa-2x"></i></div>
+      <div class="col-6 p-0 my-auto" @click="toTour">
+        <i class="fas fa-flag fa-2x"></i>
+      </div>
+      <div class="col-6 p-0 my-auto" @click="toParty">
+        <i class="fas fa-users fa-2x"></i>
+      </div>
     </div>
   </nav>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
-const mypage = "mypage"
+import { mapGetters } from "vuex";
+const mypage = "mypage";
 
 export default {
   name: "Navbar",
@@ -25,40 +46,39 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(mypage, [
-      'getUserInfo'
-    ]),
+    ...mapGetters(mypage, ["getUserInfo"]),
     imgSrc() {
-        console.log(this.getUserInfo.profile_image)
-        return this.getUserInfo.profile_image
+      return this.getUserInfo.profile_image;
     },
     currentRouteName() {
-        return this.$route.name;
-    }
-  
+      return this.$route.name;
+    },
   },
   watch: {
     getUserInfo() {
       if (this.getUserInfo !== {}) {
-        this.isLogin = true
+        this.isLogin = true;
       } else {
-        this.isLogin = false
+        this.isLogin = false;
       }
     },
   },
   methods: {
     toTour() {
-      this.$router.push('/trip/list')
+      this.$router.push("/trip/list");
     },
     toMyPage() {
-      this.$router.push('/mypage')
+      this.$router.push("/mypage");
     },
     toMain() {
-      this.$router.push('/')
+      this.$router.push("/");
     },
     toParty() {
-      this.$router.push('/party/list')
-    }
+      this.$router.push("/party/list");
+    },
+    toLogin() {
+      this.$router.push("/login");
+    },
   },
 };
 </script>
@@ -74,7 +94,7 @@ export default {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-} 
+}
 .wrap {
   height: 50px;
   max-width: 600px;
