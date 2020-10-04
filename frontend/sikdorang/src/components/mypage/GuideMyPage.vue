@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>투어 상품 관리</div>
-    <div>ddd</div>
+    <div v-for="item in guideItems" :key="item.id">
+      {{ item }}
+    </div>
 
   </div>
 </template>
@@ -13,6 +15,11 @@ const mypage = "mypage"
 export default {
   name: "GuideMyPage",
   components: {
+  },
+  data() {
+    return {
+      guideItems: [],
+    }
   },
   computed: {
     ...mapGetters(mypage, [
@@ -34,6 +41,7 @@ export default {
       .get(`/guide/list/${target}`, requestHeaders)
       .then((response) => {
         console.log(response);
+        this.guideItems = response.data
       })
       .catch((err) => {
         console.log(err);
