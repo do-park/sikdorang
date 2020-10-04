@@ -5,7 +5,7 @@
       <button class="create-btn" @click="createItem">상품 등록하기</button>
     </div>
     <div v-if="(guideItems.length > 0)" class="margin-x">
-      <div v-for="item in guideItems" :key="item.id">
+      <div class="my-2" v-for="item in guideItems" :key="item.id">
         <GuideMyPageItem :item="item" />
       </div>
     </div>
@@ -49,10 +49,10 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      const target = this.getUserInfo.username
       this.$axios
-      .get(`/guide/list/${target}`, requestHeaders)
+      .get(`/guide/list`, requestHeaders)
       .then((res) => {
+        console.log(res)
         res.data.forEach((target, index) => {
           const stringDate = target.start_date.toString()
           res.data[index].start_date = `${stringDate.substr(0,4)}년 ${stringDate.substr(4,2)}월 ${stringDate.substr(6,2)}일`

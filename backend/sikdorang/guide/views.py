@@ -80,8 +80,6 @@ def paidtour(request):
 
 @api_view(['GET'])
 def paider(request, trip_pk):
-    User = get_user_model()
-    user = get_object_or_404(User, pk=request.user.pk)
     paider = GuideTour.objects.filter(trip_item=trip_pk)
     serializer = PaidSerializer(paider, many=True)
     return Response(serializer.data)
