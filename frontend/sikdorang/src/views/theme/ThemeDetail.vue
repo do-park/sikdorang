@@ -2,12 +2,12 @@
   <div>
     <h3 class="text-center my-3">명예의 전당 [ {{ theme_name }} ] 편</h3>
     <div class="container">
-      <div class="row text-center">
+      <div class="row text-center mx-1">
         <div
           @click="goDetail(restuarant)"
           v-for="restuarant in restaurants"
           :key="restuarant.id"
-          class="box col-4 m-0 p-0"
+          class="box col-6 m-0 p-1"
         >
           <span v-if="storeClear[restuarant.id] === 1" class="effect">
             <div
@@ -239,7 +239,6 @@ export default {
   width: 100%;
   /* height: 30vh; */
   padding-bottom: 100%;
-  background: blanchedalmond;
 }
 .img-card {
   width: 100%;
@@ -254,7 +253,7 @@ export default {
   transform: translate(-50%, -50%);
   text-shadow: -1px 0 blanchedalmond, 0 1px blanchedalmond, 1px 0 blanchedalmond,
     0 -1px blanchedalmond;
-  font-size: 1rem;
+  font-size: 5vw;
 }
 .effect {
   position: relative;
