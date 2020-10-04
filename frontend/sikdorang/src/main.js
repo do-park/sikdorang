@@ -9,6 +9,7 @@ import axios from "axios"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
 // import swal from 'sweetalert';
+import { VueHammer } from "vue2-hammer"
 
 Vue.prototype.$axios = axios
 // axios.defaults.baseURL = "http://j3d202.p.ssafy.io:8080/"
@@ -18,6 +19,7 @@ Vue.config.productionTip = false
 Vue.use(VueCookies)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(VueHammer)
 // Vue.use(swal)
 
 new Vue({
