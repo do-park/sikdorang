@@ -23,12 +23,12 @@
     <div class="text-right">
       <button
         v-if="type == 1"
-        class="btn btn-primary my-3 mx-3"
+        class="btn btn-danger my-3 mx-3"
         @click="updateParty()"
       >
         수정
       </button>
-      <button v-else class="btn btn-primary my-2 mx-3" @click="createParty()">
+      <button v-else class="btn btn-danger my-2 mx-3" @click="createParty()">
         생성
       </button>
     </div>

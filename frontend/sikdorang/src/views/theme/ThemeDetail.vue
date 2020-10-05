@@ -272,8 +272,8 @@ export default {
   z-index: 1;
   width: 70px;
   height: auto;
-  background: red;
-  border: 3px solid red;
+  background: crimson;
+  border: 3px solid crimson;
   content: "Clear";
   text-align: center;
   color: #fff;

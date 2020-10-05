@@ -72,7 +72,7 @@
     <div style="height: 5vh"></div>
 
     <div class="d-flex justify-content-center">
-      <v-btn @click="createTrip()">CREATE</v-btn>
+      <button class="btn btn-danger" @click="createTrip()">CREATE</button>
     </div>
     <br />
     <!-- <span v-for="(item, index) in saved" :key="index">

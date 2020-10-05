@@ -15,7 +15,7 @@
       <div class="text-center my-2">
         <button
           v-if="party.user.username !== username"
-          class="btn btn-primary mb-0"
+          class="btn btn-danger mb-0"
           @click="createMessage()"
         >
           연락하기
@@ -56,7 +56,9 @@
       <button class="btn btn-primary" @click="updateParty()">
         글 수정하기
       </button>
-      <button class="btn btn-danger" @click="deleteParty()">글 삭제하기</button>
+      <button class="btn btn-secondary" @click="deleteParty()">
+        글 삭제하기
+      </button>
     </div>
   </div>
 </template>

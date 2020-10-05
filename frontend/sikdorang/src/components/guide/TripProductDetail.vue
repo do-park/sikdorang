@@ -22,12 +22,12 @@
           class="col-6 p-0 text-right"
         >
           <div v-if="!finish">
-            <button v-if="isLogin" class="btn btn-primary" @click="onClick()">
+            <button v-if="isLogin" class="btn default-btn" @click="onClick()">
               신청하기
             </button>
-            <button v-else class="btn btn-danger" @click="login()">
+            <!-- <button v-else class="btn btn-secondary" @click="login()">
               로그인하세요!
-            </button>
+            </button> -->
           </div>
           <div v-else>마감되었습니다.</div>
         </div>
@@ -52,7 +52,7 @@
     <viewer v-if="detail.content" :initialValue="detail.content" class="mx-3" />
     <div v-if="detail.user.username === username" class="text-right mr-3">
       <!-- <button class="btn btn-primary" @click="updateTrip">수정</button> -->
-      <button class="btn btn-danger" @click="deleteTrip">삭제</button>
+      <button class="btn default-btn" @click="deleteTrip">삭제</button>
     </div>
   </div>
 </template>
@@ -169,5 +169,12 @@ export default {
 .swal2-popup {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
+}
+.default-btn {
+  color: white;
+  background-color: crimson;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 </style>
