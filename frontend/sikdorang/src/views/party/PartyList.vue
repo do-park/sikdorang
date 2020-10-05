@@ -30,7 +30,6 @@ export default {
       this.$axios
         .get(`/party/list_party`)
         .then((res) => {
-          console.log("partylist", res.data);
           this.partyList = res.data;
         })
         .catch((err) => {

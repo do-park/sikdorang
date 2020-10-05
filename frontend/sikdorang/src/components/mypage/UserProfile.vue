@@ -45,7 +45,6 @@ export default {
   computed: {
     ...mapGetters(mypage, ["getUserInfo"]),
     imgSrc() {
-      console.log(this.getUserInfo.profile_image);
       return this.getUserInfo.profile_image;
     },
   },
@@ -60,8 +59,7 @@ export default {
       //get으로 로그아웃 보내기 (헤더에 토큰)
       this.$axios
         .post(`/rest-auth/logout/`, requestHeaders)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           window.$cookies.remove("auth-token");
           window.$cookies.remove("username");
           this.$store.state.isLogin = false;
@@ -82,8 +80,7 @@ export default {
       this.userImage = this.$refs.userImage.files[0];
       this.imageSubmit(e);
     },
-    imageSubmit(e) {
-      console.log(e);
+    imageSubmit() {
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
@@ -95,8 +92,7 @@ export default {
       fd.append("username", this.getUserInfo.username);
       this.$axios
         .put("/rest-auth/user/", fd, requestHeaders)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           alert("변경이 완료되었습니다.");
           location.reload();
         })

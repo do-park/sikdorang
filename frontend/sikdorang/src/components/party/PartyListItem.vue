@@ -25,7 +25,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.partyItem);
     this.getTripdata(this.partyItem.id);
   },
   methods: {
@@ -42,13 +41,10 @@ export default {
     },
     onClick() {
       if (this.$store.state.isLogin) {
-        console.log('로그인 했다.', this.$store.state.isLogin)
         this.actionParty(this.partyItem);
         this.actionTrip(this.trip);
         this.$router.push({ name: "PartyListItemDetail" });
       } else {
-        console.log('로그인 안 했다.', this.$store.state.isLogin)
-
         this.$router.push({ name: "Login"});
       }
     },

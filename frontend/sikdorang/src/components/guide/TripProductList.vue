@@ -32,7 +32,6 @@ export default {
     this.$axios
       .get(`/guide/list_tour`)
       .then((res) => {
-        console.log(res);
         this.tripProductList = res.data;
       })
       .catch((err) => {
@@ -64,7 +63,6 @@ export default {
     // },
 
     goTripProductDetailPage(item_pk) {
-      console.log(item_pk);
       this.$router.push(`/trip/detail/${item_pk}`);
     },
     // getThatGuideList() {

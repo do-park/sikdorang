@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="text-center">{{ gameCount }} | {{ roundCount }}</h3>
+    <h3 class="text-center">{{ roundCount }}</h3>
     <div v-if="!isDone">
       <img
         class="img"
@@ -93,7 +93,6 @@ export default {
   },
   methods: {
     onClick(direction) {
-      console.log(this.clickCount);
       this.clickCount += 2;
       // 선택한 이미지를 userChoice에 추가합니다.
       if (direction === "left") {
@@ -138,7 +137,6 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      // console.log(this.tags);
       this.$axios
         .post("trip/idealcategory", { tags: this.tags }, requestHeaders)
         .then(() => {

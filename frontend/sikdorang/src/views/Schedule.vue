@@ -148,7 +148,6 @@ export default {
   mounted() {
     this.resetScheduleStoreInfo();
     this.createTripStarter();
-    console.log("게터 확인", this.getIsSik, this.getForUser);
   },
   methods: {
     ...mapActions("schedule", [
@@ -167,9 +166,7 @@ export default {
           timeZone: "Asia/Seoul",
         })
         .substring(0, 12);
-      console.log(inputValue);
       inputValue = this.datetostring(inputValue);
-      console.log(inputValue);
 
       Swal.mixin({
         confirmButtonText: "Next &rarr;",
@@ -244,14 +241,13 @@ export default {
                     denyButtonColor: "gray",
                   })
                     .then((result) => {
-                      console.log(result);
                       if (result.isDenied) {
                         this.$router.push({ name: "MyPageView" });
                       } else {
                         this.$axios
                           .post("trip/delete/date_chk", data, requestHeaders)
-                          .then((res) => {
-                            console.log(res, "삭제 완료");
+                          .then(() => {
+                            // empty block
                           });
                       }
                     })
@@ -265,11 +261,6 @@ export default {
                     title: "일정 등록을 시작합니다",
                     confirmButtonColor: "crimson",
                   });
-                  console.log(
-                    "이름 날짜 확인",
-                    result.value[0],
-                    result.value[1]
-                  );
                 }
               })
               .catch((err) => {
@@ -307,7 +298,6 @@ export default {
       this.actionScheduleDate("");
       this.actionSchedule([]);
       this.actionScheduleIdx(0);
-      console.log("스케줄 관련 다 초기화 합니다.");
     },
     // function about trips
     getTripdata() {
@@ -391,11 +381,9 @@ export default {
       const data = {
         date: date,
       };
-      console.log(data);
       this.$axios
         .post("trip/date_chk", data, requestHeaders)
         .then((res) => {
-          console.log("값 왔냐?", res);
           return res.data;
         })
         .catch((err) => {

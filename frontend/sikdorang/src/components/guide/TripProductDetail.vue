@@ -101,7 +101,6 @@ export default {
   methods: {
     ...mapActions("order", ["actionOrderTrip"]),
     changeDate() {
-      console.log(this.detail);
       this.startDate = `${this.detail.start_date.split("-")[0]}년 ${
         this.detail.start_date.split("-")[1]
       }월 ${this.detail.start_date.split("-")[2]}일`;

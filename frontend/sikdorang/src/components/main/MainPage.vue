@@ -45,7 +45,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this);
     this.actionIsSik(false);
     if (this.$store.state.isLogin) {
       const requestHeaders = {
@@ -81,7 +80,6 @@ export default {
     },
     clickRecommend() {
       this.actionIsSik(true);
-      console.log("2번", true);
       this.$router.push({ name: "Schedule" });
     },
     clickToLoginPageOrMyPage() {

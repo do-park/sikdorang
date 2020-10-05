@@ -92,15 +92,13 @@ export default {
           this.reviewData,
           requestHeaders
         )
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           // 등록이 완료되면 마이페이지로 이동
           this.$router.push({ name: "MyPageView" });
         })
         .catch((err) => console.error(err));
     },
     getHtml() {
-      console.log(this.$refs);
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.reviewData.content = html;
     },

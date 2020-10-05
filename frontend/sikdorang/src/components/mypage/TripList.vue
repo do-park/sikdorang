@@ -42,11 +42,13 @@
               </button>
             </div>
           </div>
-          <div v-if="todaySchedule.schedules.length-1 > index" class="my-0">
+          <div v-if="todaySchedule.schedules.length-1 > index">
             <i class="fas fa-arrow-down ml-1"/><span class="small">{{ getTimeCheck[index].distance }}</span>
-            <i class="fas fa-walking ml-1"/><span class="small">{{ getTimeCheck[index].walkMin }}</span>
-            <i class="fas fa-bicycle ml-1"/><span class="small">{{ getTimeCheck[index].bycicleMin }}</span>
-            <i class="fas fa-car ml-1"/><span class="small">{{ getTimeCheck[index].carMin }}</span>
+            <span class="my-0" style="background-color: #FFAE0055;">
+              <i class="fas fa-walking ml-1"/><span class="small">{{ getTimeCheck[index].walkMin }}</span>
+              <i class="fas fa-bicycle ml-1"/><span class="small">{{ getTimeCheck[index].bycicleMin }}</span>
+              <i class="fas fa-car ml-1"/><span class="small">{{ getTimeCheck[index].carMin }}</span>
+            </span>
           </div>
         </div>
       </div>
