@@ -34,7 +34,7 @@ Vue.use(VueRouter);
 
 const requireAuth = () => (from, to, next) => {
   if (store.state.isLogin) return next();
-  next("/");
+  next("/login");
 };
 
 const requireNotAuth = () => (from, to, next) => {
@@ -134,6 +134,7 @@ const routes = [
     path: "/trip/detail/:item_pk",
     name: "TripProductDetailView",
     component: TripProductDetailView,
+    beforeEnter: requireAuth(),
   },
   {
     path: "/trip/list",
@@ -167,6 +168,7 @@ const routes = [
     path: "/party/detail",
     name: "PartyListItemDetail",
     component: PartyListItemDetail,
+    beforeEnter: requireAuth(),
   },
   {
     path: "/party/form",

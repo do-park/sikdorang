@@ -10,35 +10,43 @@
         <div
           v-for="(schedule, index) in todaySchedule.schedules"
           :key="index"
-          class="row schedule-detail"
         >
-          <div class="col-10 p-0 row m-0">
-            <div class="col-1 p-0">
-              <i v-if="(schedule.type === '식당')" class="fas fa-utensils"></i>
-              <i v-else-if="(schedule.type === '카페')" class="fas fa-coffee"></i>
-              <i v-else-if="(schedule.type === '관광지')" class="fas fa-place-of-worship"></i>
-              <i v-else class="fas fa-bed"></i>
+          <div class="row schedule-detail my-0">
+
+            <div class="col-10 p-0 row m-0">
+              <div class="col-1 p-0">
+                <i v-if="(schedule.type === '식당')" class="fas fa-utensils"></i>
+                <i v-else-if="(schedule.type === '카페')" class="fas fa-coffee"></i>
+                <i v-else-if="(schedule.type === '관광지')" class="fas fa-place-of-worship"></i>
+                <i v-else class="fas fa-bed"></i>
+              </div>
+              <div class="col-6 p-0 font-weight-bold">
+                <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
+                <div v-else class="text-truncate">{{ schedule.store_name }}</div>
+              </div>
+              <div class="col-5 p-0 detail-tel text-center">{{schedule.tel}}</div>
+              <div class="col-12 p-0 detail-address">{{schedule.address}}</div>
             </div>
-            <div class="col-6 p-0 font-weight-bold">
-              <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
-              <div v-else class="text-truncate">{{ schedule.store_name }}</div>
+            <div class="col-2 p-0 text-center" v-if="(schedule.type === '식당') | (schedule.type === '카페')">
+              <button
+                v-if="todayReviewList[index] === 0"
+                class="review-btn"
+                @click="goReviewForm(schedule.id)"
+              >
+                <i class="fas fa-keyboard fa-2x"></i>
+                <div>리뷰작성</div>
+              </button>
+              <button class="review-finish" v-else>
+                <i class="fas fa-keyboard fa-2x"></i>
+                <div>작성완료</div>
+              </button>
             </div>
-            <div class="col-5 p-0 detail-tel text-center">{{schedule.tel}}</div>
-            <div class="col-12 p-0 detail-address">{{schedule.address}}</div>
           </div>
-          <div class="col-2 p-0 text-center" v-if="(schedule.type === '식당') | (schedule.type === '카페')">
-            <button
-              v-if="todayReviewList[index] === 0"
-              class="review-btn"
-              @click="goReviewForm(schedule.id)"
-            >
-              <i class="fas fa-keyboard fa-2x"></i>
-              <div>리뷰작성</div>
-            </button>
-            <button class="review-finish" v-else>
-              <i class="fas fa-keyboard fa-2x"></i>
-              <div>작성완료</div>
-            </button>
+          <div v-if="todaySchedule.schedules.length-1 > index" class="my-0">
+            <i class="fas fa-arrow-down ml-1"/><span class="small">{{ getTimeCheck[index].distance }}</span>
+            <i class="fas fa-walking ml-1"/><span class="small">{{ getTimeCheck[index].walkMin }}</span>
+            <i class="fas fa-bicycle ml-1"/><span class="small">{{ getTimeCheck[index].bycicleMin }}</span>
+            <i class="fas fa-car ml-1"/><span class="small">{{ getTimeCheck[index].carMin }}</span>
           </div>
         </div>
       </div>
@@ -68,6 +76,7 @@ export default {
       "getScheduleDate",
     ]),
     ...mapGetters(mypage, ["getTripList"]),
+    ...mapGetters("mapEvent", ["getTimeCheck"]),
   },
   data() {
     return {
