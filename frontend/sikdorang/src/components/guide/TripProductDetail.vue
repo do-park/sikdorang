@@ -131,7 +131,7 @@ export default {
           };
 
           this.$axios
-            .delete(`guide/delete/${this.detail.id}`, requestHeaders)
+            .delete(`guide/delete_tour/${this.detail.id}`, requestHeaders)
             .then((res) => {
               console.log("삭제 전송 성공", res);
               Swal.fire({

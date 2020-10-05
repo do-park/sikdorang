@@ -107,13 +107,13 @@ def paider(request, trip_pk):
 #     return HttpResponse('Something Wrong')
 
 @api_view(['DELETE'])
-def delete_tour(request, trip_pk):
+def delete_tour(request, tour_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    tour = get_object_or_404(TripItemModel, pk=trip_pk)
+    tour = get_object_or_404(TripItemModel, pk=tour_pk)
     
     if tour.user == user:
-        paider = GuideTour.objects.filter(trip_item=trip_pk)
+        paider = GuideTour.objects.filter(trip_item=tour_pk)
         if paider  :
             return HttpResponse('이미 결제한 사람 있어서 삭제 불가')
         else :
