@@ -115,11 +115,11 @@ def delete_tour(request, tour_pk):
     if tour.user == user:
         paider = GuideTour.objects.filter(trip_item=tour_pk)
         if paider  :
-            return HttpResponse('이미 결제한 사람 있어서 삭제 불가')
+            return Response('이미 결제한 사람 있어서 삭제 불가',  status=status.HTTP_400_BAD_REQUEST)
         else :
             tour.delete()
             return HttpResponse('잘 지워짐')
-    return HttpResponse('니 글 아님 ㅅㄱ')
+    return Response('니 글 아님 ㅅㄱ', status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def update_tour(request, tour_pk):
