@@ -12,5 +12,6 @@ urlpatterns = [
     path('paidtour', views.paidtour),
     path('paider/<int:trip_pk>', views.paider),
     path('delete_tour/<int:tour_pk>', views.delete_tour),
+    path('update_tour/<int:tour_pk>', views.update_tour),
     # path('guidetour/<int:tour_pk>', views.guidetour),
 ]
