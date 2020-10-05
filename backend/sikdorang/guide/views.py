@@ -18,9 +18,7 @@ import datetime
 def create_tour(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    print('!!!!!!!!!!!!', request.data)
     serializer = GuideItemSerializer(data=request.data)
-    print('@@@@@@@@', serializer)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
@@ -107,19 +105,19 @@ def paider(request, trip_pk):
 #     return HttpResponse('Something Wrong')
 
 @api_view(['DELETE'])
-def delete_tour(request, trip_pk):
+def delete_tour(request, tour_pk):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    tour = get_object_or_404(TripItemModel, pk=trip_pk)
+    tour = get_object_or_404(TripItemModel, pk=tour_pk)
     
     if tour.user == user:
-        paider = GuideTour.objects.filter(trip_item=trip_pk)
+        paider = GuideTour.objects.filter(trip_item=tour_pk)
         if paider  :
-            return HttpResponse('이미 결제한 사람 있어서 삭제 불가')
+            return Response('이미 결제한 사람 있어서 삭제 불가',  status=status.HTTP_400_BAD_REQUEST)
         else :
             tour.delete()
             return HttpResponse('잘 지워짐')
-    return HttpResponse('니 글 아님 ㅅㄱ')
+    return Response('니 글 아님 ㅅㄱ', status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def update_tour(request, tour_pk):

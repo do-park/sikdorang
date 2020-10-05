@@ -22,12 +22,12 @@
           class="col-6 p-0 text-right"
         >
           <div v-if="!finish">
-            <button v-if="isLogin" class="btn btn-primary" @click="onClick()">
+            <button v-if="isLogin" class="btn default-btn" @click="onClick()">
               신청하기
             </button>
-            <button v-else class="btn btn-danger" @click="login()">
+            <!-- <button v-else class="btn btn-secondary" @click="login()">
               로그인하세요!
-            </button>
+            </button> -->
           </div>
           <div v-else>마감되었습니다.</div>
         </div>
@@ -51,7 +51,7 @@
     </div>
     <viewer v-if="detail.content" :initialValue="detail.content" class="mx-3" />
     <div v-if="detail.user.username === username" class="text-right mr-3">
-      <!-- <button class="btn btn-primary" @click="updateTrip">수정</button> -->
+      <button class="btn btn-secondary mr-1">수정</button>
       <button class="btn btn-danger" @click="deleteTrip">삭제</button>
     </div>
   </div>
@@ -83,7 +83,7 @@ export default {
       .then((res) => {
         this.detail = res.data.result;
         this.isPaied = res.data.flag;
-        this.changeDate();
+        // this.changeDate();
       })
       .catch((err) => console.error(err));
   },
@@ -122,6 +122,8 @@ export default {
         text: "여행 상품 글을 삭제하시겠습니까?",
         showCancelButton: true,
         confirmButtonText: "삭제합니다.",
+        confirmButtonColor: "crimson",
+        cancelButtonColor: "gray",
       }).then((result) => {
         if (result.isConfirmed) {
           const requestHeaders = {
@@ -131,17 +133,23 @@ export default {
           };
 
           this.$axios
-            .delete(`guide/delete/${this.detail.id}`, requestHeaders)
-            .then((res) => {
-              console.log("삭제 전송 성공", res);
+            .delete(`guide/delete_tour/${this.detail.id}`, requestHeaders)
+            .then(() => {
               Swal.fire({
                 icon: "success",
                 title: "성공적으로 삭제했습니다.",
+                confirmButtonColor: "crimson",
               }).then(() => {
                 this.$router.push({ name: "TripProductsView" });
               });
             })
-            .catch((err) => console.error(err));
+            .catch(() => {
+              Swal.fire({
+                icon: "warning",
+                title: "이미 신청한 회원이 있습니다.",
+                confirmButtonColor: "crimson",
+              });
+            });
         }
       });
     },
@@ -162,5 +170,16 @@ export default {
   background-position: center center;
   background-size: cover;
   overflow: hidden;
+}
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
+}
+.default-btn {
+  color: white;
+  background-color: crimson;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 </style>

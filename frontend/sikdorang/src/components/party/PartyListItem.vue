@@ -41,10 +41,16 @@ export default {
         });
     },
     onClick() {
-      this.actionParty(this.partyItem);
-      this.actionTrip(this.trip);
+      if (this.$store.state.isLogin) {
+        console.log('로그인 했다.', this.$store.state.isLogin)
+        this.actionParty(this.partyItem);
+        this.actionTrip(this.trip);
+        this.$router.push({ name: "PartyListItemDetail" });
+      } else {
+        console.log('로그인 안 했다.', this.$store.state.isLogin)
 
-      this.$router.push({ name: "PartyListItemDetail" });
+        this.$router.push({ name: "Login"});
+      }
     },
   },
 };
