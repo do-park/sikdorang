@@ -18,9 +18,7 @@ import datetime
 def create_tour(request):
     User = get_user_model()
     user = get_object_or_404(User, pk=request.user.pk)
-    print('!!!!!!!!!!!!', request.data)
     serializer = GuideItemSerializer(data=request.data)
-    print('@@@@@@@@', serializer)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
