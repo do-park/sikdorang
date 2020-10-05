@@ -1,16 +1,31 @@
 <template>
-  <div class="map-top">
-    <swiper class="swiper" :options="swiperOption">
-      <swiper-slide v-for="(tag, idx) in tags" :key="idx">
-        <button
-          @click="onClick(tag)"
-          style="background:crimson;"
-          class="text-white rounded txt"
-        >
-          #{{ tag }}
-        </button>
-      </swiper-slide>
-    </swiper>
+  <div>
+    <div class="map-top d-none d-md-block">
+      <swiper class="swiper" :options="swiperOption">
+        <swiper-slide v-for="(tag, idx) in tags" :key="idx">
+          <button
+            @click="onClick(tag)"
+            style="background: crimson"
+            class="text-white rounded txt2"
+          >
+            #{{ tag }}
+          </button>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <div class="map-top d-block d-md-none">
+      <swiper class="swiper" :options="swiperOption">
+        <swiper-slide v-for="(tag, idx) in tags" :key="idx">
+          <button
+            @click="onClick(tag)"
+            style="background: crimson"
+            class="text-white rounded txt"
+          >
+            #{{ tag }}
+          </button>
+        </swiper-slide>
+      </swiper>
+    </div>
   </div>
 </template>
 
@@ -61,6 +76,9 @@ export default {
   height: 50px;
   width: 20vw;
   margin-right: 10vw;
+}
+.txt2 {
+  width: 100px;
 }
 .map-top {
   position: absolute;
