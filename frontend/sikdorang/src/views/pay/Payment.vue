@@ -1,47 +1,35 @@
 <template>
   <div class="pay">
-    <button
-      class="btn btn-primary"
-      @click="handleSubmit">
-      결제하기</button>
+    <button class="btn btn-danger" @click="handleSubmit">결제하기</button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 
-
 export default {
-  name: 'Payment',
-  components: {
-
-  },
+  name: "Payment",
+  components: {},
   data() {
     return {
       hereUserPhone: null,
-    }
+    };
   },
-  props: [
-    'userName',
-    'userPhone',
-    'orderTrip'
-  ],
+  props: ["userName", "userPhone", "orderTrip"],
   watch: {
     userPhone() {
-      console.log('폰번호', this.userPhone)
-      this.hereUserPhone = this.userPhone
+      console.log("폰번호", this.userPhone);
+      this.hereUserPhone = this.userPhone;
     },
-    userName() {
-      
-    }
+    userName() {},
   },
 
   methods: {
     handleSubmit(e) {
-      window.$cookies.set('ordertrip',this.orderTrip.id)
-      window.$cookies.set('user-name', this.userName)
-      window.$cookies.set('phone-number', this.userPhone)
-      console.log('폰번호', this.userPhone)
+      window.$cookies.set("ordertrip", this.orderTrip.id);
+      window.$cookies.set("user-name", this.userName);
+      window.$cookies.set("phone-number", this.userPhone);
+      console.log("폰번호", this.userPhone);
 
       e.preventDefault();
 
@@ -57,22 +45,21 @@ export default {
       //   buyer_tel: this.userPhone,
       //   buyer_email: 'example@example.com',
       //   niceMobileV2: true,
-      // };     
+      // };
       // IMP.request_pay(data, this.callback);
     },
-   
+
     callback(response) {
       // result 페이지로 이동
       const query = {
         ...response,
-        type: 'payment',
+        type: "payment",
       };
-      this.$router.push({ path: '/result', query });
+      this.$router.push({ path: "/result", query });
     },
   },
-}
+};
 </script>
 
 <style scope>
-
 </style>

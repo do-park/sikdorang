@@ -35,7 +35,22 @@ import Swal from "sweetalert2";
 import { mapGetters, mapActions } from "vuex";
 
 const mapEvent = "mapEvent";
-const CATEGORY_NAME = ["한식", "분식", "피자", "치킨", "돈가스/회/일식", "카페/디저트/베이커리", "아시안", "양식", "중식", "도시락", "패스트푸드","술집", "족발/보쌈", "찜/탕"]
+const CATEGORY_NAME = [
+  "한식",
+  "분식",
+  "피자",
+  "치킨",
+  "돈가스/회/일식",
+  "카페/디저트/베이커리",
+  "아시안",
+  "양식",
+  "중식",
+  "도시락",
+  "패스트푸드",
+  "술집",
+  "족발/보쌈",
+  "찜/탕",
+];
 
 export default {
   name: "MapCards",
@@ -134,19 +149,23 @@ export default {
         this.actionSelectedRest(this.getThreeRes[idx]);
       }
       var Rest = this.getSelectedRest;
-      let htmlContent = ``
+      let htmlContent = ``;
       if (Rest.tel !== undefined) {
-        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.tel}</p>`
+        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.tel}</p>`;
       }
       if (Rest.address !== undefined) {
-        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.address}</p>`
-        htmlContent += '<hr>'
+        htmlContent += `<p class="m-0 text-left font-weight-bold">${Rest.address}</p>`;
+        htmlContent += "<hr>";
       }
       if (Rest.img !== undefined) {
-        htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`
+        htmlContent += `<img src="${Rest.img}" style="max-width: 100%;"/>`;
       } else if (CATEGORY_NAME.indexOf(Rest.category) !== -1) {
-        htmlContent += `<img src="${this.$store.state.SERVER_URL}media/category/${CATEGORY_NAME.indexOf(Rest.category)}.jpg" style="max-width: 100%;"/>`
-        htmlContent += `<p class="m-0 small text-right">*예시 이미지입니다</p>`
+        htmlContent += `<img src="${
+          this.$store.state.SERVER_URL
+        }media/category/${CATEGORY_NAME.indexOf(
+          Rest.category
+        )}.jpg" style="max-width: 100%;"/>`;
+        htmlContent += `<p class="m-0 small text-right">*예시 이미지입니다</p>`;
       }
       Swal.fire({
         title: Rest.name,
@@ -154,6 +173,8 @@ export default {
         showCancelButton: true,
         confirmButtonText: "추가",
         cancelButtonText: "취소",
+        confirmButtonColor: "crimson",
+        cancelButtonColor: "gray",
       }).then((res) => {
         if (res.isConfirmed) {
           Swal.fire({
@@ -218,7 +239,7 @@ export default {
 .box {
   margin: 2px;
   height: 3rem;
-  line-height : 3rem;
+  line-height: 3rem;
   text-align: center;
   background-color: lightgray;
 }

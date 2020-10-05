@@ -88,6 +88,7 @@ export default {
       html:
         "<p>어떤 음식을 가장 좋아하시나요?</p>" +
         "<strong>이상형 월드컵으로 알아보세요!</strong>",
+      confirmButtonColor: "crimson",
     });
   },
   methods: {
@@ -152,6 +153,7 @@ export default {
         html:
           "<p>어떤 음식점을 가장 좋아하시나요?</p>" +
           "<strong>이상형 월드컵으로 알아보세요!</strong>",
+        confirmButtonColor: "crimson",
       });
       this.$emit("done");
     },

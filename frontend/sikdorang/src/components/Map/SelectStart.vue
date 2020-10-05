@@ -7,7 +7,7 @@
       <div>
         <button
           type="button"
-          class="btn btn-primary m-3 go-btn"
+          class="btn btn-danger m-3 go-btn"
           @click="getMyLocation"
         >
           내 위치에서 볼래요!
@@ -19,6 +19,7 @@
         </button> -->
         <input
           type="button"
+          class="btn btn-danger"
           @click="sample3_execDaumPostcode()"
           value="다른 지역으로 갈래요!"
         /><br />
@@ -131,6 +132,7 @@ export default {
           // 우편번호와 주소 정보를 해당 필드에 넣는다.
           Swal.fire({
             html: `${addr}` + "에서 시작해볼까요?",
+            confirmButtonColor: "crimson",
           }).then((res) => {
             if (res) {
               console.log(res, "ok눌렀다");
@@ -163,6 +165,7 @@ export default {
       Swal.fire({
         title: "어느 지역을 검색하시겠습니까?",
         input: "text",
+        confirmButtonColor: "crimson",
         inputValidator: (value) => {
           if (!value) {
             return "검색어를 입력해주세요.";
@@ -182,21 +185,11 @@ export default {
           function (pos) {
             this.Latitude = pos.coords.latitude;
             this.Longitude = pos.coords.longitude;
-            Swal.fire(
-              "내 위치",
-              this.Latitude + ", " + this.Longitude,
-              "success"
-            ).then((res) => {
-              if (res) {
-                //시작 위도,경도 쿠키에 올리기
-                this.$cookies.set("startLatitude", this.Latitude);
-                this.$cookies.set("startLongitude", this.Longitude);
-                // this.$cookies.set('startLatitude',36.0954341)
-                // this.$cookies.set('startLongitude',128.4138607)
-                this.$cookies.set("searchMethod", "myLocation");
-                this.$emit("flag", false);
-              }
-            });
+            //시작 위도,경도 쿠키에 올리기
+            this.$cookies.set("startLatitude", this.Latitude);
+            this.$cookies.set("startLongitude", this.Longitude);
+            this.$cookies.set("searchMethod", "myLocation");
+            this.$emit("flag", false);
           }.bind(this)
         );
       } else {
@@ -218,7 +211,6 @@ export default {
 .top-place {
   height: 300px;
 }
-
 .go-btn {
   width: 200px;
 }
