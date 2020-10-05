@@ -51,8 +51,8 @@
     </div>
     <viewer v-if="detail.content" :initialValue="detail.content" class="mx-3" />
     <div v-if="detail.user.username === username" class="text-right mr-3">
-      <!-- <button class="btn btn-primary" @click="updateTrip">수정</button> -->
-      <button class="btn default-btn" @click="deleteTrip">삭제</button>
+      <button class="btn btn-secondary mr-1">수정</button>
+      <button class="btn btn-danger" @click="deleteTrip">삭제</button>
     </div>
   </div>
 </template>
@@ -83,7 +83,7 @@ export default {
       .then((res) => {
         this.detail = res.data.result;
         this.isPaied = res.data.flag;
-        this.changeDate();
+        // this.changeDate();
       })
       .catch((err) => console.error(err));
   },
@@ -134,8 +134,7 @@ export default {
 
           this.$axios
             .delete(`guide/delete_tour/${this.detail.id}`, requestHeaders)
-            .then((res) => {
-              console.log("삭제 전송 성공", res);
+            .then(() => {
               Swal.fire({
                 icon: "success",
                 title: "성공적으로 삭제했습니다.",
@@ -144,7 +143,12 @@ export default {
                 this.$router.push({ name: "TripProductsView" });
               });
             })
-            .catch((err) => console.error(err));
+            .catch(() => {
+              Swal.fire({
+                icon: "warning",
+                title: "이미 신청한 회원이 있습니다.",
+              });
+            });
         }
       });
     },
