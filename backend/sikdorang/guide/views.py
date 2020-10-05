@@ -120,3 +120,16 @@ def delete_guide(request, trip_pk):
             tour.delete()
             return HttpResponse('잘 지워짐')
     return HttpResponse('니 글 아님 ㅅㄱ')
+
+@api_view(['PUT'])
+def update_tour(request, tour_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    tour = get_object_or_404(TripItemModel, pk=tour_pk)
+    if tour.user == user:
+        serializer = TourUpdateSerializer(tour, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+    return HttpResponse('Something Wrong')
