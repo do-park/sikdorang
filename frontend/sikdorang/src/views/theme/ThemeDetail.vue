@@ -86,8 +86,8 @@ export default {
             rest.tel +
             "<br /><br />" +
             rest.description,
-          confirmButtonColor: "#d33",
           confirmButtonText: "닫기",
+          confirmButtonColor: "crimson",
         });
       } else {
         Swal.fire({
@@ -99,16 +99,16 @@ export default {
             "<br /><br />" +
             rest.description,
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
+          confirmButtonColor: "crimson",
+          cancelButtonColor: "gray",
           confirmButtonText: "방문하기",
           cancelButtonText: "닫기",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
               title: "영수증 업로드",
               text: "방문 인증을 위한 영수증을 업로드하세요.",
+              confirmButtonColor: "crimson",
               input: "file",
               inputAttributes: {
                 accept: "image/*",
@@ -125,6 +125,7 @@ export default {
                     title: "영수증을 업로드합니다.",
                     imageUrl: e.target.result,
                     imageAlt: "영수증을 업로드합니다.",
+                    confirmButtonColor: "crimson",
                   }).then((result) => {
                     if (result) {
                       const requestHeaders = {
@@ -157,9 +158,19 @@ export default {
                             //방문 변경 새로고침하는 함수
                             this.updateClear(rest.id);
 
-                            Swal.fire("Yummy!", "방문 완료!", "success");
+                            Swal.fire({
+                              title: "Yummy!",
+                              text: "방문 완료!",
+                              icon: "success",
+                              confirmButtonColor: "crimson",
+                            });
                           } else if (res.data === -1) {
-                            Swal.fire("Fail", "방문 인증 실패!", "warning");
+                            Swal.fire({
+                              title: "Fail",
+                              text: "방문 인증 실패!",
+                              icon: "warning",
+                              confirmButtonColor: "crimson",
+                            });
                           }
                         })
                         .catch((err) => {

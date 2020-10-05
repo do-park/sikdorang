@@ -122,6 +122,8 @@ export default {
         text: "여행 상품 글을 삭제하시겠습니까?",
         showCancelButton: true,
         confirmButtonText: "삭제합니다.",
+        confirmButtonColor: "crimson",
+        cancelButtonColor: "gray",
       }).then((result) => {
         if (result.isConfirmed) {
           const requestHeaders = {
@@ -137,6 +139,7 @@ export default {
               Swal.fire({
                 icon: "success",
                 title: "성공적으로 삭제했습니다.",
+                confirmButtonColor: "crimson",
               }).then(() => {
                 this.$router.push({ name: "TripProductsView" });
               });
@@ -162,5 +165,9 @@ export default {
   background-position: center center;
   background-size: cover;
   overflow: hidden;
+}
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
 }
 </style>

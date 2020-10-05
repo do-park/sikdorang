@@ -101,6 +101,7 @@ export default {
           Swal.fire({
             icon: "success",
             title: "동행 구하기 글을 등록했습니다.",
+            confirmButtonColor: "crimson",
           }).then(() => {
             this.$router.push({ name: "PartyList" });
           });
@@ -126,6 +127,7 @@ export default {
           Swal.fire({
             icon: "success",
             title: "동행 구하기 글을 수정했습니다.",
+            confirmButtonColor: "crimson",
           }).then(() => {
             this.$router.push({ name: "PartyList" });
           });

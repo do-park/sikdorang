@@ -183,6 +183,7 @@ export default {
             input: "text",
             allowOutsideClick: false,
             inputValue: inputValue,
+            confirmButtonColor: "crimson",
             inputValidator: (value) => {
               return new Promise((resolve) => {
                 if (value.length === 0) {
@@ -199,6 +200,7 @@ export default {
             html: `<input style="width:100%;" id="datepicker" type="date" value="${inputValue}">`,
             focusConfirm: false,
             allowOutsideClick: false,
+            confirmButtonColor: "crimson",
             preConfirm: () => {
               if (document.getElementById("datepicker").value) {
                 return this.datetoint(
@@ -238,6 +240,8 @@ export default {
                     allowOutsideClick: false,
                     showDenyButton: true,
                     denyButtonText: `Don't save`,
+                    confirmButtonColor: "crimson",
+                    denyButtonColor: "gray",
                   })
                     .then((result) => {
                       console.log(result);
@@ -259,6 +263,7 @@ export default {
                   Swal.fire({
                     icon: "success",
                     title: "일정 등록을 시작합니다",
+                    confirmButtonColor: "crimson",
                   });
                   console.log(
                     "이름 날짜 확인",
@@ -328,6 +333,7 @@ export default {
         Swal.fire({
           icon: "error",
           title: "일정을 등록하세요.",
+          confirmButtonColor: "crimson",
         });
         return false;
       }
@@ -498,6 +504,7 @@ export default {
                   Swal.fire({
                     icon: "success",
                     title: "일정을 수정했습니다.",
+                    confirmButtonColor: "crimson",
                   });
                 }
               })
@@ -514,6 +521,7 @@ export default {
           "확인 버튼을 누르면 모든 데이터가 영구적으로 삭제되어 복구할 수 없게 됩니다.",
         icon: "warning",
         showCancelButton: true,
+        confirmButtonColor: "crimson",
       }).then((result) => {
         if (result.value) {
           this.$axios
@@ -524,6 +532,7 @@ export default {
                   title: "일정이 삭제되었습니다.",
                   icon: "success",
                   showConfirmButton: true,
+                  confirmButtonColor: "crimson",
                 });
               }
             })

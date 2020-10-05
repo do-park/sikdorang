@@ -192,6 +192,8 @@ export default {
         inputPlaceholder:
           "휴대폰 번호, 카카오톡 아이디 등 연락처를 포함한 한마디를 전하세요.",
         showCancelButton: true,
+        confirmButtonColor: "crimson",
+        cancelButtonColor: "gray",
       }).then((res) => {
         if (res.isConfirmed) {
           console.log(res.value);
@@ -211,6 +213,7 @@ export default {
               Swal.fire({
                 icon: "success",
                 title: "메시지를 전송하였습니다.",
+                confirmButtonColor: "crimson",
               });
             })
             .catch((err) => console.error(err));
@@ -231,6 +234,8 @@ export default {
         text: "게시글을 삭제하시겠습니까?",
         showCancelButton: true,
         confirmButtonText: "삭제합니다.",
+        confirmButtonColor: "crimson",
+        cancelButtonColor: "gray",
       }).then((result) => {
         if (result.isConfirmed) {
           const requestHeaders = {
@@ -246,6 +251,7 @@ export default {
               Swal.fire({
                 icon: "success",
                 title: "삭제했습니다.",
+                confirmButtonColor: "crimson",
               }).then(() => {
                 this.$router.push({ name: "PartyList" });
               });
