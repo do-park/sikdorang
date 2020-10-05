@@ -42,11 +42,11 @@ export default {
       .get("/guide/paidtour", requestHeaders)
       .then((res) => {
         res.data.forEach((target, index) => {
-          const stringDate = target.start_date.toString()
-          res.data[index].start_date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
-          const stringDate2 = target.end_date.toString()
-          res.data[index].end_date = `${stringDate2.substr(0,4)}-${stringDate2.substr(4,2)}-${stringDate2.substr(6,2)}`
-          res.data[index].title_img = this.$store.state.IMG_SERVER_URL + res.data[index].title_img
+          const stringDate = target.trip_item.start_date.toString()
+          res.data[index].trip_item.start_date = `${stringDate.substr(0,4)}-${stringDate.substr(4,2)}-${stringDate.substr(6,2)}`
+          const stringDate2 = target.trip_item.end_date.toString()
+          res.data[index].trip_item.end_date = `${stringDate2.substr(0,4)}-${stringDate2.substr(4,2)}-${stringDate2.substr(6,2)}`
+          res.data[index].trip_item.title_img = this.$store.state.IMG_SERVER_URL + res.data[index].trip_item.title_img
         })
         this.tourList = res.data
       })

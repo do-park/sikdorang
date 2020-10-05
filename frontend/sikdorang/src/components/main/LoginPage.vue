@@ -86,6 +86,7 @@ export default {
     background-color: crimson;
     color: white;
     border-radius: 0.5rem;
+    font-size: 14px;
   }
   .password-input {
     font-family: 'Courier New', Courier, monospace;

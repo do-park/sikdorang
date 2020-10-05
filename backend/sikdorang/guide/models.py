@@ -6,7 +6,7 @@ from django.db.models.deletion import CASCADE
 
 class TripItemModel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title_img = models.ImageField(blank=True, upload_to="guide/%Y/%m/%d")
+    title_img = models.ImageField(default="guide/default.jpg", upload_to="guide/%Y/%m/%d")
     title = models.CharField(max_length=100)
     area = models.CharField(max_length=50)
     start_date = models.IntegerField()

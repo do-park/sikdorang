@@ -52,7 +52,6 @@ export default {
       this.$axios
       .get(`/guide/list`, requestHeaders)
       .then((res) => {
-        console.log(res)
         res.data.forEach((target, index) => {
           const stringDate = target.start_date.toString()
           res.data[index].start_date = `${stringDate.substr(0,4)}년 ${stringDate.substr(4,2)}월 ${stringDate.substr(6,2)}일`

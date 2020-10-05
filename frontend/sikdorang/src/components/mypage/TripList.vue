@@ -75,11 +75,11 @@ export default {
       todayReviewList: [],
     };
   },
-  async created() {
+  created() {
     if (this.getSchedules.length === 0) {
       this.initiateSchedule();
     } else {
-      await this.saveSchedule();
+      this.saveSchedule();
     }
   },
   mounted() {
@@ -108,20 +108,6 @@ export default {
       this.$cookies.set("review-store-id", store_id);
       this.$router.push({ name: "ReviewForm" });
     },
-    getSightseeing() {
-      const TOUR_API_KEY =
-        "K%2FplKHR5Hx7sLQwMexw4LCgDz45JjMDfJ1czEyCx83EBoZHJLUOKe%2B56J93QhZ41DlYmdRy3b1LIpwlSh%2FxYfQ%3D%3D";
-
-      this.$axios
-        .get(
-          `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=126733&contentTypeId=12&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
-        )
-        .then((res) => {
-          const items = res.data.response.body.items.item;
-          console.log(items);
-        })
-        .catch((err) => console.error(err));
-    },
     async saveSchedule() {
       const scheduleData = [];
       if (this.getSchedules.length > 0) {
@@ -145,7 +131,7 @@ export default {
         .post("trip/", data, requestHeaders)
         .then(() => {
           this.initiateSchedule();
-          console.log('저장 완료')
+          location.reload()
         })
         .catch((err) => {
           console.error(err);
@@ -169,7 +155,7 @@ export default {
         });
     },
     async restuarantPlan(i, id, type, typeName) {
-      this.$axios
+      await this.$axios
         .get(`trip/store_detail/${id}`)
         .then((res) => {
           const result = res.data;
@@ -196,13 +182,12 @@ export default {
       }
       const TOUR_API_KEY = this.$store.state.TOUR_API_KEY
       const contentId = id;
-      this.$axios
+      await this.$axios
         .get(
           `http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=${TOUR_API_KEY}&contentId=${contentId}&contentTypeId=${contentTypeId}&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y`
         )
         .then((res) => {
           const items = res.data.response.body.items.item;
-          console.log('리저트 확인', res)
           // this.scheduleList["schedules"][String(i)] = {
           let address = null
 					if (typeof(items.addr2) !== "undefined") {
@@ -224,7 +209,6 @@ export default {
             tags: "",
             img: items.firstimage,
           };
-          console.log('리저트 확인', result)
           this.$set(this.todaySchedule.schedules, i, result);
           return result;
         })
@@ -255,7 +239,6 @@ export default {
         }
         // 관광지/숙박이면
         else {
-          console.log('투어 확인')
           await this.TourAPIPlan(i, id, type);
         }
       }

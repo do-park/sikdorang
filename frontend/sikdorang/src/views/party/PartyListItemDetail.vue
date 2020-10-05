@@ -18,7 +18,7 @@
           class="btn btn-primary mb-0"
           @click="createMessage()"
         >
-          동행 신청하기
+          연락하기
         </button>
         <!-- <button v-else class="btn btn-secondary disabled mb-0">
           내가 작성한 글입니다.
@@ -187,7 +187,7 @@ export default {
     },
     createMessage() {
       Swal.fire({
-        title: "동행 신청하기",
+        title: "연락하기",
         input: "textarea",
         inputPlaceholder:
           "휴대폰 번호, 카카오톡 아이디 등 연락처를 포함한 한마디를 전하세요.",
@@ -227,8 +227,8 @@ export default {
     deleteParty() {
       Swal.fire({
         icon: "warning",
-        title: "동행 구하기 삭제",
-        text: "동행 구하기 글을 삭제하시겠습니까?",
+        title: "게시글 삭제",
+        text: "게시글을 삭제하시겠습니까?",
         showCancelButton: true,
         confirmButtonText: "삭제합니다.",
       }).then((result) => {
@@ -245,7 +245,7 @@ export default {
               console.log(res);
               Swal.fire({
                 icon: "success",
-                title: "동행 구하기를 삭제했습니다.",
+                title: "삭제했습니다.",
               }).then(() => {
                 this.$router.push({ name: "PartyList" });
               });
