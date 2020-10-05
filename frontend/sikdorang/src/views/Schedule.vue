@@ -558,4 +558,7 @@ board::-webkit-scrollbar {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
 }
+.small {
+  font-size: 0.6rem !important;
+}
 </style>
