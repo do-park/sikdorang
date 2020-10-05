@@ -147,6 +147,7 @@ export default {
               Swal.fire({
                 icon: "warning",
                 title: "이미 신청한 회원이 있습니다.",
+                confirmButtonColor: "crimson",
               });
             });
         }
