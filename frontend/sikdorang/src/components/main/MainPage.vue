@@ -10,7 +10,7 @@
       </div>
       <h5 class="text-right">어떠세요?</h5>
     </div>
-    <div class="btn-wrap row mb-5 p-0 justify-content-center">
+    <div class="btn-wrap row m-0 mb-5 p-0 justify-content-center">
       <div class="col-5 m-0 p-0">
         <button class="btn btn-danger main-btn" @click="clickMyChoice">
           <div>내가</div>

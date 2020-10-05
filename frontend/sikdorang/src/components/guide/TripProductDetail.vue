@@ -22,12 +22,12 @@
           class="col-6 p-0 text-right"
         >
           <div v-if="!finish">
-            <button v-if="isLogin" class="btn btn-primary" @click="onClick()">
+            <button v-if="isLogin" class="btn default-btn" @click="onClick()">
               신청하기
             </button>
-            <button v-else class="btn btn-danger" @click="login()">
+            <!-- <button v-else class="btn btn-secondary" @click="login()">
               로그인하세요!
-            </button>
+            </button> -->
           </div>
           <div v-else>마감되었습니다.</div>
         </div>
@@ -122,6 +122,8 @@ export default {
         text: "여행 상품 글을 삭제하시겠습니까?",
         showCancelButton: true,
         confirmButtonText: "삭제합니다.",
+        confirmButtonColor: "crimson",
+        cancelButtonColor: "gray",
       }).then((result) => {
         if (result.isConfirmed) {
           const requestHeaders = {
@@ -136,11 +138,10 @@ export default {
               Swal.fire({
                 icon: "success",
                 title: "성공적으로 삭제했습니다.",
-              })
-                .then(() => {
-                  this.$router.push({ name: "TripProductsView" });
-                })
-                .catch((err) => console.error(err));
+                confirmButtonColor: "crimson",
+              }).then(() => {
+                this.$router.push({ name: "TripProductsView" });
+              });
             })
             .catch(() => {
               Swal.fire({
@@ -168,5 +169,16 @@ export default {
   background-position: center center;
   background-size: cover;
   overflow: hidden;
+}
+.swal2-popup {
+  font-family: "NIXGONM-Vb";
+  font-size: 0.7rem !important;
+}
+.default-btn {
+  color: white;
+  background-color: crimson;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 </style>

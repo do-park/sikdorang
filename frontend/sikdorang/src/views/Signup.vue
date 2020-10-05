@@ -9,10 +9,16 @@
         placeholder="아이디"
         @keyup="turnUsernameOkToFalse"
       />
-      <button class="btn btn-secondary col-3 check-btn" @click="checkUsername">중복확인</button>
+      <button class="btn btn-secondary col-3 check-btn" @click="checkUsername">
+        중복확인
+      </button>
       <div v-if="clickedCheckUsername" class="col-12 p-0">
-        <div v-if="!usernameOk"><small class="pl-1">{{ errorMsg }}</small></div>
-        <div v-else><small class="pl-1">사용 할 수 있는 아이디입니다.</small></div>
+        <div v-if="!usernameOk">
+          <small class="pl-1">{{ errorMsg }}</small>
+        </div>
+        <div v-else>
+          <small class="pl-1">사용 할 수 있는 아이디입니다.</small>
+        </div>
       </div>
       <div v-else>
         <div><small class="pl-1">5자 이상 입력하세요</small></div>
@@ -35,11 +41,11 @@
           type="password"
           class="password-input signup-input col-12"
           v-model="signupData.password1"
-          placeholder="비밀번호"    
+          placeholder="비밀번호"
         />
         <small class="pl-1">8자 이상</small>
       </div>
-      
+
       <div class="col-12 mx-auto p-0">
         <input
           type="password"
@@ -48,19 +54,16 @@
           placeholder="비밀번호 확인"
         />
       </div>
-      
+
       <div class="col-12 p-0 text-center">
-        <button class="col-6 signup-btn" @click="clickSignup">
-          가입하기
-        </button>
+        <button class="col-6 signup-btn" @click="clickSignup">가입하기</button>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
   name: "Signup",
@@ -81,7 +84,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions('mypage', ['actionUserInfo']),
+    ...mapActions("mypage", ["actionUserInfo"]),
     turnUsernameOkToFalse() {
       this.usernameOk = false;
       this.clickedCheckUsername = false;
@@ -93,14 +96,14 @@ export default {
           .get(`/trip/chk/${this.signupData.username}`)
           .then((response) => {
             // console.log(response.data);
-            this.errorMsg = response.data
+            this.errorMsg = response.data;
             if (response.data === "사용 할 수 있는 아이디입니다.") {
               this.usernameOk = true;
             }
           })
           .catch((err) => {
             console.log(err);
-            this.errorMsg = '아이디를 다시 확인해주세요.'
+            this.errorMsg = "아이디를 다시 확인해주세요.";
           });
       }
     },
@@ -111,13 +114,13 @@ export default {
           if (this.signupData.password1 === this.signupData.password2) {
             pass = true;
           } else {
-            alert("비밀번호가 일치하지 않습니다.")
+            alert("비밀번호가 일치하지 않습니다.");
           }
         } else {
-          alert("비밀번호를 8자 이상 설정해주세요.")
+          alert("비밀번호를 8자 이상 설정해주세요.");
         }
       } else {
-        alert("아이디를 확인해주세요.")
+        alert("아이디를 확인해주세요.");
       }
 
       if (pass) {
@@ -146,8 +149,8 @@ export default {
         .put(`/rest-auth/user/`, this.signupData, requestHeaders)
         .then((response) => {
           console.log(response);
-          this.actionUserInfo(response.data)
-          this.$router.push('/idealtagcup');
+          this.actionUserInfo(response.data);
+          this.$router.push("/idealtagcup");
         })
         .catch((err) => {
           console.log(err);
@@ -182,6 +185,6 @@ export default {
   border-radius: 1rem;
 }
 .password-input {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 }
 </style>
