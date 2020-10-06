@@ -3,14 +3,12 @@
   <div v-if="result" id=container>
     <p class="m-0 text-left ml-3">{{ username }}님, </p>
     <div id=flip>
-      <!-- <div><div>맛집도 가고 여행도 가고</div></div> -->
        <div><div>{{result.store_name }}</div></div>
        <div><div>{{second_ment}} 맛집</div></div>
       <div><div>{{ address }}의</div></div>
     </div>
     <p class="text-right mr-3">어떠세요?<i class="far fa-hand-pointer"></i></p>
   </div>
-  <!-- <div v-if="result">{{ address }}의<br />{{ result.store_name }}</div> -->
 
 </div>
 </template>
