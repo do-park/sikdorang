@@ -13,32 +13,36 @@
           '{{ party.user.username }}'님과 함께해요!
         </div>
       </div>
-      <div class="row justify-content-center m-3">
+      <div v-if="party.user.username !== username" class="row justify-content-center m-3">
         <button
-          v-if="party.user.username !== username"
           class="default-btn"
           @click="createMessage()"
         >
           연락하기
         </button>
       </div>
+      <div v-else class="row justify-content-between m-3">
+        <button class="col-5 p-0 btn btn-outline-secondary" @click="updateParty()">
+          수정하기
+        </button>
+        <button class="col-5 p-0 btn btn-outline-danger" @click="deleteParty()">
+          삭제하기
+        </button>
+      </div>
     </div>
+    <hr>
+    <viewer
+      v-if="tripSchedule.content"
+      :initialValue="tripSchedule.content"
+      class="mx-3"
+    />
     <hr>
     <div class="m-3">
       <MyPageMap :todaySchedule="tripSchedule.schedules" />
     </div>
     <div class="m-3">
       <div v-for="(schedule, index) in tripSchedule.schedules" :key="index">
-        <!-- <i v-if="schedule.type === '식당'" class="fas fa-utensils"></i>
-        <i v-else-if="schedule.type === '카페'" class="fas fa-coffee"></i>
-        <i
-          v-else-if="schedule.type === '관광지'"
-          class="fas fa-place-of-worship"
-        ></i>
-        <i v-else class="fas fa-bed"></i>
-        {{ schedule.store_name }}{{ schedule.name }} |
-        {{ schedule.address }} -->
-        <div class="row schedule-detail my-0">
+        <div class="row schedule-detail m-0">
 
           <div class="col-12 p-0 row m-0">
             <div class="col-1 p-0">
@@ -49,36 +53,14 @@
             </div>
             <div class="col-6 p-0 font-weight-bold">
               <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
-              <div v-else class="text-truncate">{{ schedule.store_name }}</div>
+              <div v-else class="text-truncate">{{ schedule.name }}</div>
             </div>
-            <div class="col-5 p-0 detail-tel text-center">{{schedule.tel}}</div>
+            <div class="col-5 p-0 detail-tel text-right">{{schedule.tel}}</div>
             <div class="col-12 p-0 detail-address">{{schedule.address}}</div>
           </div>
         </div>
-        <!-- <div v-if="todaySchedule.schedules.length-1 > index" class="my-3 text-center">
-          <i class="fas fa-arrow-down ml-1"/><span class="small">{{ getTimeCheck[index].distance }}</span>
-          <span class="my-0" style="background-color: #FFAE0055;">
-            <i class="fas fa-walking ml-1"/><span class="small">{{ getTimeCheck[index].walkMin }}</span>
-            <i class="fas fa-bicycle ml-1"/><span class="small">{{ getTimeCheck[index].bycicleMin }}</span>
-            <i class="fas fa-car ml-1"/><span class="small">{{ getTimeCheck[index].carMin }}</span>
-          </span>
-        </div> -->
+        <div class="my-1 text-center"></div>
       </div>
-      <div style="height: 5vh"></div>
-      <h4>설명</h4>
-      <viewer
-        v-if="tripSchedule.content"
-        :initialValue="tripSchedule.content"
-      />
-    </div>
-    <div style="height: 5vh"></div>
-    <div v-if="party.user.username === username" class="text-right mx-3 my-3">
-      <button class="btn btn-primary" @click="updateParty()">
-        글 수정하기
-      </button>
-      <button class="btn btn-secondary" @click="deleteParty()">
-        글 삭제하기
-      </button>
     </div>
   </div>
 </template>
@@ -296,5 +278,17 @@ export default {
   background-color: crimson;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
+}
+.schedule-detail {
+  margin: 1rem 0px;
+  padding: 0.5rem;
+  background-color: whitesmoke;
+  border-radius: 20px;
+}
+.detail-tel {
+  font-size: 13px;
+}
+.detail-address {
+  font-size: 12px;
 }
 </style>

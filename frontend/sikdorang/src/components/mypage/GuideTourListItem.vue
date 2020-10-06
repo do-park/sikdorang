@@ -29,6 +29,9 @@ export default {
 .tour {
     cursor: pointer;
     margin: 1rem 5px;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    padding: 0.5rem;
 }
 .tour-title-img {
   display: block;

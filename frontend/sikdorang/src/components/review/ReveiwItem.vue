@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="wrap">
       <div class="row m-0 target-top">
         <div class="col-8 p-0 my-auto" @click="ReviewDetail">
           <div class="store-name">
@@ -95,5 +95,10 @@ export default {
 }
 .review-date {
     font-size: 13px;
+}
+.wrap {
+  background-color: whitesmoke;
+  border-radius: 20px;
+  padding: 0.5rem;
 }
 </style>

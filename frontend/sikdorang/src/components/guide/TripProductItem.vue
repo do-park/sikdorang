@@ -4,14 +4,15 @@
     <div class="col-9 p-0">
       <div class="mx-3">
         <div class="m-0 custom-title text-truncate">[{{ item.area }}] {{ item.title.substr(0, 10) }}</div>
-        <div>
+        <div class="row m-0">
           <small
+            class="col-12 p-0 text-truncate"
             >{{ item.start_date.toString().substr(0, 4) }}년 {{
               item.start_date.toString().substr(4, 2)
             }}월 {{ item.start_date.toString().substr(6, 2) }}일 ~
             {{ item.end_date.toString().substr(0, 4) }}년 {{
               item.end_date.toString().substr(4, 2)
-            }}월{{ item.end_date.toString().substr(6, 2) }}일</small
+            }}월 {{ item.end_date.toString().substr(6, 2) }}일</small
           >
         </div>
         <div>
@@ -77,5 +78,8 @@ export default {
 }
 .custom-title {
   font-weight: bolder;
+}
+.date-overflow {
+  overflow: scro;
 }
 </style>
