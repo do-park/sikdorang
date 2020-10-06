@@ -1,48 +1,43 @@
 <template>
-  <div>
-    <h3 class="mt-1 ml-1">{{ scheduleName }}</h3>
-    <!-- <div class="d-flex flex-row justify-content-between"> -->
-    <!-- </div> -->
-    <p class="text-right">
-      날짜: {{ scheduleDate.toString().substr(0, 4) }}-{{
+  <div class="m-3">
+    <h3 class="mt-1 text-center">{{ scheduleName }}</h3>
+    <div class="text-right schedule-date">
+      {{ scheduleDate.toString().substr(0, 4) }}년 {{
         scheduleDate.toString().substr(4, 2)
-      }}-{{ scheduleDate.toString().substr(6, 2) }}
-    </p>
+      }}월 {{ scheduleDate.toString().substr(6, 2) }}일 일정입니다.
+    </div>
     <p class="text-right" v-if="getIsSik">
       {{ getForUser.store_name }}에서 일정을 시작합니다.
     </p>
-
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
         :key="index"
         @click="deleteItem(index)"
-        class="clickable my-2 mx-1 d-block"
-        style="width: 98%"
+        class="clickable my-2 mx-auto d-block clickable-btn"
       >
-        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: red">
+        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: tomato">
           {{ item.name }}</i
         >
-        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: brown">
+        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: sienna">
           {{ item.name }}</i
         >
         <i
           v-if="item.id == 'S'"
           class="fas fa-place-of-worship"
-          style="color: blue"
+          style="color: steelblue"
         >
           {{ item.name }}</i
         >
-        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: green">
+        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: seagreen">
           {{ item.name }}</i
         >
       </v-btn>
     </draggable>
 
-    <p class="text-right mt-0 small">
-      *아이콘을 상자에 끌어 넣어 일정을 구성해보세요. 클릭하면 삭제됩니다.
+    <p class="text-right mt-0 schedule-small">
+      *아이콘을 드래그해 일정을 구성해보세요. 클릭하면 삭제됩니다.
     </p>
-    <div style="height: 5vh"></div>
     <draggable
       v-model="availableItems"
       :options="availableItemOptions"
@@ -55,32 +50,27 @@
         :key="index"
         class="availableItem"
       >
-        <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: red"></i>
-
-        <i v-if="item.id == 'C'" class="fas fa-coffee" style="color: brown"></i>
-
-        <i
-          v-if="item.id == 'S'"
-          class="fas fa-place-of-worship"
-          style="color: blue"
-        ></i>
-
-        <i v-if="item.id == 'A'" class="fas fa-bed" style="color: green"></i>
+        <div v-if="item.id == 'R'" class="r-border row">
+          <i class="fas fa-utensils fa-2x mx-auto align-self-center" style="color: tomato"></i>
+        </div>
+        <div v-if="item.id == 'C'" class="c-border row">
+          <i class="fas fa-coffee fa-2x mx-auto align-self-center" style="color: sienna"></i>
+        </div>
+        <div v-if="item.id == 'S'" class="s-border row">
+          <i class="fas fa-place-of-worship fa-2x mx-auto align-self-center" style="color: steelblue"></i>
+        </div>
+        <div v-if="item.id == 'A'" class="a-border row">
+          <i class="fas fa-bed fa-2x text-center mx-auto align-self-center" style="color: seagreen"></i>
+        </div>
+        
       </button>
     </draggable>
 
-    <div style="height: 5vh"></div>
 
-    <div class="d-flex justify-content-center">
-      <button class="btn btn-danger" @click="createTrip()">CREATE</button>
+    <div class="row mx-0 my-3 justify-content-center">
+      <button class="col-6 btn btn-danger" @click="createTrip()">다음 ></button>
     </div>
     <br />
-    <!-- <span v-for="(item, index) in saved" :key="index">
-      <v-btn @click="readTrip(item)">READ {{ index }}</v-btn>
-      <v-btn @click="updateTrip(item)">UPDATE {{ index }}</v-btn>
-      <v-btn @click="deleteTrip(item)">DELETE {{ index }}</v-btn>
-      <br />
-    </span> -->
   </div>
 </template>
 
@@ -541,21 +531,60 @@ export default {
   overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: lightsalmon;
+  border: dashed 3px crimson;
 }
 board::-webkit-scrollbar {
   display: none;
 }
-.availableItem {
-  width: 50px;
-  height: 50px;
-  margin: 0px 10px;
+
+.board > .availableItem {
+  display: none;
 }
 .swal2-popup {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
 }
-.small {
-  font-size: 0.6rem !important;
+.schedule-small {
+  font-size: 10px !important;
 }
+.schedule-date {
+  font-size: 14px !important;
+}
+
+.clickable-btn {
+  width: 90%;
+  background-color: white !important;
+  border: 2px solid crimson !important;
+
+}
+.r-border {
+  border: 2px solid tomato;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0px 10px;
+}
+.c-border {
+  border: 2px solid sienna;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0px 10px;
+
+}
+.s-border {
+  border: 2px solid steelblue;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0px 10px;
+}
+.a-border {
+  border: 2px solid seagreen;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0px 10px;
+}
+
 </style>
