@@ -24,7 +24,7 @@ export default {
       },
     };
     this.$axios
-      .get("rest-auth/user/", requestHeaders)
+      .get("/rest-auth/user/", requestHeaders)
       .then((res) => {
         this.actionUserInfo(res.data);
         const userCode = res.data.user_code;

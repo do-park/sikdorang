@@ -72,7 +72,7 @@ export default {
           },
         };
         this.$axios
-          .get(`achievement/theme_clear`, requestHeaders)
+          .get(`/achievement/theme_clear`, requestHeaders)
           .then((res) => {
             this.actionThemesClear(res.data[0]);
             this.userAchieve = res.data[0];

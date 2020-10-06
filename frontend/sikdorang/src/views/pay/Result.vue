@@ -51,7 +51,7 @@ export default {
         phone_number: this.$cookies.get("phone-number"),
       };
       this.$axios
-        .post(`guide/paid/${tripId}`, userData, requestHeaders)
+        .post(`/guide/paid/${tripId}`, userData, requestHeaders)
         .then(() => {
           //empty block
         })

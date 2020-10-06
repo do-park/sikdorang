@@ -68,7 +68,7 @@ export default {
       };
       await this.$axios
         .post(
-          "recommend/tag-recommend/",
+          "/recommend/tag-recommend/",
           {
             category: cf,
             lat: this.beforeLat,

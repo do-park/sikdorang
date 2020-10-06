@@ -63,7 +63,7 @@ export default {
       },
     };
     this.$axios
-      .get("rest-auth/user/", requestHeaders)
+      .get("/rest-auth/user/", requestHeaders)
       .then(() => {
         // user 정보를 userInfo에 우선적으로 저장
       })

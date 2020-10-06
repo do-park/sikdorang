@@ -132,7 +132,7 @@ export default {
           };
 
           this.$axios
-            .delete(`guide/delete_tour/${this.detail.id}`, requestHeaders)
+            .delete(`/guide/delete_tour/${this.detail.id}`, requestHeaders)
             .then(() => {
               Swal.fire({
                 icon: "success",
