@@ -231,14 +231,19 @@ export default {
         )
         .then((res) => {
           const items = res.data.response.body.items.item;
-
+          let address = null
+					if (typeof(items.addr2) !== "undefined") {
+						address = items.addr1 + items.addr2
+					} else {
+						address = items.addr1
+					}
           // this.scheduleList["schedules"][String(i)] = {
           let result = {
             id: items.contentid,
             store_name: items.title,
             branch: "",
             tel: items.tel,
-            address: items.addr1 + items.addr2,
+            address: address,
             latitude: items.mapy,
             longitude: items.mapx,
             //category가 있지만, 식당/카페와 동일하게&혼선 안되게 하기 위해 type을 또 넣음.
