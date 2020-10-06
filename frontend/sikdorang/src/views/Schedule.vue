@@ -14,6 +14,7 @@
         v-for="(item, index) in clonedItems"
         :key="index"
         @click="deleteItem(index)"
+        @touchend="deleteItem(index)"
         class="clickable my-2 mx-auto d-block clickable-btn"
       >
         <i v-if="item.id == 'R'" class="fas fa-utensils" style="color: tomato">

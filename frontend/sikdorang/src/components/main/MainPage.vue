@@ -57,6 +57,7 @@ export default {
             this.$store.state.isLogin = false;
             this.isLogin = false;
             this.loginOrMypage = "로그인";
+            location.reload()
           }
         });
       this.loginOrMypage = "마이페이지";

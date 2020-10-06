@@ -22,7 +22,7 @@ export default {
       result: null,
       address: null,
       second_ment : '',
-      category_name : ["한식","분식","피자","치킨","돈가스/회/일식","카페/디터즈/베이커리","아시안푸드","양식","중식","도시락/샌드위치","패스트푸드","술집","족발/보쌈","찜/탕"]
+      category_name : ["한식","분식","피자","치킨","돈가스/회/일식","카페/디저트/베이커리","아시안푸드","양식","중식","도시락/샌드위치","패스트푸드","술집","족발/보쌈","찜/탕"]
     };
   },
   props : {
@@ -46,7 +46,11 @@ export default {
           this.second_ment = this.category_name[this.result.category]
           this.actionForUser(this.result)
           const temp = this.result.address.split(" ");
-          this.address = temp[0] + " " + temp[1];
+          if (temp[0] === "제주특별자치도") {
+            this.address = temp[0]
+          } else {
+            this.address = temp[0] + " " + temp[1];
+          }
         })
         .catch((err) => console.error(err));
     },

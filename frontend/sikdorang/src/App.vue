@@ -42,6 +42,9 @@ export default {
 </script>
 
 <style scoped>
+#app {
+  background-color: white;
+}
 .router-view {
   margin-bottom: 100px;
 }

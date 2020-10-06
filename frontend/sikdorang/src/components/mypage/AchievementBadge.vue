@@ -5,7 +5,7 @@
       <div 
       v-for="theme in themes" 
       :key="theme.id"
-      class="col-1 p-0">
+      class="col-2 p-0 mb-1">
         <div v-if="getThemesClear[theme.db_id]" class="box">
             <img
             @click="goToThemeDetail(theme)"
@@ -15,6 +15,7 @@
         </div>
         <div v-else class="box">
           <img
+            @click="goToThemeDetail(theme)"
             class="img-circle-sm"
             :src="require(`../../../public/icons/questionMark.png`)"
             />
@@ -60,7 +61,7 @@ export default {
 
 <style>
 .box {
-  width: 100%;
+  width: 90%;
   /* height: 30vh; */
   padding-bottom: 100%;
   padding : 0;

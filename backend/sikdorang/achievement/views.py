@@ -63,8 +63,7 @@ def visit_create(request, theme_pk):
         image_path = CVisit.receipt
         
         #검증할 음식점 이름
-        # rest_name = request.data['rest_name']
-        rest_name = '리안중화요리'
+        rest_name = request.data['rest_name']
         found = False
         # 결과 찾는 로직
 
