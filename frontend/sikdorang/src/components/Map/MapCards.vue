@@ -1,14 +1,15 @@
 <template>
   <div>
-    <div v-if="threeRes" class="map-top d-block d-md-none">
-      <div class="d-flex flex-column align-items-center">
-        <div>
-          <button class="btn btn-secondary" @click="checkFilp">
-            {{ buttonStr }}
+    <div class="map-top d-block">
+      <div>
+        <div class="text-right m-3">
+          <button class="" @click="checkFilp">
+            <i class="fas fa-sync-alt fa-2x"></i>
+            <div class="">flip!</div>
           </button>
         </div>
 
-        <div class="d-flex justify-content-center align-items-center">
+        <div class="row m-0 justify-content-around">
           <transition
             v-for="(res, idx) in threeRes"
             :key="res.id"
@@ -18,7 +19,6 @@
               :class="{ active: isActive(idx) }"
               v-if="animatechk"
               class="box"
-              style="width: 30vw; height: 10vh; letter-spacing: -2px"
               @click="selectRest(idx)"
               @mouseover="actionMouseOver(idx)"
               @mouseleave="actionMouseOver(null)"
@@ -26,46 +26,6 @@
               <span class="align-middle">{{ index[idx] }}.{{ res.name }}</span>
             </div>
           </transition>
-          <br />
-        </div>
-      </div>
-    </div>
-    <div v-if="threeRes" class="map-top d-none d-md-block">
-      <div class="d-flex flex-column align-items-center">
-        <div>
-          <button class="btn btn-secondary" @click="checkFilp">
-            {{ buttonStr }}
-          </button>
-        </div>
-
-        <div class="d-flex justify-content-center align-items-center">
-          <transition
-            v-for="(res, idx) in threeRes"
-            :key="res.id"
-            enter-active-class="animated flipInY"
-          >
-            <div
-              :class="{ active: isActive(idx) }"
-              v-if="animatechk"
-              class="box"
-              style="width: 20vh"
-              @click="selectRest(idx)"
-              @mouseover="actionMouseOver(idx)"
-              @mouseleave="actionMouseOver(null)"
-            >
-              <span
-                :class="{ active: isActive(idx) }"
-                v-if="animatechk"
-                class="box"
-                style="width: 20vh"
-                @click="selectRest(idx)"
-                @mouseover="actionMouseOver(idx)"
-                @mouseleave="actionMouseOver(null)"
-                >{{ index[idx] }}.{{ res.name }}</span
-              >
-            </div>
-          </transition>
-          <br />
         </div>
       </div>
     </div>
@@ -279,11 +239,12 @@ export default {
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/animate.css@3.5.1";
 .box {
-  margin: 2px;
-  height: 3rem;
-  line-height: 3rem;
+  width: 32%;
+  height: 5rem;
+  max-width: 180px;
   text-align: center;
-  background-color: lightgray;
+  background-color: white;
+  border: dashed 3px crimson;
 }
 .box:hover {
   cursor: pointer;
@@ -295,10 +256,9 @@ export default {
 }
 .map-top {
   position: absolute;
-  top: 70%;
-  left: 0;
-  right: 0;
-  margin: 0, auto;
+  bottom: 55px;
+  max-width: 600px;
+  width: 100%;
   z-index: 10;
 }
 .swal2-popup {
