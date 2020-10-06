@@ -96,6 +96,6 @@ export default {
 
 <style>
 .icon-active {
-  color: blue;
+  color: crimson;
 }
 </style>

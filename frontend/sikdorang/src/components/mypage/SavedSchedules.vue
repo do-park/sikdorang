@@ -5,13 +5,14 @@
       <div class="my-4" v-for="ListItem in scheduleList" :key="ListItem.id">
         <div class="row m-0">
           <div class="col-1 p-0">
-            <i v-if="ListItem.type === '식당'" class="fas fa-utensils"></i>
-            <i v-else-if="ListItem.type === '카페'" class="fas fa-coffee"></i>
+            <i v-if="ListItem.type === '식당'" class="fas fa-utensils" style="color: tomato"></i>
+            <i v-else-if="ListItem.type === '카페'" class="fas fa-coffee" style="color: sienna"></i>
             <i
               v-else-if="ListItem.type === '관광지'"
               class="fas fa-place-of-worship"
+              style="color: steelblue"
             ></i>
-            <i v-else class="fas fa-bed"></i>
+            <i v-else class="fas fa-bed" style="color: seagreen"></i>
           </div>
           <div class="col-6 p-0 font-weight-bold">
             <div
@@ -32,7 +33,7 @@
         @click="goScheduleDetail(schedule)"
         v-for="schedule in allSchedule"
         :key="schedule.idx"
-        class="row m-0 mb-2"
+        class="row m-0 mb-2 schedule-wrap"
       >
         <div class="col-8 p-0">
           <div v-b-modal.modal-scrollable class="schedule-name text-truncate">
@@ -304,9 +305,14 @@ export default {
   margin: 0px 5px;
 }
 .icon-active {
-  color: blue;
+  color: crimson;
 }
 .icon-no-active {
   color: gray;
+}
+.schedule-wrap {
+  background-color: whitesmoke;
+  border-radius: 20px;
+  padding: 0.5rem;
 }
 </style>
