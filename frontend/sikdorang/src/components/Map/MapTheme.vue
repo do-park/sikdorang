@@ -74,7 +74,7 @@ export default {
   display: inline-block;
   background-color: crimson;
   color: white;
-  font-size: 13px;
+  font-size: 16px;
   width: 100%;
   padding: 0.3rem 0.5rem;
   border-radius: 30%;

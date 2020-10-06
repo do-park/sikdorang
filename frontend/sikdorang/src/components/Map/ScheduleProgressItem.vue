@@ -50,6 +50,6 @@ export default {
   color: crimson !important;
 }
 .deactivate {
-  color: skyblue;
+  color: gray;
 }
 </style>

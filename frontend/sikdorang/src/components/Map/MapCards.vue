@@ -3,7 +3,7 @@
     <div class="map-top d-block">
       <div>
         <div class="text-right m-3">
-          <button class="" @click="checkFilp">
+          <button class="flip-btn" @click="checkFilp">
             <i class="fas fa-sync-alt fa-2x"></i>
             <div class="">flip!</div>
           </button>
@@ -18,12 +18,12 @@
             <div
               :class="{ active: isActive(idx) }"
               v-if="animatechk"
-              class="box"
+              class="box row m-0"
               @click="selectRest(idx)"
               @mouseover="actionMouseOver(idx)"
               @mouseleave="actionMouseOver(null)"
             >
-              <span class="align-middle">{{ index[idx] }}.{{ res.name }}</span>
+              <div class="align-middle col-12 txt my-auto">{{ index[idx] }}.{{ res.name }}</div>
             </div>
           </transition>
         </div>
@@ -238,6 +238,9 @@ export default {
 
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/animate.css@3.5.1";
+.flip-btn:focus {
+  outline: none;
+}
 .box {
   width: 32%;
   height: 5rem;
@@ -264,5 +267,8 @@ export default {
 .swal2-popup {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
+}
+.txt {
+  padding: 0px 2px;
 }
 </style>
