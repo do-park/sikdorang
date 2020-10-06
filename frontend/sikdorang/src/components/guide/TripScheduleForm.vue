@@ -137,7 +137,7 @@ export default {
       fd.append('limit_person', this.tripSchedule.limit_person)
       fd.append('departure_person', this.tripSchedule.departure_person)
       this.$axios
-        .post("guide/create_tour", fd, requestHeaders)
+        .post("/guide/create_tour", fd, requestHeaders)
         .then(() => {
           this.$router.push(`/mypage`);
         })

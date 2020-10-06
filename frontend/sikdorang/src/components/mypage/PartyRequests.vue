@@ -85,10 +85,6 @@ export default {
         .get(`/party/list_message/${this.partyPk}`)
         .then((res) => {
           this.requestData = res.data;
-          console.log("here @@@@@@@@@@");
-          console.log("pk", this.partyPk);
-          console.log("res", res.data);
-          console.log("reqdata", this.requestData);
         })
         .catch((err) => {
           console.log(err);

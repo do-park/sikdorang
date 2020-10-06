@@ -118,7 +118,6 @@ export default {
         .then((res) => {
           // this.$cookies.set("trip", res.data);
           this.actionTrip(res.data);
-          console.log("getTripdata", res.data);
         })
         .catch((err) => {
           console.error(err);
@@ -130,18 +129,14 @@ export default {
         .then((res) => {
           // this.$cookies.set("party", res.data[0]);
           this.actionParty(res.data[0]);
-          console.log("getPartydata", res.data[0]);
         })
         .catch((err) => {
           console.error(err);
         });
     },
     async readParty(scheduleId) {
-      console.log(scheduleId);
       await this.getPartydata(scheduleId);
-      console.log("1");
       await this.getTripdata(scheduleId);
-      console.log("2");
       this.$router.push({ name: "PartyListItemDetail" });
     },
     createParty(scheduleId, scheduleDate) {

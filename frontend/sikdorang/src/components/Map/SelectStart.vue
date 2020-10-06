@@ -28,7 +28,7 @@
           style="
             display: none;
             border: 1px solid;
-            width: 500px;
+            width: 100%;
             height: 300px;
             margin: 5px 0;
             position: relative;

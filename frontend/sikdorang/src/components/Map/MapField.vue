@@ -143,7 +143,7 @@ export default {
         lng: this.beforeLng,
       };
       this.$axios
-        .post("recommend/tag-store/", data)
+        .post("/recommend/tag-store/", data)
         .then((res) => {
           this.showTagStores(res.data.result);
           this.actionTagStores(res.data.result);
@@ -167,7 +167,7 @@ export default {
       };
       this.$axios
         .post(
-          "recommend/tag-recommend/",
+          "/recommend/tag-recommend/",
           {
             category: cf,
             lat: this.beforeLat,

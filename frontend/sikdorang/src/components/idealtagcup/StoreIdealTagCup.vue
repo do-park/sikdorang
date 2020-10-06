@@ -107,7 +107,7 @@ export default {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('trip/idealtag', {tags: this.tags}, requestHeaders)
+			this.$axios.post('/trip/idealtag', {tags: this.tags}, requestHeaders)
 			.then(() => {
 				this.$store.state.mypage.userInfo.done_cup = true
 			})
