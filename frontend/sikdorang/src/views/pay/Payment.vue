@@ -44,7 +44,10 @@ export default {
         buyer_email: 'example@example.com',
         niceMobileV2: true,
       };
-      IMP.request_pay(data, this.callback);
+      IMP.request_pay({
+        data,
+        m_redirect_url: `${this.$store.state.SERVER_URL}result`
+      }, this.callback);
     },
 
     callback(response) {
