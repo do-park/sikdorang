@@ -4,7 +4,7 @@
       <router-view class="router-view" />
       <Navbar />
     </div>
-    <div id="forPcDiv" v-else style="width: 600px;" class="mx-auto">
+    <div id="forPcDiv" v-else style="" class="mx-auto maxi-size">
       <router-view class="router-view" />
       <Navbar />
     </div>
@@ -44,5 +44,9 @@ export default {
 <style scoped>
 .router-view {
   margin-bottom: 100px;
+}
+.maxi-size {
+  width: 600px;
+  min-height: 100vh;
 }
 </style>
