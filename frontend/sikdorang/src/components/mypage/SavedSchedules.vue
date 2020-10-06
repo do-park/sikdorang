@@ -1,6 +1,7 @@
 <template>
   <div v-if="savedSchedules">
-    <b-modal id="modal-scrollable" scrollable :title="scheduleName" hide-footer>
+    <b-modal id="modal-scrollable" scrollable hide-footer>
+      <div class="modal-schedule-name">{{scheduleName}}</div>
       <MyPageMap :todaySchedule="scheduleList" />
       <div class="my-4" v-for="ListItem in scheduleList" :key="ListItem.id">
         <div class="row m-0">
@@ -42,7 +43,7 @@
           <div>{{ schedule.date }}</div>
         </div>
         <div class="col-4 p-0 row m-0">
-          <div class="col-6 p-0 text-center">
+          <div class="col-6 p-0 row m-0 justify-content-center align-items-center">
             <!-- 동행 상세페이지로 이동 -->
             <button
               v-if="schedule.party_chk"
@@ -61,7 +62,7 @@
               <i class="fas fa-users fa-2x icon-no-active"></i>
             </button>
           </div>
-          <div class="col-6 p-0 text-center">
+          <div class="col-6 p-0 row m-0 justify-content-center align-items-center">
             <!-- 동행 활성화일 때 -->
             <PartyRequests v-if="schedule.party_chk" :partyPk="schedule.id" />
 
@@ -314,5 +315,10 @@ export default {
   background-color: whitesmoke;
   border-radius: 20px;
   padding: 0.5rem;
+}
+.modal-schedule-name {
+  overflow: auto;
+  font-size: 18px;
+  font-weight: bolder;
 }
 </style>

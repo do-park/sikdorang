@@ -3,8 +3,8 @@
     <div class="row m-0 justify-content-center mb-4">
       <h3 class="text-center my-3 y-line">식도랑 유저와 함께해요</h3>
     </div>
-    <div v-if="(partyList.length > 0)">
-      <div v-for="(partyItem, index) in partyList" :key="index">
+    <div class="mx-2" v-if="(partyList.length > 0)">
+      <div v-for="(partyItem, index) in partyList" :key="index" class="item-wrap">
         <PartyListItem :partyItem="partyItem" :index="index" />
       </div>
     </div>
@@ -50,5 +50,8 @@ export default {
   border-bottom: 2px solid crimson;
   padding: 0.5rem;
   font-weight: bolder;
+}
+.item-wrap {
+  cursor: pointer;
 }
 </style>

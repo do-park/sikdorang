@@ -1,9 +1,14 @@
 <template>
-  <div class="d-block">
-    <div @click="onClick()">
-      <h5 class="mx-3">{{ partyItem.title }}</h5>
-      <p class="mx-3">날짜: {{ partyItem.trip_date }}</p>
-      <p class="text-right mx-3">{{ partyItem.user.username }}</p>
+  <div class="row mx-3">
+    <div class="col-12 p-0" @click="onClick()">
+      <div class="m-0 text-truncate custom-title">{{ partyItem.title }}</div>
+      <div>
+        <small><span class="font-weight-bolder" style="color:crimson;">{{ partyItem.trip_date.toString().substr(0, 4) }}년 {{
+              partyItem.trip_date.toString().substr(4, 2)
+            }}월 {{ partyItem.trip_date.toString().substr(6, 2) }}일</span>에 같이가요!</small>
+        
+      </div>
+      <!-- <div class="text-right mx-3">{{ partyItem.user.username }}</div> -->
       <hr style="width: 100%" />
     </div>
   </div>
@@ -52,5 +57,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.custom-title {
+  font-weight: bolder;
+}
 </style>

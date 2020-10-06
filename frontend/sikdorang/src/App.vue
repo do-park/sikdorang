@@ -50,3 +50,14 @@ export default {
   min-height: 100vh;
 }
 </style>
+
+<style>
+.custom-break-word {
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      white-space: -moz-pre-wrap;
+      white-space: -pre-wrap;
+      white-space: -o-pre-wrap;
+      word-break: break-all;
+    }
+</style>

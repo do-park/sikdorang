@@ -2,7 +2,7 @@
   <div>
     <div style="height: 5vh"></div>
     <div>
-      <h3 class="text-center">[{{ detail.area }}]{{ detail.title }}</h3>
+      <h3 class="text-center custom-break-word">[{{ detail.area }}]{{ detail.title }}</h3>
       <div class="date text-center">
         {{ detail.start_date.toString().substr(0, 4) }}년 {{
           detail.start_date.toString().substr(4, 2)
