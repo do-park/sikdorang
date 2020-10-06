@@ -63,7 +63,6 @@ export default {
       getStore() {
         this.$axios.get(`trip/store_detail/${this.review.store_id}`)
         .then(res => {
-            console.log(res)
             this.storeName = res.data.store_name
         })
         .catch(err => console.error(err))

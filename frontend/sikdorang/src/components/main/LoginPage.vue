@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="login-wrap p-2">
-      <h3 class="my-3">식도랑 로고</h3>
+      <img class="logo" src="@/assets/sikdoranglogo.png" alt="logo" >
       <div class="row m-0">
         <div class="col-9 p-0 pr-1">
           <input
@@ -74,6 +74,9 @@ export default {
 </script>
 
 <style scoped>
+  .logo {
+    width: 20%;
+  }
   .login-wrap {
     border: 5px solid crimson;
     border-radius: 1rem;

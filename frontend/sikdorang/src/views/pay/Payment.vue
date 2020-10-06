@@ -18,7 +18,6 @@ export default {
   props: ["userName", "userPhone", "orderTrip"],
   watch: {
     userPhone() {
-      console.log("폰번호", this.userPhone);
       this.hereUserPhone = this.userPhone;
     },
     userName() {},
@@ -29,7 +28,6 @@ export default {
       window.$cookies.set("ordertrip", this.orderTrip.id);
       window.$cookies.set("user-name", this.userName);
       window.$cookies.set("phone-number", this.userPhone);
-      console.log("폰번호", this.userPhone);
 
       e.preventDefault();
 

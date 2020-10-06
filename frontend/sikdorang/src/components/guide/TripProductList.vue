@@ -1,6 +1,5 @@
 <template>
   <div class="mx-2">
-    <!-- 가이드를 검색하는 Input이 필요할 확률이 높음 -->
     <div
       class="item-wrap"
       v-for="item in tripProductList"
@@ -32,7 +31,6 @@ export default {
     this.$axios
       .get(`/guide/list_tour`)
       .then((res) => {
-        console.log(res);
         this.tripProductList = res.data;
       })
       .catch((err) => {
@@ -64,7 +62,6 @@ export default {
     // },
 
     goTripProductDetailPage(item_pk) {
-      console.log(item_pk);
       this.$router.push(`/trip/detail/${item_pk}`);
     },
     // getThatGuideList() {

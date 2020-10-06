@@ -141,7 +141,6 @@ export default {
         await this.divideRecommendation(this.schedules[i].name, i);
       }
     }
-    console.log("스케줄 저장 확인", this.schedules);
     this.actionPlanList(this.schedules);
     setTimeout(() => {
       this.$router.replace("/mypage");

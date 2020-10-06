@@ -52,14 +52,13 @@ export default {
       };
       this.$axios
         .post(`guide/paid/${tripId}`, userData, requestHeaders)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          //empty block
         })
         .catch((err) => console.error(err));
     },
     getSuccess(query) {
       const { success } = query;
-      console.log(query);
       if (success === "true") {
         this.postData();
       }

@@ -1,30 +1,72 @@
 <template>
-  <div v-if="threeRes" class="map-top">
-    <div class="d-flex flex-column align-items-center">
-      <div>
-        <button class="btn btn-secondary" @click="checkFilp">
-          {{ buttonStr }}
-        </button>
-      </div>
+  <div>
+    <div v-if="threeRes" class="map-top d-block d-md-none">
+      <div class="d-flex flex-column align-items-center">
+        <div>
+          <button class="btn btn-secondary" @click="checkFilp">
+            {{ buttonStr }}
+          </button>
+        </div>
 
-      <div class="d-flex justify-content-center align-items-center">
-        <transition
-          v-for="(res, idx) in threeRes"
-          :key="res.id"
-          enter-active-class="animated flipInY"
-        >
-          <div
-            :class="{ active: isActive(idx) }"
-            v-if="animatechk"
-            class="box"
-            @click="selectRest(idx)"
-            @mouseover="actionMouseOver(idx)"
-            @mouseleave="actionMouseOver(null)"
+        <div class="d-flex justify-content-center align-items-center">
+          <transition
+            v-for="(res, idx) in threeRes"
+            :key="res.id"
+            enter-active-class="animated flipInY"
           >
-            <span class="align-middle">{{ index[idx] }}.{{ res.name }}</span>
-          </div>
-        </transition>
-        <br />
+            <div
+              :class="{ active: isActive(idx) }"
+              v-if="animatechk"
+              class="box"
+              style="width: 30vw; height: 10vh; letter-spacing: -2px"
+              @click="selectRest(idx)"
+              @mouseover="actionMouseOver(idx)"
+              @mouseleave="actionMouseOver(null)"
+            >
+              <span class="align-middle">{{ index[idx] }}.{{ res.name }}</span>
+            </div>
+          </transition>
+          <br />
+        </div>
+      </div>
+    </div>
+    <div v-if="threeRes" class="map-top d-none d-md-block">
+      <div class="d-flex flex-column align-items-center">
+        <div>
+          <button class="btn btn-secondary" @click="checkFilp">
+            {{ buttonStr }}
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center">
+          <transition
+            v-for="(res, idx) in threeRes"
+            :key="res.id"
+            enter-active-class="animated flipInY"
+          >
+            <div
+              :class="{ active: isActive(idx) }"
+              v-if="animatechk"
+              class="box"
+              style="width: 20vh"
+              @click="selectRest(idx)"
+              @mouseover="actionMouseOver(idx)"
+              @mouseleave="actionMouseOver(null)"
+            >
+              <span
+                :class="{ active: isActive(idx) }"
+                v-if="animatechk"
+                class="box"
+                style="width: 20vh"
+                @click="selectRest(idx)"
+                @mouseover="actionMouseOver(idx)"
+                @mouseleave="actionMouseOver(null)"
+                >{{ index[idx] }}.{{ res.name }}</span
+              >
+            </div>
+          </transition>
+          <br />
+        </div>
       </div>
     </div>
   </div>

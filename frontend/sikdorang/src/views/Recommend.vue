@@ -45,7 +45,6 @@ export default {
           this.result = response.data;
           this.second_ment = this.category_name[this.result.category]
           this.actionForUser(this.result)
-          console.log('1번', this.result)
           const temp = this.result.address.split(" ");
           this.address = temp[0] + " " + temp[1];
         })

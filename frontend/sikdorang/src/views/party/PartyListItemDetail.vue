@@ -198,7 +198,6 @@ export default {
         cancelButtonColor: "gray",
       }).then((res) => {
         if (res.isConfirmed) {
-          console.log(res.value);
           const requestHeaders = {
             headers: {
               Authorization: `JWT ${this.$cookies.get("auth-token")}`,
@@ -210,8 +209,7 @@ export default {
               { content: res.value },
               requestHeaders
             )
-            .then((res) => {
-              console.log(res);
+            .then(() => {
               Swal.fire({
                 icon: "success",
                 title: "메시지를 전송하였습니다.",
@@ -248,8 +246,7 @@ export default {
 
           this.$axios
             .delete(`party/delete/${this.party.id}`, requestHeaders)
-            .then((res) => {
-              console.log(res);
+            .then(() => {
               Swal.fire({
                 icon: "success",
                 title: "삭제했습니다.",

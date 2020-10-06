@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 const kakaoMapKey = "d313fa70ad00838acce4a3b5bc134b23";
 
 export default {
@@ -15,6 +17,8 @@ export default {
 		return {
 			curPath: [],
 			plans : [],
+			timeCheck: [],
+			clicked: null,
 		}
 	},
 	props: {
@@ -34,6 +38,7 @@ export default {
 		}
 	},
 	methods : {
+		...mapActions('mapEvent', ['actionTimeCheck']),
 		moveSmoothly(cd) {
 			// 이동할 위도 경도 위치를 생성합니다 
 		var lat = null,
@@ -136,6 +141,41 @@ export default {
 
 			return content;
 		},
+		getTimeAction(distance) {
+
+			// 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
+			var walkkTime = distance / 67 | 0;
+			var walkHour = "", walkMin = "";
+
+			// 계산한 도보 시간이 60분 보다 크면 시간으로 표시
+			if (walkkTime > 60) {
+				walkHour = `${Math.floor(walkkTime / 60)}시간`
+			}
+			walkMin = `${walkHour} ${walkkTime % 60}분`
+
+			// 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min
+			var bycicleTime = distance / 227 | 0;
+			var bycicleHour = '', bycicleMin = '';
+
+			// 계산한 자전거 시간이 60분 보다 크면 시간으로 표출
+			if (bycicleTime > 60) {
+				bycicleHour = `${Math.floor(bycicleTime / 60)}시간`
+			}
+			bycicleMin = `${bycicleHour} ${bycicleTime % 60}분`
+
+			// KOSIS 통계청 국도 평일 평균 기준
+			// 차 평균 시속 54km/h로 두고 분속 900m/min.
+			// 300m마다 평균 2분씩 신호등 기다리기(정석) -> 신호를 지나치기 등등 고려(500미터당 1분) 
+			// 이거는 나중에 변수값 조절해서 바꾸면 된다.
+			var carTime = (distance / 900 | 0 ) + (distance / 500 | 0);
+			var carHour = '', carMin = '';
+			
+			if (carTime > 60) {
+				carHour = `${Math.floor(carTime / 60)}시간`
+			}
+			carMin = `${carHour} ${carTime % 60}분`
+			this.timeCheck.push({ distance: `${distance}m`, walkMin: walkMin, bycicleMin: bycicleMin, carMin: carMin })
+		},
 
 		showPaths() {
 			var plans = this.todaySchedule;
@@ -172,12 +212,13 @@ export default {
 				this.curPath.push(polyline)
 				polyline.setMap(map); 
 				var distance = Math.round(polyline.getLength());
-				var content = this.getTimeHTML(distance);
+				// var content = this.getTimeHTML(distance);
+				this.getTimeAction(distance);
 
 				// 커스텀 오버레이를 생성하고 지도에 표시합니다
 				var distanceOverlay = new kakao.maps.CustomOverlay({
 					map: map, // 커스텀오버레이를 표시할 지도입니다
-					content: content,  // 커스텀오버레이에 표시할 내용입니다
+					// content: content,  // 커스텀오버레이에 표시할 내용입니다
 					position: plans[i].latlng, // 커스텀오버레이를 표시할 위치입니다.
 					xAnchor: 0,
 					yAnchor: 0,
@@ -186,6 +227,7 @@ export default {
 				this.curPath.push(distanceOverlay)
 				distanceOverlay.setMap(map)
 			}
+			this.actionTimeCheck(this.timeCheck)
 			plans.forEach(plan=>{
 					// 마커 이미지의 이미지 크기 입니다
 				var imageSize = new kakao.maps.Size(24, 35); 
@@ -206,31 +248,23 @@ export default {
 			var overMarkerSize = new kakao.maps.Size(OVER_MARKER_WIDTH, OVER_MARKER_HEIGHT) // 오버 마커의 크기
 				const overImage = new kakao.maps.MarkerImage(imageSrc, overMarkerSize); 
 
-				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker,infowindow,overImage))
-				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(map, marker,infowindow,markerImage))
-
-				let selectedMarker = this.selectedMarker
-				// const self = this
-				function makeOverListener(map, marker, infowindow, overImage) {
+				kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker,infowindow,overImage,markerImage))
+				
+				const self = this
+				function makeOverListener(map, marker, infowindow, overImage, markerImage) {
 					return function() {
-						infowindow.open(map, marker);
-						if (!selectedMarker || selectedMarker !== marker) {
+						if (self.clicked === this.mc) {
+							infowindow.close()
+							self.clicked = null
+							marker.setImage(markerImage);
+						} else {
+							infowindow.open(map, marker);
+							self.clicked = this.mc
 							marker.setImage(overImage);
 						}
 					};
 				}
-				function makeOutListener(map, marker,infowindow, normalImage) {
-					return function() {
-						infowindow.close();
-						//클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면
-						// 마커의 이미지를 기본 이미지로 변경합니다
-						if (!selectedMarker || selectedMarker !== marker) {
-							marker.setImage(normalImage);
-						}
-					};
-				}
 				marker.setMap(map);
-
 			})
 			map.setBounds(bounds);
 		},

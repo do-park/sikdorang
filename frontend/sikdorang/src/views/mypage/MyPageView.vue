@@ -26,7 +26,6 @@ export default {
     this.$axios
       .get("rest-auth/user/", requestHeaders)
       .then((res) => {
-        console.log("인증 확인", res);
         this.actionUserInfo(res.data);
         const userCode = res.data.user_code;
         if (userCode === 0) {
