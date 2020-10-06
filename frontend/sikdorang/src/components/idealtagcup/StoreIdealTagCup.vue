@@ -13,7 +13,7 @@
 		</div>
 		<div v-if="isDone" @click="done">
 			<h2>1위</h2>
-			<img :src="imgs[tags[0]]">
+			<img class="img" :src="imgs[tags[0]]">
 		</div>
 	</div>
 </template>
@@ -122,7 +122,7 @@ export default {
 
 <style scoped>
 .img {
-	width: 400px;
+	width: 100%;
 	cursor: pointer;
 }
 .vs-wrap {
