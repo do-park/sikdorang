@@ -1,6 +1,6 @@
 <template>
   <div class="m-3">
-    <h3 class="mt-1 text-center">{{ scheduleName }}</h3>
+    <h3 class="mt-1 text-center text-truncate">{{ scheduleName }}</h3>
     <div class="text-right schedule-date">
       {{ scheduleDate.toString().substr(0, 4) }}년 {{
         scheduleDate.toString().substr(4, 2)

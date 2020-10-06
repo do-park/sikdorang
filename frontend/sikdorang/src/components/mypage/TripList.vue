@@ -15,10 +15,10 @@
 
             <div class="col-10 p-0 row m-0">
               <div class="col-1 p-0">
-                <i v-if="(schedule.type === '식당')" class="fas fa-utensils"></i>
-                <i v-else-if="(schedule.type === '카페')" class="fas fa-coffee"></i>
-                <i v-else-if="(schedule.type === '관광지')" class="fas fa-place-of-worship"></i>
-                <i v-else class="fas fa-bed"></i>
+                <i v-if="(schedule.type === '식당')" class="fas fa-utensils" style="color: tomato"></i>
+                <i v-else-if="(schedule.type === '카페')" class="fas fa-coffee" style="color: sienna"></i>
+                <i v-else-if="(schedule.type === '관광지')" class="fas fa-place-of-worship" style="color: steelblue"></i>
+                <i v-else class="fas fa-bed" style="color: seagreen"></i>
               </div>
               <div class="col-6 p-0 font-weight-bold">
                 <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
@@ -42,7 +42,7 @@
               </button>
             </div>
           </div>
-          <div v-if="todaySchedule.schedules.length-1 > index">
+          <div v-if="todaySchedule.schedules.length-1 > index" class="my-3 text-center">
             <i class="fas fa-arrow-down ml-1"/><span class="small">{{ getTimeCheck[index].distance }}</span>
             <span class="my-0" style="background-color: #FFAE0055;">
               <i class="fas fa-walking ml-1"/><span class="small">{{ getTimeCheck[index].walkMin }}</span>
@@ -277,9 +277,12 @@ export default {
 }
 .schedule-detail {
   margin: 1rem 0px;
+  padding: 0.5rem;
+  background-color: whitesmoke;
+  border-radius: 20px;
 }
 .detail-tel {
-  font-size: 14px;
+  font-size: 13px;
 }
 .detail-address {
   font-size: 12px;
