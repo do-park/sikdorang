@@ -18,7 +18,7 @@
             class="img-circle"
             :src="require(`../../../public/icons/${theme.id}.png`)"
           />
-          <div class="theme-name">{{ theme.theme_name }}</div>
+          <div class="theme-name mx-auto">{{ theme.theme_name }}</div>
         </div>
       </div>
       <div v-else >
@@ -27,7 +27,7 @@
               class="img-circle"
               :src="require(`../../../public/icons/${theme.id}.png`)"
             />
-            <div class="theme-name">{{ theme.theme_name }}</div>
+            <div class="theme-name mx-auto">{{ theme.theme_name }}</div>
         </div>
       </div>
     </div>
@@ -146,8 +146,8 @@ export default {
 }
 .img-circle {
   display: inline-block;
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  /* height: 50px; */
   /* border-radius: 40%; */
   /* border: 4px solid crimson; */
   background-repeat: no-repeat;
@@ -208,9 +208,9 @@ export default {
   min-width : 30px;
 }
 .theme-name{
-  font-size: 13px;
+  font-size: 3vw;
   text-align : center;
-  width : 50px;
+  width : 100%;
   font-weight: bold;
 }
 .theme-title{

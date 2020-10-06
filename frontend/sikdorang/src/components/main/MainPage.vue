@@ -1,23 +1,23 @@
 <template>
   <div>
     <div id="recommendcontainer">
-      <div v-if="!isLogin">
-        <h4 class="d-inline-block my-auto txt">여행을 시작할까요?</h4>
+      <div v-if="!isLogin" id="loginRec" class="d-flex flex-column align-items-center justify-content-center" @click="onLoginRecClick()">
+        <img class="logo" src="@/assets/sikdoranglogo.png" alt="">
+        <p class="h4">여행을 시작할까요?</p>
       </div>
-      <div id="recommendLoc" @click="clickRecommend">
-        <Recommend :username="username" />
+      <div v-else>
+        <div id="recommendLoc" class="mt-3" @click="clickRecommend">
+          <Recommend :username="username" />
+        </div>
+        <div id="mypick">
+          <button class="long-btn" @click="clickMyChoice">
+            <div>내가 일정 골라서 떠날래요 <i class="fas fa-car-side"></i></div>
+          </button>
+        </div>
       </div>
     </div>
-    <div>
-      <div id="mypick">
-        <button class="long-btn" @click="clickMyChoice">
-          <div>내가 일정 골라서 떠나볼래요 <i class="fas fa-car-side"></i></div>
-        </button>
-      </div>
-      <div id="themepick" class="theme-wrap m-4">
-        <ThemePage />
-      </div>
-
+    <div id="themepick" class="theme-wrap m-4">
+      <ThemePage />
     </div>
   </div>
 </template>
@@ -78,6 +78,9 @@ export default {
     clickToLoginPageOrMyPage() {
       this.$emit("toLoginPageOrMyPage");
     },
+    onLoginRecClick() {
+      this.$router.push({ name: "Login" })
+    }
   },
 };
 </script>
@@ -91,6 +94,7 @@ export default {
   text-align: center;
 }
 .long-btn{
+  max-width: 600px;
   width: 90vw;
   height: 60px;
   background: white;
@@ -100,18 +104,21 @@ export default {
 .main-btn {
   width: 500px;
   height: 80px;
-  
 }
 #recommendLoc{
   height : 28vh;
-  
 }
 #mypick{
-  margin-top: 9vh;
+  margin-top: 2vh;
   margin-bottom: 9vh;
   font-size : 18px;
   font-weight: bold;
 }
-
-
+#loginRec{
+  background-image: url("/assets/sikdoranglogo.png");
+  height: 50vh;
+}
+.logo {
+  width: 80%;
+}
 </style>
