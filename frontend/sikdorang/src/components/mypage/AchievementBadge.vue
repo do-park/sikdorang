@@ -47,12 +47,9 @@ export default {
     created() {
         this.themes = this.getThemes;
         this.themesClear = this.getThemesClear;
-        console.log(this.themes)
-        console.log(this.getThemesClear)
     },
     methods : {
         goToThemeDetail(theme) {
-            console.log(theme.theme_name)
             this.$cookies.set('theme_name',theme.theme_name),
             this.$cookies.set('theme_id',theme.id),
             this.$router.push('/themedetail')

@@ -88,7 +88,7 @@ export default {
       };
       this.$axios
         .post(
-          `party/create_party/${this.tripPk}`,
+          `/party/create_party/${this.tripPk}`,
           this.partyData,
           requestHeaders
         )
@@ -112,7 +112,7 @@ export default {
       };
       this.$axios
         .put(
-          `party/update_party/${this.tripPk}`,
+          `/party/update_party/${this.tripPk}`,
           this.partyData,
           requestHeaders
         )

@@ -98,7 +98,7 @@ export default {
   methods: {
     async restuarantPlan(i, id, type, typeName) {
       this.$axios
-        .get(`trip/store_detail/${id}`)
+        .get(`/trip/store_detail/${id}`)
         .then((res) => {
           const result = res.data;
 
@@ -205,7 +205,7 @@ export default {
           };
           this.$axios
             .post(
-              `party/create_message/${this.party.id}`,
+              `/party/create_message/${this.party.id}`,
               { content: res.value },
               requestHeaders
             )
@@ -245,7 +245,7 @@ export default {
           };
 
           this.$axios
-            .delete(`party/delete/${this.party.id}`, requestHeaders)
+            .delete(`/party/delete/${this.party.id}`, requestHeaders)
             .then(() => {
               Swal.fire({
                 icon: "success",

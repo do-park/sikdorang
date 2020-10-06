@@ -1,28 +1,26 @@
 <template>
   <div>
-    <div class="map-top d-none d-md-block">
+    <div class="map-top d-none">
       <swiper class="swiper" :options="swiperOption">
         <swiper-slide v-for="(tag, idx) in tags" :key="idx">
-          <button
+          <div
             @click="onClick(tag)"
-            style="background: crimson"
-            class="text-white rounded txt2"
+            class="txt"
           >
             #{{ tag }}
-          </button>
+          </div>
         </swiper-slide>
       </swiper>
     </div>
-    <div class="map-top d-block d-md-none">
+    <div class="map-top">
       <swiper class="swiper" :options="swiperOption">
         <swiper-slide v-for="(tag, idx) in tags" :key="idx">
-          <button
+          <div
             @click="onClick(tag)"
-            style="background: crimson"
-            class="text-white rounded txt"
+            class="txt"
           >
             #{{ tag }}
-          </button>
+          </div>
         </swiper-slide>
       </swiper>
     </div>
@@ -45,8 +43,8 @@ export default {
       destination: "",
       tags: [],
       swiperOption: {
-        slidesPerView: 5,
-        spaceBetween: 20,
+        // slidesPerView: 4,
+        // spaceBetween: 10,
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
@@ -73,17 +71,19 @@ export default {
 
 <style scoped>
 .txt {
-  height: 50px;
-  width: 20vw;
-  margin-right: 10vw;
-}
-.txt2 {
-  width: 100px;
+  display: inline-block;
+  background-color: crimson;
+  color: white;
+  font-size: 13px;
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  border-radius: 30%;
 }
 .map-top {
   position: absolute;
   z-index: 10;
   width: 100%;
+  max-width: 600px;
 }
 
 #search-box {
@@ -111,9 +111,10 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  width: auto !important;
+  padding: 0.5rem;
 }
 .swiper-container {
-  height: 100px;
-  width: 100%;
+  height: 60px;
 }
 </style>

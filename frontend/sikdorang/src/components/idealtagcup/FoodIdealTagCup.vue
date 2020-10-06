@@ -21,7 +21,7 @@
       />
     </div>
     <div v-if="isDone" @click="done">
-      <img :src="imgs[tags[0]]" />
+      <img class="img" :src="imgs[tags[0]]" />
     </div>
   </div>
 </template>
@@ -138,7 +138,7 @@ export default {
         },
       };
       this.$axios
-        .post("trip/idealcategory", { tags: this.tags }, requestHeaders)
+        .post("/trip/idealcategory", { tags: this.tags }, requestHeaders)
         .then(() => {
           //empty
         })
@@ -161,7 +161,7 @@ export default {
 
 <style scoped>
 .img {
-  width: 400px;
+  width: 100%;
   cursor: pointer;
 }
 .vs-wrap {

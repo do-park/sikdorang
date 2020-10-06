@@ -218,7 +218,7 @@ export default {
               date: date,
             };
             this.$axios
-              .post("trip/date_chk", data, requestHeaders)
+              .post("/trip/date_chk", data, requestHeaders)
               .then((res) => {
                 if (res.data) {
                   Swal.fire({
@@ -235,7 +235,7 @@ export default {
                         this.$router.push({ name: "MyPageView" });
                       } else {
                         this.$axios
-                          .post("trip/delete/date_chk", data, requestHeaders)
+                          .post("/trip/delete/date_chk", data, requestHeaders)
                           .then(() => {
                             // empty block
                           });
@@ -372,7 +372,7 @@ export default {
         date: date,
       };
       this.$axios
-        .post("trip/date_chk", data, requestHeaders)
+        .post("/trip/date_chk", data, requestHeaders)
         .then((res) => {
           return res.data;
         })

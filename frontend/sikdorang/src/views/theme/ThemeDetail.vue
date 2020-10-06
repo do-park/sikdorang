@@ -47,8 +47,7 @@ export default {
       theme_name: this.$cookies.get("theme_name"),
       theme_id: this.$cookies.get("theme_id"),
       restaurants: [],
-      // IMG_URL: "http://j3d202.p.ssafy.io:8080/",
-      IMG_URL: this.$state.IMG_URL,
+      IMG_URL: this.$store.state.IMG_SERVER_URL,
       file: null,
     };
   },
@@ -145,7 +144,7 @@ export default {
 
                       this.$axios
                         .post(
-                          `achievement/visit_create/${rest.id}`,
+                          `/achievement/visit_create/${rest.id}`,
                           data,
                           //null대신에 이미지 담아서 전송 -> 백에서 받아서 저장 + 알고리즘 돌리고 결과값 다시 여기로 보냄
                           requestHeaders
@@ -224,7 +223,7 @@ export default {
           },
         };
         this.$axios
-          .post(`achievement/theme_create/${theme}`, null, requestHeaders)
+          .post(`/achievement/theme_create/${theme}`, null, requestHeaders)
           .then(() => {
             this.$set(this.themeClear, theme, 1);
             this.actionThemesClear(this.themeClear);
