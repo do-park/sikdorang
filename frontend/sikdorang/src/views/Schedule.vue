@@ -1,14 +1,14 @@
 <template>
   <div class="m-3">
-    <h3 class="mt-1 text-center text-truncate">{{ scheduleName }}</h3>
+    <h4 class="mt-1 text-center text-truncate">{{ scheduleName }}</h4>
     <div class="text-right schedule-date">
       {{ scheduleDate.toString().substr(0, 4) }}년 {{
         scheduleDate.toString().substr(4, 2)
       }}월 {{ scheduleDate.toString().substr(6, 2) }}일 일정입니다.
     </div>
-    <p class="text-right" v-if="getIsSik">
+    <div class="text-right schedule-date" v-if="getIsSik">
       {{ getForUser.store_name }}에서 일정을 시작합니다.
-    </p>
+    </div>
     <draggable v-model="clonedItems" :options="clonedItemOptions" class="board">
       <v-btn
         v-for="(item, index) in clonedItems"
@@ -67,7 +67,7 @@
     </draggable>
 
 
-    <div class="row mx-0 my-3 justify-content-center">
+    <div class="row mx-0 my-2 justify-content-center">
       <button class="col-6 btn btn-danger" @click="createTrip()">다음 ></button>
     </div>
     <br />
