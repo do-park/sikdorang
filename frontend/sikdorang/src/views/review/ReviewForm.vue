@@ -67,7 +67,7 @@ export default {
   methods: {
     getStore() {
       this.$axios
-        .get(`trip/store_detail/${this.$cookies.get("review-store-id")}`)
+        .get(`/trip/store_detail/${this.$cookies.get("review-store-id")}`)
         .then((res) => {
           this.storeName = res.data.store_name;
         })
@@ -88,7 +88,7 @@ export default {
       };
       this.$axios
         .post(
-          `review/create_review/${this.storeId}`,
+          `/review/create_review/${this.storeId}`,
           this.reviewData,
           requestHeaders
         )

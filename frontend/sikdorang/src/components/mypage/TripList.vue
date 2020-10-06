@@ -139,7 +139,7 @@ export default {
         },
       };
       await this.$axios
-        .post("trip/", data, requestHeaders)
+        .post("/trip/", data, requestHeaders)
         .then(() => {
           this.initiateSchedule();
           location.reload()
@@ -156,7 +156,7 @@ export default {
         },
       };
       await this.$axios
-        .get("trip/today", requestHeaders)
+        .get("/trip/today", requestHeaders)
         .then((res) => {
           this.makeScheduleList(res.data[0]);
           this.todayReviewList = res.data[1];
@@ -167,7 +167,7 @@ export default {
     },
     async restuarantPlan(i, id, type, typeName) {
       await this.$axios
-        .get(`trip/store_detail/${id}`)
+        .get(`/trip/store_detail/${id}`)
         .then((res) => {
           const result = res.data;
 

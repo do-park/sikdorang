@@ -235,7 +235,7 @@ def get_tag_recommendation(request):
     while 1:
         ran_num = random.randint(0, len(CATEGORY_NAME)-1)
         if ran_num not in selected_categories:
-            user_categories.append({"category": CATEGORY_NAME[ran_num], "count": 5})
+            user_categories.append({"category": CATEGORY_NAME[ran_num], "count": 1})
             break
         
     store_tags = []

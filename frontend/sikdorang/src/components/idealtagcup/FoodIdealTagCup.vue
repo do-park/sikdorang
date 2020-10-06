@@ -138,7 +138,7 @@ export default {
         },
       };
       this.$axios
-        .post("trip/idealcategory", { tags: this.tags }, requestHeaders)
+        .post("/trip/idealcategory", { tags: this.tags }, requestHeaders)
         .then(() => {
           //empty
         })

@@ -1,31 +1,23 @@
 <template>
   <div>
-    <div v-if="!isLogin" class="main-ment p-5">
-      <h5 class="d-inline-block my-auto">여행을 시작할까요?</h5>
-    </div>
-    <div v-else class="main-ment text-left p-5">
-      <h5>{{ username }}님,</h5>
-      <div class="d-flex justify-content-center">
-        <h4 class="text-center"><Recommend /></h4>
+    <div id="recommendcontainer">
+      <div v-if="!isLogin">
+        <h4 class="d-inline-block my-auto txt">여행을 시작할까요?</h4>
       </div>
-      <h5 class="text-right">어떠세요?</h5>
+      <div id="recommendLoc" @click="clickRecommend">
+        <Recommend :username="username" />
+      </div>
     </div>
-    <div class="btn-wrap row m-0 mb-5 p-0 justify-content-center">
-      <div class="col-5 m-0 p-0">
-        <button class="btn btn-danger main-btn" @click="clickMyChoice">
-          <div>내가</div>
-          <div>고르기</div>
+    <div>
+      <div id="mypick">
+        <button class="long-btn" @click="clickMyChoice">
+          <div>내가 일정 골라서 떠나볼래요 <i class="fas fa-car-side"></i></div>
         </button>
       </div>
-      <div class="col-5 m-0 p-0">
-        <button class="btn btn-danger main-btn" @click="clickRecommend">
-          <div>식도랑</div>
-          <div>추천코스</div>
-        </button>
+      <div id="themepick" class="theme-wrap m-4">
+        <ThemePage />
       </div>
-    </div>
-    <div class="theme-wrap">
-      <ThemePage />
+
     </div>
   </div>
 </template>
@@ -42,6 +34,7 @@ export default {
       loginOrMypage: "로그인",
       isLogin: this.$store.state.isLogin,
       username: "",
+     
     };
   },
   mounted() {
@@ -97,13 +90,28 @@ export default {
   margin-right: auto;
   text-align: center;
 }
-
+.long-btn{
+  width: 90vw;
+  height: 60px;
+  background: white;
+  border-radius: 0.8rem;
+  border : 3px solid crimson;
+}
 .main-btn {
-  width: 100px;
-  height: 100px;
+  width: 500px;
+  height: 80px;
+  
 }
-.main-ment {
-  height: 40vh;
-  margin: auto;
+#recommendLoc{
+  height : 28vh;
+  
 }
+#mypick{
+  margin-top: 9vh;
+  margin-bottom: 9vh;
+  font-size : 18px;
+  font-weight: bold;
+}
+
+
 </style>
