@@ -74,6 +74,7 @@ export default {
 <style>
 .item-title {
 	font-size: 16px;
+	font-weight: bolder;
 }
 .item-date {
 	font-size: 12px;

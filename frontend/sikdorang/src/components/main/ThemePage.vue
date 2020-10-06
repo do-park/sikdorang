@@ -35,56 +35,19 @@
 
 </div>
 </div>
-
-  <!-- <swiper class="swiper" :options="swiperOption">
-    <swiper-slide v-for="theme in themes" :key="theme.id" class="m-0">
-      <span v-if="userAchieve[theme.db_id] === 1" class="effect">
-        <img
-          @click="goDetail(theme)"
-          class="img-circle"
-          :src="require(`../../../public/icons/${theme.id}.png`)"
-        />
-      </span>
-      <span v-else>
-        <img
-          @click="goDetail(theme)"
-          class="img-circle"
-          :src="require(`../../../public/icons/${theme.id}.png`)"
-        />
-      </span>
-
-      <div>{{ theme.theme_name }}</div>
-    </swiper-slide>
-    <div class="swiper-pagination" slot="pagination"></div>
-  </swiper> -->
 </template>
 
 <script>
-// import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-// import "swiper/swiper-bundle.css";
 import { mapGetters, mapActions } from "vuex";
 const themes = "themes";
 
 export default {
   name: "ThemePage",
-  components: {
-    // Swiper,
-    // SwiperSlide,
-  },
   data() {
     return {
       isLogin: this.$store.state.isLogin,
       themes: [],
       userAchieve: [],
-
-      // swiperOption: {
-      //   slidesPerView: 3,
-      //   spaceBetween: 20,
-      //   pagination: {
-      //     el: ".swiper-pagination",
-      //     clickable: true,
-      //   },
-      // },
     };
   },
   computed: {
@@ -147,9 +110,6 @@ export default {
 .img-circle {
   display: inline-block;
   width: 100%;
-  /* height: 50px; */
-  /* border-radius: 40%; */
-  /* border: 4px solid crimson; */
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -167,7 +127,6 @@ export default {
   content: "";
   position: absolute;
   z-index: 1;
-  width: 70px;
   height: auto;
   background: crimson;
   border: 3px solid crimson;
@@ -176,10 +135,10 @@ export default {
   color: #fff;
   font-family: "Arial";
   font-weight: bold;
-  /* padding: 5px 10px; */
+  font-size: 3vmin;
   transform: rotate(-25deg);
-  left: 3px;
-  top: 20px;
+  left: 5px;
+  top: 10px;
 }
 .swiper-slide {
   display: flex;
@@ -208,7 +167,7 @@ export default {
   min-width : 30px;
 }
 .theme-name{
-  font-size: 3vw;
+  font-size: 3vmin;
   text-align : center;
   width : 100%;
   font-weight: bold;

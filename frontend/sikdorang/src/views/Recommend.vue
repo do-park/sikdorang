@@ -1,13 +1,13 @@
 <template>
-<div class="con">
-  <div v-if="result" id=container>
-    <p class="m-0 text-left ml-3">{{ username }}님, </p>
+<div class="con row m-0 align-items-center">
+  <div v-if="result" class="col-12 p-0" id=container>
+    <div class="m-0 text-left ml-3"><div class="main-username text-truncate">{{ username }}</div><div class="d-inline-block text-truncate">님, </div> </div>
     <div id=flip>
-       <div><div>{{result.store_name }}</div></div>
-       <div><div>{{second_ment}} 맛집</div></div>
-      <div><div>{{ address }}의</div></div>
+       <div class="text-truncate"><div>{{result.store_name }}</div></div>
+       <div class="text-truncate"><div>{{second_ment}} 맛집</div></div>
+      <div class="text-truncate"><div>{{ address }}의</div></div>
     </div>
-    <p class="text-right mr-3">어떠세요?<i class="far fa-hand-pointer"></i></p>
+    <div class="text-right mr-3">어떠세요?<i class="far fa-hand-pointer"></i></div>
   </div>
 
 </div>
@@ -70,10 +70,7 @@ export default {
   text-transform: uppercase;
   font-size:30px;
   font-weight:bold;
-  /* padding-top:200px;   */
-  /* position:fixed; */
   width:100%;
-  bottom :70%;
   display:block;
 }
 
@@ -123,6 +120,10 @@ export default {
   font-size:12px;
   color:#999;
   margin-top:200px;
+}
+.main-username {
+  display: inline-block;
+  max-width: 80%;
 }
  
 </style>
