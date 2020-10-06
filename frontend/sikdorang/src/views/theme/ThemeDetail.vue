@@ -47,7 +47,8 @@ export default {
       theme_name: this.$cookies.get("theme_name"),
       theme_id: this.$cookies.get("theme_id"),
       restaurants: [],
-      IMG_URL: "http://j3d202.p.ssafy.io:8080",
+      // IMG_URL: "http://j3d202.p.ssafy.io:8080/",
+      IMG_URL: this.$state.IMG_URL,
       file: null,
     };
   },
