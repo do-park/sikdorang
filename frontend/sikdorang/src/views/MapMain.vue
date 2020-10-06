@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-bottom: -100px;">
       <div v-if="flag">
           <SelectStart   
           @flag="flagValue"
