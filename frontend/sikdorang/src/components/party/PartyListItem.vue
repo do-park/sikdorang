@@ -1,6 +1,6 @@
 <template>
-  <div class="row mx-3">
-    <div class="col-12 p-0" @click="onClick()">
+  <div class="row mx-3" @click="onClick()">
+    <div class="col-12 p-0">
       <div class="m-0 text-truncate custom-title">{{ partyItem.title }}</div>
       <div>
         <small><span class="font-weight-bolder" style="color:crimson;">{{ partyItem.trip_date.toString().substr(0, 4) }}년 {{
@@ -29,7 +29,7 @@ export default {
       trip: Object,
     };
   },
-  mounted() {
+  created() {
     this.getTripdata(this.partyItem.id);
   },
   methods: {
