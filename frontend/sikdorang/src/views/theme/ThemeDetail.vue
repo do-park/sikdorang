@@ -1,22 +1,22 @@
 <template>
   <div>
-    <h3 class="text-center my-3">명예의 전당 [ {{ theme_name }} ] 편</h3>
+    <h3 class="text-center my-3 theme-title py-1">명예의 전당 [ {{ theme_name }} ] 편</h3>
     <div class="container">
       <div class="row text-center mx-1">
         <div
           @click="goDetail(restuarant)"
           v-for="restuarant in restaurants"
           :key="restuarant.id"
-          class="box col-6 m-0 p-1"
+          class="col-6 m-0 p-1"
         >
           <span v-if="storeClear[restuarant.id] === 1" class="effect">
             <div
               class="img-card"
               :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
             >
-              <p class="store_name">
+              <div class="store_name custom-break-word">
                 {{ restuarant.store_name }}
-              </p>
+              </div>
             </div>
           </span>
           <span v-else>
@@ -24,7 +24,7 @@
               class="img-card"
               :style="getCardBgImage(`${IMG_URL}${restuarant.image}`)"
             >
-              <p class="store_name">{{ restuarant.store_name }}</p>
+              <div class="store_name custom-break-word">{{ restuarant.store_name }}</div>
             </div>
           </span>
         </div>
@@ -238,11 +238,6 @@ export default {
 </script>
 
 <style scoped>
-.box {
-  width: 100%;
-  /* height: 30vh; */
-  padding-bottom: 100%;
-}
 .img-card {
   width: 100%;
   /* height: 30vh; */
@@ -254,9 +249,9 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-shadow: -1px 0 blanchedalmond, 0 1px blanchedalmond, 1px 0 blanchedalmond,
-    0 -1px blanchedalmond;
-  font-size: 5vw;
+  width: 100%;
+  font-size: 5vmin;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .effect {
   position: relative;
@@ -279,12 +274,16 @@ export default {
   font-weight: bold;
   /* padding: 5px 10px; */
   transform: rotate(-25deg);
-  left: 3px;
+  left: 5px;
   top: 20px;
   /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); */
 }
 .swal2-popup {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
+}
+.theme-title {
+  border-top: 3px solid crimson;
+  border-bottom: 3px solid crimson;
 }
 </style>
