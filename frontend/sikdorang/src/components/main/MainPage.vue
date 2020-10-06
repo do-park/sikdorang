@@ -1,31 +1,23 @@
 <template>
   <div>
-    <div v-if="!isLogin" class="main-ment p-5">
-      <h5 class="d-inline-block my-auto">여행을 시작할까요?</h5>
-    </div>
-    <div v-else class="main-ment text-left p-5">
-      <h5>{{ username }}님,</h5>
-      <div class="d-flex justify-content-center">
-        <h4 class="text-center"><Recommend /></h4>
+    <div id="recommendcontainer">
+      <div v-if="!isLogin">
+        <h4 class="d-inline-block my-auto txt">여행을 시작할까요?</h4>
       </div>
-      <h5 class="text-right">어떠세요?</h5>
+      <div id="recommendLoc" @click="clickRecommend">
+        <Recommend :username="username" />
+      </div>
     </div>
-    <div class="btn-wrap row m-0 mb-5 p-0 justify-content-center">
-      <div class="col-5 m-0 p-0">
-        <button class="btn btn-danger main-btn" @click="clickMyChoice">
-          <div>내가</div>
-          <div>고르기</div>
+    <div>
+      <div id="mypick" class="my-5">
+        <button class="long-btn" @click="clickMyChoice">
+          <div>내가 일정 골라서 떠나볼래요 <i class="fas fa-car-side"></i></div>
         </button>
       </div>
-      <div class="col-5 m-0 p-0">
-        <button class="btn btn-danger main-btn" @click="clickRecommend">
-          <div>식도랑</div>
-          <div>추천코스</div>
-        </button>
+      <div id="themepick" class="theme-wrap m-4">
+        <ThemePage />
       </div>
-    </div>
-    <div class="theme-wrap">
-      <ThemePage />
+
     </div>
   </div>
 </template>
@@ -42,6 +34,7 @@ export default {
       loginOrMypage: "로그인",
       isLogin: this.$store.state.isLogin,
       username: "",
+     
     };
   },
   mounted() {
@@ -99,13 +92,204 @@ export default {
   margin-right: auto;
   text-align: center;
 }
-
+.long-btn{
+  width: 90vw;
+  height: 60px;
+  background: white;
+  border-radius: 0.8rem;
+  border : 3px solid crimson;
+}
 .main-btn {
-  width: 100px;
-  height: 100px;
+  width: 500px;
+  height: 80px;
+  
 }
-.main-ment {
-  height: 40vh;
+#recommendLoc{
+  height : 27vh;
+}
+#mypick{
+  font-size : 18px;
+  font-weight: bold;
+}
+/* #recommendcontainer {
+  height: 25vh;
+  line-height : 25vh;
+  padding : 5vh;
   margin: auto;
+} */
+
+/* .content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 160px;
+  overflow: hidden;
+  font-family: 'Lato', sans-serif;
+  font-size: 35px;
+  line-height: 40px;
+  color: #ecf0f1;
 }
+.content__container {
+  font-weight: 600;
+  overflow: hidden;
+  height: 40px;
+  padding: 0 40px;
+}
+.content__container:before {
+  content: '[';
+  left: 0;
+}
+.content__container:after {
+  content: ']';
+  position: absolute;
+  right: 0;
+}
+.content__container:after, .content__container:before {
+  position: absolute;
+  top: 0;
+  color: #16a085;
+  font-size: 42px;
+  line-height: 40px;
+  -webkit-animation-name: opacity;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: opacity;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+.content__container__text {
+  display: inline;
+  float: left;
+  margin: 0;
+}
+.content__container__list {
+  margin-top: 0;
+  padding-left: 110px;
+  text-align: left;
+  list-style: none;
+  -webkit-animation-name: change;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: change;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+.content__container__list__item {
+  line-height: 40px;
+  margin: 0;
+}
+@-webkit-keyframes opacity {
+  0%, 100% {
+    opacity: 0;
+}
+  50% {
+    opacity: 1;
+}
+}
+@-webkit-keyframes change {
+  0%, 12.66%, 100% {
+    transform: translate3d(0, 0, 0);
+}
+  16.66%, 29.32% {
+    transform: translate3d(0, -25%, 0);
+}
+  33.32%, 45.98% {
+    transform: translate3d(0, -50%, 0);
+}
+  49.98%, 62.64% {
+    transform: translate3d(0, -75%, 0);
+}
+  66.64%, 79.3% {
+    transform: translate3d(0, -50%, 0);
+}
+  83.3%, 95.96% {
+    transform: translate3d(0, -25%, 0);
+}
+}
+@-o-keyframes opacity {
+  0%, 100% {
+    opacity: 0;
+}
+  50% {
+    opacity: 1;
+}
+}
+@-o-keyframes change {
+  0%, 12.66%, 100% {
+    transform: translate3d(0, 0, 0);
+}
+  16.66%, 29.32% {
+    transform: translate3d(0, -25%, 0);
+}
+  33.32%, 45.98% {
+    transform: translate3d(0, -50%, 0);
+}
+  49.98%, 62.64% {
+    transform: translate3d(0, -75%, 0);
+}
+  66.64%, 79.3% {
+    transform: translate3d(0, -50%, 0);
+}
+  83.3%, 95.96% {
+    transform: translate3d(0, -25%, 0);
+}
+}
+@-moz-keyframes opacity {
+  0%, 100% {
+    opacity: 0;
+}
+  50% {
+    opacity: 1;
+}
+}
+@-moz-keyframes change {
+  0%, 12.66%, 100% {
+    transform: translate3d(0, 0, 0);
+}
+  16.66%, 29.32% {
+    transform: translate3d(0, -25%, 0);
+}
+  33.32%, 45.98% {
+    transform: translate3d(0, -50%, 0);
+}
+  49.98%, 62.64% {
+    transform: translate3d(0, -75%, 0);
+}
+  66.64%, 79.3% {
+    transform: translate3d(0, -50%, 0);
+}
+  83.3%, 95.96% {
+    transform: translate3d(0, -25%, 0);
+}
+}
+@keyframes opacity {
+  0%, 100% {
+    opacity: 0;
+}
+  50% {
+    opacity: 1;
+}
+}
+@keyframes change {
+  0%, 12.66%, 100% {
+    transform: translate3d(0, 0, 0);
+}
+  16.66%, 29.32% {
+    transform: translate3d(0, -25%, 0);
+}
+  33.32%, 45.98% {
+    transform: translate3d(0, -50%, 0);
+}
+  49.98%, 62.64% {
+    transform: translate3d(0, -75%, 0);
+}
+  66.64%, 79.3% {
+    transform: translate3d(0, -50%, 0);
+}
+  83.3%, 95.96% {
+    transform: translate3d(0, -25%, 0);
+}
+} */
+
 </style>

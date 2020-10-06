@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapGetters(mypage, ["getUserInfo"]),
     imgSrc() {
-      console.log(this.getUserInfo.profile_image);
+      console.log("유저 이미지",this.getUserInfo.profile_image);
       return this.getUserInfo.profile_image;
     },
   },
