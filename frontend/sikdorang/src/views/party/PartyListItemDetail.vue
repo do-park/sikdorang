@@ -1,40 +1,35 @@
 <template>
-  <div v-if="tripSchedule" class="">
+  <div v-if="tripSchedule">
     <div style="height: 5vh"></div>
-    <h3 class="text-center">{{ tripSchedule.name }}</h3>
     <div>
-      <div class="row mx-3 justify-content-center">
-        {{ tripSchedule.date.toString().substr(0, 4) }}년
-        {{ tripSchedule.date.toString().substr(4, 2) }}월
-        {{ tripSchedule.date.toString().substr(6, 2) }}일<br />
+      <h3 class="text-center custom-break-word">{{ tripSchedule.name }}</h3>
+      <div class="m-3">
+        <div class="date text-center custom-break-word">
+          {{ tripSchedule.date.toString().substr(0, 4) }}년 
+          {{ tripSchedule.date.toString().substr(4, 2) }}월 
+          {{ tripSchedule.date.toString().substr(6, 2) }}일
+        </div>
+        <div class="date text-center custom-break-word">
+          '{{ party.user.username }}'님과 함께해요!
+        </div>
       </div>
-      <div class="row mx-3 justify-content-end">
-        작성자: {{ party.user.username }}<br />
-      </div>
-
-      <div class="text-center my-2">
+      <div class="row justify-content-center m-3">
         <button
           v-if="party.user.username !== username"
-          class="btn btn-danger mb-0"
+          class="default-btn"
           @click="createMessage()"
         >
           연락하기
         </button>
-        <!-- <button v-else class="btn btn-secondary disabled mb-0">
-          내가 작성한 글입니다.
-        </button> -->
       </div>
     </div>
-    <div style="height: 5vh"></div>
-    <div class="mx-3">
+    <hr>
+    <div class="m-3">
       <MyPageMap :todaySchedule="tripSchedule.schedules" />
-      <!-- <MapMain /> -->
     </div>
-    <div style="height: 5vh"></div>
-    <div class="mx-3">
-      <h4>일정</h4>
+    <div class="m-3">
       <div v-for="(schedule, index) in tripSchedule.schedules" :key="index">
-        <i v-if="schedule.type === '식당'" class="fas fa-utensils"></i>
+        <!-- <i v-if="schedule.type === '식당'" class="fas fa-utensils"></i>
         <i v-else-if="schedule.type === '카페'" class="fas fa-coffee"></i>
         <i
           v-else-if="schedule.type === '관광지'"
@@ -42,7 +37,32 @@
         ></i>
         <i v-else class="fas fa-bed"></i>
         {{ schedule.store_name }}{{ schedule.name }} |
-        {{ schedule.address }}
+        {{ schedule.address }} -->
+        <div class="row schedule-detail my-0">
+
+          <div class="col-12 p-0 row m-0">
+            <div class="col-1 p-0">
+              <i v-if="(schedule.type === '식당')" class="fas fa-utensils" style="color: tomato"></i>
+              <i v-else-if="(schedule.type === '카페')" class="fas fa-coffee" style="color: sienna"></i>
+              <i v-else-if="(schedule.type === '관광지')" class="fas fa-place-of-worship" style="color: steelblue"></i>
+              <i v-else class="fas fa-bed" style="color: seagreen"></i>
+            </div>
+            <div class="col-6 p-0 font-weight-bold">
+              <div v-if="(schedule.type === '식당') | (schedule.type === '카페')" class="text-truncate">{{ schedule.store_name }}</div>
+              <div v-else class="text-truncate">{{ schedule.store_name }}</div>
+            </div>
+            <div class="col-5 p-0 detail-tel text-center">{{schedule.tel}}</div>
+            <div class="col-12 p-0 detail-address">{{schedule.address}}</div>
+          </div>
+        </div>
+        <!-- <div v-if="todaySchedule.schedules.length-1 > index" class="my-3 text-center">
+          <i class="fas fa-arrow-down ml-1"/><span class="small">{{ getTimeCheck[index].distance }}</span>
+          <span class="my-0" style="background-color: #FFAE0055;">
+            <i class="fas fa-walking ml-1"/><span class="small">{{ getTimeCheck[index].walkMin }}</span>
+            <i class="fas fa-bicycle ml-1"/><span class="small">{{ getTimeCheck[index].bycicleMin }}</span>
+            <i class="fas fa-car ml-1"/><span class="small">{{ getTimeCheck[index].carMin }}</span>
+          </span>
+        </div> -->
       </div>
       <div style="height: 5vh"></div>
       <h4>설명</h4>
@@ -267,5 +287,14 @@ export default {
 .swal2-popup {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
+}
+.date {
+  font-size: 14px;
+}
+.default-btn {
+  color: white;
+  background-color: crimson;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 </style>

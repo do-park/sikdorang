@@ -1,9 +1,9 @@
 <template>
-  <div class="row m-0">
+  <div class="row mx-0">
     <img :src="imgSrc" alt="" class="col-3 p-0 img-circle align-self-center" />
     <div class="col-9 p-0">
       <div class="mx-3">
-        <b class="m-0">[{{ item.area }}] {{ item.title.substr(0, 10) }}</b>
+        <div class="m-0 custom-title text-truncate">[{{ item.area }}] {{ item.title.substr(0, 10) }}</div>
         <div>
           <small
             >{{ item.start_date.toString().substr(0, 4) }}년 {{
@@ -74,5 +74,8 @@ export default {
 }
 .guide {
   font-size: 12px;
+}
+.custom-title {
+  font-weight: bolder;
 }
 </style>
