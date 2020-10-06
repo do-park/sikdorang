@@ -3,57 +3,63 @@
     <div style="height: 5vh"></div>
     <div>
       <h3 class="text-center">[{{ detail.area }}]{{ detail.title }}</h3>
-      <div class="text-center">
-        {{ detail.start_date.toString().substr(0, 4) }}-{{
+      <div class="date text-center">
+        {{ detail.start_date.toString().substr(0, 4) }}년 {{
           detail.start_date.toString().substr(4, 2)
-        }}-{{ detail.start_date.toString().substr(6, 2) }} ~
-        {{ detail.end_date.toString().substr(0, 4) }}-{{
+        }}월 {{ detail.start_date.toString().substr(6, 2) }}일 ~
+        {{ detail.end_date.toString().substr(0, 4) }}년 {{
           detail.end_date.toString().substr(4, 2)
-        }}-{{ detail.end_date.toString().substr(6, 2) }}
+        }}월{{ detail.end_date.toString().substr(6, 2) }}일
       </div>
-      <div class="row mx-3 p-0 my-3 justify-content-end">
-        가이드: {{ detail.user.username }}
-      </div>
-
-      <div class="row mx-3">
-        <div class="col-6 my-auto p-0">{{ detail.price }}원</div>
-        <div
-          v-if="detail.user.username !== username && !isPaied"
-          class="col-6 p-0 text-right"
-        >
-          <div v-if="!finish">
-            <button v-if="isLogin" class="btn default-btn" @click="onClick()">
-              신청하기
-            </button>
-            <!-- <button v-else class="btn btn-secondary" @click="login()">
-              로그인하세요!
-            </button> -->
+      
+      <div class="row justify-content-between m-3">
+        <div class="col-3 p-0">
+          신청 현황
+        </div>
+        <div class="col-9 p-0 text-right">
+          {{ detail.now_person }} / {{ detail.limit_person }}
+          <div class="badge badge-secondary" v-if="(detail.now_person < detail.departure_person)">
+            {{ detail.departure_person }}명 이상 신청 시 출발
           </div>
-          <div v-else>마감되었습니다.</div>
+          <div class="badge badge-info" v-else>
+            출발 가능!
+          </div>
         </div>
-        <div v-if="isPaied" class="col-6 p-0 text-right">
-          이미 참가중입니다.
+      </div>
+      <div class="row justify-content-between m-3">
+        <div class="col-3 p-0">총 금액</div>
+        <div class="col-9 p-0 text-right"><span class="price">{{ detail.price }}</span>원</div>
+      </div>
+      
+      <div v-if="isLogin">
+        <div v-if="detail.user.username === username" class="row justify-content-between m-3">
+          <button class="col-5 p-0 btn btn-outline-secondary">수정하기</button>
+          <button class="col-5 p-0 btn btn-outline-danger" @click="deleteTrip">삭제하기</button>
+        </div>
+        <div v-else-if="isPaied" class="row justify-content-center m-3 y-line">
+          <div class="text-center">
+            <div>'{{ detail.user.username }}' 가이드와 함께해요.</div>
+            <div><span class="strong">{{ detail.start_point }}</span>에서 <span class="strong">{{ detail.start_time }}</span>에 출발합니다.</div>
+          </div>
+        </div>
+        <div v-else-if="!finish" class="row justify-content-center m-3">
+          <button class="default-btn" @click="onClick()">
+            신청하기
+          </button>
+        </div>
+        <div v-else class="row justify-content-center m-3">
+          <div class="y-line">마감되었습니다.</div>
         </div>
       </div>
+  
     </div>
-    <div class="row mx-3">
-      <div class="col-4 p-0 text-left">
-        {{ detail.now_person }} / {{ detail.limit_person }}
-      </div>
-      <div class="col-8 p-0 my-1 text-right">
-        {{ detail.departure_person }}명 이상 신청 시 출발
-      </div>
-    </div>
+    
 
     <hr />
     <div class="mx-3">
       <img :src="imgSrc" alt="" class="img-main" />
     </div>
     <viewer v-if="detail.content" :initialValue="detail.content" class="mx-3" />
-    <div v-if="detail.user.username === username" class="text-right mr-3">
-      <button class="btn btn-secondary mr-1">수정</button>
-      <button class="btn btn-danger" @click="deleteTrip">삭제</button>
-    </div>
   </div>
 </template>
 
@@ -161,7 +167,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .img-main {
   display: inline-block;
   width: 100%;
@@ -178,8 +184,24 @@ export default {
 .default-btn {
   color: white;
   background-color: crimson;
-  margin-top: 2rem;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
+}
+.date {
+  font-size: 13px;
+}
+.price {
+  font-size: 20px;
+  color: crimson;
+  font-weight: bolder;
+}
+.strong {
+  color: crimson;
+  font-weight: bolder;
+}
+.y-line {
+  border-top: 2px solid crimson;
+  border-bottom: 2px solid crimson;
+  padding: 0.5rem;
 }
 </style>

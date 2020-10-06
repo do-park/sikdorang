@@ -1,34 +1,34 @@
 <template>
   <div class="row m-0">
-    <img :src="imgSrc" alt="" class="col-3 p-0 img-circle" />
+    <img :src="imgSrc" alt="" class="col-3 p-0 img-circle align-self-center" />
     <div class="col-9 p-0">
       <div class="mx-3">
         <b class="m-0">[{{ item.area }}] {{ item.title.substr(0, 10) }}</b>
         <div>
           <small
-            >{{ item.start_date.toString().substr(0, 4) }}-{{
+            >{{ item.start_date.toString().substr(0, 4) }}년 {{
               item.start_date.toString().substr(4, 2)
-            }}-{{ item.start_date.toString().substr(6, 2) }} ~
-            {{ item.end_date.toString().substr(0, 4) }}-{{
+            }}월 {{ item.start_date.toString().substr(6, 2) }}일 ~
+            {{ item.end_date.toString().substr(0, 4) }}년 {{
               item.end_date.toString().substr(4, 2)
-            }}-{{ item.end_date.toString().substr(6, 2) }}</small
+            }}월{{ item.end_date.toString().substr(6, 2) }}일</small
           >
         </div>
-        <!-- item.user 어떻게 들어오는지 보고 닉네임 넣어주기 -->
-        <div class="">{{ item.user.username }}</div>
-        <div class="text-right">{{ item.price }} 원</div>
-        <div v-if="finish"><small>인원 마감!</small></div>
-        <!-- <div v-else class="row">
-          <div class="col-4">
-            {{ item.now_person }} / {{ item.limit_person }}
+        <div>
+          {{ item.now_person }} / {{ item.limit_person }}
+          <div v-if="ready" class="badge badge-info">
+            출발 가능!
           </div>
-          <div v-if="ready" class="col-8 text-right">
-            <small>즉시 출발!</small>
+          <div v-else-if="finish" class="badge badge-danger">
+            인원 마감!
           </div>
-          <div v-else class="col-8 text-right">
-            <small>최소인원({{ item.departure_person }}) 달성 시 출발</small>
+          <div v-else class="badge badge-secondary">
+            {{ item.departure_person }}명 이상 신청 시 출발
           </div>
-        </div> -->
+        </div>
+        <div class="text-right mt-2"><span class="price">{{ item.price }}</span> 원</div>
+        
+        <div class="text-right guide">'{{ item.user.username }}' 가이드 인솔 상품입니다</div>
       </div>
     </div>
     <hr style="width: 100%" />
@@ -66,5 +66,13 @@ export default {
   background-position: center center;
   background-size: cover;
   overflow: hidden;
+}
+.price {
+  font-size: 20px;
+  color: crimson;
+  font-weight: bolder;
+}
+.guide {
+  font-size: 12px;
 }
 </style>

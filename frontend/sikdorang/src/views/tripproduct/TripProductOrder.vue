@@ -1,44 +1,47 @@
 <template>
   <div>
-    <!-- <img :src="getOrderTrip.img" alt=""> -->
-    <div class="m-4">
-      <h3>{{ getOrderTrip.title }}</h3>
-      <span>{{ startDate }} ~ {{ endDate }}</span>
-      <span> {{ getOrderTrip.guide_user }} 가이드</span>
-      <hr />
-      <div>
-        <h5>가격: {{ getOrderTrip.price }}원</h5>
+    <div style="height: 5vh"></div>
+    <div>
+      <h3 class="text-center">[{{ getOrderTrip.area }}]{{ getOrderTrip.title }}</h3>
+      <div class="date text-center">
+        {{ getOrderTrip.start_date.toString().substr(0, 4) }}년 {{
+          getOrderTrip.start_date.toString().substr(4, 2)
+        }}월 {{ getOrderTrip.start_date.toString().substr(6, 2) }}일 ~
+        {{ getOrderTrip.end_date.toString().substr(0, 4) }}년 {{
+          getOrderTrip.end_date.toString().substr(4, 2)
+        }}월{{ getOrderTrip.end_date.toString().substr(6, 2) }}일
       </div>
-      <p>
-        {{ getOrderTrip.start_point }}에서 {{ getOrderTrip.start_time }}분 출발
-        여정
-      </p>
-      <hr />
-      <div>
-        <h4 class="mb-3">예약자 정보</h4>
-        <input @click="onClick()" type="checkbox" id="isSame" />
-        <label for="isSame"> 주문자와 같음</label>
+      <div class="row justify-content-center m-3 y-line">
+        <div class="text-center">
+          <div>'{{ getOrderTrip.user.username }}' 가이드와 함께해요.</div>
+          <div><span class="strong">{{ getOrderTrip.start_point }}</span>에서 <span class="strong">{{ getOrderTrip.start_time }}</span>에 출발합니다.</div>
+        </div>
       </div>
-      <label for="orderName">이름 : </label>
-      <input
-        class="form-control"
-        type="text"
-        id="orderName"
-        v-model="userName"
-      />
-      <br />
-      <label for="orderPhone">연락처 : </label>
-      <input
-        class="form-control"
-        type="text"
-        id="orderPhone"
-        v-model="userPhone"
-      />
-      <hr />
-      <!-- <Payment :orderTrip="getOrderTrip" :userName.sync="userName" :userPhone="userPhone" /> -->
-      <div class="pay text-right">
-        <button class="btn btn-danger" @click="handleSubmit">결제하기</button>
-        <!-- <button class="btn btn-secondary">취소</button> -->
+      <div class="row justify-content-between m-3">
+        <div class="col-3 p-0">결제 금액</div>
+        <div class="col-9 p-0 text-right"><span class="price">{{ getOrderTrip.price }}</span>원</div>
+      </div>
+      <div style="height: 2rem"></div>
+      <div class="m-3 row">
+        <h5 class="col-12 p-0">예약자 정보</h5>
+        <input
+          class="form-input col-12 p-0 px-1"
+          type="text"
+          id="orderName"
+          v-model="userName"
+          placeholder="이름 (실명)"
+        />
+        <input
+          class="form-input col-12 p-0 px-1"
+          type="text"
+          id="orderPhone"
+          v-model="userPhone"
+          placeholder="휴대폰 번호"
+        />
+      </div>
+
+      <div class="pay text-center">
+        <button class="default-btn" @click="handleSubmit">결제하기</button>
       </div>
     </div>
   </div>
@@ -124,5 +127,32 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.price {
+  font-size: 20px;
+  color: crimson;
+  font-weight: bolder;
+}
+.y-line {
+  border-top: 2px solid crimson;
+  border-bottom: 2px solid crimson;
+  padding: 0.5rem;
+}
+.date {
+  font-size: 13px;
+}
+.strong {
+  color: crimson;
+  font-weight: bolder;
+}
+.default-btn {
+  color: white;
+  background-color: crimson;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+.form-input {
+  border-bottom: 2px solid gray;
+  margin: 1rem auto ;
+}
 </style>

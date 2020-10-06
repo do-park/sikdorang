@@ -1,6 +1,5 @@
 <template>
   <div class="mx-2">
-    <!-- 가이드를 검색하는 Input이 필요할 확률이 높음 -->
     <div
       class="item-wrap"
       v-for="item in tripProductList"
