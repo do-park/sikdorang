@@ -8,7 +8,7 @@ const themes = {
       { id: 4, db_id: 3, theme_name: "떡볶이" },
       { id: 5, db_id: 7, theme_name: "짬뽕" },
       { id: 6, db_id: 2, theme_name: "짜장면" },
-      { id: 7, db_id: 8, theme_name: "수제버거" },
+      { id: 7, db_id: 8, theme_name: "버거" },
       { id: 8, db_id: 10, theme_name: "돈가스" },
       { id: 9, db_id: 11, theme_name: "터미널" },
       { id: 10, db_id: 4, theme_name: "기차역" },
