@@ -143,6 +143,7 @@ export default {
         .then(() => {
           this.initiateSchedule();
           location.reload()
+          this.$router.go()
         })
         .catch((err) => {
           console.error(err);
