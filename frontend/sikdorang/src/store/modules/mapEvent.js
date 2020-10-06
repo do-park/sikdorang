@@ -11,6 +11,7 @@ const mapEvent = {
         tags: [],
         tagStores: [],
         selectTag: null,
+        timeCheck: [],
     },
     getters : {
         getFlip : state => {
@@ -44,6 +45,9 @@ const mapEvent = {
         },
         getSelectTag : state => {
             return state.selectTag
+        },
+        getTimeCheck : state => {
+            return state.timeCheck
         }
     },
     mutations : {
@@ -88,6 +92,9 @@ const mapEvent = {
         mutationSelectTag: (state, payload) => {
             state.selectTag = payload
         },
+        mutationTimeCheck: (state, payload) => {
+            state.timeCheck = payload
+        },
     },
     actions : {
         actionFlip: ({commit}, payload) => {
@@ -122,6 +129,9 @@ const mapEvent = {
         },
         actionSelectTag: ({commit}, payload) => {
             commit("mutationSelectTag", payload)
+        },
+        actionTimeCheck: ({commit}, payload) => {
+            commit("mutationTimeCheck", payload)
         },
     }
 }

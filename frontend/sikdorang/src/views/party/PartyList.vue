@@ -27,15 +27,9 @@ export default {
   },
   methods: {
     getPartyList() {
-      const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-        },
-      };
       this.$axios
-        .get(`/party/list_party`, requestHeaders)
+        .get(`/party/list_party`)
         .then((res) => {
-          console.log("partylist", res.data);
           this.partyList = res.data;
         })
         .catch((err) => {

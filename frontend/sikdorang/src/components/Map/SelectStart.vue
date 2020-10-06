@@ -135,7 +135,6 @@ export default {
             confirmButtonColor: "crimson",
           }).then((res) => {
             if (res) {
-              console.log(res, "ok눌렀다");
               self.$cookies.set("searchMethod", "Regions");
               self.$cookies.set("destination", addr);
               self.destination = "";

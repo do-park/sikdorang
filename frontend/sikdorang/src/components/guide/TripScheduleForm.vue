@@ -138,19 +138,16 @@ export default {
       fd.append('departure_person', this.tripSchedule.departure_person)
       this.$axios
         .post("guide/create_tour", fd, requestHeaders)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.$router.push(`/mypage`);
         })
         .catch((err) => console.error(err));
     },
     getHtml() {
-      console.log(this.$refs);
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.tripSchedule.content = html;
     },
     fileChange() {
-      console.log("!!", this.$refs)
       this.tripSchedule.title_img = this.$refs.tI.files[0];
     },
   },

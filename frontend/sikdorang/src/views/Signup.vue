@@ -143,12 +143,9 @@ export default {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
         },
       };
-      console.log(window.$cookies.get("auth-token"));
-
       this.$axios
         .put(`/rest-auth/user/`, this.signupData, requestHeaders)
         .then((response) => {
-          console.log(response);
           this.actionUserInfo(response.data);
           this.$router.push("/idealtagcup");
         })

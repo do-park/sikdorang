@@ -63,15 +63,12 @@ export default {
     };
   },
   mounted() {
-    console.log(this.type);
     if (this.type == 1) {
       const party = this.$cookies.get("party");
-      console.log(party);
       this.partyData.title = party.title;
       this.partyData.content = party.content;
       this.editorText = this.partyData.content;
     }
-    console.log("here", this.type, this.tripPk, this.partyData.trip_date);
   },
   methods: {
     datetoint(date) {
@@ -81,11 +78,9 @@ export default {
       return y + m + d;
     },
     createParty() {
-      console.log("crate");
       // this.tripPk = window.$cookies.get("party-trip-id");
       // this.partyData.trip_date = window.$cookies.get("party-trip-date");
       this.getHtml();
-      console.log(this.partyData);
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
@@ -109,7 +104,6 @@ export default {
         .catch((err) => console.error(err));
     },
     updateParty() {
-      console.log("update");
       this.getHtml();
       const requestHeaders = {
         headers: {
@@ -122,8 +116,7 @@ export default {
           this.partyData,
           requestHeaders
         )
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           Swal.fire({
             icon: "success",
             title: "동행 구하기 글을 수정했습니다.",
@@ -135,10 +128,8 @@ export default {
         .catch((err) => console.error(err));
     },
     getHtml() {
-      console.log(this.$refs);
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.partyData.content = html;
-      console.log(this.partyData);
     },
   },
 };

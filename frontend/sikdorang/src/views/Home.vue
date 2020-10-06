@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     handleScroll() {
-      console.log("스크롤!!");
+      //empty block
     },
     changeToLoginPageOrMyPage() {
       // islogin확인

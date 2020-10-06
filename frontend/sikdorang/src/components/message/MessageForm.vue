@@ -85,15 +85,14 @@ export default {
           this.messageData,
           requestHeaders
         )
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           // 등록이 완료되면 상세페이지로 이동
           // this.$router.push(`주소`);
         })
         .catch((err) => console.error(err));
     },
     getHtml() {
-      console.log(this.$refs);
       let html = this.$refs.toastuiEditor.invoke("getHtml");
       this.messageData.content = html;
     },

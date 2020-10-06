@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h3 class="text-center">{{ gameCount}} | {{ roundCount }}</h3>
+		<h3 class="text-center">{{ roundCount }}</h3>
 
 		<div>
 			<img class="img" :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
@@ -98,7 +98,6 @@ export default {
 			// console.log('round:', this.round)
 			// console.log('tags:', this.tags)
 			if (this.tags.length === 1) {
-				console.log('종료 로직을 실행합니다.')
 				this.isDone = true
 			}
 		},

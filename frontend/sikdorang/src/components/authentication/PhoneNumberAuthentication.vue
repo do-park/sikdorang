@@ -27,10 +27,8 @@ export default {
     methods: {
         onClickAuth() {
             if (this.number !== null) {
-                console.log("핸드폰 인증 절차를 실행합니다.", this.number)
                 this.$axios.get(`account/${this.number}/`)
-                .then(res => {
-                    console.log(res)
+                .then(() => {
                     this.isClicked = true
                 })
                 .catch(err => console.error(err))
@@ -39,7 +37,6 @@ export default {
         onClickCheck() {
             // 인증이 완료되면 authenticated를 emit으로 올립니다.
             if (this.authNumber !== null) {
-                console.log("인증번호 검증 절차를 실행합니다.", this.authNumber)
                 const authData = {
                     phone_num: this.number,
                     auth_num: this.authNumber,
@@ -49,7 +46,6 @@ export default {
                         Authorization: `JWT ${this.$cookies.get('auth-token')}`
                     }
                 }
-                console.log(requestHeaders)
                 this.$axios.post(`account/phonetoken/`, authData, requestHeaders)
                 .then(res => {
                     if (res.data.message === 'success') {

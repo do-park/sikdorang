@@ -743,7 +743,6 @@ export default {
 
     showPaths() {
       var plans = this.getPlanList;
-      console.log('패스 보여주기', console.log(plans))
       var map = this.map;
       var imageSrc =
         "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";

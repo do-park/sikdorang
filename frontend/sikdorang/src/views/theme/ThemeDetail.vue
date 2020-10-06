@@ -76,7 +76,6 @@ export default {
         });
     },
     goDetail(rest) {
-      console.log(rest);
       if (this.storeClear[rest.id] === 1) {
         Swal.fire({
           title: rest.store_name,
@@ -151,7 +150,6 @@ export default {
                           requestHeaders
                         )
                         .then((res) => {
-                          console.log(res);
                           if (res.data === 1) {
                             this.$set(this.storeClear, rest.id, 1);
                             this.actionStoreClear(this.storeClear);

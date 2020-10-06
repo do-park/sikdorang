@@ -39,7 +39,6 @@ export default {
       };
       this.$axios.get(`/review/user_review`, requestHeaders)
         .then(res => {
-            console.log(res)
             this.reviews = res.data
         })
         .catch(err => console.error(err))

@@ -64,9 +64,8 @@ export default {
     };
     this.$axios
       .get("rest-auth/user/", requestHeaders)
-      .then((res) => {
+      .then(() => {
         // user 정보를 userInfo에 우선적으로 저장
-        console.log(res);
       })
       .catch((err) => console.error(err));
   },
@@ -116,7 +115,6 @@ export default {
       this.$router.push({ path: "/result", query });
     },
     onClick() {
-      console.log(this.getOrderTrip);
       this.userName = this.userInfo.userName;
       this.userPhone = this.userInfo.userPhone;
     },
