@@ -22,10 +22,7 @@
         </button>
       </div>
       <div v-else class="row justify-content-between m-3">
-        <button class="col-5 p-0 btn btn-outline-secondary" @click="updateParty()">
-          수정하기
-        </button>
-        <button class="col-5 p-0 btn btn-outline-danger" @click="deleteParty()">
+        <button class="col-12 p-0 btn btn-outline-danger" @click="deleteParty()">
           삭제하기
         </button>
       </div>

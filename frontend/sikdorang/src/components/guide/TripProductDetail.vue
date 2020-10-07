@@ -33,8 +33,7 @@
       
       <div v-if="isLogin">
         <div v-if="detail.user.username === username" class="row justify-content-between m-3">
-          <button class="col-5 p-0 btn btn-outline-secondary">수정하기</button>
-          <button class="col-5 p-0 btn btn-outline-danger" @click="deleteTrip">삭제하기</button>
+          <button class="col-12 p-0 btn btn-outline-danger" @click="deleteTrip">삭제하기</button>
         </div>
         <div v-else-if="isPaied" class="row justify-content-center m-3 y-line">
           <div class="text-center">
