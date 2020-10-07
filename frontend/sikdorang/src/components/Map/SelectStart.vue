@@ -4,7 +4,7 @@
       <hr />
       <div class="top-place"><truck /></div>
       <hr />
-      <div>
+      <div v-if="!isMobile">
         <button
           type="button"
           class="btn btn-danger m-3 go-btn btn-design"
@@ -71,6 +71,7 @@ export default {
       destination: "",
       message: "",
       element_wrap: null,
+      isMobile: false,
     };
   },
   mounted() {
@@ -79,6 +80,19 @@ export default {
       "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
     document.head.appendChild(script);
     this.element_wrap = document.getElementById("wrap");
+
+    var UserAgent = navigator.userAgent;
+
+
+
+    if (UserAgent.match(/iPhone|iPod|Android|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i) != null || UserAgent.match(/LG|SAMSUNG|Samsung/) != null)
+    {
+      // 모바일
+      this.isMobile = true;
+    }else{
+      // PC
+      this.isMobile = false;
+    }
   },
   methods: {
     foldDaumPostcode() {

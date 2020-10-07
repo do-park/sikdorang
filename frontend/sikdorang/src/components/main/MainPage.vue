@@ -117,9 +117,9 @@ export default {
 }
 #loginRec{
   background-image: url("/assets/sikdoranglogo.png");
-  height: 50vh;
+  height: 22rem;
 }
 .logo {
-  width: 80%;
+  width: 20rem;
 }
 </style>
