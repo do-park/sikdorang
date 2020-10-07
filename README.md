@@ -1,171 +1,155 @@
 # 식도랑
 
-- 음식점 기반 여행 기획 및 추천 플랫폼
- 
+- 목적 : 음식점 기반 여행 기획 및  추천 플랫폼
+- 개발 기간 : 20.08.31 ~ 20.10.08 (6주)
+- [베포링크](http://j3d202.p.ssafy.io/)
+
+
+
+## 목차
+
+- [1. 팀 구성원 및 업무 분장](#팀-구성원-및-업무-분장)
+
+- [2. 와이어 프레임](#와이어-프레임)
+
+- [3. DB 모델링](#DB-모델링)
+
+- [4. 식도랑 시퀀스](#식도랑-시퀀스)
+
+- [5. 핵심 기능](#핵심-기능)
+
+- [6. 느낀점](#느낀점)
+
+
+
+## 팀 구성원 및 업무 분장
+
+#### 정승희
+
+ - 팀장 / QA / 프론트
+   	- 1
+   	- 2
+
+
+
+#### 박인영
+
+- 테크리더 / 프론트
+  - 최종 코드리뷰 담당자
+  - 모바일 웹 최적화
+
+
+
+#### 박도희
+
+- 기획 / 프론트
+  - 
+  - 프로젝트 동영상 편집
+
+
+
+#### 조규성
+
+- 풀스택
+  - 형태소 분석
+  - 디버깅
+
+
+
+#### 허성수
+
+- 백엔드 / 배포
+  - DB 모델링 설계 및 API 로직 작성
+  - EC2, Jenkins, Nginx, uwsgi 를 통한 배포
+
+
+
+## 와이어 프레임
+
 - [식도랑_와이어프레임.pdf](README_img/식도랑_와이어프레임.pdf) 
+
 - [식도랑_와이어프레임2.pdf](README_img/식도랑_와이어프레임2.pdf) 
 
+- [식도랑 와이어프레임3.pdf](README_IMG\식도랑_와이어프레임3.pdf)
 
 
 
-
-# ERD
-
-### 여행 일정
+## DB 모델링
 
 ![ERD](README_img/ERD.PNG)
 
 
 
-### 성취(맛집 도장깨기)
-
-![ERD_achievement](README_img/ERD_Achievement.PNG)
 
 
+## 식도랑 시퀀스
 
-# 식도랑 시퀀스
+- [식도랑_시퀀스.md](README_img\식도랑_시퀀스.md)
 
 
 
-## 1. 로그인
-
-로그인은 email, pw 입력을 통해 DB를 확인하여 로그인을 진행
-
-``` mermaid
-sequenceDiagram
-
-FrontPage->>DjangoServer:email/pw입력
-DjangoServer->>DB : 고객정보 확인
-DB -->> FrontPage: 로그인 완료
-```
 
 
+## 핵심 기능
 
-## 2. 회원가입
-
-별도의 인증 없이 email 중복확인과 pw 예외처리 후 저장한다.
-
-``` mermaid
-sequenceDiagram
-
-FrontPage ->> FrontPage : pw 예외처리
-
-FrontPage ->> DjangoServer : 회원정보 입력 및 전송
-DjangoServer ->> DB : email 중복확인
-DB -->> DjangoServer : email 중복확인 결과 반환
-DjangoServer ->> DB : 성공 시 회원정보 저장
-DB -->> FrontPage : 성공 여부 반환
-```
-
-## 3. 취향 월드컵
-
-회원가입 성공 직후 취향 월드컵을 통해 사용자의 취향을 분석하여 user 테이블에 저장
-
-``` mermaid
-sequenceDiagram
-
-FrontPage ->> FrontPage : 중간 결과값 저장
-
-FrontPage ->> DjangoServer : 최종 결과값 전송
-DjangoServer ->> DB : 최종 결과값 저장
-DB -->> FrontPage : 성공 여부 반환
-```
-
-## 4. 사용자 선택코스
-
-사용자가 지도 페이지에 접근하면 사용자의 토큰을 이용하여 DB에서 취향(태그)을 가져와 사용자 지정 장소에서 해당 태그와 겹치는 음식점을 6개 선별하여 프론트로 반환
-
-``` mermaid
-sequenceDiagram
-
-FrontPage ->> DjangoServer : 유저 토큰 전송
-DjangoServer ->> DB : 유저 취향 태그 요청
-DB -->> DjangoServer : 유저 취향 태그
-DjangoServer ->> DjangoServer : 태그 기반 추천 알고리즘
-DjangoServer -->> FrontPage : 추천 결과
-
-DjangoServer ->> tourAPI : 위/경도 범위 내부의 관광/숙박 정보 요청
-tourAPI -->> DjangoServer : 위/경도 범위 내부의 관광/숙박 정보
-DjangoServer -->> FrontPage : 추천 결과
-
-FrontPage ->> DjangoServer : 최종 결과값 전송
-DjangoServer ->> DB : 최종 결과값 저장
-DB -->> FrontPage : 성공 여부 반환
-```
+> **사용자와 연결된 태그, 카테고리를 필터링하여 음식점, 카페, 숙박, 관광지와 같은 여행 일정 추천 알고리즘 제공**
+>
+> 다이닝코드 식당 데이터, 한국관광공사 API를 사용하여 약 5만건의 데이터를 필터링
+>
+> 이상형 월드컵을 통해 초기 데이터 확보 및 코사인 유사도 분석으로 콜드스타트 문제 해결
+>
+> 카카오 map API를 사용하여 사용자가 고르거나 식도랑에서 추천받은 지점 자동으로 연결 및 거리 분석
+>
+> 리뷰를 쓰면 형태소 분석을 통해 리뷰에 사용한 글자 기반으로 사용자 태그 업데이트 구현
+>
+> IAMPORT API를 사용하여 이니시스, 카카오, 네이버페이 등 다양한 결제 시스템 구축
+>
+> Pytesserect, Open CV를 통해 영수증, 결제내역 분석으로 자동 방문 인증 구현
 
 
 
-## 5. 식도랑 추천코스
+#### 구현기능
 
-사용자가 식도랑 추천코스 버튼 클릭 시 사용자의 토큰을 서버에 전달하여 취향(태그)를 기반으로 유저 기반 추천 알고리즘 (협업 필터링)을 이용하여 사용자에게 지역과 음식점을 추천
+휴대폰 인증을 통한 가이드 권한 획득
 
-``` mermaid
-sequenceDiagram
+사용자 여행 생성 후 동행구하기 활성화 가능
 
-FrontPage ->> DjangoServer : 와이어프레임 제작 페이지 진입
-DjangoServer ->> DB : 유저 취향 태그 요청
-DB -->> DjangoServer : 유저 취향 태그
-DjangoServer ->> DjangoServer : 유저 기반 추천 알고리즘
-DjangoServer -->> FrontPage : 추천 결과
-FrontPage ->> DjangoServer : 유저 선택/와이어프레임
-DjangoServer ->> DB : 위/경도 범위 내부의 음식점/태그 요청
-DB -->> DjangoServer : 음식점/태그
-DjangoServer ->> DjangoServer : 아이템 기반 추천 알고리즘
-DjangoServer ->> tourAPI : 위/경도 범위 내부의 관광/숙박 정보 요청
-tourAPI -->> DjangoServer : 위/경도 범위 내부의 관광/숙박 정보
-DjangoServer -->> FrontPage : 추천 코스
-FrontPage ->> DjangoServer : 최종 결과값 전송
-DjangoServer ->> DB : 최종 결과값 저장
-DB -->> FrontPage : 성공 여부 반환
-```
+가이드일 경우 투어 생성을 통해 결제시스템 사용 가능
 
-## 6. 오늘의 일정 선택(와이어프레임)
+GeoLocation API를 통해 현재 위치 획득
 
-드래그 앤 드롭 방식으로 사용자가 "음식점 / 카페 / 관광지 / 숙소" 중 선택하여 일정을 계획하도록 유도함
 
-``` mermaid
-sequenceDiagram
 
-FrontPage ->> FrontPage : 음식점/카페/관광지/숙소 선택 -> 일정 리스트 제작
-FrontPage ->> DjangoServer : 일정 리스트, 유저 정보
-DjangoServer ->> DB : 일정 리스트 저장 요청
-DB -->> FrontPage : 저장 완료
-```
+---
 
-## 7. 마이페이지 (저장된 일정 조회)
 
-메인 페이지에서 스크롤 혹은 버튼 클릭을 통해 마이페이지로 진입 후 사용자 토큰을 통해 여행 일정 정보를 불러와 보여줌
 
-``` mermaid
-sequenceDiagram
+## 느낀점
 
-FrontPage ->> FrontPage : 스크롤 혹은 버튼클릭 마이페이지 진입
-FrontPage ->> DjangoServer : 유저 정보
-DjangoServer ->> DB : 유저 정보를 참조하는 일정 요청
-DB -->> FrontPage : 유저 정보를 참조하는 일정
-```
+**정승희**
 
-#### 일정이 없을 경우
+- 
 
-``` mermaid
-sequenceDiagram
+**박도희**
 
-FrontPage ->> FrontPage : 스크롤 혹은 버튼클릭 마이페이지 진입
-FrontPage ->> DjangoServer : 유저 정보
-DjangoServer ->> DB : 유저 정보를 참조하는 일정 요청
-DB -->> FrontPage : 해당 정보 없음
-```
+- 
 
-## 8. 업적 페이지 (음식점 테마 별로 업적 갱신)
+**박인영**
 
-메인 페이지에서 테마별 아이콘을 누르면  해당 테마 음식점 (최대 9개)을 소개해준다. 방문한 가게는 clear로 도장깨기가 되고, 그 테마의 모든 음식점을 다 방문하면 메인페이지에서 해당 테마 아이콘에 clear가 찍힌다. 또한 마이페이지에 배찌로 업적이 등록된다.
+- 
 
-```mermaid
-sequenceDiagram
-FrontPage ->> DjangoServer : 유저 정보/테마 id
-DjangoServer ->> DB : 해당 유저 참조하는 테마/모든 테마 음식점 정보 요청
-DB -->> DjangoServer : 해당 유저 참조하는 테마/테마 음식점 정보
-DjangoServer -->> FrontPage : 테마 clear/모든 테마 음식점 방문 여부
-FrontPage ->> FrontPage : 버튼클릭 테마 상세페이지 진입
-```
+**조규성**
 
+1. 디버깅에 엄청 익숙해졌다. 자바스크립트의 동작, 특히 비동기처리에대해 고민해볼 수 있었다.
+2. 뷰의 장점인 컴포넌트화, 데이터 중앙처리에 부족함이 많이 느껴져서 안타까웠다.
+3. 리뷰 형태소 분석 후에 유의미한 데이터로 저장하는 과정이 흥미로웠다.
+
+**허성수**
+
+1. Rest-framework의 역할과 Django기반의 백 구성에 대해 많이 고민했고 배웠다
+2. Ubuntu 기반 Vue.js와 Django 배포에 대해 배웠고 프록시 설정법 또한 배운 기회가 되었다
+3. HTTPS를 구성할 때 SSL 인증 방식과 접근 권한, 데이터 폼 처리에 대해 고민해 볼 수 있었다.
+
+
+
+---
