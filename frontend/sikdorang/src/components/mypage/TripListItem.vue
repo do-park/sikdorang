@@ -58,6 +58,12 @@ export default {
     },
     computed: {
         ...mapGetters("mapEvent", ["getTimeCheck"]),
+    },
+    methods: {
+      goReviewForm(store_id) {
+        this.$cookies.set("review-store-id", store_id);
+        this.$router.push({ name: "ReviewForm" });
+      },
     }
 }
 </script>
