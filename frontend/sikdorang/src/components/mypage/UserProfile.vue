@@ -30,7 +30,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import AchievementBadge from "./AchievementBadge";
-import axios from "axios";
 
 const mypage = "mypage";
 
@@ -92,8 +91,8 @@ export default {
       let fd = new FormData();
       fd.append("profile_image", this.userImage);
       fd.append("username", this.getUserInfo.username);
-      axios
-        .put("http://j3d202.p.ssafy.io/rest-auth/user/", fd, requestHeaders)
+      this.$axios
+        .put("/rest-auth/user/", fd, requestHeaders)
         .then(() => {
           alert("변경이 완료되었습니다.");
           location.reload();
