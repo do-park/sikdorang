@@ -20,7 +20,7 @@ def create_review(request, store_pk):
     serializer = ReviewSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=user, store_id=store)
-        if request.data["score"] >= 4:
+        if request.data["score"] > 6:
             TAG_NAME = ["가성비", "청결", "친절", "분위기", "인테리어", "아침", "점심", "저녁", "친구", "연인", "가족", "주차장"]
             tag_dict = {"가성비":0,"저렴":0,"깔끔":1,"신선":1,"위생":1,"깨끗":1,"친절":2,"분위기":3,"감성":3,"인테리어":4,"아침":5,"조식":5,"새벽":5,"점심시간":6,"점심":6,"낮":6,"퇴근":7,"석식":7,"술":7,"야식":7,"밤":7,"저녁":7,"친구":8,"연인":9,"데이트":9,"둘이서":9,"여자친구":9,"여친":9,"남자친구":9,"남친":9,"커플":9,"가족":10,"부모님":10,"주차장":11,"주차공간":11,"주차권":11}
             
