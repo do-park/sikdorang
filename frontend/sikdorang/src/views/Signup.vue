@@ -95,7 +95,6 @@ export default {
         this.$axios
           .get(`/trip/chk/${this.signupData.username}`)
           .then((response) => {
-            // console.log(response.data);
             this.errorMsg = response.data;
             if (response.data === "사용 할 수 있는 아이디입니다.") {
               this.usernameOk = true;
@@ -146,7 +145,6 @@ export default {
       this.$axios
         .put(`/rest-auth/user/`, this.signupData, requestHeaders)
         .then((response) => {
-          response.data.profile_image = this.$store.state.IMG_SERVER_URL + response.data.profile_image.slice(21,-0)
           this.actionUserInfo(response.data);
           this.$router.push("/idealtagcup");
         })
