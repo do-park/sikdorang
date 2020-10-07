@@ -51,9 +51,10 @@ export default {
       this.$axios
         .post(`/rest-auth/login/`, this.loginData)
         .then((response) => {
-          // console.log(response)
+          console.log(response)
           window.$cookies.set("auth-token", response.data.token);
           this.$store.state.isLogin = true;
+          response.data.user.profile_image = this.$store.state.IMG_SERVER_URL + response.data.user.profile_image.slice(21,-0)
           this.actionUserInfo(response.data.user);
           if (response.data.user.done_cup === 1) {
             this.$router.push("/");
