@@ -2,15 +2,35 @@
   <div>
     <h3 class="title">여행 상품 생성</h3>
     <div class="wrap row m-0">
-      <input class="form-input col-10 p-0 px-1" placeholder="상품명" type="text" id="title" v-model="tripSchedule.title" />
+      <input
+        class="form-input col-10 p-0 px-1"
+        placeholder="상품명"
+        type="text"
+        id="title"
+        v-model="tripSchedule.title"
+      />
       <div class="form-input col-10 p-0 row m-0 mx-auto filebox">
-        <input @change="fileChange" type="file" ref="tI" id="t-i" accept=".jpg, .jpeg, .gif" />
-        <div class="col-8 p-0" v-if="tripSchedule.title_img">{{tripSchedule.title_img.name}}</div>
+        <input
+          @change="fileChange"
+          type="file"
+          ref="tI"
+          id="t-i"
+          accept=".jpg, .jpeg, .gif"
+        />
+        <div class="col-8 p-0" v-if="tripSchedule.title_img">
+          {{ tripSchedule.title_img.name }}
+        </div>
         <div class="col-8 p-0" v-else></div>
         <label class="col-4 p-0 m-0" for="t-i">대표이미지</label>
       </div>
       <div class="col-10 mx-auto p-0 mt-3 row justify-content-between">
-        <input class="form-input col-6 m-0 px-1" placeholder="여행지역" type="text" id="area" v-model="tripSchedule.area" />
+        <input
+          class="form-input col-6 m-0 px-1"
+          placeholder="여행지역"
+          type="text"
+          id="area"
+          v-model="tripSchedule.area"
+        />
         <input
           placeholder="가격"
           class="form-input col-6 m-0 px-1"
@@ -20,9 +40,21 @@
         />
       </div>
       <div class="col-10 mx-auto p-0 row">
-        <input class="form-input col-5 date-input" type="date" name="start_date" id="start_date" v-model="tripSchedule.start_date" />
+        <input
+          class="form-input col-5 date-input"
+          type="date"
+          name="start_date"
+          id="start_date"
+          v-model="tripSchedule.start_date"
+        />
         <div class="col-2 p-0 m-0 my-auto text-center">~</div>
-        <input class="form-input col-5 date-input" type="date" name="end_date" id="end_date" v-model="tripSchedule.end_date" />
+        <input
+          class="form-input col-5 date-input"
+          type="date"
+          name="end_date"
+          id="end_date"
+          v-model="tripSchedule.end_date"
+        />
       </div>
       <div class="col-10 mx-auto p-0 row justify-content-between">
         <input
@@ -40,11 +72,26 @@
           v-model="tripSchedule.departure_person"
         />
       </div>
-      <div class="col-10 p-0 mx-auto mb-0 row justify-content-between form-input">
-        <label for="time" class="pl-1 date-time-title" @click="clickStartTime">출발시간</label>
-        <input type="time" name="time" id="time" v-model="tripSchedule.start_time" />
+      <div
+        class="col-10 p-0 mx-auto mb-0 row justify-content-between form-input"
+      >
+        <label for="time" class="pl-1 date-time-title" @click="clickStartTime"
+          >출발시간</label
+        >
+        <input
+          type="time"
+          name="time"
+          id="time"
+          v-model="tripSchedule.start_time"
+        />
       </div>
-      <input placeholder="출발장소" class="col-10 pl-1 form-input" type="text" id="start_point" v-model="tripSchedule.start_point" />
+      <input
+        placeholder="출발장소"
+        class="col-10 pl-1 form-input"
+        type="text"
+        id="start_point"
+        v-model="tripSchedule.start_point"
+      />
     </div>
     <editor
       class="mt-4"
@@ -58,13 +105,13 @@
     <div class="text-center">
       <button class="create-btn" @click="onClick()">작성완료</button>
     </div>
-    
   </div>
 </template>
 
 <script>
 import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
+import axios from "axios";
 
 import { Editor } from "@toast-ui/vue-editor";
 
@@ -98,11 +145,11 @@ export default {
     };
   },
   mounted() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   },
   methods: {
     clickStartTime(e) {
-      e.target.nextSibling.click()
+      e.target.nextSibling.click();
     },
     datetoint(date) {
       var y = date.substr(0, 4) * 10000;
@@ -115,29 +162,29 @@ export default {
       const requestHeaders = {
         headers: {
           Authorization: `JWT ${this.$cookies.get("auth-token")}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       };
-        if (
-          this.tripSchedule.title_img === null ||
-          this.tripSchedule.title_img === undefined
-        ) {
-          this.tripSchedule.title_img = "";
-        }
-      const fd = new FormData()
-      fd.append('title_img', this.tripSchedule.title_img)
-      fd.append('title', this.tripSchedule.title)
-      fd.append('area', this.tripSchedule.area)
-      fd.append('start_date', this.datetoint(this.tripSchedule.start_date))
-      fd.append('end_date', this.datetoint(this.tripSchedule.end_date))
-      fd.append('price', this.tripSchedule.price)
-      fd.append('start_point', this.tripSchedule.start_point)
-      fd.append('start_time', this.tripSchedule.start_time)
-      fd.append('content', this.tripSchedule.content)
-      fd.append('limit_person', this.tripSchedule.limit_person)
-      fd.append('departure_person', this.tripSchedule.departure_person)
-      this.$axios
-        .post("/guide/create_tour", fd, requestHeaders)
+      if (
+        this.tripSchedule.title_img === null ||
+        this.tripSchedule.title_img === undefined
+      ) {
+        this.tripSchedule.title_img = "";
+      }
+      const fd = new FormData();
+      fd.append("title_img", this.tripSchedule.title_img);
+      fd.append("title", this.tripSchedule.title);
+      fd.append("area", this.tripSchedule.area);
+      fd.append("start_date", this.datetoint(this.tripSchedule.start_date));
+      fd.append("end_date", this.datetoint(this.tripSchedule.end_date));
+      fd.append("price", this.tripSchedule.price);
+      fd.append("start_point", this.tripSchedule.start_point);
+      fd.append("start_time", this.tripSchedule.start_time);
+      fd.append("content", this.tripSchedule.content);
+      fd.append("limit_person", this.tripSchedule.limit_person);
+      fd.append("departure_person", this.tripSchedule.departure_person);
+      axios
+        .post("http://j3d202.p.io.guide/create_tour", fd, requestHeaders)
         .then(() => {
           this.$router.push(`/mypage`);
         })
@@ -164,7 +211,7 @@ export default {
 }
 .form-input {
   border-bottom: 2px solid gray;
-  margin: 1rem auto ;
+  margin: 1rem auto;
 }
 .filebox label {
   color: gray;
@@ -173,7 +220,7 @@ export default {
   border: 1px solid #ebebeb;
   text-align: center;
 }
-.filebox input[type="file"] { 
+.filebox input[type="file"] {
   /* 파일필드 숨기기 */
   position: absolute;
   width: 1px;
@@ -181,7 +228,7 @@ export default {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip:rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
 .date-input {
@@ -199,5 +246,4 @@ export default {
   padding: 0.5rem 1rem;
   border-radius: 1rem;
 }
-
 </style>
