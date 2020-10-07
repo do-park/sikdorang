@@ -21,9 +21,9 @@ export default new Vuex.Store({
   state: {
     positions: [],
     isLogin: !!window.$cookies.get("auth-token"),
-    SERVER_URL: "http://localhost:3000/api/",
+    SERVER_URL: "http://localhost:8399/api/",
     // SERVER_URL: 'http://localhost:8080/',
-    IMG_SERVER_URL: "http://localhost:3000",
+    IMG_SERVER_URL: "http://localhost:8399/api",
     // IMG_SERVER_URL: 'http://localhost:8080',
     LOCAL_URL: "http://j3d202.p.ssafy.io:8181/project/sikdorang",
     TOUR_API_KEY:

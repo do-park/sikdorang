@@ -11,7 +11,7 @@ import "bootstrap/dist/js/bootstrap.min.js";
 // import swal from 'sweetalert';
 
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = "http://localhost:3000/api/";
+axios.defaults.baseURL = "http://localhost:8399/api/";
 // axios.defaults.baseURL = "http://127.0.0.1:8080/"
 
 Vue.config.productionTip = false;
