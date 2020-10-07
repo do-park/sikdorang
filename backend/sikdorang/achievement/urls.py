@@ -8,4 +8,5 @@ urlpatterns = [
     path('theme_clear', views.theme_clear),
     path('theme_create/<int:theme_pk>',views.theme_create),
     path('visit_create/<int:theme_pk>', views.visit_create),
+    path('cvisit/<int:theme_pk>', views.cvisit),
 ]
