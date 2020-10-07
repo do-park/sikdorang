@@ -111,7 +111,6 @@
 <script>
 import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import axios from "axios";
 
 import { Editor } from "@toast-ui/vue-editor";
 
@@ -183,8 +182,8 @@ export default {
       fd.append("content", this.tripSchedule.content);
       fd.append("limit_person", this.tripSchedule.limit_person);
       fd.append("departure_person", this.tripSchedule.departure_person);
-      axios
-        .post("http://j3d202.p.io.guide/create_tour", fd, requestHeaders)
+      this.$axios
+        .post("/guide/create_tour", fd, requestHeaders)
         .then(() => {
           this.$router.push(`/mypage`);
         })
