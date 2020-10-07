@@ -150,6 +150,7 @@ export default {
                           requestHeaders
                         )
                         .then((res) => {
+                          console.log(res)
                           if (res.data === 1) {
                             this.$set(this.storeClear, rest.id, 1);
                             this.actionStoreClear(this.storeClear);
