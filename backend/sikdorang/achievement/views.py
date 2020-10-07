@@ -47,6 +47,13 @@ def theme_create(request, theme_pk):
         return HttpResponse('테마 클리어 등록.')
     else:
         return HttpResponse('이미 클리어된 테마입니다.')
+
+@api_view(['POST'])
+def cvisit(request, theme_pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=request.user.pk)
+    CVisit = AchieveUser.objects.create(count=theme_pk, user=user, receipt="")
+    return HttpResponse(1)
     
 @api_view(['POST'])
 def visit_create(request, theme_pk):
