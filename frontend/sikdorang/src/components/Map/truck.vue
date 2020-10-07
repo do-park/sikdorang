@@ -83,7 +83,7 @@ body {
   width: 85px;
   margin-right: -60px;
   bottom: 0px;
-  right: 50%;
+  right: 70%;
   position: absolute;
   background: #eee;
 }

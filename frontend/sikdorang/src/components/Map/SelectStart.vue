@@ -7,7 +7,7 @@
       <div>
         <button
           type="button"
-          class="btn btn-danger m-3 go-btn"
+          class="btn btn-danger m-3 go-btn btn-design"
           @click="getMyLocation"
         >
           내 위치에서 볼래요!
@@ -19,7 +19,7 @@
         </button> -->
         <input
           type="button"
-          class="btn btn-danger"
+          class="btn btn-danger btn-design"
           @click="sample3_execDaumPostcode()"
           value="다른 지역으로 갈래요!"
         /><br />
@@ -210,11 +210,11 @@ export default {
 .top-place {
   height: 300px;
 }
-.go-btn {
-  width: 200px;
-}
 .swal2-popup {
   font-family: "NIXGONM-Vb";
   font-size: 0.7rem !important;
+}
+.btn-design {
+  width: 80%;
 }
 </style>
