@@ -1,14 +1,19 @@
 <template>
 	<div>
+		<h3 class="text-center">{{ roundCount }}</h3>
+
 		<div>
-			<img :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
+			<img class="img" :src="imgs[tags[leftIndex]]" alt="left Image" @click="onClick('left')" v-if="!isDone">
+		</div>
+		<div class="vs-wrap">
+			<img class="vs" v-if="!isDone" src="@/assets/vs.png">
 		</div>
 		<div>
-			<img :src="imgs[tags[rightIndex]]" alt="right Image" @click="onClick('right')" v-if="!isDone">
+			<img class="img" :src="imgs[tags[rightIndex]]" alt="right Image" @click="onClick('right')" v-if="!isDone">
 		</div>
 		<div v-if="isDone" @click="done">
 			<h2>1위</h2>
-			<img :src="imgs[tags[0]]">
+			<img class="img" :src="imgs[tags[0]]">
 		</div>
 	</div>
 </template>
@@ -41,6 +46,26 @@ export default {
 			isDone: false,
 		}
 	},
+	computed: {
+		roundCount() {
+		if (this.tags.length === 2) {
+			return '결승'
+		} else if (this.tags.length === 1) {
+			return '우승'
+		} else {
+			return `${this.tags.length} 강`
+		}
+		},
+		gameCount() {
+		if (this.clickCount === -1) {
+			return `1 / ${Math.round(this.tags.length / 2)}`
+		} else if (this.clickCount === 1) {
+			return `2 / ${Math.round(this.tags.length / 2)}`
+		} else {
+			return `${Math.round(this.clickCount / 2)+1} / ${Math.round(this.tags.length / 2)}`
+		}
+		}
+	},
 	methods: {
 		onClick(direction) {
 			this.clickCount += 2
@@ -70,10 +95,9 @@ export default {
 			this.userChoice = []
 			this.round += 1
 			this.clickCount = -1
-			console.log('round:', this.round)
-			console.log('tags:', this.tags)
+			// console.log('round:', this.round)
+			// console.log('tags:', this.tags)
 			if (this.tags.length === 1) {
-				console.log('종료 로직을 실행합니다.')
 				this.isDone = true
 			}
 		},
@@ -83,9 +107,9 @@ export default {
 					Authorization: `JWT ${this.$cookies.get('auth-token')}`
 				}
 			}
-			this.$axios.post('trip/idealcategory', {tags: this.tags}, requestHeaders)
-			.then(res => {
-				console.log(res)
+			this.$axios.post('/trip/idealtag', {tags: this.tags}, requestHeaders)
+			.then(() => {
+				this.$store.state.mypage.userInfo.done_cup = true
 			})
 			.catch(err => console.erro(err))
 		},
@@ -97,8 +121,19 @@ export default {
 </script>
 
 <style scoped>
-img {
-	width: 100vh;
-	height: 50vh;
+.img {
+	width: 100%;
+	cursor: pointer;
+}
+.vs-wrap {
+	position: relative;
+	widows: 400px;
+}
+.vs {
+	width: 100px;
+	left: 50%;
+	transform:translateX(-50%);
+	bottom: -40px;
+	position: absolute;
 }
 </style>

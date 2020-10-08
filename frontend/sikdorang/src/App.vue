@@ -1,50 +1,66 @@
 <template>
-  <div id="app">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/maptest">MapTest</router-link>|
-      <router-link to="/map">Map 시작하기</router-link>|
-      <router-link to="/idealtagcup">이상형 월드컵 테스트</router-link>|
-      <router-link to="/schedule">schedule</router-link>|
-      <router-link to="/recommend">recommend</router-link>|
-      <span v-if="$store.state.isLogin"><a @click="tryLogout">로그아웃</a></span>
-      <router-view />
+  <div id="app" style='font-family: "NIXGONM-Vb";'>
+    <div v-if="isMobile" style="width: 100%">
+      <router-view class="router-view" />
+      <Navbar />
+    </div>
+    <div id="forPcDiv" v-else style="" class="mx-auto maxi-size">
+      <router-view class="router-view" />
+      <Navbar />
+    </div>
   </div>
 </template>
 
 <script>
+import Navbar from "../src/components/layout/Navbar.vue";
+
 export default {
   name: "App",
+  components: {
+    Navbar,
+  },
   data() {
     return {
-      
-    }
+      isMobile: window.innerWidth < 600,
+    };
   },
+  mounted() {
+    window.addEventListener("resize", this.setSize);
+  },
+
   methods: {
-    tryLogout() {
-      window.$cookies.remove('auth-token')
-      this.$store.state.isLogin = false
-
-      console.log(this.$cookies.get('auth-token'))
-
-      const requestHeaders = {
-        headers: {
-          Authorization: `JWT ${this.$cookies.get('auth-token')}`
-        }
+    setSize() {
+      let size = window.innerWidth;
+      if (size > 600) {
+        this.isMobile = false;
+      } else {
+        this.isMobile = true;
       }
-
-      //get으로 로그아웃 보내기 (헤더에 토큰)
-      this.$axios.post(`/rest-auth/logout/`, requestHeaders)
-      .then (response => {
-        console.log(response)
-        // 로그아웃이 완료되면 사용자를 홈페이지로 던집니다.
-        this.$router.push({ name: 'Home' })
-        window.location.reload()
-      })
-      .catch(err => {
-        console.log(err)
-      })
-
-    }
+    },
   },
 };
 </script>
+
+<style scoped>
+#app {
+  background-color: white;
+}
+.router-view {
+  margin-bottom: 100px;
+}
+.maxi-size {
+  width: 600px !important;
+  min-height: 100vh;
+}
+</style>
+
+<style>
+.custom-break-word {
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      white-space: -moz-pre-wrap;
+      white-space: -pre-wrap;
+      white-space: -o-pre-wrap;
+      word-break: break-all;
+    }
+</style>

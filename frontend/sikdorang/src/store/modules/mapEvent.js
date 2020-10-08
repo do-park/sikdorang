@@ -1,12 +1,17 @@
 const mapEvent = {
     namespaced : true,
     state : {
-        flip : false,
+        flip : true,
         mouseOver : null,
+        mouseOverToCard : null,
         clicked : null,
-        threeRes : null,
+        threeRes : [],
         selectedRest : null,
         planList : [],
+        tags: [],
+        tagStores: [],
+        selectTag: null,
+        timeCheck: [],
     },
     getters : {
         getFlip : state => {
@@ -19,7 +24,9 @@ const mapEvent = {
             return state.clicked
         },
         getThreeRes : state => {
-            return state.threeRes
+            if (state.threeRes) {
+                return state.threeRes
+            }
         },
         getSelectedRest : state => {
             return state.selectedRest
@@ -27,6 +34,21 @@ const mapEvent = {
         getPlanList : state => {
             return state.planList
         },
+        getmouseOverToCard : state => {
+            return state.mouseOverToCard
+        },
+        getTags : state => {
+            return state.tags
+        },
+        getTagStores : state => {
+            return state.tagStores
+        },
+        getSelectTag : state => {
+            return state.selectTag
+        },
+        getTimeCheck : state => {
+            return state.timeCheck
+        }
     },
     mutations : {
         mutationFlip: (state,payload) => {
@@ -47,6 +69,32 @@ const mapEvent = {
         mutationPlanList: (state,payload) => {
             state.planList = payload
         },
+        mutationMapEventClear: (state) => {
+            state.flip = true
+            state.mouseOver = null
+            state.clicked = null
+            state.threeRes = []
+            state.selectedRest = null
+            state.planList = []
+            state.tags = []
+            state.tagStores = false
+            state.selectTag =null
+        },
+        mutationMouseOverToCard: (state, payload) => {
+            state.mouseOverToCard = payload
+        },
+        mutationTags: (state, payload) => {
+            state.tags = payload
+        },
+        mutationTagStores: (state, payload) => {
+            state.tagStores = payload
+        },
+        mutationSelectTag: (state, payload) => {
+            state.selectTag = payload
+        },
+        mutationTimeCheck: (state, payload) => {
+            state.timeCheck = payload
+        },
     },
     actions : {
         actionFlip: ({commit}, payload) => {
@@ -66,6 +114,24 @@ const mapEvent = {
         },
         actionPlanList: ({commit}, payload) => {
             commit("mutationPlanList", payload)
+        },
+        actionMapEventClear: ({commit}, payload) => {
+            commit("mutationMapEventClear", payload)
+        },
+        actionMouseOverToCard: ({commit}, payload) => {
+            commit("mutationMouseOverToCard", payload)
+        },
+        actionTags: ({commit}, payload) => {
+            commit("mutationTags", payload)
+        },
+        actionTagStores: ({commit}, payload) => {
+            commit("mutationTagStores", payload)
+        },
+        actionSelectTag: ({commit}, payload) => {
+            commit("mutationSelectTag", payload)
+        },
+        actionTimeCheck: ({commit}, payload) => {
+            commit("mutationTimeCheck", payload)
         },
     }
 }

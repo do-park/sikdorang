@@ -60,15 +60,18 @@ INSTALLED_APPS = [
     # 계정
     'accounts',
     'review',
+    'guide',
 
     # 여행
     'trip',
+    'party',
 
     # 추천
     'recommend',
 
     # 데이터베이스 추가
     'api',
+    'achievement',
 
     'drf_yasg',
 ]
@@ -190,7 +193,12 @@ ACCOUNT_EMAIL_REQUIRED = False
 JWT_AUTH = {
    'JWT_SECRET_KEY' : SECRET_KEY,
    'JWT_ALGORITHM' : 'HS256',
-   'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
-   'JWT_ALLOW_REFRESH' : False,
+   'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=30000),
+   'JWT_ALLOW_REFRESH' : True,
    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
